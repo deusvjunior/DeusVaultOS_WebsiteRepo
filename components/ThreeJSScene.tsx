@@ -92,17 +92,17 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       ];
       const selectedColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
       
-      // Completely opaque material (NO TRANSPARENCY AT ALL)
+      // Soft matte material with pulsating emission (NO SHININESS)
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
-        metalness: 0.0,
-        roughness: 0.4,
-        clearcoat: 0.3,
+        metalness: 0.0, // NO METALLIC SHINE
+        roughness: 0.8, // MATTE FINISH
+        clearcoat: 0.0, // NO SHINY COATING
         transmission: 0, // NO TRANSLUCENCY
         transparent: false, // NO TRANSPARENCY
         opacity: 1.0, // FULLY OPAQUE
         emissive: selectedColor,
-        emissiveIntensity: 0.02, // Very subtle emission
+        emissiveIntensity: 0.1, // Base emission for pulsating
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
@@ -116,45 +116,54 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       blobMesh.position.set(x, y, z);
 
-      // Create SINGLE SET of cute black dot eyes (fixed eye duplication issue)
+      // Create SINGLE SET of cute black dot eyes (MATTE BLACK - NO SHINE)
       const eyeSize = baseSize * 0.12; // Slightly larger relative to smaller blob
       const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6);
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x000000 // Black dots
+        color: 0x000000, // Pure black dots
+        transparent: false,
+        fog: false // Prevent fog interference
       });
       
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       
-      // Position eyes on front of blob (SINGLE SET ONLY)
+      // Position eyes on front of blob (SINGLE SET ONLY) - ATTACHED TO SKIN
       const eyeOffset = baseSize * 0.35;
-      leftEye.position.set(-eyeOffset, eyeOffset * 0.3, baseSize * 0.85);
-      rightEye.position.set(eyeOffset, eyeOffset * 0.3, baseSize * 0.85);
+      leftEye.position.set(-eyeOffset, eyeOffset * 0.3, baseSize * 0.75); // Closer to surface
+      rightEye.position.set(eyeOffset, eyeOffset * 0.3, baseSize * 0.75);
       
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Store comprehensive animation data
-      blobMesh.userData = {
-        size: baseSize,
-        originalVertices,
-        leftEye,
-        rightEye,
-        
-        // Slow, cute swimming
-        swimSpeed: 0.2 + Math.random() * 0.3, // Very slow
-        swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 0.5 + Math.random() * 0.5,
-        
-        // Individual direction per blob
-        targetDirection: new THREE.Vector3(
-          (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 0.5,
-          (Math.random() - 0.5) * 2
-        ).normalize(),
-        currentDirection: new THREE.Vector3(),
-        
-        // Jelly physics
+        // Store comprehensive animation data with physics collision
+        blobMesh.userData = {
+          size: baseSize,
+          originalVertices,
+          leftEye,
+          rightEye,
+          
+          // Physics collision properties
+          radius: baseSize, // Collision sphere radius
+          velocity: new THREE.Vector3(),
+          
+          // Slow, cute swimming
+          swimSpeed: 0.2 + Math.random() * 0.3, // Very slow
+          swimOffset: Math.random() * Math.PI * 2,
+          swimAmplitude: 0.5 + Math.random() * 0.5,
+          
+          // Individual direction per blob
+          targetDirection: new THREE.Vector3(
+            (Math.random() - 0.5) * 2,
+            (Math.random() - 0.5) * 0.5,
+            (Math.random() - 0.5) * 2
+          ).normalize(),
+          currentDirection: new THREE.Vector3(),
+          
+          // Material pulsing
+          baseMaterial: blobMaterial,
+          pulseSpeed: 0.8 + Math.random() * 0.6,
+          pulseOffset: Math.random() * Math.PI * 2,        // Jelly physics
         jellyVertices: new Float32Array(originalVertices),
         jellySpeed: 0.5 + Math.random() * 0.5,
         jellyIntensity: 0.1 + Math.random() * 0.1,
@@ -400,14 +409,42 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
     }
 
-    // Animate cute jelly blobs with squishy physics and spiral emergence
+    // Animate cute jelly blobs with physics collision and pulsating emission
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
       const hexagonRadius = 5.5; // Boundary radius
+      const groundLevel = -2.5; // Floor collision
+      const ceilingLevel = 2.5; // Ceiling collision
       
       blobs.forEach((blob: any, index: number) => {
         const userData = blob.userData;
         const time = elapsedTime;
+        
+        // Pulsating emission animation (breathing life effect)
+        const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
+        const pulseIntensity = 0.05 + Math.sin(pulseTime) * 0.04; // Gentle pulsing
+        userData.baseMaterial.emissiveIntensity = pulseIntensity;
+        
+        // Sphere collision detection with other blobs
+        for (let j = index + 1; j < blobs.length; j++) {
+          const otherBlob = blobs[j];
+          const distance = blob.position.distanceTo(otherBlob.position);
+          const minDistance = userData.radius + otherBlob.userData.radius + 0.1; // Small buffer
+          
+          if (distance < minDistance) {
+            // Calculate collision response
+            const direction = blob.position.clone().sub(otherBlob.position).normalize();
+            const separation = (minDistance - distance) * 0.5;
+            
+            // Separate blobs gently
+            blob.position.add(direction.clone().multiplyScalar(separation));
+            otherBlob.position.sub(direction.clone().multiplyScalar(separation));
+            
+            // Bounce effect - reverse directions softly
+            userData.targetDirection.reflect(direction).multiplyScalar(0.7);
+            otherBlob.userData.targetDirection.reflect(direction.clone().negate()).multiplyScalar(0.7);
+          }
+        }
         
         // Jelly vertex deformation for squishiness
         const geometry = blob.geometry;
@@ -431,6 +468,17 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           );
         }
         positions.needsUpdate = true;
+        
+        // Eyes follow skin deformation (stick to surface)
+        const eyeOffset = userData.size * 0.35;
+        const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.5;
+        
+        userData.leftEye.position.z = userData.size * 0.75 + skinDeformation;
+        userData.rightEye.position.z = userData.size * 0.75 + skinDeformation;
+        
+        // Slight eye movement with jelly physics
+        userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.8) * userData.jellyIntensity * 0.3;
+        userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.8) * userData.jellyIntensity * 0.3;
         
         // Individual directional movement (slow & cute)
         const moveTime = time * userData.swimSpeed;
@@ -475,24 +523,24 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           );
         }
         
-        // Soft boundary checking (bounce gently)
+        // Box collider boundaries (walls, floor, ceiling)
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
-        if (distanceFromCenter > hexagonRadius - userData.size) {
+        if (distanceFromCenter > hexagonRadius - userData.radius) {
           const angle = Math.atan2(blob.position.z, blob.position.x);
-          blob.position.x = Math.cos(angle) * (hexagonRadius - userData.size);
-          blob.position.z = Math.sin(angle) * (hexagonRadius - userData.size);
+          blob.position.x = Math.cos(angle) * (hexagonRadius - userData.radius);
+          blob.position.z = Math.sin(angle) * (hexagonRadius - userData.radius);
           
-          // Gently reverse direction
-          userData.targetDirection.multiplyScalar(-0.7);
+          // Bounce off walls
+          userData.targetDirection.reflect(new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle))).multiplyScalar(0.8);
         }
         
-        // Vertical bounds (with ground emergence)
-        if (blob.position.y > 2.5) {
-          blob.position.y = 2.5;
-          userData.targetDirection.y *= -0.8;
-        } else if (blob.position.y < -2.5 && !userData.isEmerging) {
-          blob.position.y = -2.5;
-          userData.targetDirection.y *= -0.8;
+        // Floor and ceiling collision
+        if (blob.position.y > ceilingLevel - userData.radius) {
+          blob.position.y = ceilingLevel - userData.radius;
+          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * -0.8; // Bounce down
+        } else if (blob.position.y < groundLevel + userData.radius && !userData.isEmerging) {
+          blob.position.y = groundLevel + userData.radius;
+          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * 0.8; // Bounce up
         }
         
         // Squishy scale animation
