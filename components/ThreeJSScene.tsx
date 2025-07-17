@@ -48,8 +48,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   const [isInteracting, _setIsInteracting] = useState(false);
 
   // 🧭 SECTION NAVIGATION MAPPING
-  // Six-sided hexagon navigation system (60 degrees per section)
-  const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
+  // Six-sided hexagon navigation system with optimized page 5 positioning
+  const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, 0]; // Page 5 returns to home position
 
   // 💡 ADVANCED LIGHTING SYSTEM
   // Optimized lighting setup for consciousness environments with soft colors
@@ -1187,9 +1187,9 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // Enhanced physics-based rotation with anti-jitter system
-    const springStrength = 0.015; // Even gentler for smoother motion
-    const damping = 0.95; // Higher damping for stability
+    // Smooth physics-based rotation with minimal spring oscillation
+    const springStrength = 0.008; // Much gentler for smooth, elegant motion
+    const damping = 0.88; // Slightly lower damping for natural feel
     
     // Anti-jitter threshold - prevent micro-movements
     const angleDifference = targetRotationY.current - currentRotationY.current;

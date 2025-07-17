@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
 import ThreeJSScene from './components/ThreeJSScene';
+import { AtmosphericParticles } from './components/AtmosphericParticles';
 
 // Import main sections for final site
 import { HeroSection } from "./components/HeroSection";
@@ -172,6 +173,12 @@ export default function App() {
         <ThreeJSScene
           currentSection={currentSection}
           reducedMotion={reducedMotion}
+        />
+        {/* High-Quality Atmospheric Particles */}
+        <AtmosphericParticles 
+          intensity="subtle" 
+          interactive={true}
+          className="opacity-60"
         />
       </div>
 
