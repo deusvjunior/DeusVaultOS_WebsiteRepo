@@ -309,7 +309,23 @@ deusvault-os-website/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## � Documentation
+
+### Core Documentation
+- **[Technical Architecture](./ARCHITECTURE.md)** - Complete system architecture and design patterns
+- **[Consciousness AI System](./BLOB_SYSTEM.md)** - Detailed blob AI implementation guide
+- **[Performance Optimization](./PERFORMANCE.md)** - 60fps optimization strategies and monitoring
+- **[Deployment Guide](./DEPLOYMENT.md)** - Production deployment with global CDN setup
+- **[Version History](./CHANGELOG.md)** - Complete changelog with breaking changes
+- **[Development Guidelines](./Guidelines.md)** - Component and code quality standards
+
+### Quick Reference
+- **Component Documentation**: Inline JSDoc comments throughout codebase
+- **API References**: TypeScript interfaces and method signatures
+- **Performance Metrics**: Real-time FPS and memory monitoring
+- **Troubleshooting**: Common issues and solutions in each guide
+
+## �🙏 Acknowledgments
 
 - **Three.js Community** - For amazing 3D capabilities
 - **React Team** - For the robust framework

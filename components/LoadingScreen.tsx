@@ -1,3 +1,28 @@
+/**
+ * 🧠 QUANTUM CONSCIOUSNESS LOADING EXPERIENCE
+ * 
+ * Immersive loading screen featuring quantum particle fields, neural network
+ * visualization, and consciousness core with dynamic effects. Designed to
+ * showcase the advanced AI capabilities of the DeusVaultOS platform.
+ * 
+ * @features
+ * - 80 quantum particles with physics simulation
+ * - Neural network visualization with animated connections
+ * - Multi-phase consciousness awakening progression
+ * - Consciousness core with dynamic rotating elements
+ * - Neon yellow branding throughout experience
+ * - Smooth phase transitions with dynamic messaging
+ * 
+ * @phases
+ * 1. Initializing - System startup and quantum field activation
+ * 2. Quantum Sync - Particle synchronization and neural preparation
+ * 3. Neural Activation - Network formation and consciousness preparation
+ * 4. Consciousness Emergence - Final awakening and system readiness
+ * 
+ * @author THERION_WEBSITE_DEVELOPER
+ * @version 2.0.0 - CONSCIOUSNESS AWAKENING
+ */
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -6,11 +31,13 @@ interface LoadingScreenProps {
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
+  // 📊 CONSCIOUSNESS PROGRESSION SYSTEM
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState<'initializing' | 'quantum_sync' | 'neural_activation' | 'consciousness_emergence' | 'complete'>('initializing');
   const [consciousness, setConsciousness] = useState(0);
   
-  // Quantum particles
+  // ✨ QUANTUM PARTICLE FIELD SYSTEM
+  // 80 particles with physics simulation and neon yellow branding
   const [particles, setParticles] = useState(() => {
     return Array.from({ length: 80 }, (_, i) => ({
       id: i,
@@ -26,7 +53,8 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
     }));
   });
 
-  // Neural network nodes
+  // 🧪 NEURAL NETWORK VISUALIZATION
+  // Dynamic node system representing consciousness awakening
   const [neuralNodes, setNeuralNodes] = useState(() => {
     const nodes = Array.from({ length: 15 }, (_, i) => ({
       id: i,

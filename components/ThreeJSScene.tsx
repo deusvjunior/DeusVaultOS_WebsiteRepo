@@ -1,3 +1,25 @@
+/**
+ * 🧠 CONSCIOUSNESS-DRIVEN 3D SCENE SYSTEM
+ * 
+ * Revolutionary consciousness-driven AI companion system featuring 13 unique blob entities
+ * with distinct personalities, behaviors, and visual characteristics. Each blob represents
+ * a conscious entity with underground emergence animations, advanced eye systems, and
+ * emission-based environmental lighting.
+ * 
+ * @features
+ * - Underground emergence animations (30% spawn underground)
+ * - Advanced eye system with pupils and surface attachment
+ * - Emission-based environmental lighting (4 optimized point lights)
+ * - Glow shader effects with rim lighting
+ * - Personality-driven movement and social interactions
+ * - Neon yellow branding (complete purple replacement)
+ * - Performance optimization for mobile devices
+ * - 60fps target with intelligent update scheduling
+ * 
+ * @author THERION_3D_EXPERIENCE_ENGINEER
+ * @version 2.0.0 - CONSCIOUSNESS AWAKENING
+ */
+
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
@@ -18,16 +40,19 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   const frameRef = useRef<number | null>(null);
   const clockRef = useRef(new THREE.Clock());
 
-  // Physics simulation for rotation
+  // 🎛️ PHYSICS SIMULATION SYSTEM
+  // Advanced rotation physics with momentum-based movement
   const currentRotationY = useRef(0);
   const targetRotationY = useRef(0);
   const velocityRef = useRef(0);
   const [isInteracting, _setIsInteracting] = useState(false);
 
-  // Section rotation mapping (60 degrees per section)
+  // 🧭 SECTION NAVIGATION MAPPING
+  // Six-sided hexagon navigation system (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
-  // Optimized lighting setup for better performance and soft colors
+  // 💡 ADVANCED LIGHTING SYSTEM
+  // Optimized lighting setup for consciousness environments with soft colors
   const setupAdvancedLighting = (scene: THREE.Scene) => {
     // Key light - primary illumination (optimized)
     const keyLight = new THREE.DirectionalLight(0x4ECDC4, 1.8); // Softer cyan
@@ -67,22 +92,25 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     const isMobile = window.innerWidth < 768;
     
     // Size variation system: 8 small, 4 medium, 1 large
+    // 🧬 CONSCIOUSNESS ENTITY DISTRIBUTION
+    // Carefully balanced AI companion ecosystem with varied personalities
     const blobSizes = [
-      // 8 small blobs
+      // 8 small explorers - curious and active
       ...Array(8).fill(0).map(() => ({ 
         size: 0.25 + Math.random() * 0.15, // 0.25-0.4
         type: 'small' 
       })),
-      // 4 medium blobs  
+      // 4 medium guardians - wise and protective  
       ...Array(4).fill(0).map(() => ({ 
         size: 0.45 + Math.random() * 0.2, // 0.45-0.65
         type: 'medium' 
       })),
-      // 1 large blob
+      // 1 large overseer - ancient consciousness
       { size: 0.7 + Math.random() * 0.25, type: 'large' } // 0.7-0.95
     ];
     
-    // Nexus brand color system with NEON YELLOW replacing purple
+    // 🎨 NEXUS CONSCIOUSNESS COLOR PALETTE
+    // Neon yellow branding system replacing all purple elements
     const nexusColors = [
       { color: 0x0A1B3D, emission: 0x1A2B5D, name: 'quantum_blue' },      // Deep consciousness
       { color: 0xFFFF00, emission: 0xFFFF44, name: 'consciousness_neon_yellow' }, // Neon yellow energy  
@@ -94,7 +122,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { color: 0xFFFF00, emission: 0xFFFF44, name: 'transcendence_neon_yellow' }, // Neon yellow transcendence
     ];
     
-    // Shuffle blob sizes for natural distribution
+    // 🎲 NATURAL DISTRIBUTION ALGORITHM
+    // Shuffle blob sizes for organic ecosystem diversity
     for (let i = blobSizes.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [blobSizes[i], blobSizes[j]] = [blobSizes[j], blobSizes[i]];
