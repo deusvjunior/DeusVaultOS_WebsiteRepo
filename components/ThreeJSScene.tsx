@@ -22,15 +22,18 @@
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 interface ThreeJSSceneProps {
   currentSection: number;
   reducedMotion?: boolean;
+  observerMode?: boolean;
 }
 
 const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({ 
   currentSection, 
-  reducedMotion = false 
+  reducedMotion = false,
+  observerMode = false
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -1138,7 +1141,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     }
   };
 
-  // 🎬 OPTIMIZED HEXAGONAL CAMERA SYSTEM - PERFECT PAGE TRANSITIONS
+  // 🎬 ULTRA SMOOTH HEXAGONAL CAMERA SYSTEM - ALWAYS SMOOTH MOVEMENT
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
@@ -1170,26 +1173,44 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Gentle breathing motion (very subtle)
     const breathingOffset = Math.sin(elapsedTime * 0.15) * 0.02;
     
-    // ULTRA SMOOTH INTERPOLATION - Prevent jarring transitions
-    const lerpSpeed = 0.004; // **SLOWED FROM 0.008** - Perfect camera transition speed (was 2x too fast)
-    cameraRef.current.position.x = THREE.MathUtils.lerp(cameraRef.current.position.x, targetX, lerpSpeed);
+    // **ULTRA SMOOTH INTERPOLATION** - Prevent jarring transitions, ALWAYS smooth movement
+    const lerpSpeed = 0.008; // **INCREASED from 0.004** - Slightly faster but still smooth camera transitions
+    
+    // **SMOOTH ANGULAR INTERPOLATION** - Handle wrap-around properly for camera angle
+    const currentAngle = Math.atan2(cameraRef.current.position.z, cameraRef.current.position.x);
+    let targetAngle = currentConfig.angle;
+    
+    // **FIX ANGULAR JUMPS** - Always take shortest path around circle
+    let angleDiff = targetAngle - currentAngle;
+    if (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+    if (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+    
+    const smoothAngle = currentAngle + angleDiff * lerpSpeed;
+    const smoothRadius = THREE.MathUtils.lerp(
+      Math.sqrt(cameraRef.current.position.x ** 2 + cameraRef.current.position.z ** 2), 
+      currentConfig.radius, 
+      lerpSpeed
+    );
+    
+    // Apply smooth angular movement - NO JUMPS EVER
+    cameraRef.current.position.x = Math.cos(smoothAngle) * smoothRadius;
+    cameraRef.current.position.z = Math.sin(smoothAngle) * smoothRadius;
     cameraRef.current.position.y = THREE.MathUtils.lerp(cameraRef.current.position.y, targetY + breathingOffset, lerpSpeed);
-    cameraRef.current.position.z = THREE.MathUtils.lerp(cameraRef.current.position.z, targetZ, lerpSpeed);
     
     // Smooth look-at with gentle tilt
     const lookAtY = currentConfig.tilt;
     cameraRef.current.lookAt(0, lookAtY, 0);
   };
 
-  // Apple-grade rotation with smoother, less bouncy physics
+  // Apple-grade rotation with stiffer, more responsive physics
   const updateRotationWithPhysics = (_deltaTime: number) => {
     if (!isInteracting && !reducedMotion) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // **SMOOTHER ROTATION - REDUCED SPRING INTENSITY**
-    const springStrength = 0.008; // **REDUCED from 0.015** - Much gentler spring
-    const damping = 0.98; // **INCREASED from 0.95** - More damping to prevent overshoot
+    // **STIFFER ROTATION - INCREASED SPRING STRENGTH**
+    const springStrength = 0.025; // **INCREASED from 0.008** - Much stiffer, more responsive spring
+    const damping = 0.92; // **REDUCED from 0.98** - Less damping for snappier response
     
     // Anti-jitter threshold - prevent micro-movements
     const angleDifference = targetRotationY.current - currentRotationY.current;
@@ -1262,6 +1283,24 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Create Apple-grade hexagon structure
     createAppleGradeHexagon(hexagonGroup);
     
+    // **ORBIT CONTROLS FOR OBSERVER MODE** - Professional camera interaction
+    let orbitControls: OrbitControls | null = null;
+    if (observerMode) {
+      orbitControls = new OrbitControls(camera, renderer.domElement);
+      orbitControls.enableDamping = true;
+      orbitControls.dampingFactor = 0.05;
+      orbitControls.screenSpacePanning = false;
+      orbitControls.minDistance = 8;
+      orbitControls.maxDistance = 30;
+      orbitControls.maxPolarAngle = Math.PI / 1.8; // Prevent going too low
+      orbitControls.target.set(0, 0, 0); // Always look at center
+      orbitControls.mouseButtons = {
+        LEFT: THREE.MOUSE.ROTATE,
+        MIDDLE: THREE.MOUSE.DOLLY,
+        RIGHT: THREE.MOUSE.PAN
+      };
+    }
+    
     // Advanced animation loop with proper frame timing
     let lastTime = 0;
     const animate = (currentTime: number) => {
@@ -1272,14 +1311,20 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       const elapsedTime = clockRef.current.getElapsedTime();
 
-      // Apple-grade rotation with physics-based easing
-      updateRotationWithPhysics(deltaTime);
+      // Apple-grade rotation with physics-based easing (ONLY in normal mode)
+      if (!observerMode) {
+        updateRotationWithPhysics(deltaTime);
+      }
 
       // Advanced material updates with performance optimization
       updateAdvancedMaterials(elapsedTime, deltaTime);
       
-      // Subtle camera movements for depth
-      updateCameraMovement(elapsedTime);
+      // Camera movements (normal mode) OR orbit controls update (observer mode)
+      if (observerMode && orbitControls) {
+        orbitControls.update(); // Update orbit controls for smooth interaction
+      } else {
+        updateCameraMovement(elapsedTime); // Normal hexagon camera system
+      }
 
       renderer.render(scene, camera);
     };
@@ -1310,12 +1355,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         cancelAnimationFrame(frameRef.current);
       }
       
+      if (orbitControls) {
+        orbitControls.dispose();
+      }
+      
       if (rendererRef.current && mountRef.current) {
         mountRef.current.removeChild(rendererRef.current.domElement);
         rendererRef.current.dispose();
       }
     };
-  }, [currentSection, reducedMotion]);
+  }, [currentSection, reducedMotion, observerMode]);
 
   return (
     <div 

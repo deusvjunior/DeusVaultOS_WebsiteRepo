@@ -182,10 +182,11 @@ export default function App() {
       <SEOOptimizer {...seoConfigs.home} />
       
       {/* 3D Background Scene - Enhanced visibility */}
-      <div className="fixed inset-0 z-0">
+      <div className={`fixed inset-0 z-0 ${observerMode ? 'pointer-events-auto' : 'pointer-events-none'}`}>
         <ThreeJSScene
           currentSection={currentSection}
           reducedMotion={reducedMotion}
+          observerMode={observerMode}
         />
       </div>
 
