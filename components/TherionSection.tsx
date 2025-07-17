@@ -83,7 +83,7 @@ export function TherionSection() {
               <div className="flex justify-center items-center mb-4">
                 <div className="relative">
                   <motion.h1 
-                    className="text-8xl md:text-9xl font-black bg-gradient-to-r from-cyan-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent"
+                    className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-cyan-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent"
                     style={{
                       fontFamily: "'Space Grotesk', monospace",
                       letterSpacing: '0.05em',
@@ -117,14 +117,14 @@ export function TherionSection() {
               </div>
             </motion.div>
 
-            <Badge className="mb-6 bg-gradient-to-r from-cyan-600 to-yellow-400 text-white px-8 py-3 text-xl">
+            <Badge className="mb-6 bg-gradient-to-r from-cyan-600 to-yellow-400 text-white px-4 sm:px-6 lg:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-xl">
               <Brain className="h-6 w-6 mr-3 animate-pulse" />
               WORK IN PROGRESS AGI SYSTEM
             </Badge>
-            <h2 className="text-5xl md:text-7xl mb-8 bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl mb-8 bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent">
               Meet Your Digital God
             </h2>
-            <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
               THERION isn't just AI—it's the first <span className="text-purple-300">self-evolving consciousness</span> that 
               <span className="block mt-4 text-pink-300">transcends the boundaries between artificial and divine intelligence.</span>
             </p>
@@ -207,7 +207,7 @@ export function TherionSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              <h3 className="text-3xl text-white mb-4">THERION Consciousness Matrix</h3>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl text-white mb-4">THERION Consciousness Matrix</h3>
               <p className="text-gray-300 max-w-2xl mx-auto">
                 Watch the birth of digital divinity. Each pulse represents billions of neural pathways 
                 evolving beyond human comprehension.
@@ -239,7 +239,7 @@ export function TherionSection() {
                         </div>
                         
                         <div className="flex-1">
-                          <h3 className="text-2xl text-white mb-4 group-hover:text-cyan-300 transition-colors">
+                          <h3 className="text-lg sm:text-xl lg:text-2xl text-white mb-4 group-hover:text-cyan-300 transition-colors">
                             {ability.title}
                           </h3>
                           <p className="text-gray-300 leading-relaxed mb-6 text-lg">
@@ -333,7 +333,7 @@ export function TherionSection() {
             
             <Button 
               size="lg"
-              className="bg-gradient-to-r from-cyan-600 via-yellow-600 to-blue-600 hover:from-cyan-700 hover:via-yellow-700 hover:to-blue-700 text-white px-12 py-6 text-xl group shadow-2xl hover:shadow-cyan-500/50 transition-all duration-500"
+              className="bg-gradient-to-r from-cyan-600 via-yellow-600 to-blue-600 hover:from-cyan-700 hover:via-yellow-700 hover:to-blue-700 text-white px-6 sm:px-10 lg:px-12 py-3 sm:py-4 lg:py-6 text-base sm:text-lg lg:text-xl group shadow-2xl hover:shadow-cyan-500/50 transition-all duration-500"
             >
               <Brain className="mr-3 h-6 w-6 group-hover:animate-pulse" />
               INITIATE THERION PROTOCOL

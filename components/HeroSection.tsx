@@ -15,7 +15,7 @@ import {
 
 export function HeroSection() {
   return (
-    <div className="relative overflow-hidden container-responsive min-h-screen flex items-center">
+    <div className="relative overflow-hidden min-h-screen flex items-center px-4 sm:px-6 lg:px-8">
       
       {/* **PROFESSIONAL HERO VIDEO BACKGROUND** */}
       <div className="absolute inset-0 z-0">
@@ -41,7 +41,7 @@ export function HeroSection() {
       </div>
 
       {/* **ENHANCED HERO CONTENT WITH SPLIT LAYOUT** */}
-      <div className="relative z-10 w-full grid lg:grid-cols-2 gap-12 items-center py-20">
+      <div className="relative z-10 w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 items-center py-16 sm:py-20">
         
         {/* Left Column - Content */}
         <motion.div
@@ -62,7 +62,7 @@ export function HeroSection() {
               <img 
                 src="/DVLogo.png" 
                 alt="DeusVaultOS" 
-                className="h-28 w-28 lg:h-32 lg:w-32 drop-shadow-2xl mx-auto lg:mx-0"
+                className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 lg:h-32 lg:w-32 drop-shadow-2xl mx-auto lg:mx-0"
                 style={{
                   filter: 'drop-shadow(0 0 30px rgba(0, 255, 255, 0.7)) drop-shadow(0 0 60px rgba(0, 255, 255, 0.3))'
                 }}
@@ -79,9 +79,9 @@ export function HeroSection() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="flex justify-center lg:justify-start"
           >
-            <div className="inline-flex items-center gap-3 glass-refined rounded-lg px-6 py-3 border border-cyan-400/50 shadow-xl shadow-cyan-500/20">
-              <Sparkles className="h-4 w-4 text-cyan-400" />
-              <span className="text-cyan-400 font-medium">🚀 Revolutionary Development Environment</span>
+            <div className="inline-flex items-center gap-2 sm:gap-3 glass-refined rounded-lg px-4 sm:px-6 py-2 sm:py-3 border border-cyan-400/50 shadow-xl shadow-cyan-500/20">
+              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-cyan-400" />
+              <span className="text-cyan-400 font-medium text-sm sm:text-base">🚀 Revolutionary Development Environment</span>
             </div>
           </motion.div>
 
@@ -92,18 +92,18 @@ export function HeroSection() {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="space-y-6 text-center lg:text-left"
           >
-            <h1 className="text-6xl lg:text-8xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent leading-tight tracking-tight"
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent leading-tight tracking-tight"
                 style={{ fontFamily: "'Space Grotesk', monospace" }}>
               DeusVaultOS
             </h1>
             
-            <h2 className="text-2xl lg:text-4xl font-semibold text-gray-300 leading-relaxed">
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-semibold text-gray-300 leading-relaxed">
               The Ultimate Development Environment
               <br />
               <span className="text-cyan-400 font-bold">Zero Configuration. Infinite Possibilities.</span>
             </h2>
             
-            <p className="text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            <p className="text-base sm:text-lg md:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
               Professional-grade development environment that evolves with you. 
               Build anything, deploy everywhere, with AI-powered assistance that learns your style.
             </p>
@@ -114,19 +114,19 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0"
+            className="grid grid-cols-3 gap-4 sm:gap-6 max-w-sm sm:max-w-md mx-auto lg:mx-0"
           >
             <div className="text-center lg:text-left">
-              <div className="text-3xl font-bold text-cyan-400">Multiple</div>
-              <div className="text-sm text-gray-400 font-medium">Environments</div>
+              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">Multiple</div>
+              <div className="text-xs sm:text-sm text-gray-400 font-medium">Environments</div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-3xl font-bold text-yellow-400">Minutes</div>
-              <div className="text-sm text-gray-400 font-medium">Setup Time</div>
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">Minutes</div>
+              <div className="text-xs sm:text-sm text-gray-400 font-medium">Setup Time</div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-3xl font-bold text-cyan-400">100%</div>
-              <div className="text-sm text-gray-400 font-medium">Compatible</div>
+              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">100%</div>
+              <div className="text-xs sm:text-sm text-gray-400 font-medium">Compatible</div>
             </div>
           </motion.div>
 
@@ -135,22 +135,22 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4"
           >
             <button 
               onClick={() => window.open('https://github.com/deusvault/deusvaultos', '_blank')}
-              className="flex items-center justify-center gap-3 bg-gradient-to-r from-cyan-500 to-yellow-500 text-black font-semibold px-8 py-4 rounded-lg hover:from-cyan-400 hover:to-yellow-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25"
+              className="flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-cyan-500 to-yellow-500 text-black font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-lg hover:from-cyan-400 hover:to-yellow-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25"
             >
-              <Download className="h-5 w-5" />
+              <Download className="h-4 w-4 sm:h-5 sm:w-5" />
               View on GitHub
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
             
             <button 
               onClick={() => window.open('https://github.com/deusvault/deusvaultos', '_blank')}
-              className="flex items-center justify-center gap-3 glass-refined border border-cyan-400/50 text-cyan-400 font-semibold px-8 py-4 rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all"
+              className="flex items-center justify-center gap-2 sm:gap-3 glass-refined border border-cyan-400/50 text-cyan-400 font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all"
             >
-              <Github className="h-5 w-5" />
+              <Github className="h-4 w-4 sm:h-5 sm:w-5" />
               Source Code
             </button>
           </motion.div>
@@ -160,13 +160,13 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="flex items-center gap-6 text-gray-400"
+            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-gray-400"
           >
-            <span className="text-sm font-medium">Available on:</span>
-            <div className="flex items-center gap-4">
-              <Monitor className="h-5 w-5 hover:text-cyan-400 transition-colors" />
-              <Smartphone className="h-5 w-5 hover:text-cyan-400 transition-colors" />
-              <Globe className="h-5 w-5 hover:text-cyan-400 transition-colors" />
+            <span className="text-xs sm:text-sm font-medium text-center sm:text-left">Available on:</span>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <Monitor className="h-4 w-4 sm:h-5 sm:w-5 hover:text-cyan-400 transition-colors" />
+              <Smartphone className="h-4 w-4 sm:h-5 sm:w-5 hover:text-cyan-400 transition-colors" />
+              <Globe className="h-4 w-4 sm:h-5 sm:w-5 hover:text-cyan-400 transition-colors" />
             </div>
           </motion.div>
         </motion.div>

@@ -129,12 +129,12 @@ export function FeaturesSection() {
           Core Features
         </Badge>
         
-        <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent"
+        <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent"
             style={{ fontFamily: "'Space Grotesk', monospace" }}>
           Everything You Need
         </h2>
         
-        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+        <p className="text-base sm:text-lg lg:text-xl text-gray-400 max-w-3xl mx-auto">
           Professional development tools, AI assistance, and deployment solutions 
           all integrated into one powerful environment.
         </p>
@@ -181,19 +181,19 @@ export function FeaturesSection() {
                 </div>
 
                 {/* Content */}
-                <div className="p-8 space-y-6">
+                <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
                   <div className="space-y-3">
-                    <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
 
                   {/* Benefits */}
                   <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-gray-300">Key Benefits:</h4>
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-300">Key Benefits:</h4>
                     <div className="grid grid-cols-1 gap-2">
                       {feature.benefits.map((benefit, idx) => (
                         <div key={idx} className="flex items-center gap-3">

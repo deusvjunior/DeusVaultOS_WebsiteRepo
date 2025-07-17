@@ -129,12 +129,12 @@ export function UserSegments() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="text-center space-y-6"
+        className="text-center space-y-4 sm:space-y-6"
       >
-        <h2 className="text-4xl md:text-6xl bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent">
+        <h2 className="text-3xl sm:text-4xl md:text-6xl bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent">
           Who Is <span className="text-cyan-400">DeusVaultOS</span> For?
         </h2>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
           Whether you're building the next breakthrough or exploring new possibilities, 
           DeusVaultOS adapts to <span className="text-cyan-400">your world</span>.
         </p>
@@ -194,23 +194,23 @@ export function UserSegments() {
                 }`} />
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-white mb-2">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">
                   For {currentUser.title}
                 </h3>
                 <div className={`${
                   currentUser.color === 'cyan' ? 'text-cyan-400' : 'text-yellow-400'
-                } font-mono text-lg`}>
+                } font-mono text-sm sm:text-base lg:text-lg`}>
                   {currentUser.stats.metric}: +{currentUser.stats.value}
                 </div>
               </div>
             </div>
             
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed">
               {currentUser.description}
             </p>
 
             <div className="space-y-4">
-              <h4 className="text-xl font-semibold text-white mb-4">Key Benefits:</h4>
+              <h4 className="text-lg sm:text-xl font-semibold text-white mb-4">Key Benefits:</h4>
               {currentUser.benefits.map((benefit, index) => (
                 <motion.div
                   key={index}

@@ -327,48 +327,61 @@ export default function App() {
             <Footer />
           </div>
         </>
+      )}
 
-      {/* Navigation */}
+      {/* 3D Scene Background */}
+      <ThreeJSScene currentSection={currentSection} reducedMotion={reducedMotion} />
+      
+      {/* SEO */}
+      <SEOOptimizer
+        title="DeusVaultOS - Ultimate Development Environment"
+        description="Professional development environment with AI assistance"
+        keywords={[]}
+      />
+
+      {/* Single Navigation - Compact Floating Island */}
       <motion.div
-        className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-30"
+        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1 }}
       >
-        <div className="bg-black/20 backdrop-blur-md rounded-2xl p-4 border border-white/10">
-          <div className="flex items-center gap-4">
+        <div className="bg-black/40 backdrop-blur-xl rounded-full border border-cyan-400/30 shadow-2xl shadow-cyan-500/20">
+          <div className="flex items-center gap-1 py-3 px-6">
             
             {/* Previous */}
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={prevSection}
-              className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-cyan-400 hover:text-white transition-colors border border-white/20"
+              className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
               title="Previous Section (A/←)"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-4 w-4" />
             </motion.button>
 
             {/* Section dots */}
-            <div className="flex items-center gap-3 px-4">
+            <div className="flex items-center gap-2 px-3">
               {sections.map((section, index) => (
                 <motion.button
                   key={index}
-                  whileHover={{ scale: 1.3 }}
+                  whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}
                   onClick={() => navigateToSection(index)}
-                  className={`relative w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`relative w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                     index === currentSection
                       ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
                       : 'bg-white/30 hover:bg-white/50'
                   }`}
-                  title={`${section.title} (${index + 1})`}
+                  title={section.title}
                 >
+                  {/* Progress ring for current section */}
                   {index === currentSection && (
                     <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute inset-0 border-2 border-cyan-400 rounded-full animate-ping"
+                      className="absolute inset-0 rounded-full border border-cyan-400"
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 2.5, opacity: 0 }}
+                      transition={{ duration: 2, repeat: Infinity }}
                     />
                   )}
                 </motion.button>
@@ -377,21 +390,21 @@ export default function App() {
 
             {/* Next */}
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={nextSection}
-              className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-cyan-400 hover:text-white transition-colors border border-white/20"
+              className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
               title="Next Section (D/→)"
             >
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-4 w-4" />
             </motion.button>
 
           </div>
         </div>
       </motion.div>
 
-      {/* Content Area - Proper Layout with Margins */}
-      <div className="relative z-20">
+      {/* Content Area with Mobile-Optimized Margins */}
+      <div className="relative z-20 px-4 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSection}
@@ -406,8 +419,8 @@ export default function App() {
         </AnimatePresence>
       </div>
 
-      {/* Side Navigation Indicator */}
-      <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
+      {/* Side Navigation Indicator - Hidden on Mobile */}
+      <div className="hidden lg:block fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
         <div className="flex flex-col gap-3">
           {sections.map((section, index) => (
             <motion.button
@@ -423,11 +436,6 @@ export default function App() {
             />
           ))}
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="relative z-20">
-        <Footer />
       </div>
 
     </div>
