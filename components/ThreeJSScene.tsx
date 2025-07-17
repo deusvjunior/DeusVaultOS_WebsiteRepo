@@ -116,43 +116,45 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         );
       }
       
-      // Enhanced cyberpunk neon colors with cyan and yellow palette
+      // Pure cyberpunk neon colors - brighter and more saturated
       const colorsBySize = {
         small: [
-          0x00FFFF, // Neon cyan
-          0x00E6E6, // Bright cyan
-          0x40FFFF, // Light cyan
+          0x00FFFF, // Electric cyan
+          0x00EEEE, // Bright cyan
+          0x00DDDD, // Medium cyan
           0x00CCCC, // Deep cyan
+          0x33FFFF, // Light cyan
           0x66FFFF, // Soft cyan
-          0x00B3B3, // Dark cyan
-          0x80FFFF, // Pale cyan
-          0x009999, // Teal cyan
+          0x00BBBB, // Dark cyan
+          0x00AAAA, // Teal cyan
         ],
         medium: [
-          0xFFFF00, // Pure neon yellow
-          0xFFE600, // Bright yellow
-          0xFFCC00, // Golden yellow
-          0xFFB300, // Orange yellow
+          0xFFFF00, // Electric yellow
+          0xFFDD00, // Golden yellow
+          0xFFBB00, // Amber yellow
+          0xFF9900, // Orange yellow
         ],
         large: [
-          0x00FF00, // Neon green accent - the king blob
+          0x00FF00, // Electric green - the king
         ]
       };
       
       const colorPalette = colorsBySize[category.type as keyof typeof colorsBySize];
       const selectedColor = colorPalette[i % colorPalette.length];
       
-      // Enhanced cyberpunk material with neon glow
+      // Enhanced reflective material for better mirror effect
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
-        metalness: 0.1, // Slight metallic for neon effect
-        roughness: 0.3, // Smoother for better light reflection
-        clearcoat: 0.2, // Slight coating for neon look
+        metalness: 0.3, // Increased for better reflections
+        roughness: 0.1, // Much smoother for reflections
+        clearcoat: 0.8, // Strong coating for reflection
+        clearcoatRoughness: 0.0, // Perfect smooth clearcoat
         transmission: 0,
         transparent: false,
         opacity: 1.0,
         emissive: selectedColor,
-        emissiveIntensity: category.type === 'large' ? 0.25 : category.type === 'medium' ? 0.2 : 0.18, // Stronger neon glow
+        emissiveIntensity: category.type === 'large' ? 0.3 : category.type === 'medium' ? 0.25 : 0.2, // Stronger glow
+        reflectivity: 0.9, // High reflectivity
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
@@ -163,22 +165,23 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       let attempts = 0;
       const maxAttempts = 50;
       
+      // Position blobs in TIGHT CENTER of hexagon for grouping
       while (!validPosition && attempts < maxAttempts) {
-        // Position blobs in CENTER of hexagon, not edges
+        // Much tighter center positioning - blobs grouped together
         const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * 2.5; // Center area: 0 to 2.5 radius (well within hexagon)
+        const radius = Math.random() * 1.2; // Very tight center: 0 to 1.2 radius ONLY
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
         
-        // Enhanced size-based vertical layers within center
+        // Tighter vertical layers for better grouping
         let y;
-        const centralLayers = {
-          small: { min: -1.0, max: 0.5 }, // Upper center waters
-          medium: { min: -1.8, max: -0.2 }, // Middle center layer
-          large: { min: -2.2, max: -0.8 } // Deep center dwelling
+        const tightLayers = {
+          small: { min: -0.5, max: 0.8 }, // Upper tight center
+          medium: { min: -1.2, max: 0.2 }, // Middle tight center
+          large: { min: -1.8, max: -0.5 } // Deep tight center
         };
         
-        const range = centralLayers[category.type as keyof typeof centralLayers];
+        const range = tightLayers[category.type as keyof typeof tightLayers];
         y = range.min + Math.random() * (range.max - range.min);
         
         const testPosition = new THREE.Vector3(x, y, z);
@@ -204,14 +207,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         attempts++;
       }
       
-      // Enhanced fallback position in hexagon center
+      // Tighter fallback position for center grouping
       if (!validPosition) {
         const fallbackAngle = (i / blobCount) * Math.PI * 2;
-        const fallbackY = category.type === 'large' ? -1.5 : category.type === 'medium' ? -1.0 : -0.5;
+        const fallbackY = category.type === 'large' ? -1.2 : category.type === 'medium' ? -0.8 : -0.2;
         blobMesh.position.set(
-          Math.cos(fallbackAngle) * 1.8, // Center hexagon area
-          fallbackY, // Size-appropriate center layer
-          Math.sin(fallbackAngle) * 1.8
+          Math.cos(fallbackAngle) * 0.8, // Very tight center grouping
+          fallbackY, // Tighter vertical spacing
+          Math.sin(fallbackAngle) * 0.8
         );
       }
 
@@ -290,7 +293,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
                    category.type === 'medium' ? 0.8 + Math.random() * 0.6 : 
                    0.4 + Math.random() * 0.4, // Size-based pulse speed
         pulseOffset: Math.random() * Math.PI * 2,
-        baseEmission: category.type === 'large' ? 0.25 : category.type === 'medium' ? 0.2 : 0.18,
+        baseEmission: category.type === 'large' ? 0.3 : category.type === 'medium' ? 0.25 : 0.2,
         
         // Enhanced jelly physics with personality
         jellyVertices: new Float32Array(originalVertices),
@@ -474,16 +477,17 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     for (let i = 0; i < sections; i++) {
       const angle = (i * Math.PI * 2) / sections;
       
-      // Screen frame with granite material
+      // Clean cyberpunk frame material - no yellowish tint
       const frameGeometry = new THREE.BoxGeometry(3.5, 2.5, 0.3);
       const frameMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x4a4a4a,
-        metalness: 0.3,
-        roughness: 0.6,
-        clearcoat: 0.8,
-        clearcoatRoughness: 0.2,
-        reflectivity: 0.4,
-        normalScale: new THREE.Vector2(0.5, 0.5),
+        color: 0x2a2a2a, // Neutral dark gray instead of yellowish
+        metalness: 0.8, // High metalness for reflections
+        roughness: 0.1, // Very smooth for better reflections
+        clearcoat: 0.9, // Strong clearcoat
+        clearcoatRoughness: 0.0, // Perfect smooth clearcoat
+        reflectivity: 0.8, // High reflectivity
+        emissive: 0x001111, // Dark blue emissive instead of yellow
+        emissiveIntensity: 0.05,
       });
 
       const frameMesh = new THREE.Mesh(frameGeometry, frameMaterial);
@@ -493,12 +497,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       frameMesh.position.set(x, 0, z);
       frameMesh.lookAt(0, 0, 0);
       
-      // Screen content (monitor display)
+      // Enhanced screen content with better cyberpunk colors
       const screenGeometry = new THREE.PlaneGeometry(3.0, 2.0);
       const screenMaterial = new THREE.MeshStandardMaterial({
-        color: i === 0 ? 0x00e1ff : 0x1a1d20,
-        emissive: i === 0 ? 0x003344 : 0x000000,
-        emissiveIntensity: i === 0 ? 0.5 : 0.1,
+        color: i === 0 ? 0x00FFFF : 0x111111, // Pure cyan or dark
+        emissive: i === 0 ? 0x004444 : 0x000000, // Stronger cyan emissive
+        emissiveIntensity: i === 0 ? 0.6 : 0.05, // Brighter active screen
+        metalness: 0.2,
+        roughness: 0.1, // Smoother for reflections
       });
       
       const screenMesh = new THREE.Mesh(screenGeometry, screenMaterial);
@@ -560,14 +566,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Enhanced pulsating emission with cyberpunk neon intensity
-        if (index % 3 === Math.floor(time * 10) % 3) { // Optimized update frequency
+        // Enhanced cyberpunk neon emission with tighter grouping
+        if (index % 3 === Math.floor(time * 10) % 3) {
           const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
           const basePulse = userData.baseEmission;
-          const pulseAmplitude = userData.sizeCategory === 'large' ? 0.15 : 
-                               userData.sizeCategory === 'medium' ? 0.12 : 0.1;
+          const pulseAmplitude = userData.sizeCategory === 'large' ? 0.2 : 
+                               userData.sizeCategory === 'medium' ? 0.15 : 0.12;
           const pulseIntensity = basePulse + Math.sin(pulseTime) * pulseAmplitude;
-          userData.baseMaterial.emissiveIntensity = Math.max(0.1, pulseIntensity);
+          userData.baseMaterial.emissiveIntensity = Math.max(0.15, pulseIntensity);
         }
         
         // Advanced collision detection with static meshes (hexagon structure)
@@ -689,24 +695,24 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           }
         }
         
-        // Enhanced movement system with personality-based behavior
+        // Enhanced movement system with smoother transitions
         const moveTime = time * userData.swimSpeed;
-        userData.currentDirection.lerp(userData.targetDirection, 0.012); // Faster response
+        userData.currentDirection.lerp(userData.targetDirection, 0.02); // Much slower for smoothness
         
-        // Enhanced direction change with personality-based timers
+        // Enhanced direction change with less frequent changes to reduce jitter
         userData.directionChangeTimer -= deltaTime;
         if (userData.directionChangeTimer <= 0) {
-          // Personality-based direction change frequency
-          const changeFrequency = userData.energyLevel === 'high' ? 2 + Math.random() * 3 :
-                                 userData.energyLevel === 'medium' ? 3 + Math.random() * 4 :
-                                 4 + Math.random() * 6;
+          // Longer intervals between direction changes
+          const changeFrequency = userData.energyLevel === 'high' ? 4 + Math.random() * 6 :
+                                 userData.energyLevel === 'medium' ? 6 + Math.random() * 8 :
+                                 8 + Math.random() * 12;
           userData.directionChangeTimer = changeFrequency;
           
-          // Enhanced 3D movement with personality
+          // Gentler direction changes
           userData.targetDirection.set(
-            (Math.random() - 0.5) * 2,
-            (Math.random() - 0.5) * userData.movementRange.y * 2, // Personality-based vertical movement
-            (Math.random() - 0.5) * 2
+            (Math.random() - 0.5) * 1.5, // Reduced intensity
+            (Math.random() - 0.5) * userData.movementRange.y * 1.5,
+            (Math.random() - 0.5) * 1.5
           ).normalize();
         }
         
@@ -717,41 +723,58 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             userData.isEmerging = false;
           }
         } else {
-          // Enhanced swimming motion with personality-based movement
-          const swimOffset = Math.sin(moveTime + userData.swimOffset) * 0.7;
-          const moveDistance = userData.swimAmplitude * deltaTime * userData.speedMultiplier * 0.5;
+          // Enhanced swimming motion with multiple movement patterns
+          const time = elapsedTime;
+          const swimTime = time * userData.swimSpeed;
           
-          // Smoother movement with velocity smoothing
-          const targetVelocity = userData.currentDirection.clone().multiplyScalar(moveDistance * (1 + swimOffset));
-          userData.velocity.lerp(targetVelocity, 0.1); // Smooth velocity transitions
+          // Multiple swimming patterns for variety
+          const pattern1 = Math.sin(swimTime + userData.swimOffset) * 0.7;
+          const pattern2 = Math.cos(swimTime * 0.7 + userData.swimOffset) * 0.3;
+          const pattern3 = Math.sin(swimTime * 1.3 + userData.swimOffset) * 0.2;
           
+          const combinedPattern = (pattern1 + pattern2 + pattern3) / 3;
+          const moveDistance = userData.swimAmplitude * deltaTime * userData.speedMultiplier * 0.8;
+          
+          // Enhanced swimming with undulation
+          const undulation = new THREE.Vector3(
+            Math.sin(swimTime * 0.8) * 0.1,
+            Math.sin(swimTime * 1.2) * 0.15, // Vertical undulation
+            Math.cos(swimTime * 0.9) * 0.1
+          );
+          
+          // Smoother movement with less jitter
+          const targetVelocity = userData.currentDirection.clone()
+            .multiplyScalar(moveDistance * (1 + combinedPattern))
+            .add(undulation.multiplyScalar(userData.speedMultiplier));
+          
+          userData.velocity.lerp(targetVelocity, 0.15); // Smoother transitions
           blob.position.add(userData.velocity);
         }
         
-        // Enhanced boundary collision with hexagon CENTER containment
+        // Tighter boundary collision for center grouping
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
-        const centerRadius = 2.8; // Keep within center area (well inside hexagon)
+        const centerRadius = 1.5; // Much tighter containment radius
         
         if (distanceFromCenter > centerRadius - userData.radius) {
           const angle = Math.atan2(blob.position.z, blob.position.x);
           const targetX = Math.cos(angle) * (centerRadius - userData.radius);
           const targetZ = Math.sin(angle) * (centerRadius - userData.radius);
           
-          // Smooth boundary correction instead of instant snap
-          blob.position.x = THREE.MathUtils.lerp(blob.position.x, targetX, 0.2);
-          blob.position.z = THREE.MathUtils.lerp(blob.position.z, targetZ, 0.2);
+          // Immediate correction for tight grouping
+          blob.position.x = targetX;
+          blob.position.z = targetZ;
           
-          // Smoother wall bounce
+          // Strong bounce back toward center
           const wallNormal = new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle));
-          userData.targetDirection.reflect(wallNormal).multiplyScalar(0.9);
-          userData.velocity.multiplyScalar(0.7); // Dampen velocity on collision
+          userData.targetDirection.reflect(wallNormal).multiplyScalar(1.2);
+          userData.velocity.multiplyScalar(0.5); // Strong damping
         }
         
-        // Enhanced vertical boundaries with personality layers
+        // Enhanced vertical boundaries for tight center grouping
         const verticalLimits = {
-          small: { floor: -2.5, ceiling: 0.5 },
-          medium: { floor: -3.0, ceiling: -0.2 },
-          large: { floor: -3.5, ceiling: -1.0 }
+          small: { floor: -1.0, ceiling: 1.0 },
+          medium: { floor: -1.5, ceiling: 0.5 },
+          large: { floor: -2.0, ceiling: -0.2 }
         };
         
         const limits = verticalLimits[userData.sizeCategory as keyof typeof verticalLimits];
@@ -876,10 +899,34 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // Advanced scene setup with Apple-grade rendering
+    // Enhanced scene setup with radial gradient background for depth
     const scene = new THREE.Scene();
-    scene.background = null; // Transparent for layering
-    scene.fog = new THREE.Fog(0x000000, 5, 25); // Depth perception
+    
+    // Create radial gradient background for depth perception
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const context = canvas.getContext('2d')!;
+    
+    // Radial gradient from center to edges
+    const gradient = context.createRadialGradient(256, 256, 0, 256, 256, 256);
+    gradient.addColorStop(0, '#001a2e'); // Dark blue center
+    gradient.addColorStop(0.4, '#000d1a'); // Darker middle
+    gradient.addColorStop(1, '#000000'); // Black edges
+    
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, 512, 512);
+    
+    const backgroundTexture = new THREE.CanvasTexture(canvas);
+    const backgroundGeometry = new THREE.SphereGeometry(50, 32, 32);
+    const backgroundMaterial = new THREE.MeshBasicMaterial({ 
+      map: backgroundTexture,
+      side: THREE.BackSide 
+    });
+    const backgroundSphere = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+    scene.add(backgroundSphere);
+    
+    scene.fog = new THREE.Fog(0x000611, 5, 25); // Deeper fog for depth
     sceneRef.current = scene;
 
     // Professional camera setup with responsive characteristics
