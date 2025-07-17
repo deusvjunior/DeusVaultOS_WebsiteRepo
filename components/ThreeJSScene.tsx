@@ -30,7 +30,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Professional lighting setup for depth and atmosphere
   const setupAdvancedLighting = (scene: THREE.Scene) => {
     // Key light - primary illumination (brighter)
-    const keyLight = new THREE.DirectionalLight(0x00e1ff, 1.2);
+    const keyLight = new THREE.DirectionalLight(0x00e1ff, 2.0); // Increased intensity
     keyLight.position.set(10, 10, 5);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
@@ -40,32 +40,31 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     scene.add(keyLight);
 
     // Fill light - soften shadows (brighter)
-    const fillLight = new THREE.DirectionalLight(0x39ff14, 0.6);
+    const fillLight = new THREE.DirectionalLight(0x39ff14, 1.2); // Increased intensity
     fillLight.position.set(-5, 5, 5);
     scene.add(fillLight);
 
     // Rim light - edge definition (brighter)
-    const rimLight = new THREE.DirectionalLight(0xffd700, 0.8);
+    const rimLight = new THREE.DirectionalLight(0xffd700, 1.2); // Increased intensity
     rimLight.position.set(0, -5, -10);
     scene.add(rimLight);
 
     // Ambient light - global illumination
-    const ambientLight = new THREE.AmbientLight(0x1a1d20, 0.2);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); // Brighter ambient
     scene.add(ambientLight);
 
     // Environment light for reflections
-    const hemisphereLight = new THREE.HemisphereLight(0x00e1ff, 0x131619, 0.3);
+    const hemisphereLight = new THREE.HemisphereLight(0x00e1ff, 0x131619, 0.5); // Brighter hemisphere
     scene.add(hemisphereLight);
   };
 
   // Enhanced living blobs with silicone material and compact clustering
   const createLivingBlobs = (group: THREE.Group) => {
-    const blobCount = 18; // More compact blobs
+    const blobCount = 18;
     const blobs: any[] = [];
-
     for (let i = 0; i < blobCount; i++) {
-      // Much smaller blob sizes for compact clustering
-      const baseSize = 0.06 + Math.random() * 0.08; // 0.06 to 0.14 (very small)
+      // Slightly larger blobs for visibility
+      const baseSize = 0.18 + Math.random() * 0.12; // 0.18 to 0.3
       const scaleX = 0.9 + Math.random() * 0.2; // 0.9 to 1.1
       const scaleY = 0.9 + Math.random() * 0.2;
       const scaleZ = 0.9 + Math.random() * 0.2;
@@ -82,16 +81,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: siliconeColor,
-        metalness: 0.1, // Very low metalness for silicone
-        roughness: 0.3, // Smooth silicone surface
-        clearcoat: 0.8, // High clearcoat for glossy finish
-        clearcoatRoughness: 0.1, // Smooth clearcoat
-        transmission: 0.05, // Minimal transmission for opacity
-        thickness: 0.5, // Subsurface scattering thickness
-        ior: 1.4, // Silicone-like IOR
-        emissive: emissiveColor, // Subtle inner glow
-        transparent: false, // Completely opaque
-        opacity: 1.0, // Full opacity
+        metalness: 0.1,
+        roughness: 0.3,
+        clearcoat: 0.8,
+        clearcoatRoughness: 0.1,
+        transmission: 0.0, // Fully opaque
+        thickness: 0.0, // No subsurface
+        ior: 1.4,
+        emissive: emissiveColor,
+        transparent: false,
+        opacity: 1.0,
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
@@ -573,8 +572,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
     // Advanced scene setup with Apple-grade rendering
     const scene = new THREE.Scene();
-    scene.background = null; // Transparent for layering
-    scene.fog = new THREE.Fog(0x000000, 5, 25); // Depth perception
+    scene.background = new THREE.Color(0x131619); // Set to visible dark color
+    scene.fog = new THREE.Fog(0x000000, 5, 25);
     sceneRef.current = scene;
 
     // Professional camera setup with film-like characteristics
