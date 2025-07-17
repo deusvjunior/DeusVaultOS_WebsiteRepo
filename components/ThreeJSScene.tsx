@@ -65,8 +65,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     const hexagonRadius = 5.5; // Slightly smaller boundary
 
     for (let i = 0; i < blobCount; i++) {
-      // Smaller, cuter blob sizes (halved)
-      const baseSize = 0.3 + Math.random() * 0.2; // 0.3 to 0.5 (halved from 0.6-1.0)
+      // Smaller, cuter blob sizes (halved from 0.6-1.0 to 0.3-0.5)
+      const baseSize = 0.3 + Math.random() * 0.2; // 0.3 to 0.5
       
       // Create jelly-like geometry with vertex displacement capability
       const blobGeometry = new THREE.SphereGeometry(baseSize, 16, 12); // Lower poly for better performance
@@ -82,7 +82,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         );
       }
       
-      // Soft, cute colors (NO TRANSPARENCY)
+      // Soft, cute colors (FULLY OPAQUE - NO TRANSPARENCY)
       const colorOptions = [
         0x4ECDC4, // Soft cyan
         0xFFE66D, // Warm yellow
@@ -92,32 +92,32 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       ];
       const selectedColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
       
-      // Completely opaque material (NO transparency)
+      // Completely opaque material (NO TRANSPARENCY AT ALL)
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
         metalness: 0.0,
         roughness: 0.4,
         clearcoat: 0.3,
-        transmission: 0, // NO transparency
-        transparent: false, // NO transparency 
-        opacity: 1.0, // Fully opaque
+        transmission: 0, // NO TRANSLUCENCY
+        transparent: false, // NO TRANSPARENCY
+        opacity: 1.0, // FULLY OPAQUE
         emissive: selectedColor,
         emissiveIntensity: 0.02, // Very subtle emission
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       
-      // Better distribution for 12 blobs
-      const angle = (i / blobCount) * Math.PI * 2 + Math.random() * 0.5;
-      const radius = 0.5 + Math.random() * 3; // Varied radius
+      // Position within safe zone with better distribution for more blobs
+      const angle = (i / blobCount) * Math.PI * 2;
+      const radius = 0.5 + Math.random() * 3; // Spread out more
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
-      const y = -2 + Math.random() * 4; // Full height range
+      const y = -1 + Math.random() * 2; // Mostly below surface
       
       blobMesh.position.set(x, y, z);
 
-      // Create SINGLE SET of cute black dot eyes (fix duplication)
-      const eyeSize = baseSize * 0.12; // Slightly larger relative to smaller blobs
+      // Create SINGLE SET of cute black dot eyes (fixed eye duplication issue)
+      const eyeSize = baseSize * 0.12; // Slightly larger relative to smaller blob
       const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6);
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
         color: 0x000000 // Black dots
@@ -126,12 +126,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       
-      // Position eyes on front of blob
+      // Position eyes on front of blob (SINGLE SET ONLY)
       const eyeOffset = baseSize * 0.35;
-      leftEye.position.set(-eyeOffset, eyeOffset * 0.2, baseSize * 0.9);
-      rightEye.position.set(eyeOffset, eyeOffset * 0.2, baseSize * 0.9);
+      leftEye.position.set(-eyeOffset, eyeOffset * 0.3, baseSize * 0.85);
+      rightEye.position.set(eyeOffset, eyeOffset * 0.3, baseSize * 0.85);
       
-      // Add eyes to blob (only once)
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
@@ -456,15 +455,15 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           blob.position.z += spiralZ * deltaTime;
           blob.position.y += userData.spiralSpeed * deltaTime;
           
-          // Ground intersection fade effect (no transparency changes)
+          // Ground intersection effect (NO OPACITY CHANGES - FULLY OPAQUE)
           if (blob.position.y < 0) {
             userData.intersectionFade = Math.max(0.3, (blob.position.y + 2) / 2);
-            // No opacity changes since material is opaque
+            // NO opacity change - keep fully opaque
           }
           
           if (blob.position.y >= userData.emergenceTarget) {
             userData.isEmerging = false;
-            // No opacity changes since material is opaque
+            // NO opacity change - keep fully opaque
           }
         } else {
           // Normal cute swimming motion
@@ -684,7 +683,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         rendererRef.current.dispose();
       }
     };
-  }, [reducedMotion]); // Removed currentSection to prevent recreation
+  }, [currentSection, reducedMotion]);
 
   return (
     <div 
