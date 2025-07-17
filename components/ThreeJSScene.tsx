@@ -82,16 +82,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { size: 0.7 + Math.random() * 0.25, type: 'large' } // 0.7-0.95
     ];
     
-    // Nexus brand color system with quantum consciousness
+    // Nexus brand color system with NEON YELLOW replacing purple
     const nexusColors = [
       { color: 0x0A1B3D, emission: 0x1A2B5D, name: 'quantum_blue' },      // Deep consciousness
-      { color: 0x6B46C1, emission: 0x8B66E1, name: 'consciousness_purple' }, // Elevated awareness  
+      { color: 0xFFFF00, emission: 0xFFFF44, name: 'consciousness_neon_yellow' }, // Neon yellow energy  
       { color: 0x06B6D4, emission: 0x26D6F4, name: 'neural_cyan' },       // Intelligence flow
       { color: 0x10B981, emission: 0x30D9A1, name: 'consciousness_green' }, // Growth awareness
-      { color: 0x8B5CF6, emission: 0xAB7CF6, name: 'wisdom_violet' },      // Higher wisdom
+      { color: 0xFFFF00, emission: 0xFFFF44, name: 'wisdom_neon_yellow' },      // Neon yellow wisdom
       { color: 0x06B6D4, emission: 0x26D6F4, name: 'flow_cyan' },         // Energy flow
       { color: 0x3B82F6, emission: 0x5BA2F6, name: 'clarity_blue' },      // Mental clarity
-      { color: 0x8B5CF6, emission: 0xAB7CF6, name: 'transcendence_purple' }, // Spiritual elevation
+      { color: 0xFFFF00, emission: 0xFFFF44, name: 'transcendence_neon_yellow' }, // Neon yellow transcendence
     ];
     
     // Shuffle blob sizes for natural distribution
@@ -128,23 +128,65 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
       blobGeometry.computeVertexNormals();
       
-      // Apply Nexus consciousness colors with stronger emission
+      // Apply Nexus consciousness colors with stronger emission and glow effects
       const colorData = nexusColors[i % nexusColors.length];
       
+      // Enhanced material with inner glow and optimized lighting
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: colorData.color,
         metalness: 0.0,
-        roughness: 0.85, // Slightly less matte for subtle energy glow
+        roughness: 0.75, // Reduced for better glow effect
         clearcoat: 0.0,
         transmission: 0,
         transparent: false,
         opacity: 1.0,
         emissive: colorData.emission,
-        emissiveIntensity: 0.25 + (blobData.type === 'large' ? 0.15 : blobData.type === 'medium' ? 0.1 : 0.05), // Stronger emission, varies by size
-      });      const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
+        emissiveIntensity: 0.35 + (blobData.type === 'large' ? 0.2 : blobData.type === 'medium' ? 0.15 : 0.1), // Enhanced emission
+      });
+
+      const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       (blobMesh as any).isBlob = true;
-      (blobMesh as any).blobType = blobData.type; // Store blob type for behavior
-      (blobMesh as any).colorName = colorData.name; // Store color identity
+      (blobMesh as any).blobType = blobData.type;
+      (blobMesh as any).colorName = colorData.name;
+      
+      // Add glow shader for outer glow effect
+      const glowGeometry = new THREE.SphereGeometry(baseSize * 1.3, 8, 6); // Larger, lower poly for glow
+      const glowMaterial = new THREE.ShaderMaterial({
+        transparent: true,
+        side: THREE.BackSide,
+        uniforms: {
+          glowColor: { value: new THREE.Color(colorData.emission) },
+          intensity: { value: 0.8 }
+        },
+        vertexShader: `
+          varying vec3 vNormal;
+          void main() {
+            vNormal = normalize(normalMatrix * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 glowColor;
+          uniform float intensity;
+          varying vec3 vNormal;
+          void main() {
+            float rim = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
+            float alpha = pow(rim, 2.0) * intensity * 0.3;
+            gl_FragColor = vec4(glowColor, alpha);
+          }
+        `
+      });
+      
+      const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
+      blobMesh.add(glowMesh); // Attach glow to blob
+      
+      // Add point light for environmental illumination (only for some blobs)
+      let pointLight = null;
+      if (i < 4) { // Only 4 lights active at once for performance
+        pointLight = new THREE.PointLight(colorData.emission, 1.2, 4, 2); // Intensity, distance, decay
+        pointLight.position.set(0, 0, 0); // Centered on blob
+        blobMesh.add(pointLight);
+      }
       
       // Enhanced positioning system with consciousness-aware distribution
       let validPosition = false;
@@ -205,22 +247,42 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         attempts++;
       }
       
-      // Consciousness-flow fallback positioning
+      // Enhanced fallback positioning with underground emergence animation
       if (!validPosition) {
         const spiralAngle = (i / totalBlobs) * Math.PI * 2 * 1.618; // Golden ratio spiral
         const spiralRadius = 1.5 + (i % 3) * 0.8;
+        
+        // Some blobs spawn underground for emergence animation
+        const shouldEmerge = Math.random() < 0.3; // 30% chance to emerge from underground
+        const startY = shouldEmerge ? -3.5 : (-1.4 + (i % 4) * 0.2); // Deep underground or normal
+        
         blobMesh.position.set(
           Math.cos(spiralAngle) * spiralRadius,
-          -1.4 + (i % 4) * 0.2, // Staggered heights
+          startY,
           Math.sin(spiralAngle) * spiralRadius
         );
+      } else {
+        // Check if spawned position is below ground - if so, enable emergence
+        const groundLevel = -2.0;
+        if (blobMesh.position.y < groundLevel) {
+          // Don't relocate - let it emerge naturally through animation
+          blobMesh.userData = blobMesh.userData || {};
+          (blobMesh.userData as any).isEmerging = true;
+          (blobMesh.userData as any).emergenceTarget = groundLevel + 0.5; // Target above ground
+        }
       }
 
-      // Enhanced consciousness-aware eyes with better attachment
-      const eyeSize = baseSize * 0.08; // Refined proportional sizing
-      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6);
-      const eyeMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x0F172A, // Void black for depth
+      // Enhanced polished eyes with proper vertex attachment
+      const eyeSize = baseSize * 0.15; // Much larger eyes for better visibility
+      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 12, 8); // Higher poly for smoothness
+      
+      // Enhanced eye material with subtle glow
+      const eyeMaterial = new THREE.MeshPhysicalMaterial({ 
+        color: 0x000000, // Deep black
+        metalness: 0.8, // Slightly metallic for depth
+        roughness: 0.1, // Very smooth for eye shine
+        emissive: 0x111111, // Subtle dark glow
+        emissiveIntensity: 0.1,
         transparent: false,
         fog: false
       });
@@ -228,22 +290,43 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       
-      // Consciousness-flow eye positioning with better skin attachment
-      const eyeOffset = baseSize * 0.28;
-      const eyeForward = baseSize * 0.75;
-      const eyeHeight = baseSize * 0.15;
+      // Enhanced eye positioning with proper vertex surface attachment
+      const eyeOffset = baseSize * 0.25; // Closer together
+      const eyeForward = baseSize * 0.85; // More forward for better attachment
+      const eyeHeight = baseSize * 0.1; // Lower for better proportion
       
-      leftEye.position.set(-eyeOffset, eyeHeight, eyeForward);
-      rightEye.position.set(eyeOffset, eyeHeight, eyeForward);
+      // Calculate surface normal for proper attachment
+      const leftEyePos = new THREE.Vector3(-eyeOffset, eyeHeight, eyeForward);
+      const rightEyePos = new THREE.Vector3(eyeOffset, eyeHeight, eyeForward);
       
-      // Add subtle eye depth for more lifelike appearance
-      leftEye.position.z -= eyeSize * 0.3;
-      rightEye.position.z -= eyeSize * 0.3;
+      // Normalize to blob surface for perfect attachment
+      leftEyePos.normalize().multiplyScalar(baseSize * 0.9);
+      rightEyePos.normalize().multiplyScalar(baseSize * 0.9);
+      
+      leftEye.position.copy(leftEyePos);
+      rightEye.position.copy(rightEyePos);
+      
+      // Add eye pupils for more polished look
+      const pupilSize = eyeSize * 0.6;
+      const pupilGeometry = new THREE.SphereGeometry(pupilSize, 8, 6);
+      const pupilMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x000000,
+        transparent: false
+      });
+      
+      const leftPupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
+      const rightPupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
+      
+      leftPupil.position.set(0, 0, eyeSize * 0.2); // Slightly forward
+      rightPupil.position.set(0, 0, eyeSize * 0.2);
+      
+      leftEye.add(leftPupil);
+      rightEye.add(rightPupil);
       
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Store enhanced consciousness-driven animation data
+      // Store enhanced consciousness-driven animation data with glow and light references
       blobMesh.userData = {
         size: baseSize,
         type: blobData.type,
@@ -253,48 +336,54 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         rightEye,
         staticMeshes,
         
+        // Glow and lighting references
+        glowMesh: glowMesh,
+        pointLight: pointLight,
+        lightActive: pointLight !== null,
+        
         // Enhanced physics with consciousness flow
         radius: baseSize * 1.2,
         velocity: new THREE.Vector3(),
         lastValidPosition: blobMesh.position.clone(),
         
         // Consciousness-inspired movement with vertical swimming
-        swimSpeed: 0.12 + Math.random() * 0.18, // Smoother base movement
+        swimSpeed: 0.12 + Math.random() * 0.18,
         swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 0.4 + Math.random() * 0.4, // Enhanced amplitude
+        swimAmplitude: 0.4 + Math.random() * 0.4,
         
         // Enhanced vertical swimming patterns
         verticalSwimSpeed: 0.08 + Math.random() * 0.12,
         verticalAmplitude: 0.6 + (blobData.type === 'large' ? 0.3 : blobData.type === 'medium' ? 0.2 : 0.1),
         verticalOffset: Math.random() * Math.PI * 2,
-        baseDepth: blobMesh.position.y, // Remember starting depth
+        baseDepth: blobMesh.position.y,
         
         // Enhanced directional movement with consciousness awareness
         targetDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 0.6, // More vertical movement for 3D leverage
+          (Math.random() - 0.5) * 0.6,
           (Math.random() - 0.5) * 2
         ).normalize(),
         currentDirection: new THREE.Vector3(),
         
-        // Enhanced consciousness pulsing system
+        // Enhanced consciousness pulsing system with glow sync
         baseMaterial: blobMaterial,
-        pulseSpeed: 0.4 + Math.random() * 0.4, // Smoother pulsing
+        pulseSpeed: 0.3 + Math.random() * 0.3, // Slower, more varied pulsing
         pulseOffset: Math.random() * Math.PI * 2,
-        pulseIntensity: 0.3 + (blobData.type === 'large' ? 0.2 : blobData.type === 'medium' ? 0.15 : 0.1),
+        pulseIntensity: 0.35 + (blobData.type === 'large' ? 0.25 : blobData.type === 'medium' ? 0.2 : 0.15),
         
         // Enhanced jelly physics with consciousness flow
         jellyVertices: new Float32Array(originalVertices),
-        jellySpeed: 0.3 + Math.random() * 0.25, // Smoother deformation
-        jellyIntensity: 0.06 + Math.random() * 0.04, // Subtle but visible
+        jellySpeed: 0.3 + Math.random() * 0.25,
+        jellyIntensity: 0.06 + Math.random() * 0.04,
         
-        // Consciousness emergence system (allow vertical exploration)
-        isEmerging: blobMesh.position.y < -1.0,
-        emergenceTarget: -0.8 + Math.random() * 0.8, // Can swim higher
+        // Enhanced emergence system with smooth underground animation
+        isEmerging: blobMesh.position.y < -1.8,
+        emergenceTarget: -1.0 + Math.random() * 1.2, // Target above ground
+        emergenceSpeed: 0.5 + Math.random() * 0.3, // Varied emergence speeds
         
-        // Enhanced animation timers for lifelike behavior
-        blinkTimer: 3 + Math.random() * 5, // More relaxed blinking
-        directionChangeTimer: 4 + Math.random() * 6, // Less frequent direction changes
+        // Non-synchronous animation timers for natural randomness
+        blinkTimer: 2 + Math.random() * 6, // Wider range for randomness
+        directionChangeTimer: 3 + Math.random() * 8, // Even more varied timing
         eyeLookTimer: 2 + Math.random() * 3, // Eye movement timer
         
         // Enhanced squishiness with consciousness flow
