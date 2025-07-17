@@ -50,7 +50,7 @@ export function Footer() {
 
   return (
     <footer className="bg-gradient-to-t from-brand-neutral-950 via-brand-neutral-900 to-brand-neutral-950 section-spacing">
-      <div className="content-container">
+            <div className="content-container max-w-7xl mx-auto px-6 lg:px-8">{/* ... */}
         
         {/* Main Footer Content */}
         <div className="grid lg:grid-cols-4 gap-12 mb-16">

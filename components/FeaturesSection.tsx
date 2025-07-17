@@ -117,7 +117,7 @@ export function FeaturesSection() {
   };
 
   return (
-    <div className="space-y-20 container-responsive py-20">
+    <div className="space-y-20 max-w-7xl mx-auto px-6 lg:px-8 py-20">
       
       {/* Section Header */}
       <motion.div

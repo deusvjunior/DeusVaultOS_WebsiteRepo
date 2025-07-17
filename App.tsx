@@ -17,12 +17,11 @@ import ThreeJSScene from './components/ThreeJSScene';
 import { HeroSection } from "./components/HeroSection";
 import { FeaturesSection } from "./components/FeaturesSection";
 import { CTASection } from "./components/CTASection";
-import { UserSegments } from "./components/UserSegments"; // **NEW USER SEGMENTS PAGE**
+import { UserSegments } from "./components/UserSegments";
 import { TherionSection } from "./components/TherionSection_New";
 import { MarketplaceSection } from "./components/MarketplaceSection";
 import { Footer } from "./components/Footer";
 import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
-import { WebVitalsMonitor } from "./components/WebVitalsMonitor";
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -80,6 +79,11 @@ export default function App() {
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
+
+  // Auto-scroll to top when section changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentSection]);
 
   // Loading timer
   useEffect(() => {
@@ -163,9 +167,6 @@ export default function App() {
       {/* SEO Optimization */}
       <SEOOptimizer {...seoConfigs.home} />
       
-      {/* Web Vitals Monitoring */}
-      <WebVitalsMonitor enableReporting={true} />
-      
       {/* 3D Background Scene - Enhanced visibility */}
       <div className="fixed inset-0 z-0">
         <ThreeJSScene
@@ -174,26 +175,29 @@ export default function App() {
         />
       </div>
 
-      {/* Minimal Header */}
-      <div className="fixed top-0 left-0 right-0 z-30 bg-black/20 backdrop-blur-md border-b border-cyan-400/10">
-        <div className="container mx-auto px-6 py-4">
+      {/* **PROFESSIONAL HEADER** */}
+      <div className="fixed top-0 left-0 right-0 z-30 bg-black/30 backdrop-blur-xl border-b border-cyan-400/20">
+        <div className="container mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
             
-            {/* Logo */}
+            {/* **ENHANCED LOGO & BRAND** */}
             <div className="flex items-center gap-4">
-              <div className="w-8 h-8 flex items-center justify-center">
+              <div className="w-10 h-10 flex items-center justify-center">
                 <img 
                   src="/DVLogo.png" 
                   alt="DeusVaultOS Logo" 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain drop-shadow-lg"
+                  style={{
+                    filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.4))'
+                  }}
                 />
               </div>
               <div>
-                <h1 className="text-xl text-white font-bold" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
-                  DEUSVAULT OS
+                <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent">
+                  DeusVaultOS
                 </h1>
-                <p className="text-xs text-gray-300" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
-                  AI Platform & Operating System
+                <p className="text-xs text-cyan-400/80 font-medium tracking-wide">
+                  Revolutionary Development Environment
                 </p>
               </div>
             </div>

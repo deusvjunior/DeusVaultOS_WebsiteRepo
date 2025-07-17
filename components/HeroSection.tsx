@@ -52,76 +52,81 @@ export function HeroSection() {
           className="space-y-8"
         >
           
-          {/* DeusVaultOS Logo */}
+          {/* **ENHANCED DEUSVAUL**TOS LOGO** */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1, duration: 0.8 }}
-            className="relative"
+            className="relative flex justify-center lg:justify-start mb-8"
           >
-            <img 
-              src="/DVLogo.png" 
-              alt="DeusVaultOS" 
-              className="h-20 w-20 drop-shadow-2xl"
-              style={{
-                filter: 'drop-shadow(0 0 25px rgba(0, 255, 255, 0.6))'
-              }}
-            />
+            <div className="relative">
+              <img 
+                src="/DVLogo.png" 
+                alt="DeusVaultOS" 
+                className="h-28 w-28 lg:h-32 lg:w-32 drop-shadow-2xl mx-auto lg:mx-0"
+                style={{
+                  filter: 'drop-shadow(0 0 30px rgba(0, 255, 255, 0.7)) drop-shadow(0 0 60px rgba(0, 255, 255, 0.3))'
+                }}
+              />
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-cyan-400/10 rounded-full blur-xl"></div>
+            </div>
           </motion.div>
           
-          {/* Floating Badge */}
+          {/* **PROFESSIONAL BADGE** */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
+            className="flex justify-center lg:justify-start"
           >
-            <div className="inline-flex items-center gap-3 glass-refined rounded-lg px-6 py-3 border border-cyan-400/50">
+            <div className="inline-flex items-center gap-3 glass-refined rounded-lg px-6 py-3 border border-cyan-400/50 shadow-xl shadow-cyan-500/20">
               <Sparkles className="h-4 w-4 text-cyan-400" />
               <span className="text-cyan-400 font-medium">🚀 Revolutionary Development Environment</span>
             </div>
           </motion.div>
 
-          {/* Main Title */}
+          {/* **ENHANCED MAIN TITLE** */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="space-y-6"
+            className="space-y-6 text-center lg:text-left"
           >
-            <h1 className="text-5xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-6xl lg:text-8xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent leading-tight tracking-tight">
               DeusVaultOS
             </h1>
             
-            <h2 className="text-2xl lg:text-3xl font-semibold text-gray-300 leading-relaxed">
+            <h2 className="text-2xl lg:text-4xl font-semibold text-gray-300 leading-relaxed">
               The Ultimate Development Environment
               <br />
-              <span className="text-cyan-400">Zero Configuration. Infinite Possibilities.</span>
+              <span className="text-cyan-400 font-bold">Zero Configuration. Infinite Possibilities.</span>
             </h2>
             
-            <p className="text-lg text-gray-400 leading-relaxed max-w-2xl">
+            <p className="text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
               Professional-grade development environment that evolves with you. 
               Build anything, deploy everywhere, with AI-powered assistance that learns your style.
             </p>
           </motion.div>
 
-          {/* Stats Section */}
+          {/* **PROFESSIONAL STATS** */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="grid grid-cols-3 gap-6"
+            className="grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0"
           >
-            <div className="text-center">
-              <div className="text-2xl font-bold text-cyan-400">∞</div>
-              <div className="text-sm text-gray-400">Environments</div>
+            <div className="text-center lg:text-left">
+              <div className="text-3xl font-bold text-cyan-400">∞</div>
+              <div className="text-sm text-gray-400 font-medium">Environments</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-400">0ms</div>
-              <div className="text-sm text-gray-400">Setup Time</div>
+            <div className="text-center lg:text-left">
+              <div className="text-3xl font-bold text-yellow-400">0ms</div>
+              <div className="text-sm text-gray-400 font-medium">Setup Time</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-cyan-400">100%</div>
-              <div className="text-sm text-gray-400">Compatible</div>
+            <div className="text-center lg:text-left">
+              <div className="text-3xl font-bold text-cyan-400">100%</div>
+              <div className="text-sm text-gray-400 font-medium">Compatible</div>
             </div>
           </motion.div>
 
