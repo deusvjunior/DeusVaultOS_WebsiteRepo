@@ -68,18 +68,21 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   // Enhanced living blobs with organic movement and personality - INDEPENDENT OF PAGE
   const createOrganicBlobs = (group: THREE.Group) => {
     const blobs: any[] = [];
-    const BLOB_COUNT = 28; // Slightly increased for fullness
+    const blobCount = 28 + Math.floor(Math.random() * 12); // 28-40 blobs for better density
+    
+    // Create blobs with better spacing and wider distribution
     const positions: THREE.Vector3[] = [];
-    for (let i = 0; i < BLOB_COUNT; i++) {
-      // Generate position with collision avoidance
+    
+    for (let i = 0; i < blobCount; i++) {
+      // Generate position with better distribution
       let position: THREE.Vector3;
       let attempts = 0;
       const maxAttempts = 50;
       
       do {
         const angle = Math.random() * Math.PI * 2;
-        const radius = 2.2 + Math.random() * 3.5; // More spread out
-        const height = 1.2 + Math.random() * 2.5; // More elevated
+        const radius = 0.5 + Math.random() * 4.5; // Wider spread: 0.5 to 5.0 radius
+        const height = 0.5 + Math.random() * 3.5; // Higher spread: 0.5 to 4.0 height
         
         position = new THREE.Vector3(
           Math.cos(angle) * radius,
@@ -87,23 +90,44 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           Math.sin(angle) * radius
         );
         attempts++;
-      } while (attempts < maxAttempts && positions.some(pos => pos.distanceTo(position) < 0.7));
+      } while (attempts < maxAttempts && positions.some(pos => pos.distanceTo(position) < 0.4));
       
       positions.push(position);
       
-      // --- Blob geometry and material ---
-      const baseScale = 0.18 + Math.random() * 0.12; // Larger blobs
-      const scale = new THREE.Vector3(baseScale, baseScale, baseScale);
+      // Better sized blobs for improved visibility and presence
+      const baseScale = 0.12 + Math.random() * 0.16; // 0.12 to 0.28 (larger and more visible)
+      const scale = new THREE.Vector3(
+        baseScale * (0.8 + Math.random() * 0.4),
+        baseScale * (0.8 + Math.random() * 0.4),
+        baseScale * (0.8 + Math.random() * 0.4)
+      );
       
-      // Consistent neon appearance
+      // Rare black blobs with white eyes (1/100 chance)
+      const isRareBlackBlob = Math.random() < 0.01;
+      
+      // Create blob geometry
+      const geometry = new THREE.SphereGeometry(1, 12, 10);
+      
+      // Strict neon palette: cyan, yellow, and in-between
+      const neonPalette = [
+        { color: 0x00ffff, emissive: 0x00eedd, type: 'cyan' },
+        { color: 0xffff00, emissive: 0xeedd00, type: 'yellow' },
+        { color: 0x88ffee, emissive: 0x44eecc, type: 'mix' },
+        { color: 0xffee88, emissive: 0xeedd44, type: 'mix' }
+      ];
+      const isUnique = Math.random() < 0.08;
+      let paletteChoice = neonPalette[Math.floor(Math.random() * neonPalette.length)];
+      if (isUnique) {
+        paletteChoice = { color: 0xffffff, emissive: 0x00ffff, type: 'unique' };
+      }
       const material = new THREE.MeshPhongMaterial({
-        color: 0x00ffff,
-        emissive: 0x00eedd,
-        emissiveIntensity: 0.6,
+        color: new THREE.Color(paletteChoice.color),
+        emissive: new THREE.Color(paletteChoice.emissive),
+        emissiveIntensity: isUnique ? 0.8 : 0.6,
         transparent: false,
         shininess: 90
       });
-      const blob = new THREE.Mesh(new THREE.SphereGeometry(1, 12, 10), material);
+      const blob = new THREE.Mesh(geometry, material);
       blob.position.copy(position);
       blob.scale.copy(scale);
       // Random start rotation for organic look
@@ -114,17 +138,17 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       );
       
       // --- Eyes ---
-      const eyeGeometry = new THREE.SphereGeometry(0.16, 12, 10); // Larger eyes
+      const eyeGeometry = new THREE.SphereGeometry(isUnique ? 0.15 : 0.12, 8, 6); // Bigger eyes
       const eyeMaterial = new THREE.MeshPhongMaterial({
-        color: 0x000000,
-        emissive: 0x00eedd,
-        emissiveIntensity: 0.5,
+        color: isUnique ? 0xffffff : 0x000000,
+        emissive: isUnique ? 0x00ffff : 0x001133,
+        emissiveIntensity: isUnique ? 0.6 : 0.3,
         shininess: 100
       });
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-      leftEye.position.set(-0.32, 0.22, 0.95);
-      rightEye.position.set(0.32, 0.22, 0.95);
+      leftEye.position.set(-0.28, 0.18, 0.85);
+      rightEye.position.set(0.28, 0.18, 0.85);
       blob.add(leftEye);
       blob.add(rightEye);
       blob.userData.leftEye = leftEye;
@@ -133,13 +157,13 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       // --- Personality & Energy ---
       let energy = 1.0;
       let behaviorType = 'neutral';
-      if (Math.random() < 0.5) {
+      if (paletteChoice.type === 'cyan') {
         energy = 0.5 + Math.random() * 0.3;
         behaviorType = 'calm';
-      } else if (Math.random() < 0.8) {
+      } else if (paletteChoice.type === 'yellow') {
         energy = 1.2 + Math.random() * 0.4;
         behaviorType = 'energetic';
-      } else {
+      } else if (paletteChoice.type === 'unique') {
         energy = 1.5;
         behaviorType = 'unique';
       }
@@ -172,6 +196,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         bobbingSpeed: 0.8 + Math.random() * 0.6, // 0.8-1.4
         
         // Individual characteristics
+        isRareBlackBlob,
         personalityType: Math.floor(Math.random() * 4), // 0: curious, 1: shy, 2: playful, 3: lazy
         
         // Swimming territory
@@ -199,7 +224,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       };
       
       // Add proper neon eyes that glow
-      if (Math.random() >= 0.01) {
+      if (!isRareBlackBlob) {
         // Regular blob with glowing black eyes
         const eyeGeometry = new THREE.SphereGeometry(0.09, 8, 6); // Slightly larger
         const eyeMaterial = new THREE.MeshPhongMaterial({ 
@@ -236,7 +261,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
         const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
         
-        leftEye.position.set(0.25, 0.15, 0.85);
+        leftEye.position.set(-0.25, 0.15, 0.85);
         rightEye.position.set(0.25, 0.15, 0.85);
         
         blob.add(leftEye);
@@ -699,7 +724,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
     cameraRef.current.position.y = originalCameraPosition.current.y + breathingOffset + cameraOffset.current.y;
     cameraRef.current.position.z = originalCameraPosition.current.z + cameraOffset.current.z;
     
-    cameraRef.current.lookAt(0, 1.2, 0); // Look slightly upwards for aquarium
+    cameraRef.current.lookAt(0, 0, 0);
   };
 
   // Apple-grade rotation with physics simulation (SLOWER & SMOOTHER)
