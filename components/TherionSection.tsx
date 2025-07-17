@@ -3,7 +3,6 @@ import {
   Zap, 
   Eye, 
   Cpu, 
-  Infinity, 
   Target,
   Shield,
   Sparkles,

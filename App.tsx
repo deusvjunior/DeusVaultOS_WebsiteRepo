@@ -17,9 +17,14 @@ import ThreeJSScene from './components/ThreeJSScene';
 import { FeaturesSection } from "./components/FeaturesSection";
 import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/HeroSection";
+import { ImprovedHeroSection } from "./components/ImprovedHeroSection";
+import { CTASection } from "./components/CTASection";
+import { EnterpriseSection } from "./components/EnterpriseSection";
 import { MarketplaceSection } from "./components/MarketplaceSection";
 import { MicrosoftComparisonSection } from "./components/MicrosoftComparisonSection";
 import { UserSegments } from "./components/UserSegments";
+import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
+import { WebVitalsMonitor } from "./components/WebVitalsMonitor";
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -31,7 +36,7 @@ export default function App() {
       id: 'hero',
       title: 'Welcome to Deus Vault',
       icon: <Home className="h-4 w-4" />,
-      component: <HeroSection />
+      component: <ImprovedHeroSection />
     },
     {
       id: 'segments',
@@ -46,6 +51,12 @@ export default function App() {
       component: <FeaturesSection />
     },
     {
+      id: 'enterprise',
+      title: 'Enterprise',
+      icon: <BarChart3 className="h-4 w-4" />,
+      component: <EnterpriseSection />
+    },
+    {
       id: 'marketplace',
       title: 'Marketplace',
       icon: <ShoppingCart className="h-4 w-4" />,
@@ -58,10 +69,10 @@ export default function App() {
       component: <MicrosoftComparisonSection />
     },
     {
-      id: 'contact',
+      id: 'cta',
       title: 'Get Started',
       icon: <Mail className="h-4 w-4" />,
-      component: <Footer />
+      component: <CTASection />
     }
   ];
 
@@ -146,6 +157,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-cyber-black text-cyber-white antialiased relative">
+      
+      {/* SEO Optimization */}
+      <SEOOptimizer {...seoConfigs.home} />
+      
+      {/* Web Vitals Monitoring */}
+      <WebVitalsMonitor enableReporting={true} />
       
       {/* 3D Background Scene */}
       <ThreeJSScene

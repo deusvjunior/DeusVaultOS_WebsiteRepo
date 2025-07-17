@@ -51,7 +51,7 @@ export function OSShowcase() {
   ];
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setTimeout>;
     if (isPlaying) {
       interval = setInterval(() => {
         setActiveDemo(prev => (prev + 1) % demos.length);
