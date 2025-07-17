@@ -8,7 +8,9 @@ import {
   Layers, 
   Zap, 
   ArrowRight,
-  Sparkles
+  Sparkles,
+  CheckCircle,
+  Download
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -49,14 +51,20 @@ export function FeaturesSection() {
   };
 
   return (
-    <section id="section-1" className="snap-section bg-gradient-to-b from-cyber-dark-900 via-cyber-dark-800 to-cyber-dark-900 relative">
+    <section id="section-1" className="snap-section relative py-24 overflow-hidden">
       
-      {/* Subtle Background */}
-      <div className="absolute inset-0 bg-dots-subtle opacity-10" />
+      {/* Transparent Background - Let 3D scene show through */}
+      <div className="absolute inset-0 bg-black/10" />
       
-      <div className="container-refined section-refined">
+      {/* Optional accent areas for contrast */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+        <div className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400/50 to-transparent" />
+      </div>
+      
+      <div className="container mx-auto px-6 relative z-10">
         
-        {/* Section Header */}
+        {/* Section Header - Semi-transparent */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -64,21 +72,23 @@ export function FeaturesSection() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <Badge className="glass-refined px-6 py-3 font-caption mb-8 border-cyber-cyan/30">
-            <Sparkles className="h-4 w-4 mr-3 text-cyber-cyan" />
-            Core Capabilities
-          </Badge>
-          
-          <h2 className="font-hero mb-6">
-            Everything You Need to <span className="text-gradient">Build Faster</span>
-          </h2>
-          
-          <p className="font-subtitle max-w-4xl mx-auto">
-            A complete development environment that eliminates setup time and accelerates creation with AI.
-          </p>
+          <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-8 border border-white/10 inline-block">
+            <Badge className="bg-gradient-to-r from-cyan-600/80 to-purple-600/80 backdrop-blur-sm px-6 py-3 mb-8 border border-cyan-400/30 text-white">
+              <Sparkles className="h-4 w-4 mr-3" />
+              Core Capabilities
+            </Badge>
+            
+            <h2 className="text-4xl md:text-6xl mb-6 bg-gradient-to-r from-white via-cyan-200 to-purple-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
+              Everything You Need to <span className="bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">Build Faster</span>
+            </h2>
+            
+            <p className="text-xl text-white max-w-4xl mx-auto" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.7)' }}>
+              A complete development environment that eliminates setup time and accelerates creation with AI.
+            </p>
+          </div>
         </motion.div>
 
-        {/* Features Grid */}
+        {/* Features Grid - Mixed transparency */}
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
           {coreFeatures.map((feature, index) => (
             <motion.div
@@ -88,63 +98,38 @@ export function FeaturesSection() {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               viewport={{ once: true }}
             >
-              <Card className="card-refined h-full interactive-refined">
+              {/* Alternate between semi-transparent and more opaque cards */}
+              <Card className={`h-full transition-all duration-300 hover:scale-105 ${
+                index % 2 === 0 
+                  ? 'bg-black/20 backdrop-blur-sm border-white/20' // Transparent cards
+                  : 'bg-black/40 backdrop-blur-md border-cyan-400/30' // More opaque cards
+              }`}>
                 <CardContent className="p-8">
                   
                   {/* Feature Header */}
                   <div className="flex items-start gap-6 mb-6">
-                    <div className="text-cyber-cyan">
+                    <div className="text-cyan-400 bg-cyan-400/10 p-3 rounded-xl backdrop-blur-sm">
                       {feature.icon}
                     </div>
                     <div>
-                      <h3 className="font-title mb-2">
+                      <h3 className="text-2xl text-white mb-2" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
                         {feature.title}
                       </h3>
+                      <p className="text-lg text-gray-200 leading-relaxed" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.6)' }}>
+                        {feature.description}
+                      </p>
                     </div>
                   </div>
                   
-                  {/* Description */}
-                  <p className="font-body mb-8">
-                    {feature.description}
-                  </p>
-                  
-                  {/* Benefits */}
-                  <div className="mb-8">
-                    <h4 className="font-subtitle mb-4 text-cyber-white">Key Benefits:</h4>
-                    <div className="grid grid-cols-2 gap-3">
-                      {feature.benefits.map((benefit, idx) => (
-                        <div key={idx} className="flex items-center gap-3">
-                          <div className="w-1.5 h-1.5 bg-cyber-cyan rounded-full" />
-                          <span className="font-body-sm text-cyber-dark-300">{benefit}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* Metrics */}
-                  <div className="glass-refined rounded-lg p-6 mb-6">
-                    <div className="grid grid-cols-3 gap-4">
-                      {Object.entries(feature.metrics).map(([key, value]) => (
-                        <div key={key} className="text-center">
-                          <div className="font-body text-accent-cyan font-semibold mb-1">
-                            {value}
-                          </div>
-                          <div className="font-caption capitalize">
-                            {key}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* CTA */}
-                  <Button 
-                    onClick={() => handleFeatureCTA(feature.title)}
-                    className="w-full button-refined font-body interactive-refined focus-refined"
-                  >
-                    Learn More
-                    <ArrowRight className="ml-3 h-4 w-4" />
-                  </Button>
+                  {/* Benefits List */}
+                  <ul className="space-y-3 mb-8">
+                    {feature.benefits.map((benefit, i) => (
+                      <li key={i} className="flex items-center gap-3 text-gray-200" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
+                        <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0" />
+                        <span>{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
                   
                 </CardContent>
               </Card>
@@ -152,52 +137,43 @@ export function FeaturesSection() {
           ))}
         </div>
 
-        {/* Platform Support */}
+        {/* Call to Action - Transparent */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="card-refined rounded-xl p-12 text-center"
+          className="text-center"
         >
-          <h3 className="font-title mb-8">
-            Universal Platform Support
-          </h3>
-          
-          <div className="grid md:grid-cols-5 gap-6 mb-8">
-            {["Linux", "Windows", "macOS", "Mobile", "Cloud"].map((platform, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="glass-refined rounded-lg p-6 interactive-refined"
+          <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-8 border border-white/10 inline-block">
+            <h3 className="text-3xl text-white mb-4" style={{ textShadow: '0 2px 15px rgba(0,0,0,0.8)' }}>
+              Ready to Build Something Amazing?
+            </h3>
+            <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.7)' }}>
+              Join thousands of developers who've accelerated their workflow with DeusVaultOS.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-cyan-500/80 to-purple-500/80 backdrop-blur-sm text-white border border-cyan-400/30 hover:scale-105 transition-all duration-300"
+                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}
               >
-                <div className="font-subtitle text-cyber-white mb-2">
-                  {platform}
-                </div>
-                <div className="font-caption text-cyber-dark-400">
-                  Native support
-                </div>
-              </motion.div>
-            ))}
+                <Download className="h-5 w-5 mr-2" />
+                Download Now
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="border-white/30 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all duration-300"
+                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}
+              >
+                View Documentation
+              </Button>
+            </div>
           </div>
-          
-          <p className="font-body mb-8 max-w-3xl mx-auto">
-            One environment. Every platform. <span className="text-accent-cyan">Infinite possibilities.</span>
-          </p>
-          
-          <Button 
-            className="button-primary px-8 py-4 font-subtitle interactive-refined focus-refined"
-          >
-            <Zap className="mr-3 h-5 w-5" />
-            Get Started Now
-            <ArrowRight className="ml-3 h-5 w-5" />
-          </Button>
         </motion.div>
-
+        
       </div>
     </section>
   );
-}
+};

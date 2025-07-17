@@ -87,10 +87,19 @@ export function ComparisonSection() {
   ];
 
   return (
-    <section className="section-spacing bg-gradient-to-b from-brand-neutral-900 to-brand-neutral-950">
-      <div className="content-container">
+    <section className="section-spacing relative overflow-hidden">
+      {/* Minimal Background - Let 3D scene show through */}
+      <div className="absolute inset-0 bg-black/10" />
+      
+      {/* Subtle accent lines */}
+      <div className="absolute inset-0 opacity-15">
+        <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+        <div className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400/50 to-transparent" />
+      </div>
+      
+      <div className="content-container relative z-10">
         
-        {/* Section Header */}
+        {/* Section Header - Semi-transparent */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -98,21 +107,23 @@ export function ComparisonSection() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <Badge className="glass-morphism refined-border px-6 py-3 text-sm font-medium mb-8">
-            <AlertTriangle className="h-4 w-4 mr-3 text-brand-primary" />
-            Competitive Analysis
-          </Badge>
-          
-          <h2 className="text-hero text-white mb-6">
-            Deus Vault vs OpenDan.ai
-          </h2>
-          
-          <p className="text-subtitle text-brand-neutral-300 max-w-4xl mx-auto">
-            A comprehensive comparison of professional development environments.
-          </p>
+          <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-8 border border-white/10 inline-block">
+            <Badge className="bg-gradient-to-r from-cyan-600/80 to-green-600/80 backdrop-blur-sm px-6 py-3 mb-8 border border-cyan-400/30 text-white">
+              <Crown className="h-4 w-4 mr-3" />
+              Market Comparison
+            </Badge>
+            
+            <h2 className="text-4xl md:text-6xl mb-6 bg-gradient-to-r from-white via-cyan-200 to-green-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
+              Why DeusVaultOS Leads the <span className="bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">Future</span>
+            </h2>
+            
+            <p className="text-xl text-white max-w-4xl mx-auto" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.7)' }}>
+              A direct comparison showing how DeusVaultOS revolutionizes development beyond traditional solutions.
+            </p>
+          </div>
         </motion.div>
 
-        {/* OpenDan Limitations */}
+        {/* OpenDan Limitations - Transparent cards */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -120,9 +131,11 @@ export function ComparisonSection() {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <h3 className="text-title text-white mb-12 text-center">
-            OpenDan.ai Limitations
-          </h3>
+          <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-6 border border-white/10 mb-12 inline-block">
+            <h3 className="text-3xl text-white text-center" style={{ textShadow: '0 1px 12px rgba(0,0,0,0.8)' }}>
+              OpenDan.ai Limitations
+            </h3>
+          </div>
           
           <div className="grid md:grid-cols-2 gap-6">
             {openDanLimitations.map((limitation, index) => (
@@ -133,7 +146,11 @@ export function ComparisonSection() {
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="glass-morphism refined-border h-full">
+                <Card className={`h-full backdrop-blur-md border transition-all duration-300 ${
+                  index % 2 === 0 
+                    ? 'bg-black/20 border-red-400/30' // Transparent cards
+                    : 'bg-black/40 border-red-400/40' // Semi-opaque cards
+                }`}>
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <div className="p-2 rounded-lg bg-red-500/20 text-red-400 flex-shrink-0">
@@ -150,6 +167,22 @@ export function ComparisonSection() {
                           <strong>Impact:</strong> {limitation.impact}
                         </p>
                       </div>
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="p-2 bg-red-500/20 rounded-lg">
+                        <X className="h-5 w-5 text-red-400" />
+                      </div>
+                      <div>
+                        <h4 className="text-lg text-white mb-2" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
+                          {limitation.title}
+                        </h4>
+                        <p className="text-gray-300 mb-3" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.7)' }}>
+                          {limitation.description}
+                        </p>
+                        <p className="text-sm text-red-300" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
+                          <strong>Impact:</strong> {limitation.impact}
+                        </p>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -158,7 +191,7 @@ export function ComparisonSection() {
           </div>
         </motion.div>
 
-        {/* Head-to-Head Comparison */}
+        {/* Head-to-Head Comparison - Transparent */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -166,20 +199,22 @@ export function ComparisonSection() {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <h3 className="text-title text-white mb-12 text-center">
-            Feature Comparison
-          </h3>
+          <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-6 border border-white/10 mb-12 inline-block">
+            <h3 className="text-3xl text-white text-center" style={{ textShadow: '0 1px 12px rgba(0,0,0,0.8)' }}>
+              Feature Comparison
+            </h3>
+          </div>
           
-          <Card className="glass-morphism refined-border overflow-hidden">
+          <Card className="backdrop-blur-md bg-black/30 border border-white/20 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-brand-neutral-800">
-                    <th className="text-left p-6 text-brand-neutral-300 font-medium">Feature</th>
-                    <th className="text-center p-6 bg-brand-primary/5">
+                  <tr className="border-b border-white/20">
+                    <th className="text-left p-6 text-gray-200 font-medium" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>Feature</th>
+                    <th className="text-center p-6 bg-cyan-400/10">
                       <div className="flex items-center justify-center gap-2">
-                        <Crown className="h-5 w-5 text-brand-primary" />
-                        <span className="brand-text font-semibold">Deus Vault</span>
+                        <Crown className="h-5 w-5 text-cyan-400" />
+                        <span className="text-cyan-400 font-semibold" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>DeusVaultOS</span>
                       </div>
                     </th>
                     <th className="text-center p-6 bg-red-500/5">
