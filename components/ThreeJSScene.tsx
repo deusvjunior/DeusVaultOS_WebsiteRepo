@@ -27,28 +27,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Section rotation mapping (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
-  // Cyberpunk lighting setup with dramatic rim lighting and bloom
+  // Optimized lighting setup for better performance and soft colors
   const setupAdvancedLighting = (scene: THREE.Scene) => {
-    // Dramatic orange/yellow rim light from underneath
-    const rimLight = new THREE.DirectionalLight(0xFF6600, 2.5); // Intense orange
-    rimLight.position.set(0, -10, 0); // From below pointing up
-    rimLight.target.position.set(0, 0, 0);
-    rimLight.castShadow = false; // No shadows for rim effect
-    scene.add(rimLight);
-    scene.add(rimLight.target);
-
-    // Secondary yellow rim light for variation
-    const yellowRimLight = new THREE.DirectionalLight(0xFFFF00, 1.8); // Bright yellow
-    yellowRimLight.position.set(-5, -8, 3); // Angled from below
-    yellowRimLight.castShadow = false;
-    scene.add(yellowRimLight);
-
-    // Key light - primary illumination (cooler for contrast)
-    const keyLight = new THREE.DirectionalLight(0x00FFFF, 1.2); // Cyan key
+    // Key light - primary illumination (optimized)
+    const keyLight = new THREE.DirectionalLight(0x4ECDC4, 1.8); // Softer cyan
     keyLight.position.set(8, 12, 6);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 2048; // Higher quality shadows
-    keyLight.shadow.mapSize.height = 2048;
+    keyLight.shadow.mapSize.width = 1024; // Reduced for performance
+    keyLight.shadow.mapSize.height = 1024;
     keyLight.shadow.camera.near = 0.1;
     keyLight.shadow.camera.far = 50;
     keyLight.shadow.camera.left = -15;
@@ -57,147 +43,159 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     keyLight.shadow.camera.bottom = -15;
     scene.add(keyLight);
 
-    // Green accent light for neon effect
-    const accentLight = new THREE.PointLight(0x00FF00, 2.0, 15);
-    accentLight.position.set(0, 3, 0);
-    accentLight.castShadow = false;
-    scene.add(accentLight);
+    // Warm fill light
+    const fillLight = new THREE.DirectionalLight(0xFFE66D, 0.8); // Warm yellow
+    fillLight.position.set(-6, 8, 4);
+    scene.add(fillLight);
 
-    // Ambient light for base illumination
-    const ambientLight = new THREE.AmbientLight(0x004444, 0.3); // Dark cyan ambient
+    // Ambient light for soft base illumination
+    const ambientLight = new THREE.AmbientLight(0x95E1D3, 0.4); // Soft mint
     scene.add(ambientLight);
+
+    // Single accent point light (optimized)
+    const accentLight = new THREE.PointLight(0xA8E6CF, 1.2, 25);
+    accentLight.position.set(0, 8, 0);
+    scene.add(accentLight);
   };
 
-  // Enhanced living blobs with dramatic size variation and personality
-  const createCuteBlobsWithJellyPhysics = (group: THREE.Group) => {
+  // Enhanced blob creation with size variation and Nexus color system
+  const createCuteBlobsWithJellyPhysics = (
+    group: THREE.Group, 
+    staticMeshes: THREE.Mesh[]
+  ) => {
+    const blobs: THREE.Mesh[] = [];
     const isMobile = window.innerWidth < 768;
-    const blobCount = isMobile ? 8 : 13; // 8 small + 4 medium + 1 large
-    const blobs: any[] = [];
-    const hexagonInnerRadius = isMobile ? 3.2 : 3.8;
-    const staticMeshes: THREE.Mesh[] = [];
-
-    // Collect all static meshes in the scene for collision detection
-    group.traverse((child) => {
-      if (child instanceof THREE.Mesh && !(child as any).isBlob) {
-        staticMeshes.push(child);
-      }
-    });
-
-    // Define size categories with personality traits
-    const sizeCategories = [
-      // 8 Small blobs - energetic and quick
-      ...Array(8).fill({ type: 'small', size: [0.2, 0.35], speed: [0.4, 0.8], energy: 'high' }),
-      // 4 Medium blobs - balanced behavior  
-      ...Array(4).fill({ type: 'medium', size: [0.4, 0.6], speed: [0.2, 0.5], energy: 'medium' }),
-      // 1 Large blob - slow and majestic
-      { type: 'large', size: [0.8, 1.2], speed: [0.1, 0.3], energy: 'low' }
+    
+    // Size variation system: 8 small, 4 medium, 1 large
+    const blobSizes = [
+      // 8 small blobs
+      ...Array(8).fill(0).map(() => ({ 
+        size: 0.25 + Math.random() * 0.15, // 0.25-0.4
+        type: 'small' 
+      })),
+      // 4 medium blobs  
+      ...Array(4).fill(0).map(() => ({ 
+        size: 0.45 + Math.random() * 0.2, // 0.45-0.65
+        type: 'medium' 
+      })),
+      // 1 large blob
+      { size: 0.7 + Math.random() * 0.25, type: 'large' } // 0.7-0.95
     ];
-
-    for (let i = 0; i < blobCount; i++) {
-      const category = sizeCategories[i];
-      const baseSize = category.size[0] + Math.random() * (category.size[1] - category.size[0]);
+    
+    // Nexus brand color system with quantum consciousness
+    const nexusColors = [
+      { color: 0x0A1B3D, emission: 0x1A2B5D, name: 'quantum_blue' },      // Deep consciousness
+      { color: 0x6B46C1, emission: 0x8B66E1, name: 'consciousness_purple' }, // Elevated awareness  
+      { color: 0x06B6D4, emission: 0x26D6F4, name: 'neural_cyan' },       // Intelligence flow
+      { color: 0x10B981, emission: 0x30D9A1, name: 'consciousness_green' }, // Growth awareness
+      { color: 0x8B5CF6, emission: 0xAB7CF6, name: 'wisdom_violet' },      // Higher wisdom
+      { color: 0x06B6D4, emission: 0x26D6F4, name: 'flow_cyan' },         // Energy flow
+      { color: 0x3B82F6, emission: 0x5BA2F6, name: 'clarity_blue' },      // Mental clarity
+      { color: 0x8B5CF6, emission: 0xAB7CF6, name: 'transcendence_purple' }, // Spiritual elevation
+    ];
+    
+    // Shuffle blob sizes for natural distribution
+    for (let i = blobSizes.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [blobSizes[i], blobSizes[j]] = [blobSizes[j], blobSizes[i]];
+    }
+    
+    const totalBlobs = isMobile ? Math.min(blobSizes.length, 8) : blobSizes.length;
+    
+    for (let i = 0; i < totalBlobs; i++) {
+      const blobData = blobSizes[i];
+      const baseSize = blobData.size;
       
-      // Enhanced high-quality geometry with modern smoothness
-      const complexity = category.type === 'large' ? [32, 24] : category.type === 'medium' ? [24, 18] : [20, 16];
-      const blobGeometry = new THREE.SphereGeometry(baseSize, complexity[0], complexity[1]);
+      // Create unique jelly geometry with enhanced deformation
+      const blobGeometry = new THREE.SphereGeometry(baseSize, 14, 10);
+      const originalVertices = new Float32Array(blobGeometry.attributes.position.array);
       
-      // Smooth normals for modern appearance
+      // Advanced organic deformation with consciousness-inspired patterns
+      const positionAttribute = blobGeometry.attributes.position;
+      for (let j = 0; j < positionAttribute.count; j++) {
+        const vertex = new THREE.Vector3();
+        vertex.fromBufferAttribute(positionAttribute, j);
+        
+        // Quantum-inspired deformation pattern
+        const consciousness = Math.sin(vertex.x * 3 + i * 0.7) * 0.12;
+        const neural = Math.cos(vertex.y * 4 + i * 1.1) * 0.08;
+        const quantum = Math.sin(vertex.z * 2.5 + i * 0.9) * 0.1;
+        const flow = Math.sin((vertex.x + vertex.z) * 2 + i) * 0.06;
+        
+        const totalNoise = (consciousness + neural + quantum + flow) * (baseSize * 0.5);
+        vertex.multiplyScalar(1 + totalNoise);
+        positionAttribute.setXYZ(j, vertex.x, vertex.y, vertex.z);
+      }
       blobGeometry.computeVertexNormals();
       
-      const positions = blobGeometry.attributes.position;
+      // Apply Nexus consciousness colors with stronger emission
+      const colorData = nexusColors[i % nexusColors.length];
       
-      // Store original vertices for jelly deformation
-      const originalVertices = [];
-      for (let j = 0; j < positions.count; j++) {
-        originalVertices.push(
-          positions.getX(j),
-          positions.getY(j), 
-          positions.getZ(j)
-        );
-      }
-      
-      // Pure cyberpunk neon colors - brighter and more saturated
-      const colorsBySize = {
-        small: [
-          0x00FFFF, // Electric cyan
-          0x00EEEE, // Bright cyan
-          0x00DDDD, // Medium cyan
-          0x00CCCC, // Deep cyan
-          0x33FFFF, // Light cyan
-          0x66FFFF, // Soft cyan
-          0x00BBBB, // Dark cyan
-          0x00AAAA, // Teal cyan
-        ],
-        medium: [
-          0xFFFF00, // Electric yellow
-          0xFFDD00, // Golden yellow
-          0xFFBB00, // Amber yellow
-          0xFF9900, // Orange yellow
-        ],
-        large: [
-          0x00FF00, // Electric green - the king
-        ]
-      };
-      
-      const colorPalette = colorsBySize[category.type as keyof typeof colorsBySize];
-      const selectedColor = colorPalette[i % colorPalette.length];
-      
-      // Enhanced reflective material for better mirror effect
       const blobMaterial = new THREE.MeshPhysicalMaterial({
-        color: selectedColor,
-        metalness: 0.3, // Increased for better reflections
-        roughness: 0.1, // Much smoother for reflections
-        clearcoat: 0.8, // Strong coating for reflection
-        clearcoatRoughness: 0.0, // Perfect smooth clearcoat
+        color: colorData.color,
+        metalness: 0.0,
+        roughness: 0.85, // Slightly less matte for subtle energy glow
+        clearcoat: 0.0,
         transmission: 0,
         transparent: false,
         opacity: 1.0,
-        emissive: selectedColor,
-        emissiveIntensity: category.type === 'large' ? 0.3 : category.type === 'medium' ? 0.25 : 0.2, // Stronger glow
-        reflectivity: 0.9, // High reflectivity
-      });
-
-      const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
+        emissive: colorData.emission,
+        emissiveIntensity: 0.25 + (blobData.type === 'large' ? 0.15 : blobData.type === 'medium' ? 0.1 : 0.05), // Stronger emission, varies by size
+      });      const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       (blobMesh as any).isBlob = true;
+      (blobMesh as any).blobType = blobData.type; // Store blob type for behavior
+      (blobMesh as any).colorName = colorData.name; // Store color identity
       
-      // Enhanced positioning INSIDE hexagon center area
+      // Enhanced positioning system with consciousness-aware distribution
       let validPosition = false;
       let attempts = 0;
-      const maxAttempts = 50;
+      const maxAttempts = 100;
       
-      // Position blobs in TIGHT CENTER of hexagon for grouping
       while (!validPosition && attempts < maxAttempts) {
-        // Much tighter center positioning - blobs grouped together
+        // Hexagon interior positioning with consciousness flow patterns
         const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * 1.2; // Very tight center: 0 to 1.2 radius ONLY
+        
+        // Size-based positioning: larger blobs get more central positions
+        const radiusMultiplier = blobData.type === 'large' ? 0.7 : 
+                                blobData.type === 'medium' ? 0.85 : 1.0;
+        const radius = (0.8 + Math.random() * 2.8) * radiusMultiplier;
+        
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
         
-        // Tighter vertical layers for better grouping
-        let y;
-        const tightLayers = {
-          small: { min: -0.5, max: 0.8 }, // Upper tight center
-          medium: { min: -1.2, max: 0.2 }, // Middle tight center
-          large: { min: -1.8, max: -0.5 } // Deep tight center
-        };
-        
-        const range = tightLayers[category.type as keyof typeof tightLayers];
-        y = range.min + Math.random() * (range.max - range.min);
+        // Enhanced vertical positioning with swimming depth variation
+        const depthVariation = blobData.type === 'large' ? 0.8 : 
+                              blobData.type === 'medium' ? 1.0 : 1.2;
+        const y = -1.6 + Math.random() * depthVariation; // More vertical space
         
         const testPosition = new THREE.Vector3(x, y, z);
         
-        // Check collision with static meshes using bounding boxes
+        // Enhanced collision detection with consciousness boundaries
         validPosition = true;
+        const collisionPadding = baseSize * 1.5; // More generous spacing
+        
         for (const staticMesh of staticMeshes) {
           const boundingBox = new THREE.Box3().setFromObject(staticMesh);
           const blobBox = new THREE.Box3().setFromCenterAndSize(
             testPosition,
-            new THREE.Vector3(baseSize * 2, baseSize * 2, baseSize * 2)
+            new THREE.Vector3(collisionPadding * 2, collisionPadding * 2, collisionPadding * 2)
           );
           
           if (boundingBox.intersectsBox(blobBox)) {
             validPosition = false;
             break;
+          }
+        }
+        
+        // Check distance from other blobs for natural spacing
+        if (validPosition) {
+          for (const existingBlob of blobs) {
+            const distance = testPosition.distanceTo(existingBlob.position);
+            const minDistance = (baseSize + existingBlob.userData?.size || 0.5) * 2;
+            if (distance < minDistance) {
+              validPosition = false;
+              break;
+            }
           }
         }
         
@@ -207,114 +205,110 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         attempts++;
       }
       
-      // Tighter fallback position for center grouping
+      // Consciousness-flow fallback positioning
       if (!validPosition) {
-        const fallbackAngle = (i / blobCount) * Math.PI * 2;
-        const fallbackY = category.type === 'large' ? -1.2 : category.type === 'medium' ? -0.8 : -0.2;
+        const spiralAngle = (i / totalBlobs) * Math.PI * 2 * 1.618; // Golden ratio spiral
+        const spiralRadius = 1.5 + (i % 3) * 0.8;
         blobMesh.position.set(
-          Math.cos(fallbackAngle) * 0.8, // Very tight center grouping
-          fallbackY, // Tighter vertical spacing
-          Math.sin(fallbackAngle) * 0.8
+          Math.cos(spiralAngle) * spiralRadius,
+          -1.4 + (i % 4) * 0.2, // Staggered heights
+          Math.sin(spiralAngle) * spiralRadius
         );
       }
 
-      // Enhanced eyes with better attachment and personality
-      const eyeSize = baseSize * 0.15; // Larger, more expressive eyes
-      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6); // Higher detail for better looks
+      // Enhanced consciousness-aware eyes with better attachment
+      const eyeSize = baseSize * 0.08; // Refined proportional sizing
+      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6);
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x000000, // Pure black dots
+        color: 0x0F172A, // Void black for depth
         transparent: false,
-        fog: false // Prevent fog interference
+        fog: false
       });
       
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       
-      // Enhanced eye positioning for better attachment
-      const eyeOffset = baseSize * 0.35;
-      const eyeHeight = baseSize * 0.25;
-      const eyeForward = baseSize * 0.8;
+      // Consciousness-flow eye positioning with better skin attachment
+      const eyeOffset = baseSize * 0.28;
+      const eyeForward = baseSize * 0.75;
+      const eyeHeight = baseSize * 0.15;
       
       leftEye.position.set(-eyeOffset, eyeHeight, eyeForward);
       rightEye.position.set(eyeOffset, eyeHeight, eyeForward);
       
+      // Add subtle eye depth for more lifelike appearance
+      leftEye.position.z -= eyeSize * 0.3;
+      rightEye.position.z -= eyeSize * 0.3;
+      
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Enhanced physics and personality data
-      const speedMultiplier = category.speed[0] + Math.random() * (category.speed[1] - category.speed[0]);
-      const movementIntensity = {
-        small: { x: 0.6, y: 0.4, z: 0.6 }, // Hyperactive movement
-        medium: { x: 0.4, y: 0.3, z: 0.4 }, // Moderate swimming
-        large: { x: 0.2, y: 0.15, z: 0.2 } // Slow, majestic movement
-      };
-      
-      const movement = movementIntensity[category.type as keyof typeof movementIntensity];
-
-      // Store comprehensive animation data with enhanced personality
+      // Store enhanced consciousness-driven animation data
       blobMesh.userData = {
         size: baseSize,
+        type: blobData.type,
+        colorData: colorData,
         originalVertices,
         leftEye,
         rightEye,
-        staticMeshes, // Reference to static meshes for collision
+        staticMeshes,
         
-        // Enhanced personality-based physics
-        sizeCategory: category.type,
-        speedMultiplier,
-        movementRange: movement,
-        energyLevel: category.energy,
-        
-        // Enhanced physics collision properties
-        radius: baseSize * 1.1, // Slightly larger collision sphere
-        velocity: new THREE.Vector3(
-          (Math.random() - 0.5) * speedMultiplier,
-          (Math.random() - 0.5) * speedMultiplier * 0.4, // More vertical movement
-          (Math.random() - 0.5) * speedMultiplier
-        ),
+        // Enhanced physics with consciousness flow
+        radius: baseSize * 1.2,
+        velocity: new THREE.Vector3(),
         lastValidPosition: blobMesh.position.clone(),
         
-        // Enhanced personality-based movement parameters
-        swimSpeed: speedMultiplier * (0.15 + Math.random() * 0.25), // Speed based on size
+        // Consciousness-inspired movement with vertical swimming
+        swimSpeed: 0.12 + Math.random() * 0.18, // Smoother base movement
         swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: movement.x * (0.5 + Math.random() * 0.8), // Amplitude based on personality
+        swimAmplitude: 0.4 + Math.random() * 0.4, // Enhanced amplitude
         
-        // Enhanced 3D movement with personality-based direction
+        // Enhanced vertical swimming patterns
+        verticalSwimSpeed: 0.08 + Math.random() * 0.12,
+        verticalAmplitude: 0.6 + (blobData.type === 'large' ? 0.3 : blobData.type === 'medium' ? 0.2 : 0.1),
+        verticalOffset: Math.random() * Math.PI * 2,
+        baseDepth: blobMesh.position.y, // Remember starting depth
+        
+        // Enhanced directional movement with consciousness awareness
         targetDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * movement.y * 2, // Vertical movement based on personality
+          (Math.random() - 0.5) * 0.6, // More vertical movement for 3D leverage
           (Math.random() - 0.5) * 2
         ).normalize(),
         currentDirection: new THREE.Vector3(),
         
-        // Enhanced material pulsing with stronger emission
+        // Enhanced consciousness pulsing system
         baseMaterial: blobMaterial,
-        pulseSpeed: category.type === 'small' ? 1.2 + Math.random() * 0.8 : 
-                   category.type === 'medium' ? 0.8 + Math.random() * 0.6 : 
-                   0.4 + Math.random() * 0.4, // Size-based pulse speed
+        pulseSpeed: 0.4 + Math.random() * 0.4, // Smoother pulsing
         pulseOffset: Math.random() * Math.PI * 2,
-        baseEmission: category.type === 'large' ? 0.3 : category.type === 'medium' ? 0.25 : 0.2,
+        pulseIntensity: 0.3 + (blobData.type === 'large' ? 0.2 : blobData.type === 'medium' ? 0.15 : 0.1),
         
-        // Enhanced jelly physics with personality
+        // Enhanced jelly physics with consciousness flow
         jellyVertices: new Float32Array(originalVertices),
-        jellySpeed: speedMultiplier * (0.6 + Math.random() * 0.5),
-        jellyIntensity: 0.08 + Math.random() * 0.06,
+        jellySpeed: 0.3 + Math.random() * 0.25, // Smoother deformation
+        jellyIntensity: 0.06 + Math.random() * 0.04, // Subtle but visible
         
-        // Simplified emergence system (keep near ground)
-        isEmerging: blobMesh.position.y < -1.5,
-        emergenceTarget: -1.4, // Stay close to ground level
+        // Consciousness emergence system (allow vertical exploration)
+        isEmerging: blobMesh.position.y < -1.0,
+        emergenceTarget: -0.8 + Math.random() * 0.8, // Can swim higher
         
-        // Optimized animation timers
-        blinkTimer: 2 + Math.random() * 4,
-        directionChangeTimer: 3 + Math.random() * 5,
+        // Enhanced animation timers for lifelike behavior
+        blinkTimer: 3 + Math.random() * 5, // More relaxed blinking
+        directionChangeTimer: 4 + Math.random() * 6, // Less frequent direction changes
+        eyeLookTimer: 2 + Math.random() * 3, // Eye movement timer
         
-        // Squishy scale animation  
-        squishiness: 0.03 + Math.random() * 0.03,
-        squishSpeed: 0.6 + Math.random() * 0.3,
+        // Enhanced squishiness with consciousness flow
+        squishiness: 0.02 + Math.random() * 0.02, // Gentler squishing
+        squishSpeed: 0.5 + Math.random() * 0.3, // Smoother squish animation
         squishOffset: Math.random() * Math.PI * 2,
         
-        // Gentle rotation
-        rotationSpeed: (Math.random() - 0.5) * 0.008,
+        // Smoother rotation with size-based variation
+        rotationSpeed: (Math.random() - 0.5) * (blobData.type === 'large' ? 0.004 : 0.006),
+        
+        // Happiness and personality factors
+        happiness: 0.7 + Math.random() * 0.3, // Base happiness level
+        curiosity: Math.random(), // How much they explore
+        sociability: Math.random(), // How much they group together
       };
 
       blobs.push(blobMesh);
@@ -324,45 +318,49 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     return blobs;
   };
 
-  // Enhanced particle system with responsive particle count
+  // Enhanced consciousness particle system with Nexus brand colors
   const createEnhancedParticles = (group: THREE.Group) => {
     const isMobile = window.innerWidth < 768;
-    const particleCount = isMobile ? 75 : 150; // Reduce particles on mobile
+    const particleCount = isMobile ? 60 : 120; // Optimized particle count
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const sizes = new Float32Array(particleCount);
     const velocities = new Float32Array(particleCount * 3);
 
-    const color1 = new THREE.Color(0x00e1ff);
-    const color2 = new THREE.Color(0x39ff14);
-    const color3 = new THREE.Color(0xffd700);
+    // Nexus consciousness color palette
+    const quantumBlue = new THREE.Color(0x0A1B3D);      // Deep consciousness
+    const consciousnessPurple = new THREE.Color(0x6B46C1); // Elevated awareness
+    const neuralCyan = new THREE.Color(0x06B6D4);       // Intelligence flow
+    const wisdomViolet = new THREE.Color(0x8B5CF6);     // Higher wisdom
 
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
       
-      // Distribute particles in hexagonal space
+      // Consciousness-aware distribution in hexagonal space
       const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 6;
-      const height = (Math.random() - 0.5) * 4;
+      const radius = Math.random() * 5.5; // Slightly more contained
+      const height = (Math.random() - 0.5) * 3.5; // More focused height
       
       positions[i3] = Math.cos(angle) * radius;
       positions[i3 + 1] = height;
       positions[i3 + 2] = Math.sin(angle) * radius;
       
-      // Smaller, more dynamic velocities
-      velocities[i3] = (Math.random() - 0.5) * 0.02;
-      velocities[i3 + 1] = (Math.random() - 0.5) * 0.02;
-      velocities[i3 + 2] = (Math.random() - 0.5) * 0.02;
+      // Consciousness flow velocities
+      velocities[i3] = (Math.random() - 0.5) * 0.015;
+      velocities[i3 + 1] = (Math.random() - 0.5) * 0.015;
+      velocities[i3 + 2] = (Math.random() - 0.5) * 0.015;
       
-      // More varied colors
+      // Nexus consciousness color distribution
       const colorChoice = Math.random();
-      let color;
-      if (colorChoice < 0.4) color = color1;
-      else if (colorChoice < 0.7) color = color2;
-      else color = color3;
+      let baseColor;
+      if (colorChoice < 0.3) baseColor = quantumBlue;
+      else if (colorChoice < 0.55) baseColor = consciousnessPurple;
+      else if (colorChoice < 0.8) baseColor = neuralCyan;
+      else baseColor = wisdomViolet;
       
-      const mixRatio = Math.random() * 0.3;
-      const finalColor = color.clone().lerp(new THREE.Color(0xffffff), mixRatio);
+      // Consciousness luminosity variation
+      const consciousnessGlow = Math.random() * 0.4 + 0.6; // 60-100% brightness
+      const finalColor = baseColor.clone().multiplyScalar(consciousnessGlow);
       colors[i3] = finalColor.r;
       colors[i3 + 1] = finalColor.g;
       colors[i3 + 2] = finalColor.b;
@@ -427,23 +425,6 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
   // Apple-grade hexagon with premium materials and effects
   const createAppleGradeHexagon = (group: THREE.Group) => {
-    // Create mirror ground surface
-    const mirrorGeometry = new THREE.PlaneGeometry(15, 15);
-    const mirrorMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x001122,
-      metalness: 1.0, // Full metallic for mirror effect
-      roughness: 0.0, // Perfect smoothness for reflection
-      reflectivity: 1.0,
-      transmission: 0,
-      transparent: false,
-      emissive: 0x000044,
-      emissiveIntensity: 0.1,
-    });
-    const mirrorMesh = new THREE.Mesh(mirrorGeometry, mirrorMaterial);
-    mirrorMesh.rotation.x = -Math.PI / 2; // Horizontal
-    mirrorMesh.position.y = -2.5; // Below everything
-    group.add(mirrorMesh);
-
     // Create spaceship-style base platform
     const baseGeometry = new THREE.CylinderGeometry(6.5, 7.0, 0.3, 32);
     const baseMaterial = new THREE.MeshPhysicalMaterial({
@@ -477,17 +458,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     for (let i = 0; i < sections; i++) {
       const angle = (i * Math.PI * 2) / sections;
       
-      // Clean cyberpunk frame material - no yellowish tint
+      // Screen frame with granite material
       const frameGeometry = new THREE.BoxGeometry(3.5, 2.5, 0.3);
       const frameMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x2a2a2a, // Neutral dark gray instead of yellowish
-        metalness: 0.8, // High metalness for reflections
-        roughness: 0.1, // Very smooth for better reflections
-        clearcoat: 0.9, // Strong clearcoat
-        clearcoatRoughness: 0.0, // Perfect smooth clearcoat
-        reflectivity: 0.8, // High reflectivity
-        emissive: 0x001111, // Dark blue emissive instead of yellow
-        emissiveIntensity: 0.05,
+        color: 0x4a4a4a,
+        metalness: 0.3,
+        roughness: 0.6,
+        clearcoat: 0.8,
+        clearcoatRoughness: 0.2,
+        reflectivity: 0.4,
+        normalScale: new THREE.Vector2(0.5, 0.5),
       });
 
       const frameMesh = new THREE.Mesh(frameGeometry, frameMaterial);
@@ -497,14 +477,12 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       frameMesh.position.set(x, 0, z);
       frameMesh.lookAt(0, 0, 0);
       
-      // Enhanced screen content with better cyberpunk colors
+      // Screen content (monitor display)
       const screenGeometry = new THREE.PlaneGeometry(3.0, 2.0);
       const screenMaterial = new THREE.MeshStandardMaterial({
-        color: i === 0 ? 0x00FFFF : 0x111111, // Pure cyan or dark
-        emissive: i === 0 ? 0x004444 : 0x000000, // Stronger cyan emissive
-        emissiveIntensity: i === 0 ? 0.6 : 0.05, // Brighter active screen
-        metalness: 0.2,
-        roughness: 0.1, // Smoother for reflections
+        color: i === 0 ? 0x00e1ff : 0x1a1d20,
+        emissive: i === 0 ? 0x003344 : 0x000000,
+        emissiveIntensity: i === 0 ? 0.5 : 0.1,
       });
       
       const screenMesh = new THREE.Mesh(screenGeometry, screenMaterial);
@@ -519,9 +497,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       (group as any)[`frame_${i}`] = frameMesh;
     }
 
-    // Add cute jelly blobs with physics ONLY ONCE
+    // Add cute jelly blobs with consciousness physics ONLY ONCE
     if (!(group as any).blobsCreated) {
-      const blobs = createCuteBlobsWithJellyPhysics(group);
+      const staticMeshes: THREE.Mesh[] = []; // Collect static meshes for collision detection
+      group.traverse((child) => {
+        if (child instanceof THREE.Mesh && !(child as any).isBlob) {
+          staticMeshes.push(child);
+        }
+      });
+      
+      const blobs = createCuteBlobsWithJellyPhysics(group, staticMeshes);
       const particles = createEnhancedParticles(group);
       
       // Store references for animation updates  
@@ -555,36 +540,39 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
     }
 
-    // Optimized blob physics with hexagon interior containment
+    // Enhanced consciousness-driven blob physics with vertical swimming
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
-      const hexagonInnerRadius = 3.8; // Keep blobs INSIDE hexagon, not on perimeter
-      const groundLevel = -2.0; // Slightly above ground
-      const ceilingLevel = 0.5; // Lower ceiling to keep them near ground
+      const hexagonInnerRadius = 3.8; // Consciousness containment field
+      const depthRange = { min: -2.2, max: 0.2 }; // Expanded vertical swimming space
       
       blobs.forEach((blob: any, index: number) => {
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Enhanced cyberpunk neon emission with tighter grouping
-        if (index % 3 === Math.floor(time * 10) % 3) {
+        // Enhanced consciousness pulsing with Nexus color system
+        if (index % 2 === Math.floor(time * 8) % 2) { // Smoother frame distribution
           const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
-          const basePulse = userData.baseEmission;
-          const pulseAmplitude = userData.sizeCategory === 'large' ? 0.2 : 
-                               userData.sizeCategory === 'medium' ? 0.15 : 0.12;
-          const pulseIntensity = basePulse + Math.sin(pulseTime) * pulseAmplitude;
-          userData.baseMaterial.emissiveIntensity = Math.max(0.15, pulseIntensity);
+          const basePulse = userData.pulseIntensity;
+          const consciousness = Math.sin(pulseTime) * 0.15;
+          const quantum = Math.sin(pulseTime * 1.618) * 0.1; // Golden ratio harmonics
+          
+          const finalIntensity = basePulse + consciousness + quantum;
+          userData.baseMaterial.emissiveIntensity = Math.max(0.1, finalIntensity);
+          
+          // Color temperature variation for living feel
+          const colorVariation = 1 + Math.sin(time * 0.5 + userData.pulseOffset) * 0.1;
+          userData.baseMaterial.color.setHex(userData.colorData.color).multiplyScalar(colorVariation);
         }
         
-        // Advanced collision detection with static meshes (hexagon structure)
+        // Enhanced collision detection with consciousness flow
         const currentPosition = blob.position.clone();
         let collisionDetected = false;
         
-        // Check collision with static meshes using optimized bounding spheres
+        // Static mesh collision with smoothed response
         for (const staticMesh of userData.staticMeshes) {
           if (!staticMesh.geometry || !staticMesh.visible) continue;
           
-          // Use bounding sphere for faster collision detection
           if (!staticMesh.boundingSphere) {
             staticMesh.geometry.computeBoundingSphere();
             staticMesh.boundingSphere = staticMesh.geometry.boundingSphere?.clone();
@@ -595,43 +583,107 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             staticMesh.getWorldPosition(meshWorldPosition);
             
             const distance = currentPosition.distanceTo(meshWorldPosition);
-            const collisionRadius = userData.radius + staticMesh.boundingSphere.radius + 0.1;
+            const collisionRadius = userData.radius + staticMesh.boundingSphere.radius + 0.15;
             
             if (distance < collisionRadius) {
-              // Collision detected - push blob away gently
               const pushDirection = currentPosition.clone().sub(meshWorldPosition).normalize();
               const pushDistance = collisionRadius - distance;
               
-              blob.position.add(pushDirection.multiplyScalar(pushDistance * 0.5));
-              userData.targetDirection.reflect(pushDirection).multiplyScalar(0.6);
+              // Smoother collision response with consciousness flow
+              blob.position.add(pushDirection.multiplyScalar(pushDistance * 0.3));
+              userData.targetDirection.lerp(pushDirection, 0.4);
+              userData.velocity.multiplyScalar(0.8); // Gentle deceleration
               collisionDetected = true;
-              break; // Exit early for performance
+              break;
             }
           }
         }
         
-        // Optimized blob-to-blob collision (check only nearby blobs)
+        // Enhanced blob-to-blob social interaction
         for (let j = index + 1; j < blobs.length; j++) {
           const otherBlob = blobs[j];
           const distance = blob.position.distanceTo(otherBlob.position);
-          const minDistance = userData.radius + otherBlob.userData.radius + 0.05;
+          const comfortDistance = userData.radius + otherBlob.userData.radius + 0.1;
+          const socialDistance = comfortDistance * 2.5; // Social awareness range
           
-          if (distance < minDistance) {
-            // Optimized collision response
+          if (distance < comfortDistance) {
+            // Physical collision - gentle separation
             const direction = blob.position.clone().sub(otherBlob.position).normalize();
-            const separation = (minDistance - distance) * 0.4; // Reduced for smoother movement
+            const separation = (comfortDistance - distance) * 0.25; // Gentler separation
             
             blob.position.add(direction.clone().multiplyScalar(separation));
             otherBlob.position.sub(direction.clone().multiplyScalar(separation));
             
-            // Soft bounce effect
-            userData.targetDirection.reflect(direction).multiplyScalar(0.7);
-            otherBlob.userData.targetDirection.reflect(direction.clone().negate()).multiplyScalar(0.7);
+            // Consciousness-based interaction
+            userData.targetDirection.lerp(direction, 0.3);
+            otherBlob.userData.targetDirection.lerp(direction.clone().negate(), 0.3);
+          } else if (distance < socialDistance) {
+            // Social interaction - mild attraction/repulsion based on personality
+            const direction = blob.position.clone().sub(otherBlob.position).normalize();
+            const socialForce = (userData.sociability + otherBlob.userData.sociability - 1) * 0.01;
+            
+            if (socialForce > 0) {
+              // Attraction
+              userData.targetDirection.lerp(direction.clone().negate(), socialForce);
+            } else {
+              // Repulsion
+              userData.targetDirection.lerp(direction, Math.abs(socialForce));
+            }
           }
         }
         
-        // Optimized jelly vertex deformation (reduced frequency for performance)
-        if (index % 2 === Math.floor(time * 15) % 2) { // Update half the blobs per frame
+        // Enhanced vertical swimming with consciousness flow
+        const verticalTime = time * userData.verticalSwimSpeed + userData.verticalOffset;
+        const verticalMovement = Math.sin(verticalTime) * userData.verticalAmplitude;
+        const targetY = userData.baseDepth + verticalMovement;
+        
+        // Smooth vertical transition with consciousness awareness
+        blob.position.y = THREE.MathUtils.lerp(blob.position.y, targetY, deltaTime * 2);
+        
+        // Enhanced horizontal swimming with curiosity-driven exploration
+        const swimTime = time * userData.swimSpeed + userData.swimOffset;
+        const explorationFactor = userData.curiosity * 2 + 1;
+        
+        const swimX = Math.sin(swimTime) * userData.swimAmplitude * explorationFactor;
+        const swimZ = Math.cos(swimTime * 1.2) * userData.swimAmplitude * explorationFactor;
+        
+        // Apply swimming movement with direction blending
+        userData.targetDirection.lerp(
+          new THREE.Vector3(swimX, verticalMovement * 0.3, swimZ).normalize(),
+          deltaTime * 0.5
+        );
+        
+        // Consciousness-driven movement with smooth acceleration
+        userData.velocity.lerp(userData.targetDirection, deltaTime * 0.8);
+        userData.velocity.multiplyScalar(0.95); // Natural friction
+        
+        // Apply movement with boundary containment
+        const movement = userData.velocity.clone().multiplyScalar(deltaTime * 2);
+        blob.position.add(movement);
+        
+        // Enhanced hexagon boundary containment with consciousness reflection
+        const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
+        if (distanceFromCenter > hexagonInnerRadius) {
+          const direction = new THREE.Vector3(blob.position.x, 0, blob.position.z).normalize();
+          blob.position.x = direction.x * hexagonInnerRadius;
+          blob.position.z = direction.z * hexagonInnerRadius;
+          
+          // Consciousness-based reflection
+          userData.targetDirection.reflect(direction);
+          userData.velocity.reflect(direction).multiplyScalar(0.6);
+        }
+        
+        // Enhanced vertical boundary containment
+        if (blob.position.y < depthRange.min) {
+          blob.position.y = depthRange.min;
+          userData.velocity.y = Math.abs(userData.velocity.y) * 0.5;
+        } else if (blob.position.y > depthRange.max) {
+          blob.position.y = depthRange.max;
+          userData.velocity.y = -Math.abs(userData.velocity.y) * 0.5;
+        }
+        
+        // Enhanced jelly vertex deformation with consciousness patterns
+        if (index % 2 === Math.floor(time * 8) % 2) { // Smoother update frequency
           const geometry = blob.geometry;
           const positions = geometry.attributes.position;
           
@@ -641,203 +693,122 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             const originalY = userData.originalVertices[i3 + 1];  
             const originalZ = userData.originalVertices[i3 + 2];
             
-            // Optimized jelly wobble
-            const wobbleX = Math.sin(time * userData.jellySpeed + originalY * 1.5) * userData.jellyIntensity;
-            const wobbleY = Math.sin(time * userData.jellySpeed * 1.2 + originalZ * 1.5) * userData.jellyIntensity;
-            const wobbleZ = Math.sin(time * userData.jellySpeed * 0.9 + originalX * 1.5) * userData.jellyIntensity;
+            // Enhanced consciousness-driven jelly wobble
+            const consciousnessWave = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity;
+            const quantumFlow = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity * 0.8;
+            const neuralPulse = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity * 0.6;
             
             positions.setXYZ(i, 
-              originalX + wobbleX,
-              originalY + wobbleY, 
-              originalZ + wobbleZ
+              originalX + consciousnessWave,
+              originalY + quantumFlow, 
+              originalZ + neuralPulse
             );
           }
           positions.needsUpdate = true;
           
-          // Enhanced eyes follow skin deformation with better attachment
-          const eyeOffset = userData.size * 0.35; // Proportional to blob size
-          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.6;
+          // Enhanced consciousness-aware eye behavior
+          const eyeOffset = userData.size * 0.28;
+          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.3;
+          const eyeLook = Math.sin(time * 0.5 + userData.pulseOffset) * 0.05; // Subtle eye movement
           
-          // Enhanced eye positioning with smooth movement
-          const eyeHeight = userData.size * 0.25;
-          const eyeForward = userData.size * 0.8 + skinDeformation;
+          // Eyes follow consciousness flow and skin deformation
+          userData.leftEye.position.z = userData.size * 0.75 + skinDeformation;
+          userData.rightEye.position.z = userData.size * 0.75 + skinDeformation;
           
-          userData.leftEye.position.set(
-            -eyeOffset + Math.sin(time * userData.jellySpeed * 0.8) * userData.jellyIntensity * 0.3,
-            eyeHeight + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.2,
-            eyeForward
-          );
-          userData.rightEye.position.set(
-            eyeOffset + Math.sin(time * userData.jellySpeed * 0.8) * userData.jellyIntensity * 0.3,
-            eyeHeight + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.2,
-            eyeForward
-          );
+          userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.15 + eyeLook;
+          userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.15 - eyeLook;
           
-          // Enhanced blinking behavior with personality
-          userData.blinkTimer -= deltaTime;
-          if (userData.blinkTimer <= 0) {
-            // Personality-based blink frequency
-            const blinkRate = userData.energyLevel === 'high' ? 1.5 + Math.random() * 2 :
-                             userData.energyLevel === 'medium' ? 2 + Math.random() * 3 :
-                             2.5 + Math.random() * 4;
-            userData.blinkTimer = blinkRate;
-            
-            // Smooth blink animation
-            const blinkDuration = 0.15 + Math.random() * 0.1;
-            userData.leftEye.scale.y = 0.1;
-            userData.rightEye.scale.y = 0.1;
-            
-            // Reset eyes after blink
-            setTimeout(() => {
-              userData.leftEye.scale.y = 1;
-              userData.rightEye.scale.y = 1;
-            }, blinkDuration * 1000);
-          }
+          // Subtle eye height variation for lifelike behavior
+          userData.leftEye.position.y = userData.size * 0.15 + Math.sin(time * 0.3) * 0.02;
+          userData.rightEye.position.y = userData.size * 0.15 + Math.sin(time * 0.3 + 1) * 0.02;
         }
         
-        // Enhanced movement system with smoother transitions
-        const moveTime = time * userData.swimSpeed;
-        userData.currentDirection.lerp(userData.targetDirection, 0.02); // Much slower for smoothness
-        
-        // Enhanced direction change with less frequent changes to reduce jitter
-        userData.directionChangeTimer -= deltaTime;
-        if (userData.directionChangeTimer <= 0) {
-          // Longer intervals between direction changes
-          const changeFrequency = userData.energyLevel === 'high' ? 4 + Math.random() * 6 :
-                                 userData.energyLevel === 'medium' ? 6 + Math.random() * 8 :
-                                 8 + Math.random() * 12;
-          userData.directionChangeTimer = changeFrequency;
-          
-          // Gentler direction changes
-          userData.targetDirection.set(
-            (Math.random() - 0.5) * 1.5, // Reduced intensity
-            (Math.random() - 0.5) * userData.movementRange.y * 1.5,
-            (Math.random() - 0.5) * 1.5
-          ).normalize();
-        }
-        
-        // Enhanced emergence or personality-based swimming
-        if (userData.isEmerging && blob.position.y < userData.emergenceTarget) {
-          blob.position.y += userData.swimSpeed * deltaTime * 0.8; // Faster emergence
-          if (blob.position.y >= userData.emergenceTarget) {
-            userData.isEmerging = false;
-          }
-        } else {
-          // Enhanced swimming motion with multiple movement patterns
-          const time = elapsedTime;
-          const swimTime = time * userData.swimSpeed;
-          
-          // Multiple swimming patterns for variety
-          const pattern1 = Math.sin(swimTime + userData.swimOffset) * 0.7;
-          const pattern2 = Math.cos(swimTime * 0.7 + userData.swimOffset) * 0.3;
-          const pattern3 = Math.sin(swimTime * 1.3 + userData.swimOffset) * 0.2;
-          
-          const combinedPattern = (pattern1 + pattern2 + pattern3) / 3;
-          const moveDistance = userData.swimAmplitude * deltaTime * userData.speedMultiplier * 0.8;
-          
-          // Enhanced swimming with undulation
-          const undulation = new THREE.Vector3(
-            Math.sin(swimTime * 0.8) * 0.1,
-            Math.sin(swimTime * 1.2) * 0.15, // Vertical undulation
-            Math.cos(swimTime * 0.9) * 0.1
-          );
-          
-          // Smoother movement with less jitter
-          const targetVelocity = userData.currentDirection.clone()
-            .multiplyScalar(moveDistance * (1 + combinedPattern))
-            .add(undulation.multiplyScalar(userData.speedMultiplier));
-          
-          userData.velocity.lerp(targetVelocity, 0.15); // Smoother transitions
-          blob.position.add(userData.velocity);
-        }
-        
-        // Tighter boundary collision for center grouping
-        const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
-        const centerRadius = 1.5; // Much tighter containment radius
-        
-        if (distanceFromCenter > centerRadius - userData.radius) {
-          const angle = Math.atan2(blob.position.z, blob.position.x);
-          const targetX = Math.cos(angle) * (centerRadius - userData.radius);
-          const targetZ = Math.sin(angle) * (centerRadius - userData.radius);
-          
-          // Immediate correction for tight grouping
-          blob.position.x = targetX;
-          blob.position.z = targetZ;
-          
-          // Strong bounce back toward center
-          const wallNormal = new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle));
-          userData.targetDirection.reflect(wallNormal).multiplyScalar(1.2);
-          userData.velocity.multiplyScalar(0.5); // Strong damping
-        }
-        
-        // Enhanced vertical boundaries for tight center grouping
-        const verticalLimits = {
-          small: { floor: -1.0, ceiling: 1.0 },
-          medium: { floor: -1.5, ceiling: 0.5 },
-          large: { floor: -2.0, ceiling: -0.2 }
-        };
-        
-        const limits = verticalLimits[userData.sizeCategory as keyof typeof verticalLimits];
-        
-        if (blob.position.y > limits.ceiling - userData.radius) {
-          blob.position.y = THREE.MathUtils.lerp(blob.position.y, limits.ceiling - userData.radius, 0.2);
-          userData.targetDirection.y = -Math.abs(userData.targetDirection.y) * 0.9;
-          userData.velocity.y *= 0.7;
-        } else if (blob.position.y < limits.floor + userData.radius && !userData.isEmerging) {
-          blob.position.y = THREE.MathUtils.lerp(blob.position.y, limits.floor + userData.radius, 0.2);
-          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * 0.9;
-          userData.velocity.y *= 0.7;
-        }
-        
-        // Optimized squishy scale animation
+        // Enhanced consciousness-driven squishy scale animation
         const squishTime = time * userData.squishSpeed + userData.squishOffset;
-        const squishScale = 1 + Math.sin(squishTime) * userData.squishiness;
-        const squishScaleY = 1 + Math.sin(squishTime * 1.1) * userData.squishiness * 0.7;
+        const happinessMultiplier = 0.5 + userData.happiness * 0.5; // Happier blobs are more animated
+        
+        const squishScale = 1 + Math.sin(squishTime) * userData.squishiness * happinessMultiplier;
+        const squishScaleY = 1 + Math.sin(squishTime * 1.2) * userData.squishiness * 0.8 * happinessMultiplier;
         blob.scale.set(squishScale, squishScaleY, squishScale);
         
-        // Optimized rotation
-        blob.rotation.y += userData.rotationSpeed;
+        // Enhanced consciousness-driven rotation
+        blob.rotation.y += userData.rotationSpeed * (0.5 + userData.happiness * 0.5);
+        blob.rotation.x += userData.rotationSpeed * 0.3 * Math.sin(time * 0.2);
         
-        // Optimized blinking system
+        // Enhanced consciousness-aware blinking system
         userData.blinkTimer -= deltaTime;
         if (userData.blinkTimer <= 0) {
-          userData.blinkTimer = 3 + Math.random() * 6; // Slower blinking
+          userData.blinkTimer = 2 + Math.random() * 4 + userData.happiness; // Happy blobs blink more
           
-          // Quick blink animation
+          // Consciousness-driven blink animation
+          const blinkDuration = 100 + userData.happiness * 50; // Happier = longer blinks
           userData.leftEye.scale.y = 0.1;
           userData.rightEye.scale.y = 0.1;
           
           setTimeout(() => {
-            userData.leftEye.scale.y = 1;
-            userData.rightEye.scale.y = 1;
-          }, 100);
+            if (userData.leftEye && userData.rightEye) {
+              userData.leftEye.scale.y = 1;
+              userData.rightEye.scale.y = 1;
+            }
+          }, blinkDuration);
+        }
+        
+        // Enhanced consciousness-driven direction changes
+        userData.directionChangeTimer -= deltaTime;
+        if (userData.directionChangeTimer <= 0) {
+          userData.directionChangeTimer = 3 + Math.random() * 4 + userData.curiosity * 2; // Curious blobs change direction more
+          
+          // Consciousness-aware direction selection
+          const explorationStrength = userData.curiosity * 2 + 0.5;
+          userData.targetDirection.set(
+            (Math.random() - 0.5) * explorationStrength,
+            (Math.random() - 0.5) * 0.4 * explorationStrength, // More vertical movement for curious blobs
+            (Math.random() - 0.5) * explorationStrength
+          ).normalize();
+        }
+        
+        // Enhanced consciousness eye looking behavior
+        userData.eyeLookTimer -= deltaTime;
+        if (userData.eyeLookTimer <= 0) {
+          userData.eyeLookTimer = 1 + Math.random() * 3;
+          
+          // Eyes can look around independently based on curiosity
+          const lookDirection = new THREE.Vector3(
+            (Math.random() - 0.5) * userData.curiosity * 0.1,
+            (Math.random() - 0.5) * userData.curiosity * 0.05,
+            0
+          );
+          
+          userData.leftEye.lookAt(blob.position.clone().add(lookDirection));
+          userData.rightEye.lookAt(blob.position.clone().add(lookDirection.clone().negate()));
         }
       });
     }
 
-    // Optimized particle animation with reduced update frequency
+    // Enhanced consciousness-driven particle animation
     const particles = (hexagonRef.current as any).particles;
     if (particles) {
-      particles.rotation.y += 0.0003; // Slower rotation for better performance
+      particles.rotation.y += 0.0002; // Consciousness flow rotation
       
-      // Update particles less frequently for performance
-      if (Math.floor(elapsedTime * 30) % 2 === 0) { // 15fps update rate
+      // Consciousness-aware particle updates
+      if (Math.floor(elapsedTime * 20) % 2 === 0) { // Smoother 10fps update rate
         const positions = particles.geometry.attributes.position.array as Float32Array;
         const velocities = particles.userData.velocities;
         
         for (let i = 0; i < positions.length; i += 3) {
-          // Apply velocities with damping
-          positions[i] += velocities[i] * 0.8;
-          positions[i + 1] += velocities[i + 1] * 0.8;
-          positions[i + 2] += velocities[i + 2] * 0.8;
+          // Consciousness flow velocity
+          positions[i] += velocities[i] * 0.9;
+          positions[i + 1] += velocities[i + 1] * 0.9;
+          positions[i + 2] += velocities[i + 2] * 0.9;
           
-          // Gentler wave motion
-          positions[i + 1] += Math.sin(elapsedTime * 1.5 + i * 0.08) * 0.001;
+          // Quantum consciousness wave motion
+          const consciousnessWave = Math.sin(elapsedTime * 1.2 + i * 0.06) * 0.0008;
+          positions[i + 1] += consciousnessWave;
           
-          // Optimized boundary wrapping
-          if (Math.abs(positions[i]) > 7) velocities[i] *= -0.9;
-          if (Math.abs(positions[i + 1]) > 3.5) velocities[i + 1] *= -0.9;
-          if (Math.abs(positions[i + 2]) > 7) velocities[i + 2] *= -0.9;
+          // Enhanced boundary wrapping with consciousness reflection
+          if (Math.abs(positions[i]) > 6) velocities[i] *= -0.85;
+          if (Math.abs(positions[i + 1]) > 3) velocities[i + 1] *= -0.85;
+          if (Math.abs(positions[i + 2]) > 6) velocities[i + 2] *= -0.85;
         }
         
         particles.geometry.attributes.position.needsUpdate = true;
@@ -861,35 +832,20 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     cameraRef.current.lookAt(0, 0, 0);
   };
 
-  // Ultra-smooth rotation with enhanced physics simulation
+  // Apple-grade rotation with physics simulation (SLOWER & SMOOTHER)
   const updateRotationWithPhysics = (_deltaTime: number) => {
     if (!isInteracting && !reducedMotion) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // Enhanced physics-based rotation with ultra-smooth damping
-    const springStrength = 0.015; // Even gentler for ultra-smooth movement
-    const damping = 0.95; // Higher damping to prevent oscillation
+    // Physics-based rotation with gentler spring damping
+    const springStrength = 0.025; // Half the original speed
+    const damping = 0.9; // Higher damping for smoother motion
     
-    const angleDifference = targetRotationY.current - currentRotationY.current;
-    
-    // Normalize angle difference to prevent unnecessary full rotations
-    let normalizedDiff = angleDifference;
-    while (normalizedDiff > Math.PI) normalizedDiff -= 2 * Math.PI;
-    while (normalizedDiff < -Math.PI) normalizedDiff += 2 * Math.PI;
-    
-    const force = normalizedDiff * springStrength;
+    const force = (targetRotationY.current - currentRotationY.current) * springStrength;
     velocityRef.current += force;
     velocityRef.current *= damping;
-    
-    // Apply velocity threshold to prevent micro-movements
-    if (Math.abs(velocityRef.current) > 0.001) {
-      currentRotationY.current += velocityRef.current;
-    } else if (Math.abs(normalizedDiff) < 0.01) {
-      // Snap to target when very close to prevent endless micro-adjustments
-      currentRotationY.current = targetRotationY.current;
-      velocityRef.current = 0;
-    }
+    currentRotationY.current += velocityRef.current;
     
     if (hexagonRef.current) {
       hexagonRef.current.rotation.y = currentRotationY.current;
@@ -899,34 +855,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // Enhanced scene setup with radial gradient background for depth
+    // Advanced scene setup with Apple-grade rendering
     const scene = new THREE.Scene();
-    
-    // Create radial gradient background for depth perception
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 512;
-    const context = canvas.getContext('2d')!;
-    
-    // Radial gradient from center to edges
-    const gradient = context.createRadialGradient(256, 256, 0, 256, 256, 256);
-    gradient.addColorStop(0, '#001a2e'); // Dark blue center
-    gradient.addColorStop(0.4, '#000d1a'); // Darker middle
-    gradient.addColorStop(1, '#000000'); // Black edges
-    
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, 512, 512);
-    
-    const backgroundTexture = new THREE.CanvasTexture(canvas);
-    const backgroundGeometry = new THREE.SphereGeometry(50, 32, 32);
-    const backgroundMaterial = new THREE.MeshBasicMaterial({ 
-      map: backgroundTexture,
-      side: THREE.BackSide 
-    });
-    const backgroundSphere = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
-    scene.add(backgroundSphere);
-    
-    scene.fog = new THREE.Fog(0x000611, 5, 25); // Deeper fog for depth
+    scene.background = null; // Transparent for layering
+    scene.fog = new THREE.Fog(0x000000, 5, 25); // Depth perception
     sceneRef.current = scene;
 
     // Professional camera setup with responsive characteristics
@@ -940,22 +872,21 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
-    // Enhanced renderer with bloom and cyberpunk quality
+    // Advanced renderer with Apple-grade quality
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
       powerPreference: "high-performance",
       stencil: false,
-      depth: true,
-      preserveDrawingBuffer: true // For better quality
+      depth: true
     });
     
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.toneMapping = THREE.ReinhardToneMapping; // Better for neon colors
-    renderer.toneMappingExposure = 1.8; // Increased for bloom effect
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     
     rendererRef.current = renderer;
