@@ -82,15 +82,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     accentLight.position.set(0, 8, 0);
     scene.add(accentLight);
 
-    // 🌫️ VOLUMETRIC FOG SYSTEM - ATMOSPHERIC CLOUD EFFECTS
-    // Create volumetric fog that blobs can influence with their emission colors
+    // 🌫️ TRUE VOLUMETRIC FOG SYSTEM - ATMOSPHERIC CLOUD EFFECTS
+    // Using Three.js native fog system with ground plane for realistic atmosphere
     const setupVolumetricFog = () => {
       // Ground plane for fog base (partially submerged ground)
       const groundGeometry = new THREE.PlaneGeometry(50, 50);
       const groundMaterial = new THREE.MeshLambertMaterial({ 
         color: 0x1a1a1a, 
         transparent: true, 
-        opacity: 0.7 
+        opacity: 0.7,
+        fog: true // Enable fog on ground material
       });
       const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
       groundMesh.rotation.x = -Math.PI / 2;
@@ -98,54 +99,19 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       groundMesh.receiveShadow = true;
       scene.add(groundMesh);
 
-      // Volumetric fog particles system
-      const fogGeometry = new THREE.BufferGeometry();
-      const fogCount = 800; // Dense fog for atmospheric effect
-      const positions = new Float32Array(fogCount * 3);
-      const opacities = new Float32Array(fogCount);
-      const sizes = new Float32Array(fogCount);
-
-      for (let i = 0; i < fogCount; i++) {
-        // Create layered fog distribution - denser near ground, lighter up high
-        const i3 = i * 3;
-        positions[i3] = (Math.random() - 0.5) * 60; // X spread
-        positions[i3 + 1] = Math.random() * 15 - 2; // Y: -2 to 13 (ground level to clouds)
-        positions[i3 + 2] = (Math.random() - 0.5) * 60; // Z spread
-        
-        // Height-based opacity - denser at ground level
-        const height = positions[i3 + 1];
-        const heightFactor = Math.max(0, 1 - (height + 2) / 15);
-        opacities[i] = heightFactor * 0.1 + Math.random() * 0.05;
-        
-        // Size variation based on height
-        sizes[i] = 2 + Math.random() * 3 + heightFactor * 2;
-      }
-
-      fogGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      fogGeometry.setAttribute('opacity', new THREE.BufferAttribute(opacities, 1));
-      fogGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-      // Advanced fog shader material with blob color influence
-      const fogMaterial = new THREE.PointsMaterial({
-        color: 0x6ec5f7, // Base fog color (cool blue-cyan)
-        transparent: true,
-        opacity: 0.3,
-        size: 3,
-        sizeAttenuation: true,
-        blending: THREE.AdditiveBlending,
-        vertexColors: false
-      });
-
-      const fogMesh = new THREE.Points(fogGeometry, fogMaterial);
-      scene.add(fogMesh);
-
-      // Store fog for dynamic color updates based on blob emissions
-      (scene as any).volumetricFog = fogMesh;
+      // TRUE THREE.JS VOLUMETRIC FOG - Exponential fog for realistic atmospheric effect
+      // FogExp2 creates exponential fog that gets denser with distance
+      const baseFogColor = new THREE.Color(0x6ec5f7); // Cool blue-cyan base
+      scene.fog = new THREE.FogExp2(baseFogColor, 0.02); // Density: 0.02 for subtle atmospheric effect
       
-      return fogMesh;
+      // Store fog reference for dynamic color updates based on blob emissions
+      (scene as any).volumetricFog = scene.fog;
+      (scene as any).baseFogColor = baseFogColor.clone();
+      
+      return scene.fog;
     };
 
-    // Create the volumetric fog system
+    // Create the true volumetric fog system
     setupVolumetricFog();
   };
 
@@ -1245,21 +1211,37 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     cameraRef.current.lookAt(0, lookAtY, 0);
   };
 
-  // Apple-grade rotation with SMOOTH physics simulation (NO OVERSHOOTING)
-  const updateRotationWithPhysics = (_deltaTime: number) => {
+  // Apple-grade smooth camera transitions with curved interpolation (NO ABRUPT MOVEMENT)
+  const updateRotationWithPhysics = (deltaTime: number) => {
     if (!isInteracting && !reducedMotion) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // SMOOTH DIRECT INTERPOLATION - NO SPRING PHYSICS (prevents overshooting)
+    // SMOOTH CURVED INTERPOLATION using easing function for natural movement
     const angleDifference = targetRotationY.current - currentRotationY.current;
     const normalizedDiff = ((angleDifference + Math.PI) % (2 * Math.PI)) - Math.PI; // Normalize to -π to π
     
-    // Direct smooth interpolation with appropriate speed
-    const lerpFactor = 0.02; // Smooth but responsive (was 0.004 - too slow)
+    // Smooth easing-based interpolation for natural camera movement
+    const distance = Math.abs(normalizedDiff);
     
-    if (Math.abs(normalizedDiff) > 0.001) {
-      currentRotationY.current += normalizedDiff * lerpFactor;
+    // Dynamic speed based on distance - faster for larger differences, slower for fine adjustments
+    let lerpFactor;
+    if (distance > Math.PI / 2) {
+      // Large rotations: smooth but responsive
+      lerpFactor = Math.min(deltaTime * 1.5, 0.08);
+    } else if (distance > Math.PI / 4) {
+      // Medium rotations: balanced speed
+      lerpFactor = Math.min(deltaTime * 1.2, 0.05);
+    } else {
+      // Small adjustments: gentle precision
+      lerpFactor = Math.min(deltaTime * 0.8, 0.03);
+    }
+    
+    // Apply easing curve for smooth acceleration/deceleration
+    const easedFactor = 1 - Math.pow(1 - lerpFactor, 3); // Cubic ease-out
+    
+    if (distance > 0.001) {
+      currentRotationY.current += normalizedDiff * easedFactor;
     } else {
       // Snap to target when very close to prevent drift
       currentRotationY.current = targetRotationY.current;
