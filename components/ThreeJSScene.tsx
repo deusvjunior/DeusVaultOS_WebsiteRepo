@@ -110,13 +110,27 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       const blob = new THREE.Mesh(geometry, material);
       
-      // More centered positioning around the hexagon
-      const radius = 2 + Math.random() * 4; // Closer to center: 2-6 units
+      // Add cute blinking eyes
+      const eyeGeometry = new THREE.SphereGeometry(0.015, 8, 6); // Small eye spheres
+      const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Black eyes
+      
+      // Left eye
+      const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+      leftEye.position.set(-0.03, 0.02, 0.08); // Position relative to blob
+      blob.add(leftEye);
+      
+      // Right eye
+      const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+      rightEye.position.set(0.03, 0.02, 0.08); // Position relative to blob
+      blob.add(rightEye);
+      
+      // More centered positioning WITHIN the hexagon bounds
+      const radius = 1.5 + Math.random() * 3; // Closer to center: 1.5-4.5 units (within hexagon)
       const theta = Math.random() * Math.PI * 2; // Random angle
-      const phi = Math.PI * 0.3 + Math.random() * Math.PI * 0.4; // Elevation: 30% to 70% (more centered)
+      const phi = Math.PI * 0.25 + Math.random() * Math.PI * 0.5; // Elevation: 25% to 75% (above floor, below ceiling)
       
       blob.position.x = radius * Math.sin(phi) * Math.cos(theta);
-      blob.position.y = Math.max(1, radius * Math.cos(phi)); // Ensure Y is always above 1
+      blob.position.y = Math.max(0.5, Math.min(3, radius * Math.cos(phi))); // Keep within hexagon height: 0.5 to 3
       blob.position.z = radius * Math.sin(phi) * Math.sin(theta);
       
       // Random initial rotation
@@ -178,6 +192,24 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         emissionPulseSpeed: 0.8 + Math.random() * 1.2,
         emissionPulseIntensity: 0.1 + Math.random() * 0.2,
         originalEmissiveIntensity: material.emissiveIntensity,
+        
+        // Cute blinking behavior
+        blinkSpeed: 2 + Math.random() * 3, // Random blink timing
+        lastBlinkTime: Math.random() * 10, // Random initial blink timing
+        isBlinking: false,
+        
+        // Jelly physics for rippling skin
+        ripplePhase: Math.random() * Math.PI * 2,
+        rippleIntensity: 0.02 + Math.random() * 0.03,
+        rippleSpeed: 1 + Math.random() * 2,
+        
+        // Enhanced swimming animations
+        swimPhase: Math.random() * Math.PI * 2,
+        squishIntensity: 0.1 + Math.random() * 0.15,
+        
+        // Store eye references
+        leftEye: leftEye,
+        rightEye: rightEye,
         
         // Color info for emission pulsing
         originalHue: colorChoice < 0.6 ? 180 : 60 // Cyan or Yellow base hue
@@ -419,65 +451,146 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const timeWithOffset = time + userData.timeOffset;
         
-        // Smooth behavior-based movement system with gentle containment
-        switch (userData.behaviorType) {
-          case 0: // Gentle orbital swimmers
-            {
-              const orbitX = Math.cos(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
-              const orbitZ = Math.sin(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
-              const orbitY = Math.sin(timeWithOffset * userData.orbitSpeed * 0.3 + userData.orbitTilt) * userData.orbitRadius * 0.1;
+        // IMPORTANT: Make blobs rotate WITH the hexagon when not in observation mode
+        if (!observationMode && hexagonRef.current) {
+          // Store blob's local position relative to hexagon
+          const localPos = userData.originalPosition.clone();
+          
+          // Apply hexagon rotation to blob position
+          const rotationMatrix = new THREE.Matrix4().makeRotationY(hexagonRef.current.rotation.y);
+          localPos.applyMatrix4(rotationMatrix);
+          
+          // Smooth behavior-based movement system with gentle containment
+          switch (userData.behaviorType) {
+            case 0: // Gentle orbital swimmers
+              {
+                const orbitX = Math.cos(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
+                const orbitZ = Math.sin(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
+                const orbitY = Math.sin(timeWithOffset * userData.orbitSpeed * 0.3 + userData.orbitTilt) * userData.orbitRadius * 0.1;
+                
+                blob.position.x = localPos.x + orbitX;
+                blob.position.y = Math.max(0.5, Math.min(3, localPos.y + orbitY));
+                blob.position.z = localPos.z + orbitZ;
+              }
+              break;
               
-              blob.position.x = userData.originalPosition.x + orbitX;
-              blob.position.y = Math.max(1, userData.originalPosition.y + orbitY);
-              blob.position.z = userData.originalPosition.z + orbitZ;
-            }
-            break;
-            
-          case 1: // Smooth sine wave swimmers
-            {
-              const swimTime = timeWithOffset * userData.swimSpeed;
-              const waveX = Math.sin(swimTime) * 0.8;
-              const waveZ = Math.sin(swimTime * 0.7) * 0.6;
-              const waveY = Math.cos(swimTime * 0.4) * 0.3;
+            case 1: // Smooth sine wave swimmers with enhanced squishing
+              {
+                const swimTime = timeWithOffset * userData.swimSpeed;
+                const waveX = Math.sin(swimTime + userData.swimPhase) * 0.6;
+                const waveZ = Math.sin(swimTime * 0.7 + userData.swimPhase) * 0.4;
+                const waveY = Math.cos(swimTime * 0.4 + userData.swimPhase) * 0.2;
+                
+                // Enhanced squishing during swimming
+                const squishX = 1 + Math.sin(swimTime * 2) * userData.squishIntensity;
+                const squishY = 1 + Math.cos(swimTime * 2.3) * userData.squishIntensity;
+                const squishZ = 1 + Math.sin(swimTime * 1.8) * userData.squishIntensity;
+                
+                blob.position.x = localPos.x + waveX;
+                blob.position.y = Math.max(0.5, Math.min(3, localPos.y + waveY));
+                blob.position.z = localPos.z + waveZ;
+                
+                // Apply squishing scale
+                blob.scale.set(squishX, squishY, squishZ);
+              }
+              break;
               
-              blob.position.x = userData.originalPosition.x + waveX;
-              blob.position.y = Math.max(1, userData.originalPosition.y + waveY);
-              blob.position.z = userData.originalPosition.z + waveZ;
-            }
-            break;
-            
-          case 2: // Gentle floating with subtle drift
-            {
-              const floatX = Math.sin(timeWithOffset * 0.3) * 0.5;
-              const floatY = Math.cos(timeWithOffset * 0.2) * 0.2;
-              const floatZ = Math.sin(timeWithOffset * 0.4) * 0.4;
+            case 2: // Gentle floating with subtle drift
+              {
+                const floatX = Math.sin(timeWithOffset * 0.3 + userData.swimPhase) * 0.4;
+                const floatY = Math.cos(timeWithOffset * 0.2 + userData.swimPhase) * 0.15;
+                const floatZ = Math.sin(timeWithOffset * 0.4 + userData.swimPhase) * 0.3;
+                
+                blob.position.x = localPos.x + floatX;
+                blob.position.y = Math.max(0.5, Math.min(3, localPos.y + floatY));
+                blob.position.z = localPos.z + floatZ;
+              }
+              break;
               
-              blob.position.x = userData.originalPosition.x + floatX;
-              blob.position.y = Math.max(1, userData.originalPosition.y + floatY);
-              blob.position.z = userData.originalPosition.z + floatZ;
-            }
-            break;
-            
-          default: // Very gentle bobbing in place
-            {
-              const bobX = Math.sin(timeWithOffset * userData.bobSpeed) * 0.2;
-              const bobY = Math.cos(timeWithOffset * userData.bobSpeed * 0.8) * 0.15;
-              const bobZ = Math.sin(timeWithOffset * userData.bobSpeed * 1.2) * 0.2;
+            default: // Very gentle bobbing in place
+              {
+                const bobX = Math.sin(timeWithOffset * userData.bobSpeed + userData.swimPhase) * 0.15;
+                const bobY = Math.cos(timeWithOffset * userData.bobSpeed * 0.8 + userData.swimPhase) * 0.1;
+                const bobZ = Math.sin(timeWithOffset * userData.bobSpeed * 1.2 + userData.swimPhase) * 0.15;
+                
+                blob.position.x = localPos.x + bobX;
+                blob.position.y = Math.max(0.5, Math.min(3, localPos.y + bobY));
+                blob.position.z = localPos.z + bobZ;
+              }
+          }
+        } else {
+          // In observation mode, use independent movement (original behavior)
+          switch (userData.behaviorType) {
+            case 0: // Gentle orbital swimmers
+              {
+                const orbitX = Math.cos(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
+                const orbitZ = Math.sin(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
+                const orbitY = Math.sin(timeWithOffset * userData.orbitSpeed * 0.3 + userData.orbitTilt) * userData.orbitRadius * 0.1;
+                
+                blob.position.x = userData.originalPosition.x + orbitX;
+                blob.position.y = Math.max(0.5, Math.min(3, userData.originalPosition.y + orbitY));
+                blob.position.z = userData.originalPosition.z + orbitZ;
+              }
+              break;
               
-              blob.position.x = userData.originalPosition.x + bobX;
-              blob.position.y = Math.max(1, userData.originalPosition.y + bobY);
-              blob.position.z = userData.originalPosition.z + bobZ;
-            }
+            case 1: // Smooth sine wave swimmers with enhanced squishing
+              {
+                const swimTime = timeWithOffset * userData.swimSpeed;
+                const waveX = Math.sin(swimTime + userData.swimPhase) * 0.6;
+                const waveZ = Math.sin(swimTime * 0.7 + userData.swimPhase) * 0.4;
+                const waveY = Math.cos(swimTime * 0.4 + userData.swimPhase) * 0.2;
+                
+                // Enhanced squishing during swimming
+                const squishX = 1 + Math.sin(swimTime * 2) * userData.squishIntensity;
+                const squishY = 1 + Math.cos(swimTime * 2.3) * userData.squishIntensity;
+                const squishZ = 1 + Math.sin(swimTime * 1.8) * userData.squishIntensity;
+                
+                blob.position.x = userData.originalPosition.x + waveX;
+                blob.position.y = Math.max(0.5, Math.min(3, userData.originalPosition.y + waveY));
+                blob.position.z = userData.originalPosition.z + waveZ;
+                
+                // Apply squishing scale
+                blob.scale.set(squishX, squishY, squishZ);
+              }
+              break;
+              
+            case 2: // Gentle floating with subtle drift
+              {
+                const floatX = Math.sin(timeWithOffset * 0.3 + userData.swimPhase) * 0.4;
+                const floatY = Math.cos(timeWithOffset * 0.2 + userData.swimPhase) * 0.15;
+                const floatZ = Math.sin(timeWithOffset * 0.4 + userData.swimPhase) * 0.3;
+                
+                blob.position.x = userData.originalPosition.x + floatX;
+                blob.position.y = Math.max(0.5, Math.min(3, userData.originalPosition.y + floatY));
+                blob.position.z = userData.originalPosition.z + floatZ;
+              }
+              break;
+              
+            default: // Very gentle bobbing in place
+              {
+                const bobX = Math.sin(timeWithOffset * userData.bobSpeed + userData.swimPhase) * 0.15;
+                const bobY = Math.cos(timeWithOffset * userData.bobSpeed * 0.8 + userData.swimPhase) * 0.1;
+                const bobZ = Math.sin(timeWithOffset * userData.bobSpeed * 1.2 + userData.swimPhase) * 0.15;
+                
+                blob.position.x = userData.originalPosition.x + bobX;
+                blob.position.y = Math.max(0.5, Math.min(3, userData.originalPosition.y + bobY));
+                blob.position.z = userData.originalPosition.z + bobZ;
+              }
+          }
         }
         
-        // Smooth rotation
-        blob.rotation.x += userData.rotationSpeed.x;
-        blob.rotation.y += userData.rotationSpeed.y;
-        blob.rotation.z += userData.rotationSpeed.z;
+        // Enhanced rotation with jelly wobble
+        const rotationDamping = 0.8; // Smooth rotation
+        blob.rotation.x += userData.rotationSpeed.x * rotationDamping;
+        blob.rotation.y += userData.rotationSpeed.y * rotationDamping;
+        blob.rotation.z += userData.rotationSpeed.z * rotationDamping;
         
-        // Gentle breathing animation
-        const breathing = 1 + Math.sin(timeWithOffset * userData.breathingRate) * userData.breathingIntensity;
-        blob.scale.setScalar(breathing);
+        // Jelly rippling effect on the blob surface (if not squishing from swimming)
+        if (userData.behaviorType !== 1) { // Don't apply both squishing and rippling
+          const ripple = 1 + Math.sin(timeWithOffset * userData.rippleSpeed + userData.ripplePhase) * userData.rippleIntensity;
+          const breathing = 1 + Math.sin(timeWithOffset * userData.breathingRate) * userData.breathingIntensity;
+          blob.scale.setScalar(ripple * breathing);
+        }
         
         // Individual emission pulsing for cute effect
         if (blob.material && blob.material.emissive) {
@@ -485,20 +598,68 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           blob.material.emissiveIntensity = userData.originalEmissiveIntensity + emissionPulse;
         }
         
-        // Gentle containment - keep blobs near center
-        const containmentRadius = 8; // Smaller containment
-        const currentPos = blob.position;
-        const distanceFromCenter = currentPos.length();
-        
-        if (distanceFromCenter > containmentRadius) {
-          currentPos.normalize().multiplyScalar(containmentRadius * 0.9);
-          userData.originalPosition = currentPos.clone();
+        // Cute blinking animation
+        if (userData.leftEye && userData.rightEye) {
+          // Check if it's time to blink
+          if (time - userData.lastBlinkTime > userData.blinkSpeed) {
+            userData.isBlinking = true;
+            userData.lastBlinkTime = time;
+          }
+          
+          // Handle blink animation
+          if (userData.isBlinking) {
+            const blinkProgress = (time - userData.lastBlinkTime) * 8; // Blink speed
+            
+            if (blinkProgress < 0.3) {
+              // Closing eyes
+              const closeAmount = blinkProgress / 0.3;
+              userData.leftEye.scale.y = 1 - closeAmount * 0.9;
+              userData.rightEye.scale.y = 1 - closeAmount * 0.9;
+            } else if (blinkProgress < 0.6) {
+              // Eyes closed
+              userData.leftEye.scale.y = 0.1;
+              userData.rightEye.scale.y = 0.1;
+            } else if (blinkProgress < 0.9) {
+              // Opening eyes
+              const openAmount = (blinkProgress - 0.6) / 0.3;
+              userData.leftEye.scale.y = 0.1 + openAmount * 0.9;
+              userData.rightEye.scale.y = 0.1 + openAmount * 0.9;
+            } else {
+              // Blink complete
+              userData.leftEye.scale.y = 1;
+              userData.rightEye.scale.y = 1;
+              userData.isBlinking = false;
+              userData.blinkSpeed = 2 + Math.random() * 4; // Randomize next blink
+            }
+          }
         }
         
-        // Floor prevention
-        if (currentPos.y < 1) {
-          currentPos.y = 1;
-          userData.originalPosition.y = Math.max(1, userData.originalPosition.y);
+        // Enhanced containment - keep blobs within hexagon bounds
+        const containmentRadius = 4.5; // Hexagon inner radius
+        const currentPos = blob.position;
+        const distanceFromCenter = Math.sqrt(currentPos.x * currentPos.x + currentPos.z * currentPos.z);
+        
+        if (distanceFromCenter > containmentRadius) {
+          const angle = Math.atan2(currentPos.z, currentPos.x);
+          currentPos.x = Math.cos(angle) * containmentRadius * 0.9;
+          currentPos.z = Math.sin(angle) * containmentRadius * 0.9;
+          // Update original position if needed
+          if (!observationMode) {
+            const invRotationMatrix = new THREE.Matrix4().makeRotationY(-hexagonRef.current!.rotation.y);
+            userData.originalPosition.copy(currentPos);
+            userData.originalPosition.applyMatrix4(invRotationMatrix);
+          } else {
+            userData.originalPosition.copy(currentPos);
+          }
+        }
+        
+        // Height containment within hexagon
+        if (currentPos.y < 0.5) {
+          currentPos.y = 0.5;
+          userData.originalPosition.y = Math.max(0.5, userData.originalPosition.y);
+        } else if (currentPos.y > 3) {
+          currentPos.y = 3;
+          userData.originalPosition.y = Math.min(3, userData.originalPosition.y);
         }
       });
     }
