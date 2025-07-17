@@ -171,6 +171,49 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const blobConfig = blobConfigs[i];
       const baseSize = blobConfig.size;
       
+      // ENHANCED 3D POSITIONING WITH VERTICAL VARIATION
+      let position: THREE.Vector3 | undefined;
+      let attempts = 0;
+      
+      while (attempts < maxPoissonAttempts) {
+        // 3D spherical distribution with ENHANCED VERTICAL RANGE
+        const phi = Math.acos(2 * Math.random() - 1); // Full sphere phi
+        const theta = Math.random() * Math.PI * 2; // Full rotation
+        const radius = Math.random() * distributionSphereRadius;
+        
+        const x = radius * Math.sin(phi) * Math.cos(theta);
+        const y = radius * Math.sin(phi) * Math.sin(theta) + (Math.random() - 0.5) * 4; // ENHANCED vertical variation ±2 units
+        const z = radius * Math.cos(phi);
+        
+        const candidatePosition = new THREE.Vector3(x, y, z);
+        
+        // Check distance from existing blobs
+        let validPosition = true;
+        for (const existingPos of poissonPositions) {
+          if (candidatePosition.distanceTo(existingPos) < poissonMinDistance) {
+            validPosition = false;
+            break;
+          }
+        }
+        
+        if (validPosition) {
+          position = candidatePosition;
+          poissonPositions.push(position.clone());
+          break;
+        }
+        
+        attempts++;
+      }
+      
+      // Fallback positioning if Poisson sampling fails
+      if (!position) {
+        position = new THREE.Vector3(
+          (Math.random() - 0.5) * 6,
+          (Math.random() - 0.5) * 4, // Enhanced vertical range
+          (Math.random() - 0.5) * 6
+        );
+      }
+      
       // Create unique jelly geometry with HIGH-POLY enhanced deformation
       const blobGeometry = new THREE.SphereGeometry(baseSize, 32, 24); // Much higher poly count for smoothness
       const originalVertices = new Float32Array(blobGeometry.attributes.position.array);
@@ -216,6 +259,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
+      blobMesh.position.copy(position);
       (blobMesh as any).isBlob = true;
       (blobMesh as any).blobType = blobConfig.type;
       (blobMesh as any).colorName = colorData.name;
@@ -970,13 +1014,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     }
   };
 
-  // Subtle camera movement for depth perception (GENTLER)
+  // Subtle camera movement for depth perception with FINAL SECTION ELEVATION
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
     // Much gentler breathing motion
     const breathingOffset = Math.sin(elapsedTime * 0.2) * 0.05; // Half the jiggle
-    cameraRef.current.position.y = breathingOffset;
+    
+    // FINAL SECTION CAMERA ELEVATION (+10 meters up for overview perspective)
+    const baseHeight = currentSection === 5 ? 10 : 0; // Elevate camera on final section
+    cameraRef.current.position.y = baseHeight + breathingOffset;
     
     // Minimal parallax for mouse interaction
     const mouseInfluence = 0.01; // Half the movement
