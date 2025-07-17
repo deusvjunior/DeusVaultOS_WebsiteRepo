@@ -119,6 +119,8 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     });
 
     function animate() {
+      if (!canvas || !ctx) return;
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       const time = Date.now() * 0.001;

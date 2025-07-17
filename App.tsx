@@ -185,7 +185,7 @@ export default function App() {
   };
 
   if (isLoading) {
-    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
+    return <LoadingScreen onComplete={() => setIsLoading(false)} />;
   }
 
   return (
