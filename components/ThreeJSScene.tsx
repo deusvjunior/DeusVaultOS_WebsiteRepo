@@ -416,11 +416,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     const sizes = new Float32Array(particleCount);
     const velocities = new Float32Array(particleCount * 3);
 
-    // Nexus consciousness color palette
+    // Nexus consciousness color palette with NEON YELLOW
     const quantumBlue = new THREE.Color(0x0A1B3D);      // Deep consciousness
-    const consciousnessPurple = new THREE.Color(0x6B46C1); // Elevated awareness
+    const consciousnessNeonYellow = new THREE.Color(0xFFFF00); // Neon yellow energy
     const neuralCyan = new THREE.Color(0x06B6D4);       // Intelligence flow
-    const wisdomViolet = new THREE.Color(0x8B5CF6);     // Higher wisdom
+    const wisdomNeonYellow = new THREE.Color(0xFFFF44);     // Brighter neon yellow wisdom
 
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
@@ -439,13 +439,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       velocities[i3 + 1] = (Math.random() - 0.5) * 0.015;
       velocities[i3 + 2] = (Math.random() - 0.5) * 0.015;
       
-      // Nexus consciousness color distribution
+      // Nexus consciousness color distribution with neon yellow
       const colorChoice = Math.random();
       let baseColor;
       if (colorChoice < 0.3) baseColor = quantumBlue;
-      else if (colorChoice < 0.55) baseColor = consciousnessPurple;
+      else if (colorChoice < 0.55) baseColor = consciousnessNeonYellow;
       else if (colorChoice < 0.8) baseColor = neuralCyan;
-      else baseColor = wisdomViolet;
+      else baseColor = wisdomNeonYellow;
       
       // Consciousness luminosity variation
       const consciousnessGlow = Math.random() * 0.4 + 0.6; // 60-100% brightness
@@ -639,15 +639,28 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Enhanced consciousness pulsing with Nexus color system
-        if (index % 2 === Math.floor(time * 8) % 2) { // Smoother frame distribution
+        // Enhanced consciousness pulsing with synchronized glow and lights
+        const shouldUpdateThisFrame = (index + Math.floor(time * 6)) % 3 === 0; // Non-synchronous updates
+        if (shouldUpdateThisFrame) {
           const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
           const basePulse = userData.pulseIntensity;
-          const consciousness = Math.sin(pulseTime) * 0.15;
-          const quantum = Math.sin(pulseTime * 1.618) * 0.1; // Golden ratio harmonics
+          const consciousness = Math.sin(pulseTime) * 0.2;
+          const quantum = Math.sin(pulseTime * 1.618) * 0.15; // Golden ratio harmonics
           
           const finalIntensity = basePulse + consciousness + quantum;
-          userData.baseMaterial.emissiveIntensity = Math.max(0.1, finalIntensity);
+          userData.baseMaterial.emissiveIntensity = Math.max(0.15, finalIntensity);
+          
+          // Synchronize glow effect with emission
+          if (userData.glowMesh && userData.glowMesh.material) {
+            userData.glowMesh.material.uniforms.intensity.value = finalIntensity * 2;
+            userData.glowMesh.material.uniforms.glowColor.value.setHex(userData.colorData.emission);
+          }
+          
+          // Synchronize point light with emission (only for blobs with lights)
+          if (userData.pointLight) {
+            userData.pointLight.intensity = finalIntensity * 1.5;
+            userData.pointLight.color.setHex(userData.colorData.emission);
+          }
           
           // Color temperature variation for living feel
           const colorVariation = 1 + Math.sin(time * 0.5 + userData.pulseOffset) * 0.1;
@@ -721,26 +734,47 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           }
         }
         
-        // Enhanced vertical swimming with consciousness flow
-        const verticalTime = time * userData.verticalSwimSpeed + userData.verticalOffset;
-        const verticalMovement = Math.sin(verticalTime) * userData.verticalAmplitude;
-        const targetY = userData.baseDepth + verticalMovement;
-        
-        // Smooth vertical transition with consciousness awareness
-        blob.position.y = THREE.MathUtils.lerp(blob.position.y, targetY, deltaTime * 2);
+        // Enhanced emergence animation for underground blobs
+        if (userData.isEmerging) {
+          const emergenceProgress = Math.min(1, (userData.emergenceTarget - blob.position.y) / (userData.emergenceTarget + 3.5));
+          const emergenceSpeed = userData.emergenceSpeed * deltaTime * (1 + emergenceProgress); // Accelerate as they emerge
+          
+          blob.position.y += emergenceSpeed;
+          
+          // Add some wobble during emergence for organic feel
+          const wobble = Math.sin(time * 4 + userData.pulseOffset) * 0.05 * (1 - emergenceProgress);
+          blob.position.x += wobble;
+          blob.position.z += wobble * 0.8;
+          
+          // Disable emergence when target reached
+          if (blob.position.y >= userData.emergenceTarget) {
+            userData.isEmerging = false;
+            userData.baseDepth = blob.position.y; // Update base depth for normal swimming
+          }
+        } else {
+          // Normal vertical swimming with consciousness flow
+          const verticalTime = time * userData.verticalSwimSpeed + userData.verticalOffset;
+          const verticalMovement = Math.sin(verticalTime) * userData.verticalAmplitude;
+          const targetY = userData.baseDepth + verticalMovement;
+          
+          // Smooth vertical transition with consciousness awareness
+          blob.position.y = THREE.MathUtils.lerp(blob.position.y, targetY, deltaTime * 2);
+        }
         
         // Enhanced horizontal swimming with curiosity-driven exploration
-        const swimTime = time * userData.swimSpeed + userData.swimOffset;
-        const explorationFactor = userData.curiosity * 2 + 1;
-        
-        const swimX = Math.sin(swimTime) * userData.swimAmplitude * explorationFactor;
-        const swimZ = Math.cos(swimTime * 1.2) * userData.swimAmplitude * explorationFactor;
-        
-        // Apply swimming movement with direction blending
-        userData.targetDirection.lerp(
-          new THREE.Vector3(swimX, verticalMovement * 0.3, swimZ).normalize(),
-          deltaTime * 0.5
-        );
+        if (!userData.isEmerging) { // Don't interfere with emergence
+          const swimTime = time * userData.swimSpeed + userData.swimOffset;
+          const explorationFactor = userData.curiosity * 2 + 1;
+          
+          const swimX = Math.sin(swimTime) * userData.swimAmplitude * explorationFactor;
+          const swimZ = Math.cos(swimTime * 1.2) * userData.swimAmplitude * explorationFactor;
+          
+          // Apply swimming movement with direction blending
+          userData.targetDirection.lerp(
+            new THREE.Vector3(swimX, 0, swimZ).normalize(),
+            deltaTime * 0.5
+          );
+        }
         
         // Consciousness-driven movement with smooth acceleration
         userData.velocity.lerp(userData.targetDirection, deltaTime * 0.8);
@@ -824,20 +858,29 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         blob.rotation.y += userData.rotationSpeed * (0.5 + userData.happiness * 0.5);
         blob.rotation.x += userData.rotationSpeed * 0.3 * Math.sin(time * 0.2);
         
-        // Enhanced consciousness-aware blinking system
+        // Enhanced non-synchronous consciousness-aware blinking system
         userData.blinkTimer -= deltaTime;
         if (userData.blinkTimer <= 0) {
-          userData.blinkTimer = 2 + Math.random() * 4 + userData.happiness; // Happy blobs blink more
+          // Highly randomized blink timing to prevent synchronization
+          userData.blinkTimer = 1.5 + Math.random() * 5 + userData.happiness + (index * 0.3); // Unique timing per blob
           
-          // Consciousness-driven blink animation
-          const blinkDuration = 100 + userData.happiness * 50; // Happier = longer blinks
-          userData.leftEye.scale.y = 0.1;
-          userData.rightEye.scale.y = 0.1;
+          // Consciousness-driven blink animation with random variations
+          const blinkDuration = 80 + Math.random() * 100 + userData.happiness * 30; // Varied blink duration
+          const blinkIntensity = 0.05 + Math.random() * 0.1; // Some blinks are partial
           
+          userData.leftEye.scale.y = blinkIntensity;
+          userData.rightEye.scale.y = blinkIntensity;
+          
+          // Non-synchronous eye opening with slight delay variation
           setTimeout(() => {
             if (userData.leftEye && userData.rightEye) {
               userData.leftEye.scale.y = 1;
-              userData.rightEye.scale.y = 1;
+              // Right eye opens slightly after left for natural feel
+              setTimeout(() => {
+                if (userData.rightEye) {
+                  userData.rightEye.scale.y = 1;
+                }
+              }, 10 + Math.random() * 20);
             }
           }, blinkDuration);
         }
