@@ -176,13 +176,18 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       let attempts = 0;
       
       while (attempts < maxPoissonAttempts) {
-        // 3D spherical distribution with ENHANCED VERTICAL RANGE
+        // 3D spherical distribution with STRATIFIED VERTICAL LANES
         const phi = Math.acos(2 * Math.random() - 1); // Full sphere phi
         const theta = Math.random() * Math.PI * 2; // Full rotation
         const radius = Math.random() * distributionSphereRadius;
         
+        // STRATIFIED HEIGHT SYSTEM - 6 distinct vertical lanes
+        const heightLane = i % 6; // Assign each blob to one of 6 height lanes
+        const laneHeight = (heightLane - 2.5) * 1.2; // Lanes at: -3, -1.8, -0.6, 0.6, 1.8, 3
+        const laneVariation = (Math.random() - 0.5) * 0.4; // Small variation within lane
+        
         const x = radius * Math.sin(phi) * Math.cos(theta);
-        const y = radius * Math.sin(phi) * Math.sin(theta) + (Math.random() - 0.5) * 4; // ENHANCED vertical variation ±2 units
+        const y = laneHeight + laneVariation; // Use stratified lane height instead of random
         const z = radius * Math.cos(phi);
         
         const candidatePosition = new THREE.Vector3(x, y, z);
@@ -906,10 +911,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             const originalY = userData.originalVertices[i3 + 1];  
             const originalZ = userData.originalVertices[i3 + 2];
             
-            // Enhanced consciousness-driven jelly wobble
-            const consciousnessWave = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity;
-            const quantumFlow = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity * 0.8;
-            const neuralPulse = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity * 0.6;
+            // Enhanced consciousness-driven jelly wobble - 50% REDUCED displacement
+            const consciousnessWave = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity * 0.5;
+            const quantumFlow = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity * 0.4;
+            const neuralPulse = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity * 0.3;
             
             positions.setXYZ(i, 
               originalX + consciousnessWave,
@@ -920,21 +925,40 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           positions.needsUpdate = true;
           
           // Enhanced consciousness-aware eye behavior
-          // 👁️ IMPROVED ANIMATED EYE POSITIONING
+          // 👁️ IMPROVED ANIMATED EYE POSITIONING WITH SURFACE ATTACHMENT
           const eyeOffset = userData.size * 0.24; // Reduced for closer placement
-          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.2; // Reduced deformation
-          const eyeLook = Math.sin(time * 0.5 + userData.pulseOffset) * 0.03; // Reduced subtle movement
           
-          // Eyes better positioned on blob surface with improved attachment
-          userData.leftEye.position.z = userData.size * 0.82 + skinDeformation; // Closer to surface
-          userData.rightEye.position.z = userData.size * 0.82 + skinDeformation;
+          // Calculate surface deformation at eye positions for proper attachment
+          const leftEyeOriginalPos = new THREE.Vector3(-eyeOffset, userData.size * 0.12, userData.size * 0.82);
+          const rightEyeOriginalPos = new THREE.Vector3(eyeOffset, userData.size * 0.12, userData.size * 0.82);
           
-          userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.1 + eyeLook;
-          userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.1 - eyeLook;
+          // Sample surface deformation at eye positions (50% reduced intensity)
+          const leftEyeDeformation = {
+            x: Math.sin(time * userData.jellySpeed + leftEyeOriginalPos.y * 2) * userData.jellyIntensity * 0.5,
+            y: Math.sin(time * userData.jellySpeed * 1.3 + leftEyeOriginalPos.z * 2) * userData.jellyIntensity * 0.4,
+            z: Math.sin(time * userData.jellySpeed * 0.8 + leftEyeOriginalPos.x * 2) * userData.jellyIntensity * 0.3
+          };
           
-          // Better eye height positioning
-          userData.leftEye.position.y = userData.size * 0.12 + Math.sin(time * 0.3) * 0.015; // Better height
-          userData.rightEye.position.y = userData.size * 0.12 + Math.sin(time * 0.3 + 1) * 0.015;
+          const rightEyeDeformation = {
+            x: Math.sin(time * userData.jellySpeed + rightEyeOriginalPos.y * 2) * userData.jellyIntensity * 0.5,
+            y: Math.sin(time * userData.jellySpeed * 1.3 + rightEyeOriginalPos.z * 2) * userData.jellyIntensity * 0.4,
+            z: Math.sin(time * userData.jellySpeed * 0.8 + rightEyeOriginalPos.x * 2) * userData.jellyIntensity * 0.3
+          };
+          
+          // Apply surface-attached positioning with reduced subtle eye movement
+          const eyeLook = Math.sin(time * 0.5 + userData.pulseOffset) * 0.015; // Reduced subtle movement
+          
+          userData.leftEye.position.set(
+            leftEyeOriginalPos.x + leftEyeDeformation.x + eyeLook,
+            leftEyeOriginalPos.y + leftEyeDeformation.y + Math.sin(time * 0.3) * 0.008,
+            leftEyeOriginalPos.z + leftEyeDeformation.z
+          );
+          
+          userData.rightEye.position.set(
+            rightEyeOriginalPos.x + rightEyeDeformation.x - eyeLook,
+            rightEyeOriginalPos.y + rightEyeDeformation.y + Math.sin(time * 0.3 + 1) * 0.008,
+            rightEyeOriginalPos.z + rightEyeDeformation.z
+          );
         }
         
         // Enhanced consciousness-driven squishy scale animation
@@ -1039,39 +1063,71 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     }
   };
 
-  // Subtle camera movement for depth perception with FINAL SECTION ELEVATION
+  // 🎬 CINEMATIC ORBIT CAMERA SYSTEM - Complete Circle Around Scene
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // Much gentler breathing motion
-    const breathingOffset = Math.sin(elapsedTime * 0.2) * 0.05; // Half the jiggle
+    // CINEMATIC CAMERA POSITIONS - Complete orbital progression
+    const cameraConfigs = [
+      // Page 0: Front view - classic introduction angle
+      { radius: 12, height: 2, angle: 0, tilt: 0 },
+      // Page 1: Right side - 60 degrees around
+      { radius: 14, height: 3.5, angle: Math.PI / 3, tilt: -0.1 },
+      // Page 2: Back-right - 120 degrees around
+      { radius: 13, height: 1, angle: (2 * Math.PI) / 3, tilt: 0.05 },
+      // Page 3: Back view - 180 degrees around
+      { radius: 15, height: 4, angle: Math.PI, tilt: -0.15 },
+      // Page 4: Back-left - 240 degrees around
+      { radius: 11, height: 2.5, angle: (4 * Math.PI) / 3, tilt: 0.1 },
+      // Page 5: Final overview - elevated dramatic angle (300 degrees)
+      { radius: 16, height: 8, angle: (5 * Math.PI) / 3, tilt: -0.2 }
+    ];
     
-    // FINAL SECTION CAMERA ELEVATION (+10 meters up for overview perspective)
-    const baseHeight = currentSection === 5 ? 10 : 0; // Elevate camera on final section
-    cameraRef.current.position.y = baseHeight + breathingOffset;
+    const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
     
-    // Minimal parallax for mouse interaction
-    const mouseInfluence = 0.01; // Half the movement
-    cameraRef.current.position.x = mouseInfluence;
-    cameraRef.current.position.z = 10 + mouseInfluence;
+    // Calculate target camera position with cinematic orbit
+    const targetX = Math.cos(currentConfig.angle) * currentConfig.radius;
+    const targetZ = Math.sin(currentConfig.angle) * currentConfig.radius;
+    const targetY = currentConfig.height;
     
-    cameraRef.current.lookAt(0, 0, 0);
+    // Smooth breathing motion (reduced)
+    const breathingOffset = Math.sin(elapsedTime * 0.2) * 0.03;
+    
+    // SMOOTH INTERPOLATION to prevent jittering and immersion breaks
+    const lerpSpeed = 0.02; // Slow smooth transitions between pages
+    cameraRef.current.position.x = THREE.MathUtils.lerp(cameraRef.current.position.x, targetX, lerpSpeed);
+    cameraRef.current.position.y = THREE.MathUtils.lerp(cameraRef.current.position.y, targetY + breathingOffset, lerpSpeed);
+    cameraRef.current.position.z = THREE.MathUtils.lerp(cameraRef.current.position.z, targetZ, lerpSpeed);
+    
+    // Smooth look-at with cinematic tilt
+    const lookAtY = currentConfig.tilt;
+    cameraRef.current.lookAt(0, lookAtY, 0);
   };
 
-  // Apple-grade rotation with physics simulation (SLOWER & SMOOTHER)
+  // Apple-grade rotation with physics simulation (SMOOTHER & ANTI-JITTER)
   const updateRotationWithPhysics = (_deltaTime: number) => {
     if (!isInteracting && !reducedMotion) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // Physics-based rotation with gentler spring damping
-    const springStrength = 0.025; // Half the original speed
-    const damping = 0.9; // Higher damping for smoother motion
+    // Enhanced physics-based rotation with anti-jitter system
+    const springStrength = 0.015; // Even gentler for smoother motion
+    const damping = 0.95; // Higher damping for stability
     
-    const force = (targetRotationY.current - currentRotationY.current) * springStrength;
-    velocityRef.current += force;
-    velocityRef.current *= damping;
-    currentRotationY.current += velocityRef.current;
+    // Anti-jitter threshold - prevent micro-movements
+    const angleDifference = targetRotationY.current - currentRotationY.current;
+    const normalizedDiff = ((angleDifference + Math.PI) % (2 * Math.PI)) - Math.PI; // Normalize to -π to π
+    
+    if (Math.abs(normalizedDiff) > 0.001) { // Only apply force if significant difference
+      const force = normalizedDiff * springStrength;
+      velocityRef.current += force;
+      velocityRef.current *= damping;
+      currentRotationY.current += velocityRef.current;
+    } else {
+      // Gradual settling to prevent jitter
+      velocityRef.current *= 0.98;
+      currentRotationY.current = THREE.MathUtils.lerp(currentRotationY.current, targetRotationY.current, 0.05);
+    }
     
     if (hexagonRef.current) {
       hexagonRef.current.rotation.y = currentRotationY.current;

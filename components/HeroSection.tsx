@@ -13,7 +13,7 @@ import {
 
 export function HeroSection() {
   return (
-    <div className="space-y-12 text-center relative overflow-hidden">
+    <div className="space-y-12 text-center relative overflow-hidden container-responsive">
       
       {/* Simplified Hero Animation */}
       <motion.div
@@ -46,7 +46,7 @@ export function HeroSection() {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="space-y-6"
         >
-          <h1 className="font-display text-5xl lg:text-8xl text-gradient leading-tight relative">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl xl:text-8xl text-gradient leading-tight relative">
             <span className="block">The Development Environment</span>
             <span className="block relative">
               That{" "}
@@ -54,7 +54,7 @@ export function HeroSection() {
             </span>
           </h1>
           
-          <p className="font-subtitle text-xl lg:text-2xl text-cyber-dark-200 max-w-4xl mx-auto leading-relaxed">
+          <p className="font-subtitle text-lg sm:text-xl lg:text-2xl text-cyber-dark-200 max-w-4xl mx-auto leading-relaxed">
             Deus Vault is a revolutionary Linux-based development environment that runs{" "}
             <span className="text-cyan-400 font-semibold">any OS</span>,{" "}
             <span className="text-yellow-400 font-semibold">any app</span>, with{" "}

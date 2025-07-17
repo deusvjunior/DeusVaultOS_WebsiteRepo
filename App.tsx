@@ -273,7 +273,7 @@ export default function App() {
         </div>
       </motion.div>
 
-      {/* Content Area - Much more transparent */}
+      {/* Content Area - Proper Layout with Margins */}
       <div className="relative z-20">
         <AnimatePresence mode="wait">
           <motion.div
@@ -282,6 +282,7 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
+            className="page-section"
           >
             {sections[currentSection].component}
           </motion.div>
