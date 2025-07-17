@@ -50,40 +50,36 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
     'Ready to Transform Your Workflow!'
   ];
 
-  // 🚀 ACCELERATED LOADING PROGRESSION - Fast to 100% for smooth feel
+  // 🚀 ENHANCED LOADING PROGRESSION - Faster with smooth 100% fake completion
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
-        let next;
-        // ACCELERATED PROGRESSION: Get to 100% when only 10% actual time has passed
-        if (prev < 10) {
-          next = prev + Math.random() * 25 + 15; // Jump 15-40% quickly
-        } else {
-          next = 100; // Instantly complete after 10% threshold
-        }
+        const next = prev + Math.random() * 4 + 2; // FASTER: was 1.5+0.5, now 4+2 for rapid loading
         
-        // Update loading text based on progress
-        if (next >= 90) {
+        // **FAKE 100% AT 10% REAL PROGRESS** - Smooth transition effect
+        const displayProgress = next >= 10 ? 100 : next * 10; // When 10% reached, display as 100%
+        
+        // Update loading text based on actual progress
+        if (next >= 8) {
           setLoadingText(loadingMessages[4]);
-        } else if (next >= 60) {
+        } else if (next >= 6) {
           setLoadingText(loadingMessages[3]);
-        } else if (next >= 40) {
+        } else if (next >= 4) {
           setLoadingText(loadingMessages[2]);
-        } else if (next >= 20) {
+        } else if (next >= 2) {
           setLoadingText(loadingMessages[1]);
         } else {
           setLoadingText(loadingMessages[0]);
         }
         
-        if (next >= 100) {
+        if (next >= 12) { // Complete at 12% actual progress (displays as 100%)
           clearInterval(interval);
-          // 1 second pause for user to digest completion
-          setTimeout(() => onLoadingComplete(), 1000);
+          setTimeout(() => onLoadingComplete(), 500); // Faster transition
           return 100;
         }
-        return next;
+        return displayProgress;
       });
-    }, 100); // Faster interval for quicker progression
+    }, 80); // FASTER: was 150ms, now 80ms for rapid appearance
 
     return () => clearInterval(interval);
   }, [onLoadingComplete]);
@@ -160,25 +156,59 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
               }}
             >
               
-              {/* 🎮 DEUSVAULTOS LOGO */}
-              <motion.div
-                animate={{ 
-                  textShadow: [
-                    '0 0 20px #00FFFF',
-                    '0 0 30px #FFFF00',
-                    '0 0 20px #00FFFF'
-                  ]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="text-5xl font-bold mb-8"
-                style={{
-                  background: 'linear-gradient(45deg, #00FFFF, #FFFF00)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
-                }}
-              >
-                DeusVaultOS
+              {/* 🎮 DEUSVAULTOS LOGO WITH ENHANCED ANIMATION */}
+              <motion.div className="mb-8">
+                {/* Main Logo Text */}
+                <motion.div
+                  animate={{ 
+                    textShadow: [
+                      '0 0 20px #00FFFF',
+                      '0 0 30px #FFFF00',
+                      '0 0 20px #00FFFF'
+                    ]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="text-5xl font-bold mb-4"
+                  style={{
+                    background: 'linear-gradient(45deg, #00FFFF, #FFFF00)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text'
+                  }}
+                >
+                  DeusVaultOS
+                </motion.div>
+                
+                {/* Animated Logo Symbol - Hexagonal Badge */}
+                <motion.div
+                  animate={{ 
+                    rotate: [0, 360],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ 
+                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                    scale: { duration: 2, repeat: Infinity }
+                  }}
+                  className="flex justify-center"
+                >
+                  <div 
+                    className="w-16 h-16 border-2 border-cyan-400 bg-gradient-to-br from-cyan-400/20 to-yellow-400/20"
+                    style={{
+                      clipPath: 'polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)',
+                      boxShadow: '0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(255, 255, 0, 0.2)'
+                    }}
+                  >
+                    <div className="w-full h-full flex items-center justify-center">
+                      <motion.div
+                        animate={{ opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="text-cyan-300 text-xl font-bold"
+                      >
+                        ⚔️
+                      </motion.div>
+                    </div>
+                  </div>
+                </motion.div>
               </motion.div>
 
               {/* 📊 PROGRESS BAR */}

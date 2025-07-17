@@ -1,130 +1,135 @@
-import { motion } from 'framer-motion';
-import { Brain, Cpu, Zap, Target, Shield, Users } from 'lucide-react';
+/**
+ * 🧠 THERION AI SECTION - COMPLETELY REBUILT FOR STABILITY
+ * 
+ * Professional showcase of THERION AI capabilities with:
+ * - Simple, stable layout design
+ * - Performance-optimized animations
+ * - Clear value proposition presentation
+ * - Zero crashes or black screen issues
+ * 
+ * @author THERION_3D_EXPERIENCE_ENGINEER
+ * @version 3.0.0 - STABILITY FOCUSED
+ */
+
+import { 
+  Brain, 
+  Zap, 
+  Eye, 
+  Cpu, 
+  Target,
+  Shield,
+  Sparkles,
+  ArrowRight
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 export function TherionSection() {
+  const features = [
+    {
+      icon: Brain,
+      title: "Self-Evolution",
+      description: "THERION continuously improves its capabilities through advanced machine learning",
+      color: "text-cyan-400"
+    },
+    {
+      icon: Eye,
+      title: "Advanced Perception",
+      description: "Understands context and patterns to provide intelligent assistance",
+      color: "text-yellow-400"
+    },
+    {
+      icon: Zap,
+      title: "Instant Response",
+      description: "Lightning-fast processing for immediate development support",
+      color: "text-cyan-400"
+    },
+    {
+      icon: Shield,
+      title: "Security First",
+      description: "Built-in security protocols protect your code and data",
+      color: "text-yellow-400"
+    }
+  ];
+
   return (
-    <div className="container-responsive">
-      {/* THERION AI Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-center mb-16"
-      >
-        <div className="inline-flex items-center gap-3 mb-6">
-          <div className="p-3 rounded-xl bg-cyan-500/20 border border-cyan-400/30">
-            <Brain className="h-8 w-8 text-cyan-400" />
+    <section className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-black to-yellow-900/20" />
+      
+      {/* Content Container */}
+      <div className="container-responsive relative z-10 flex flex-col justify-center min-h-screen">
+        
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center bg-gradient-to-r from-cyan-400/20 to-yellow-400/20 border border-cyan-400/30 rounded-full px-6 py-3 mb-8">
+            <Brain className="h-5 w-5 mr-3 text-cyan-400" />
+            <span className="text-cyan-300 font-medium">THERION AI PROTOCOL</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
-            THERION <span className="text-cyan-400">AI</span>
+          
+          <h2 className="display-title mb-6">
+            <span className="bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">
+              Intelligent Development Assistant
+            </span>
           </h2>
-        </div>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-          Advanced AI assistant that understands your development context and accelerates 
-          your workflow with intelligent code generation and project management.
-        </p>
-      </motion.div>
+          
+          <p className="subtitle text-gray-300 max-w-3xl mx-auto">
+            THERION is your AI-powered development companion that understands your code,
+            anticipates your needs, and accelerates your workflow with intelligent automation.
+          </p>
+        </motion.div>
 
-      {/* THERION Features Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-        {[
-          {
-            icon: <Cpu className="h-6 w-6" />,
-            title: "Context-Aware Intelligence",
-            description: "THERION understands your entire project structure, dependencies, and coding patterns."
-          },
-          {
-            icon: <Zap className="h-6 w-6" />,
-            title: "Instant Code Generation",
-            description: "Generate boilerplate, components, and entire features with natural language commands."
-          },
-          {
-            icon: <Target className="h-6 w-6" />,
-            title: "Smart Debugging",
-            description: "AI-powered error detection and resolution suggestions based on your specific codebase."
-          },
-          {
-            icon: <Shield className="h-6 w-6" />,
-            title: "Security Analysis",
-            description: "Automated security scanning and vulnerability detection with fix recommendations."
-          },
-          {
-            icon: <Users className="h-6 w-6" />,
-            title: "Team Collaboration",
-            description: "Share AI insights and code suggestions across your development team seamlessly."
-          },
-          {
-            icon: <Brain className="h-6 w-6" />,
-            title: "Learning Engine",
-            description: "THERION learns from your coding style and project preferences over time."
-          }
-        ].map((feature, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="group"
-          >
-            <div className="p-6 rounded-xl bg-gradient-to-br from-gray-900/50 to-gray-800/30 border border-gray-700/50 hover:border-cyan-400/50 transition-all duration-300 h-full">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 group-hover:bg-cyan-500/30 transition-colors">
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold text-white">
-                  {feature.title}
-                </h3>
-              </div>
-              <p className="text-gray-300 leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* THERION Demo Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="max-w-4xl mx-auto"
-      >
-        <div className="p-8 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Experience THERION AI in Action
-            </h3>
-            <p className="text-gray-300">
-              See how THERION transforms your development workflow with intelligent assistance
-            </p>
-          </div>
-
-          {/* Code Example */}
-          <div className="bg-gray-950 rounded-lg p-6 font-mono text-sm border border-gray-800">
-            <div className="flex items-center gap-2 mb-4 text-cyan-400">
-              <span className="text-gray-500">$</span>
-              <span>therion generate react-component UserProfile --with-tests</span>
-            </div>
-            <div className="text-green-400 mb-2">✨ Analyzing project structure...</div>
-            <div className="text-green-400 mb-2">🎯 Generated UserProfile component with TypeScript</div>
-            <div className="text-green-400 mb-2">🧪 Created comprehensive test suite</div>
-            <div className="text-green-400">📝 Added to component documentation</div>
-          </div>
-
-          {/* CTA */}
-          <div className="text-center mt-8">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-lg hover:from-cyan-400 hover:to-blue-500 transition-all duration-300"
+        {/* Features Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-cyan-400/50 transition-all duration-300"
             >
-              <Brain className="h-5 w-5" />
-              Try THERION AI
-            </motion.button>
-          </div>
+              <feature.icon className={`h-8 w-8 mb-4 ${feature.color}`} />
+              <h3 className="text-lg font-semibold mb-3 text-white">{feature.title}</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">{feature.description}</p>
+            </motion.div>
+          ))}
         </div>
-      </motion.div>
-    </div>
+
+        {/* Key Benefits */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-center"
+        >
+          <div className="bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 max-w-4xl mx-auto">
+            <h3 className="text-2xl font-bold mb-6 text-white">Why THERION Changes Everything</h3>
+            <div className="grid md:grid-cols-3 gap-6 text-sm">
+              <div>
+                <div className="text-cyan-400 font-semibold mb-2">📈 Productivity Boost</div>
+                <p className="text-gray-300">Automate repetitive tasks and focus on what matters most</p>
+              </div>
+              <div>
+                <div className="text-yellow-400 font-semibold mb-2">🎯 Smart Suggestions</div>
+                <p className="text-gray-300">Get intelligent code completions and optimization tips</p>
+              </div>
+              <div>
+                <div className="text-cyan-400 font-semibold mb-2">🔄 Continuous Learning</div>
+                <p className="text-gray-300">Adapts to your coding style and project requirements</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+      </div>
+    </section>
   );
 }

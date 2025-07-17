@@ -173,8 +173,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       // CIRCULAR SWIMMING PARAMETERS - Each blob gets unique circular path
       const heightLane = i % 6; // Assign each blob to one of 6 height lanes
-      const laneHeight = (heightLane * 1.8) + 2; // Elevated lanes at: 2, 3.8, 5.6, 7.4, 9.2, 11 (no floor clipping)
-      const orbitRadius = 2.5 + Math.random() * 3.5; // Larger orbit radii between 2.5 and 6
+      const laneHeight = (heightLane - 2.5) * 2.0; // EXPANDED Lanes at: -5, -3, -1, 1, 3, 5 (no floor clipping)
+      const orbitRadius = 1.5 + Math.random() * 2; // Varied orbit sizes
       const orbitSpeed = (Math.random() > 0.5 ? 1 : -1) * (0.1 + Math.random() * 0.2); // Random clockwise/counterclockwise
       const orbitPhase = Math.random() * Math.PI * 2; // Random starting position on circle
       
@@ -883,11 +883,29 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             
             userData.targetLane = targetLaneIndex;
             userData.laneSwitchCooldown = 3; // 3 second cooldown
+            
+            // ⚡ LANE SWITCH BLINK EFFECT - Decision Making Visualization
+            if (blob.material && blob.material.emissive) {
+              // Store original emission color
+              const originalEmission = blob.material.emissive.clone();
+              
+              // Flash to bright white emission (decision blink)
+              blob.material.emissive.setHex(0xFFFFFF);
+              blob.material.emissiveIntensity = 0.8;
+              
+              // Fade back to original over 0.3 seconds
+              setTimeout(() => {
+                if (blob.material && blob.material.emissive) {
+                  blob.material.emissive.copy(originalEmission);
+                  blob.material.emissiveIntensity = 0.4;
+                }
+              }, 300);
+            }
           }
           
           // Smooth lane transitions
           if (userData.currentLane !== userData.targetLane) {
-            const targetLaneHeight = (userData.targetLane * 1.8) + 2; // Use new elevated height calculation
+            const targetLaneHeight = (userData.targetLane - 2.5) * 2.0; // Updated to match new lane spacing
             userData.laneHeight = THREE.MathUtils.lerp(userData.laneHeight, targetLaneHeight, deltaTime * 0.5);
             
             // Complete lane switch when close enough
@@ -1099,44 +1117,45 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     }
   };
 
-  // 🔷 HEXAGONAL CAMERA SYSTEM - Perfect 60° Rotation Navigation
+  // 🎬 REDESIGNED HEXAGONAL CAMERA SYSTEM - Perfect Hexagon Positioning
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // HEXAGONAL NAVIGATION - Each page = one side of hexagon (60° increments)
-    const hexagonalConfigs = [
-      // Page 0: Side 1 - 0° (Front)
-      { radius: 16, height: 5, angle: 0, label: "Hexagon Side 1" },
-      // Page 1: Side 2 - 60° (Front-Right)  
-      { radius: 16, height: 5, angle: Math.PI / 3, label: "Hexagon Side 2" },
-      // Page 2: Side 3 - 120° (Back-Right)
-      { radius: 16, height: 5, angle: (2 * Math.PI) / 3, label: "Hexagon Side 3" },
-      // Page 3: Side 4 - 180° (Back)
-      { radius: 16, height: 5, angle: Math.PI, label: "Hexagon Side 4" },
-      // Page 4: Side 5 - 240° (Back-Left)
-      { radius: 16, height: 5, angle: (4 * Math.PI) / 3, label: "Hexagon Side 5" },
-      // Page 5: Side 6 - 300° (Front-Left) 
-      { radius: 16, height: 5, angle: (5 * Math.PI) / 3, label: "Hexagon Side 6" }
+    // PERFECT HEXAGONAL PROGRESSION - Each camera angle represents one side of the hexagon
+    const cameraConfigs = [
+      // Page 0: Front face of hexagon (0°) - Hero Introduction
+      { radius: 15, height: 4, angle: 0, tilt: -0.05, label: "Front Face" },
+      // Page 1: Right-front face (60°) - Features showcase  
+      { radius: 15, height: 4, angle: Math.PI / 3, tilt: -0.05, label: "Right-Front Face" },
+      // Page 2: Right-back face (120°) - Comparison view
+      { radius: 15, height: 4, angle: (2 * Math.PI) / 3, tilt: -0.05, label: "Right-Back Face" },
+      // Page 3: Back face (180°) - THERION AI showcase
+      { radius: 15, height: 4, angle: Math.PI, tilt: -0.05, label: "Back Face" },
+      // Page 4: Left-back face (240°) - Marketplace view
+      { radius: 15, height: 4, angle: (4 * Math.PI) / 3, tilt: -0.05, label: "Left-Back Face" },
+      // Page 5: Left-front face (300°) - Call to Action
+      { radius: 15, height: 4, angle: (5 * Math.PI) / 3, tilt: -0.05, label: "Left-Front Face" }
     ];
     
-    const currentConfig = hexagonalConfigs[currentSection] || hexagonalConfigs[0];
+    const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
     
-    // Calculate hexagonal camera position
+    // Calculate target camera position with perfect hexagonal progression
     const targetX = Math.cos(currentConfig.angle) * currentConfig.radius;
     const targetZ = Math.sin(currentConfig.angle) * currentConfig.radius;
     const targetY = currentConfig.height;
     
-    // Gentle breathing motion for organic feel
-    const breathingOffset = Math.sin(elapsedTime * 0.12) * 0.15;
+    // Gentle breathing motion (very subtle)
+    const breathingOffset = Math.sin(elapsedTime * 0.15) * 0.02;
     
-    // Smooth hexagonal rotation interpolation
-    const lerpSpeed = 0.005; // Smooth hexagonal transitions
+    // ULTRA SMOOTH INTERPOLATION - Prevent jarring transitions
+    const lerpSpeed = 0.008; // Much slower for ultra-smooth transitions
     cameraRef.current.position.x = THREE.MathUtils.lerp(cameraRef.current.position.x, targetX, lerpSpeed);
     cameraRef.current.position.y = THREE.MathUtils.lerp(cameraRef.current.position.y, targetY + breathingOffset, lerpSpeed);
     cameraRef.current.position.z = THREE.MathUtils.lerp(cameraRef.current.position.z, targetZ, lerpSpeed);
     
-    // Always look at elevated center of blob system
-    cameraRef.current.lookAt(0, 6, 0); // Look at center height of elevated blob system
+    // Smooth look-at with gentle tilt
+    const lookAtY = currentConfig.tilt;
+    cameraRef.current.lookAt(0, lookAtY, 0);
   };
 
   // Apple-grade rotation with physics simulation (SMOOTHER & ANTI-JITTER)
