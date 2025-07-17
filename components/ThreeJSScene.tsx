@@ -1101,6 +1101,17 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Create Apple-grade hexagon structure
     createAppleGradeHexagon(hexagonGroup);
     
+    // DEBUG: Add a bright test blob to ensure visibility
+    const debugGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const debugMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00FFFF,
+      transparent: true,
+      opacity: 0.8
+    });
+    const debugBlob = new THREE.Mesh(debugGeometry, debugMaterial);
+    debugBlob.position.set(0, 2, 0);
+    hexagonGroup.add(debugBlob);
+    
     // Advanced animation loop with proper frame timing
     let lastTime = 0;
     const animate = (currentTime: number) => {
