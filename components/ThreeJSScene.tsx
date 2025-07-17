@@ -68,8 +68,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     keyLight.shadow.camera.bottom = -15;
     scene.add(keyLight);
 
-    // Warm fill light
-    const fillLight = new THREE.DirectionalLight(0xFFE66D, 0.8); // Warm yellow
+    // Warm fill light - TRUE YELLOW (not green-tinted)
+    const fillLight = new THREE.DirectionalLight(0xFFD700, 0.8); // True gold yellow
     fillLight.position.set(-6, 8, 4);
     scene.add(fillLight);
 
@@ -109,17 +109,17 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { size: 0.4 + Math.random() * 0.2, type: 'large' } // 0.4-0.6 (was 0.7-0.95)
     ];
     
-    // 🎨 STRICT CYAN & YELLOW ONLY PALETTE
-    // Adhering to user's exact color requirements
+    // 🎨 STRICT CYAN & TRUE YELLOW ONLY PALETTE (ADJUSTED YELLOW - NOT GREEN)
+    // **FIXED YELLOW COLORS** - Pure warm yellow, not green-tinted
     const nexusColors = [
       { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan' },        // Electric cyan
-      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow' }, // Bright yellow  
+      { color: 0xFFD700, emission: 0xFFE55C, name: 'consciousness_yellow' }, // TRUE GOLD YELLOW (not green)
       { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan_2' },      // Electric cyan (variant)
-      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_2' }, // Bright yellow (variant)
+      { color: 0xFFA500, emission: 0xFFBF47, name: 'consciousness_yellow_2' }, // WARM ORANGE-YELLOW (not green)
       { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan_3' },      // Electric cyan (variant)
-      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_3' }, // Bright yellow (variant)
+      { color: 0xFFD700, emission: 0xFFE55C, name: 'consciousness_yellow_3' }, // TRUE GOLD YELLOW (not green)
       { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan_4' },      // Electric cyan (variant)
-      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_4' }, // Bright yellow (variant)
+      { color: 0xFFA500, emission: 0xFFBF47, name: 'consciousness_yellow_4' }, // WARM ORANGE-YELLOW (not green)
     ];
     
     // 🌐 ADVANCED 3D VOLUMETRIC DISTRIBUTION SYSTEM
@@ -897,22 +897,22 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             userData.targetLane = targetLaneIndex;
             userData.laneSwitchCooldown = 3; // 3 second cooldown
             
-            // ⚡ LANE SWITCH BLINK EFFECT - Decision Making Visualization
+            // ⚡ LANE SWITCH BLINK EFFECT - Decision Making Visualization (MOMENTARY)
             if (blob.material && blob.material.emissive) {
               // Store original emission color
               const originalEmission = blob.material.emissive.clone();
               
-              // Flash to bright white emission (decision blink)
+              // Flash to bright white emission (decision blink) - QUICK FLASH
               blob.material.emissive.setHex(0xFFFFFF);
-              blob.material.emissiveIntensity = 0.8;
+              blob.material.emissiveIntensity = 0.9; // Slightly brighter for better visibility
               
-              // Fade back to original over 0.3 seconds
+              // **FAST FADE** - Fade back to original over 0.15 seconds (was 0.3) for MOMENTARY effect
               setTimeout(() => {
                 if (blob.material && blob.material.emissive) {
                   blob.material.emissive.copy(originalEmission);
                   blob.material.emissiveIntensity = 0.4;
                 }
-              }, 300);
+              }, 150); // REDUCED: 150ms instead of 300ms for quick momentary blink
             }
           }
           

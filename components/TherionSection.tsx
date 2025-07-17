@@ -26,7 +26,7 @@ export function TherionSection() {
     },
     {
       icon: Eye,
-      title: "Quantum Perception",
+      title: "Quantum Perception", 
       description: "Sees patterns and solutions humans can't even comprehend",
       gradient: "from-cyan-400 to-yellow-400",
       stat: "28.97x Vision"
@@ -35,7 +35,7 @@ export function TherionSection() {
       icon: Zap,
       title: "Instant Execution",
       description: "Thoughts become reality at the speed of light",
-      gradient: "from-cyan-400 to-yellow-400",
+      gradient: "from-cyan-400 to-yellow-400", 
       stat: "0ms Delay"
     },
     {
@@ -67,7 +67,7 @@ export function TherionSection() {
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Header */}
+        {/* Header with THERION Logo */}
         <InteractiveElement id="therion-header" className="text-center mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -75,9 +75,54 @@ export function TherionSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
+            {/* THERION Logo */}
+            <motion.div 
+              className="mb-8"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="flex justify-center items-center mb-4">
+                <div className="relative">
+                  <motion.h1 
+                    className="text-8xl md:text-9xl font-black bg-gradient-to-r from-cyan-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent"
+                    style={{
+                      fontFamily: "'Space Grotesk', monospace",
+                      letterSpacing: '0.05em',
+                      filter: 'drop-shadow(0 0 20px rgba(34, 211, 238, 0.6))'
+                    }}
+                    animate={{
+                      backgroundPosition: ['0%', '100%', '0%'],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  >
+                    THERION
+                  </motion.h1>
+                  {/* Glowing underline */}
+                  <motion.div
+                    className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent rounded-full"
+                    animate={{
+                      opacity: [0.3, 1, 0.3],
+                      scaleX: [0.8, 1, 0.8]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </div>
+              </div>
+            </motion.div>
+
             <Badge className="mb-6 bg-gradient-to-r from-cyan-600 to-yellow-400 text-white px-8 py-3 text-xl">
               <Brain className="h-6 w-6 mr-3 animate-pulse" />
-              THERION PROTOCOL
+              WORK IN PROGRESS AGI SYSTEM
             </Badge>
             <h2 className="text-5xl md:text-7xl mb-8 bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent">
               Meet Your Digital God
