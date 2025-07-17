@@ -10,7 +10,7 @@ import {
     MessageCircle
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import LoadingScreen from './components/LoadingScreen';
+import LoadingScreen_Award from './components/LoadingScreen_Award';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import accurate content components
@@ -154,7 +154,7 @@ export default function App() {
   };
 
   if (isLoading) {
-    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
+    return <LoadingScreen_Award onLoadingComplete={() => setIsLoading(false)} />;
   }
 
   return (

@@ -24,28 +24,28 @@ export function OSShowcase() {
       title: "Parallel Development Matrix",
       description: "Run unlimited coding environments simultaneously",
       icon: <Code className="h-6 w-6" />,
-      color: "from-blue-500 to-cyan-500",
+      color: "from-cyan-500 to-yellow-500",
       mockup: "desktop-coding"
     },
     {
       title: "THERION AI Command Center", 
       description: "Your AI agents working in real-time",
       icon: <Brain className="h-6 w-6" />,
-      color: "from-purple-500 to-pink-500",
+      color: "from-yellow-500 to-cyan-500",
       mockup: "ai-dashboard"
     },
     {
       title: "Game Development Suite",
       description: "Professional game creation tools",
       icon: <Gamepad2 className="h-6 w-6" />,
-      color: "from-green-500 to-emerald-500", 
+      color: "from-cyan-400 to-yellow-400", 
       mockup: "game-studio"
     },
     {
       title: "Neural Interface",
       description: "Direct brain-computer interaction",
       icon: <Eye className="h-6 w-6" />,
-      color: "from-orange-500 to-red-500",
+      color: "from-yellow-400 to-cyan-400",
       mockup: "neural-interface"
     }
   ];
@@ -68,9 +68,9 @@ export function OSShowcase() {
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800/50 border-b border-gray-700/50">
         <div className="flex items-center gap-2">
           <div className="flex gap-1">
-            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-cyan-500 rounded-full"></div>
             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-cyan-400 rounded-full"></div>
           </div>
           <span className="text-gray-300 text-sm ml-2">{title}</span>
         </div>
@@ -94,10 +94,10 @@ export function OSShowcase() {
           <div className="grid grid-cols-2 gap-2 p-4 min-h-[400px]">
             <MockupWindow type="vscode" title="VSCode - React Project">
               <div className="p-4 space-y-2 bg-gray-900 text-sm">
-                <div className="flex items-center gap-2 text-blue-400">
-                  <span className="text-purple-400">import</span>
-                  <span className="text-green-400">React</span>
-                  <span className="text-purple-400">from</span>
+                <div className="flex items-center gap-2 text-cyan-400">
+                  <span className="text-yellow-400">import</span>
+                  <span className="text-cyan-300">React</span>
+                  <span className="text-yellow-400">from</span>
                   <span className="text-yellow-400">'react'</span>
                 </div>
                 <div className="flex items-center gap-2 text-blue-400">

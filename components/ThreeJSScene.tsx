@@ -120,20 +120,62 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_3' }, // Bright yellow (variant)
       { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan_4' },      // Electric cyan (variant)
       { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_4' }, // Bright yellow (variant)
+    // 🌐 ADVANCED 3D VOLUMETRIC DISTRIBUTION SYSTEM
+    // Based on Poisson disk sampling for natural organic spacing
+    // Creates snowglobe-like 3D distribution with perfect collision avoidance
+    
+    const minDistance = 1.2; // Minimum distance between blobs
+    const maxAttempts = 30; // Per blob placement attempts
+    const sphereRadius = 3.5; // 3D distribution sphere
+    const existingPositions: THREE.Vector3[] = [];
+    
+    // 🎯 ENHANCED BLOB ECOSYSTEM WITH SIZE VARIATIONS
+    // More blobs with natural size distribution
+    const totalBlobs = 15; // Increased for better density
+    const blobSizeDistribution = [
+      { type: 'tiny', count: 4, sizeRange: [0.12, 0.18] },
+      { type: 'small', count: 6, sizeRange: [0.18, 0.28] },
+      { type: 'medium', count: 4, sizeRange: [0.28, 0.45] },
+      { type: 'large', count: 1, sizeRange: [0.45, 0.6] }
     ];
     
+    const blobConfigs: any[] = [];
+    
+    // Generate blob configurations with size variety
+    blobSizeDistribution.forEach(({ type, count, sizeRange }) => {
+      for (let i = 0; i < count; i++) {
+        blobConfigs.push({
+          type,
+          size: sizeRange[0] + Math.random() * (sizeRange[1] - sizeRange[0])
+        });
+      }
+    });
+    
+    // Shuffle for random distribution
+    for (let i = blobConfigs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [blobConfigs[i], blobConfigs[j]] = [blobConfigs[j], blobConfigs[i]];
+    }
+
     // 🎲 NATURAL DISTRIBUTION ALGORITHM
     // Shuffle blob sizes for organic ecosystem diversity
-    for (let i = blobSizes.length - 1; i > 0; i--) {
+    for (let i = blobConfigs.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [blobSizes[i], blobSizes[j]] = [blobSizes[j], blobSizes[i]];
+      [blobConfigs[i], blobConfigs[j]] = [blobConfigs[j], blobConfigs[i]];
     }
     
-    const totalBlobs = isMobile ? Math.min(blobSizes.length, 8) : blobSizes.length;
+    const totalBlobs = isMobile ? Math.min(blobConfigs.length, 8) : blobConfigs.length;
+    
+    // 🌟 3D VOLUMETRIC DISTRIBUTION SYSTEM
+    // Professional-grade Poisson disk sampling for snowglobe effect
+    const poissonPositions: THREE.Vector3[] = [];
+    const maxPoissonAttempts = 30;
+    const distributionSphereRadius = 3.5;
+    const poissonMinDistance = 1.2;
     
     for (let i = 0; i < totalBlobs; i++) {
-      const blobData = blobSizes[i];
-      const baseSize = blobData.size;
+      const blobConfig = blobConfigs[i];
+      const baseSize = blobConfig.size;
       
       // Create unique jelly geometry with HIGH-POLY enhanced deformation
       const blobGeometry = new THREE.SphereGeometry(baseSize, 32, 24); // Much higher poly count for smoothness
@@ -160,73 +202,77 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       // Apply Nexus consciousness colors with stronger emission and glow effects
       const colorData = nexusColors[i % nexusColors.length];
       
-      // Enhanced material with NO GLOW for maximum performance
+      // 🎄 CHRISTMAS TREE PULSATING EMISSION SYSTEM
+      // 40% chance for Christmas tree pulsating emission with varied intensities
+      const hasChristmasEmission = Math.random() < 0.4;
+      const christmasIntensity = hasChristmasEmission ? (0.15 + Math.random() * 0.25) : 0;
+      const emissionSpeed = hasChristmasEmission ? (0.5 + Math.random() * 1.5) : 0;
+      
+      // Enhanced material with restored emission effects
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: colorData.color,
         metalness: 0.0,
-        roughness: 0.8, // Higher roughness for matte finish
-        clearcoat: 0.0,
+        roughness: 0.6, // Reduced for better light interaction
+        clearcoat: 0.1,
         transmission: 0,
         transparent: false,
         opacity: 1.0,
-        emissive: 0x000000, // NO EMISSION for performance
-        emissiveIntensity: 0, // NO GLOW
+        emissive: hasChristmasEmission ? colorData.color : 0x000000,
+        emissiveIntensity: christmasIntensity,
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       (blobMesh as any).isBlob = true;
-      (blobMesh as any).blobType = blobData.type;
+      (blobMesh as any).blobType = blobConfig.type;
       (blobMesh as any).colorName = colorData.name;
-      // NO GLOW EFFECTS - PERFORMANCE OPTIMIZED
-      // Removed all glow shaders and emission for smooth framerate
+      (blobMesh as any).hasChristmasEmission = hasChristmasEmission;
+      (blobMesh as any).christmasIntensity = christmasIntensity;
+      (blobMesh as any).emissionSpeed = emissionSpeed;
+      (blobMesh as any).originalEmission = christmasIntensity;
       
-      // Enhanced positioning system with consciousness-aware distribution
+      // 🎯 3D VOLUMETRIC POSITIONING WITH POISSON DISK SAMPLING
       let validPosition = false;
-      let attempts = 0;
-      const maxAttempts = 100;
+      let poissonAttempts = 0;
       
-      while (!validPosition && attempts < maxAttempts) {
-        // Hexagon interior positioning with consciousness flow patterns
-        const angle = Math.random() * Math.PI * 2;
+      while (!validPosition && poissonAttempts < maxPoissonAttempts) {
+        // Generate random position within sphere using rejection sampling
+        let spherePosition: THREE.Vector3;
+        let insideSphere = false;
         
-        // Size-based positioning: larger blobs get more central positions
-        const radiusMultiplier = blobData.type === 'large' ? 0.7 : 
-                                blobData.type === 'medium' ? 0.85 : 1.0;
-        const radius = (0.8 + Math.random() * 2.8) * radiusMultiplier;
-        
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        
-        // Enhanced vertical positioning with swimming depth variation (HIGHER UP)
-        const depthVariation = blobData.type === 'large' ? 0.6 : 
-                              blobData.type === 'medium' ? 0.8 : 1.0;
-        const y = -0.2 + Math.random() * depthVariation; // MUCH HIGHER (was -1.6)
-        
-        const testPosition = new THREE.Vector3(x, y, z);
-        
-        // Enhanced collision detection with consciousness boundaries
-        validPosition = true;
-        const collisionPadding = baseSize * 1.5; // More generous spacing
-        
-        for (const staticMesh of staticMeshes) {
-          const boundingBox = new THREE.Box3().setFromObject(staticMesh);
-          const blobBox = new THREE.Box3().setFromCenterAndSize(
-            testPosition,
-            new THREE.Vector3(collisionPadding * 2, collisionPadding * 2, collisionPadding * 2)
+        while (!insideSphere) {
+          spherePosition = new THREE.Vector3(
+            (Math.random() - 0.5) * 2 * distributionSphereRadius,
+            (Math.random() - 0.5) * 2 * distributionSphereRadius,
+            (Math.random() - 0.5) * 2 * distributionSphereRadius
           );
           
-          if (boundingBox.intersectsBox(blobBox)) {
+          if (spherePosition.length() <= distributionSphereRadius) {
+            insideSphere = true;
+          }
+        }
+        
+        // Poisson disk sampling - check minimum distance from existing positions
+        validPosition = true;
+        for (const existingPos of poissonPositions) {
+          const distance = spherePosition!.distanceTo(existingPos);
+          if (distance < poissonMinDistance) {
             validPosition = false;
             break;
           }
         }
         
-        // Check distance from other blobs for natural spacing
+        // Additional collision detection with static meshes
         if (validPosition) {
-          for (const existingBlob of blobs) {
-            const distance = testPosition.distanceTo(existingBlob.position);
-            const minDistance = (baseSize + existingBlob.userData?.size || 0.5) * 2;
-            if (distance < minDistance) {
+          const collisionPadding = baseSize * 1.5;
+          
+          for (const staticMesh of staticMeshes) {
+            const boundingBox = new THREE.Box3().setFromObject(staticMesh);
+            const blobBox = new THREE.Box3().setFromCenterAndSize(
+              spherePosition!,
+              new THREE.Vector3(collisionPadding * 2, collisionPadding * 2, collisionPadding * 2)
+            );
+            
+            if (boundingBox.intersectsBox(blobBox)) {
               validPosition = false;
               break;
             }
@@ -234,30 +280,27 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         }
         
         if (validPosition) {
-          blobMesh.position.set(x, y, z);
+          blobMesh.position.copy(spherePosition!);
+          poissonPositions.push(spherePosition!.clone());
         }
-        attempts++;
+        
+        poissonAttempts++;
       }
       
-      // Enhanced fallback positioning with underground emergence animation
+      // 🎯 3D VOLUMETRIC FALLBACK POSITIONING
       if (!validPosition) {
-        const spiralAngle = (i / totalBlobs) * Math.PI * 2 * 1.618; // Golden ratio spiral
-        const spiralRadius = 1.5 + (i % 3) * 0.8;
+        // Use 3D spherical fallback distribution instead of spiral
+        const theta = Math.random() * Math.PI * 2; // Azimuthal angle
+        const phi = Math.acos(2 * Math.random() - 1); // Polar angle for uniform sphere distribution
+        const fallbackRadius = distributionSphereRadius * 0.8; // Slightly smaller radius for fallback
         
-        // FEWER blobs spawn underground for emergence animation (10% instead of 30%)
-        const shouldEmerge = Math.random() < 0.1; // 10% chance to emerge from underground
-        const startY = shouldEmerge ? -1.5 : (0.2 + (i % 4) * 0.3); // Less deep underground or HIGHER normal
+        const x = fallbackRadius * Math.sin(phi) * Math.cos(theta);
+        const y = fallbackRadius * Math.sin(phi) * Math.sin(theta);
+        const z = fallbackRadius * Math.cos(phi);
         
-        blobMesh.position.set(
-          Math.cos(spiralAngle) * spiralRadius,
-          startY,
-          Math.sin(spiralAngle) * spiralRadius
-        );
+        blobMesh.position.set(x, y, z);
+        poissonPositions.push(new THREE.Vector3(x, y, z));
       }
-      
-      // Check if any blob spawned below ground level - enable emergence for smooth animation
-      const groundLevel = -0.5; // HIGHER ground level
-      const willEmerge = blobMesh.position.y < groundLevel;
 
       // Enhanced polished eyes with 2.5x BIGGER size and BLACK color
       const eyeSize = baseSize * 0.2; // 2.5x bigger eyes (was 0.08, now 0.2)
@@ -277,18 +320,18 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       
-      // BETTER eye positioning with more natural placement
-      const eyeOffset = baseSize * 0.15; // Closer together
-      const eyeForward = baseSize * 0.92; // Very close to surface
-      const eyeHeight = baseSize * 0.05; // Slightly above center
+      // 👁️ IMPROVED EYE POSITIONING - Better surface attachment
+      const eyeOffset = baseSize * 0.12; // Closer together for better look
+      const eyeForward = baseSize * 0.88; // Slightly deeper for better attachment
+      const eyeHeight = baseSize * 0.08; // Slightly higher for better placement
       
       // Calculate surface normal for PERFECT attachment
       const leftEyePos = new THREE.Vector3(-eyeOffset, eyeHeight, eyeForward);
       const rightEyePos = new THREE.Vector3(eyeOffset, eyeHeight, eyeForward);
       
-      // Normalize to blob surface for perfect attachment (closer to surface)
-      leftEyePos.normalize().multiplyScalar(baseSize * 0.95);
-      rightEyePos.normalize().multiplyScalar(baseSize * 0.95);
+      // Normalize to blob surface for perfect attachment (better surface positioning)
+      leftEyePos.normalize().multiplyScalar(baseSize * 0.98); // Closer to surface
+      rightEyePos.normalize().multiplyScalar(baseSize * 0.98);
       
       leftEye.position.copy(leftEyePos);
       rightEye.position.copy(rightEyePos);
@@ -316,15 +359,18 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       // Store enhanced consciousness-driven animation data with glow and light references
       blobMesh.userData = {
         size: baseSize,
-        type: blobData.type,
+        type: blobConfig.type,
         colorData: colorData,
         originalVertices,
         leftEye,
         rightEye,
         staticMeshes,
         
-        // NO GLOW EFFECTS - PERFORMANCE OPTIMIZED
-        // Removed glow and point light references
+        // Christmas tree emission animation data
+        hasChristmasEmission,
+        christmasIntensity,
+        emissionSpeed,
+        originalEmission: christmasIntensity,
         
         // Enhanced physics with consciousness flow
         radius: baseSize * 1.2,
@@ -338,7 +384,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         
         // Enhanced vertical swimming patterns with MAXIMUM ENERGY
         verticalSwimSpeed: 0.6 + Math.random() * 0.5, // MUCH faster vertical movement (was 0.2-0.5, now 0.6-1.1)
-        verticalAmplitude: 1.0 + (blobData.type === 'large' ? 0.5 : blobData.type === 'medium' ? 0.4 : 0.3), // Higher amplitude
+        verticalAmplitude: 1.0 + (blobConfig.type === 'large' ? 0.5 : blobConfig.type === 'medium' ? 0.4 : 0.3), // Higher amplitude
         verticalOffset: Math.random() * Math.PI * 2,
         baseDepth: blobMesh.position.y,
         
@@ -354,17 +400,12 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         baseMaterial: blobMaterial,
         pulseSpeed: 0.8 + Math.random() * 0.6, // MUCH faster pulsing
         pulseOffset: Math.random() * Math.PI * 2,
-        pulseIntensity: 0.6 + (blobData.type === 'large' ? 0.4 : blobData.type === 'medium' ? 0.3 : 0.2), // Brighter
+        pulseIntensity: 0.6 + (blobConfig.type === 'large' ? 0.4 : blobConfig.type === 'medium' ? 0.3 : 0.2), // Brighter
         
         // Enhanced jelly physics with HIGH ENERGY consciousness flow
         jellyVertices: new Float32Array(originalVertices),
         jellySpeed: 1.0 + Math.random() * 0.6, // ULTRA fast jelly movement (was 0.6-1.0, now 1.0-1.6)
         jellyIntensity: 0.12 + Math.random() * 0.08, // More intense wobble
-        
-        // Enhanced emergence system with smooth underground animation
-        isEmerging: willEmerge,
-        emergenceTarget: willEmerge ? (-1.0 + Math.random() * 1.2) : blobMesh.position.y, // Target above ground
-        emergenceSpeed: 0.5 + Math.random() * 0.3, // Varied emergence speeds
         
         // MUCH MORE FREQUENT blinking system for high energy
         blinkTimer: 0.5 + Math.random() * 2, // Much more frequent blinking
@@ -377,7 +418,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         squishOffset: Math.random() * Math.PI * 2,
         
         // FASTER rotation with size-based variation
-        rotationSpeed: (Math.random() - 0.5) * (blobData.type === 'large' ? 0.025 : 0.035), // ULTRA fast rotation for alive feeling
+        rotationSpeed: (Math.random() - 0.5) * (blobConfig.type === 'large' ? 0.025 : 0.035), // ULTRA fast rotation for alive feeling
         
         // Happiness and personality factors
         happiness: 0.7 + Math.random() * 0.3, // Base happiness level
@@ -624,27 +665,27 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Enhanced consciousness pulsing with synchronized glow and lights
+        // 🎄 CHRISTMAS TREE PULSATING EMISSION ANIMATION
+        // Enhanced consciousness pulsing with Christmas tree effects
         const shouldUpdateThisFrame = (index + Math.floor(time * 6)) % 3 === 0; // Non-synchronous updates
         if (shouldUpdateThisFrame) {
-          const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
-          const basePulse = userData.pulseIntensity;
-          const consciousness = Math.sin(pulseTime) * 0.2;
-          const quantum = Math.sin(pulseTime * 1.618) * 0.15; // Golden ratio harmonics
-          
-          const finalIntensity = basePulse + consciousness + quantum;
-          userData.baseMaterial.emissiveIntensity = Math.max(0.15, finalIntensity);
-          
-          // Synchronize glow effect with emission
-          if (userData.glowMesh && userData.glowMesh.material) {
-            userData.glowMesh.material.uniforms.intensity.value = finalIntensity * 2;
-            userData.glowMesh.material.uniforms.glowColor.value.setHex(userData.colorData.emission);
-          }
-          
-          // Synchronize point light with emission (only for blobs with lights)
-          if (userData.pointLight) {
-            userData.pointLight.intensity = finalIntensity * 1.5;
-            userData.pointLight.color.setHex(userData.colorData.emission);
+          // Christmas tree emission for selected blobs
+          if (userData.hasChristmasEmission) {
+            const emissionTime = time * userData.emissionSpeed;
+            const christmasBase = userData.originalEmission;
+            const christmasVariation = Math.sin(emissionTime) * christmasBase * 0.5;
+            const christmasIntensity = christmasBase + christmasVariation;
+            
+            userData.baseMaterial.emissiveIntensity = Math.max(0.05, christmasIntensity);
+          } else {
+            // Standard consciousness pulsing for non-Christmas blobs
+            const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
+            const basePulse = userData.pulseIntensity;
+            const consciousness = Math.sin(pulseTime) * 0.2;
+            const quantum = Math.sin(pulseTime * 1.618) * 0.15; // Golden ratio harmonics
+            
+            const finalIntensity = basePulse + consciousness + quantum;
+            userData.baseMaterial.emissiveIntensity = Math.max(0.15, finalIntensity);
           }
           
           // Color temperature variation for living feel
@@ -766,8 +807,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         userData.velocity.lerp(userData.targetDirection, deltaTime * 0.8);
         userData.velocity.multiplyScalar(0.95); // Natural friction
         
-        // Apply movement with boundary containment
-        const movement = userData.velocity.clone().multiplyScalar(deltaTime * 2);
+        // Apply movement with 50% reduced displacement for calmer animation
+        const movement = userData.velocity.clone().multiplyScalar(deltaTime * 1); // Reduced from 2 to 1 (50% reduction)
         blob.position.add(movement);
         
         // Enhanced hexagon boundary containment with consciousness reflection
@@ -816,20 +857,21 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           positions.needsUpdate = true;
           
           // Enhanced consciousness-aware eye behavior
-          const eyeOffset = userData.size * 0.28;
-          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.3;
-          const eyeLook = Math.sin(time * 0.5 + userData.pulseOffset) * 0.05; // Subtle eye movement
+          // 👁️ IMPROVED ANIMATED EYE POSITIONING
+          const eyeOffset = userData.size * 0.24; // Reduced for closer placement
+          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.2; // Reduced deformation
+          const eyeLook = Math.sin(time * 0.5 + userData.pulseOffset) * 0.03; // Reduced subtle movement
           
-          // Eyes follow consciousness flow and skin deformation
-          userData.leftEye.position.z = userData.size * 0.75 + skinDeformation;
-          userData.rightEye.position.z = userData.size * 0.75 + skinDeformation;
+          // Eyes better positioned on blob surface with improved attachment
+          userData.leftEye.position.z = userData.size * 0.82 + skinDeformation; // Closer to surface
+          userData.rightEye.position.z = userData.size * 0.82 + skinDeformation;
           
-          userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.15 + eyeLook;
-          userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.15 - eyeLook;
+          userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.1 + eyeLook;
+          userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.1 - eyeLook;
           
-          // Subtle eye height variation for lifelike behavior
-          userData.leftEye.position.y = userData.size * 0.15 + Math.sin(time * 0.3) * 0.02;
-          userData.rightEye.position.y = userData.size * 0.15 + Math.sin(time * 0.3 + 1) * 0.02;
+          // Better eye height positioning
+          userData.leftEye.position.y = userData.size * 0.12 + Math.sin(time * 0.3) * 0.015; // Better height
+          userData.rightEye.position.y = userData.size * 0.12 + Math.sin(time * 0.3 + 1) * 0.015;
         }
         
         // Enhanced consciousness-driven squishy scale animation
