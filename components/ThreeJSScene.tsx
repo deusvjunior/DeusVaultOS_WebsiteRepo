@@ -849,6 +849,31 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const movement = userData.velocity.clone().multiplyScalar(deltaTime * 1); // Reduced from 2 to 1 (50% reduction)
         blob.position.add(movement);
         
+        // 🐛 DIRECTIONAL SWIMMING BEHAVIOR - Caterpillar in Water Effect
+        // Calculate movement direction and apply smooth rotation
+        if (movement.length() > 0.001) { // Only rotate if actually moving
+          const movementDirection = movement.clone().normalize();
+          
+          // Calculate target rotation to face movement direction
+          const targetRotationY = Math.atan2(movementDirection.x, movementDirection.z);
+          
+          // Smooth rotation interpolation for organic caterpillar-like movement
+          const currentRotationY = blob.rotation.y;
+          let deltaRotation = targetRotationY - currentRotationY;
+          
+          // Handle rotation wrapping (shortest path)
+          if (deltaRotation > Math.PI) deltaRotation -= Math.PI * 2;
+          if (deltaRotation < -Math.PI) deltaRotation += Math.PI * 2;
+          
+          // Apply smooth rotation with organic timing
+          blob.rotation.y += deltaRotation * deltaTime * 2.5; // Gentle rotation speed
+          
+          // Add subtle tilt based on movement for enhanced swimming effect
+          const tiltIntensity = Math.min(movement.length() * 15, 0.3); // Max tilt of ~17 degrees
+          blob.rotation.x = Math.sin(time * userData.swimSpeed * 2) * tiltIntensity * 0.5;
+          blob.rotation.z = Math.cos(time * userData.swimSpeed * 1.5) * tiltIntensity * 0.3;
+        }
+        
         // Enhanced hexagon boundary containment with consciousness reflection
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
         if (distanceFromCenter > hexagonInnerRadius) {

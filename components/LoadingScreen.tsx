@@ -50,11 +50,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
     'Ready to Transform Your Workflow!'
   ];
 
-  // 🚀 LOADING PROGRESSION
+  // 🚀 LOADING PROGRESSION - SLOWER FOR BETTER VISIBILITY
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
-        const next = prev + Math.random() * 3 + 1;
+        const next = prev + Math.random() * 1.5 + 0.5; // SLOWED: was 3+1, now 1.5+0.5 (half speed)
         
         // Update loading text based on progress
         if (next >= 80) {
@@ -76,7 +76,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
         }
         return next;
       });
-    }, 100);
+    }, 150); // SLOWED: was 100ms, now 150ms for even more visibility
 
     return () => clearInterval(interval);
   }, [onLoadingComplete]);
