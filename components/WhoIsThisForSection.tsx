@@ -100,7 +100,10 @@ export const WhoIsThisForSection = () => {
         >
           <h1 
             className="text-5xl md:text-6xl font-bold mb-6 text-white"
-            style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
+            style={{ 
+              textShadow: '0 2px 20px rgba(0,0,0,0.8)',
+              fontFamily: "'Space Grotesk', monospace"
+            }}
           >
             Built for the Future of{' '}
             <span className="bg-gradient-to-r from-cyan-400 via-yellow-400 to-yellow-500 bg-clip-text text-transparent">

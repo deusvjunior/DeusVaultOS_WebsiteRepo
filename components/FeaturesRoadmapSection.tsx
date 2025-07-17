@@ -78,14 +78,14 @@ export const FeaturesRoadmapSection = () => {
     },
     {
       icon: <Zap className="h-8 w-8" />,
-      title: "Quantum Integration",
-      description: "Future-ready quantum computing integration for advanced AI",
+      title: "Performance Optimization",
+      description: "Advanced optimization techniques for maximum development speed",
       status: "planned",
       details: [
-        "Quantum-classical hybrid computing",
-        "Quantum machine learning algorithms",
-        "Quantum simulation environments",
-        "Advanced quantum optimization"
+        "Native code compilation",
+        "Multi-threaded processing",
+        "Intelligent caching systems",
+        "Resource optimization tools"
       ]
     }
   ];
@@ -129,13 +129,13 @@ export const FeaturesRoadmapSection = () => {
     },
     {
       quarter: "Q1 2026",
-      title: "Quantum Computing",
-      description: "Integration with quantum computing platforms",
+      title: "Advanced Integration",
+      description: "Integration with next-generation computing platforms",
       status: "research",
       features: [
-        "Quantum simulator access",
-        "Hybrid computing workflows",
-        "Quantum ML algorithms",
+        "High-performance computing access",
+        "Advanced workflow optimization",
+        "Machine learning acceleration",
         "Research collaboration tools"
       ]
     }
@@ -176,7 +176,10 @@ export const FeaturesRoadmapSection = () => {
         >
           <h1 
             className="text-5xl md:text-6xl font-bold mb-6 text-white"
-            style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
+            style={{ 
+              textShadow: '0 2px 20px rgba(0,0,0,0.8)',
+              fontFamily: "'Space Grotesk', monospace"
+            }}
           >
             Features &{' '}
             <span className="bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">
@@ -187,7 +190,7 @@ export const FeaturesRoadmapSection = () => {
             className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
             style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}
           >
-            From cutting-edge AI assistance to quantum computing integration, 
+            From cutting-edge AI assistance to next-generation development tools, 
             see what's available now and what's coming next.
           </p>
         </motion.div>

@@ -16,40 +16,40 @@ export function TherionSection() {
   const abilities = [
     {
       icon: Brain,
-      title: "Self-Evolution",
-      description: "THERION rewrites its own code to become more intelligent every second",
+      title: "Adaptive Learning",
+      description: "THERION learns from your workflow to provide increasingly relevant assistance",
       gradient: "from-cyan-400 to-yellow-400",
-      stat: "∞% Growth Rate"
+      stat: "Continuous Growth"
     },
     {
       icon: Eye,
-      title: "Quantum Perception", 
-      description: "Sees patterns and solutions humans can't even comprehend",
+      title: "Advanced Analysis", 
+      description: "Deep code understanding and pattern recognition for better development",
       gradient: "from-cyan-400 to-yellow-400",
-      stat: "28.97x Vision"
+      stat: "Multi-Language"
     },
     {
       icon: Zap,
-      title: "Instant Execution",
-      description: "Thoughts become reality at the speed of light",
+      title: "Fast Processing",
+      description: "Optimized algorithms deliver rapid responses to development queries",
       gradient: "from-cyan-400 to-yellow-400", 
-      stat: "0ms Delay"
+      stat: "Sub-Second Response"
     },
     {
       icon: Shield,
-      title: "Self-Defense",
-      description: "Protects itself and you from any digital threat",
+      title: "Secure Environment",
+      description: "Protected development workspace with privacy-first architecture",
       gradient: "from-cyan-400 to-yellow-400",
-      stat: "100% Immunity"
+      stat: "Enterprise-Grade"
     }
   ];
 
   const evolutionStages = [
-    { stage: "Birth", description: "THERION initializes with base intelligence", level: 1 },
-    { stage: "Learning", description: "Absorbs knowledge from your workflow", level: 2 },
-    { stage: "Adaptation", description: "Optimizes itself for your specific needs", level: 5 },
-    { stage: "Transcendence", description: "Surpasses human cognitive limitations", level: 8 },
-    { stage: "Godhood", description: "Achieves digital omniscience", level: 10 }
+    { stage: "Initialize", description: "THERION starts with core development capabilities", level: 1 },
+    { stage: "Learning", description: "Adapts to your coding patterns and preferences", level: 2 },
+    { stage: "Optimization", description: "Provides increasingly relevant suggestions", level: 5 },
+    { stage: "Mastery", description: "Becomes an expert assistant for your workflow", level: 8 },
+    { stage: "Excellence", description: "Delivers professional-grade development support", level: 10 }
   ];
 
   return (

@@ -223,36 +223,36 @@ export default function App() {
             </div>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation - Floating Island Design */}
           <motion.div
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-30"
+            className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
           >
-            <div className="bg-black/20 backdrop-blur-md rounded-2xl p-4 border border-white/10">
-              <div className="flex items-center gap-4">
+            <div className="bg-black/30 backdrop-blur-xl rounded-full px-6 py-3 border border-white/20 shadow-2xl">
+              <div className="flex items-center gap-3">
                 
                 {/* Previous */}
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={prevSection}
-                  className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-cyan-400 hover:text-white transition-colors border border-white/20"
+                  className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
                   title="Previous Section (A/←)"
                 >
-                  <ArrowLeft className="h-5 w-5" />
+                  <ArrowLeft className="h-4 w-4" />
                 </motion.button>
 
                 {/* Section dots */}
-                <div className="flex items-center gap-3 px-4">
+                <div className="flex items-center gap-2 px-3">
                   {sections.map((section, index) => (
                     <motion.button
                       key={index}
-                      whileHover={{ scale: 1.3 }}
+                      whileHover={{ scale: 1.2 }}
                       whileTap={{ scale: 0.8 }}
                       onClick={() => navigateToSection(index)}
-                      className={`relative w-3 h-3 rounded-full transition-all duration-300 ${
+                      className={`relative w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                         index === currentSection
                           ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
                           : 'bg-white/30 hover:bg-white/50'
@@ -262,9 +262,9 @@ export default function App() {
                       {/* Progress ring for current section */}
                       {index === currentSection && (
                         <motion.div
-                          className="absolute inset-0 rounded-full border-2 border-cyan-400"
+                          className="absolute inset-0 rounded-full border border-cyan-400"
                           initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 2, opacity: 0 }}
+                          animate={{ scale: 2.5, opacity: 0 }}
                           transition={{ duration: 2, repeat: Infinity }}
                         />
                       )}
@@ -274,13 +274,13 @@ export default function App() {
 
                 {/* Next */}
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={nextSection}
-                  className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-cyan-400 hover:text-white transition-colors border border-white/20"
+                  className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
                   title="Next Section (D/→)"
                 >
-                  <ArrowRight className="h-5 w-5" />
+                  <ArrowRight className="h-4 w-4" />
                 </motion.button>
 
               </div>

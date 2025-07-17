@@ -92,7 +92,8 @@ export function HeroSection() {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="space-y-6 text-center lg:text-left"
           >
-            <h1 className="text-6xl lg:text-8xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent leading-tight tracking-tight">
+            <h1 className="text-6xl lg:text-8xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent leading-tight tracking-tight"
+                style={{ fontFamily: "'Space Grotesk', monospace" }}>
               DeusVaultOS
             </h1>
             
@@ -116,11 +117,11 @@ export function HeroSection() {
             className="grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0"
           >
             <div className="text-center lg:text-left">
-              <div className="text-3xl font-bold text-cyan-400">∞</div>
+              <div className="text-3xl font-bold text-cyan-400">Multiple</div>
               <div className="text-sm text-gray-400 font-medium">Environments</div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-3xl font-bold text-yellow-400">0ms</div>
+              <div className="text-3xl font-bold text-yellow-400">Minutes</div>
               <div className="text-sm text-gray-400 font-medium">Setup Time</div>
             </div>
             <div className="text-center lg:text-left">
@@ -136,15 +137,21 @@ export function HeroSection() {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <button className="flex items-center justify-center gap-3 bg-gradient-to-r from-cyan-500 to-yellow-500 text-black font-semibold px-8 py-4 rounded-lg hover:from-cyan-400 hover:to-yellow-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25">
+            <button 
+              onClick={() => window.open('https://github.com/deusvault/deusvaultos', '_blank')}
+              className="flex items-center justify-center gap-3 bg-gradient-to-r from-cyan-500 to-yellow-500 text-black font-semibold px-8 py-4 rounded-lg hover:from-cyan-400 hover:to-yellow-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25"
+            >
               <Download className="h-5 w-5" />
-              Download Free
+              View on GitHub
               <ChevronRight className="h-4 w-4" />
             </button>
             
-            <button className="flex items-center justify-center gap-3 glass-refined border border-cyan-400/50 text-cyan-400 font-semibold px-8 py-4 rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all">
+            <button 
+              onClick={() => window.open('https://github.com/deusvault/deusvaultos', '_blank')}
+              className="flex items-center justify-center gap-3 glass-refined border border-cyan-400/50 text-cyan-400 font-semibold px-8 py-4 rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all"
+            >
               <Github className="h-5 w-5" />
-              View Source
+              Source Code
             </button>
           </motion.div>
 

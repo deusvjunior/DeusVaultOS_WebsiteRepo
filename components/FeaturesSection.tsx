@@ -23,31 +23,31 @@ export function FeaturesSection() {
     {
       icon: <Brain className="h-8 w-8" />,
       title: "THERION AI Core",
-      description: "Advanced neural AI that learns your coding patterns and writes alongside you. True AI pair programming that understands context and intent.",
+      description: "Advanced AI assistant that learns your coding patterns and provides intelligent assistance. Contextual AI pair programming for better development workflow.",
       videoSrc: "/videos/therion-ai-demo.mp4",
       videoPoster: "/thumbs/therion-ai-thumb.jpg",
       benefits: [
-        "Natural language to code conversion",
-        "Real-time bug prediction & fixes", 
-        "Performance optimization suggestions",
-        "Personal coding style learning"
+        "Natural language code assistance",
+        "Pattern recognition and suggestions", 
+        "Performance optimization guidance",
+        "Adaptive learning system"
       ],
-      metrics: { accuracy: "99.7%", speed: "Real-time", learning: "Continuous" },
+      metrics: { accuracy: "High", speed: "Fast", learning: "Continuous" },
       color: "cyan"
     },
     {
       icon: <Layers className="h-8 w-8" />,
       title: "Parallel Environments",
-      description: "Run unlimited development environments simultaneously with zero conflicts and instant switching. Perfect isolation for every project.",
+      description: "Run multiple development environments simultaneously with proper isolation and quick switching. Optimized for different project needs.",
       videoSrc: "/videos/parallel-environments-demo.mp4",
       videoPoster: "/thumbs/parallel-environments-thumb.jpg",
       benefits: [
-        "Perfect environment isolation",
-        "Sub-25ms environment switching",
+        "Environment isolation",
+        "Quick environment switching",
         "Resource sharing optimization", 
-        "Zero overhead virtualization"
+        "Efficient virtualization"
       ],
-      metrics: { containers: "Unlimited", overhead: "< 1%", switching: "< 25ms" },
+      metrics: { containers: "Multiple", overhead: "Optimized", switching: "Fast" },
       color: "yellow"
     },
     {
@@ -129,7 +129,8 @@ export function FeaturesSection() {
           Core Features
         </Badge>
         
-        <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent">
+        <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent"
+            style={{ fontFamily: "'Space Grotesk', monospace" }}>
           Everything You Need
         </h2>
         
