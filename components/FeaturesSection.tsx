@@ -1,18 +1,16 @@
+import { motion } from "framer-motion";
+import {
+    Brain,
+    CheckCircle,
+    Code2,
+    Download,
+    Gamepad2,
+    Layers,
+    Sparkles
+} from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { 
-  Code2, 
-  Brain, 
-  Gamepad2, 
-  Layers, 
-  Zap, 
-  ArrowRight,
-  Sparkles,
-  CheckCircle,
-  Download
-} from "lucide-react";
-import { motion } from "framer-motion";
 
 export function FeaturesSection() {
   const coreFeatures = [

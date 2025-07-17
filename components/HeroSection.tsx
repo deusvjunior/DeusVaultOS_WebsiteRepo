@@ -1,14 +1,14 @@
 import { motion } from 'framer-motion';
-import { 
-  Sparkles, 
-  Infinity, 
-  Cpu, 
-  Shield, 
-  Layers,
-  Zap,
-  Download,
-  Github,
-  ChevronRight
+import {
+    ChevronRight,
+    Cpu,
+    Download,
+    Github,
+    Infinity,
+    Layers,
+    Shield,
+    Sparkles,
+    Zap
 } from 'lucide-react';
 
 export function HeroSection() {

@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
-import { 
-  Mail, 
-  MessageCircle, 
-  Calendar,
-  MapPin,
-  Phone,
-  Github,
-  Twitter,
-  Linkedin,
-  Send,
-  ArrowRight
+import {
+    ArrowRight,
+    Calendar,
+    Github,
+    Linkedin,
+    Mail,
+    MapPin,
+    MessageCircle,
+    Phone,
+    Send,
+    Twitter
 } from 'lucide-react';
 import { useState } from 'react';
 import { VideoPlaceholder } from './VideoPlaceholder';
