@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { Download, ArrowRight, Star, Users, Code, Shield } from "lucide-react";
-import { Button } from "./ui/button";
+import { ArrowRight, Code, Download, Shield, Star, Users } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 
 export function CTASection() {
   const trustIndicators = [

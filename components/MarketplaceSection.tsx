@@ -1,22 +1,20 @@
 import { motion } from 'framer-motion';
-import { 
-  Store,
-  Download,
-  Star,
-  Users,
-  TrendingUp,
-  Shield,
-  Zap,
-  Code,
-  Gamepad2,
-  Brush,
-  Database,
-  Globe,
-  Play,
-  ArrowRight,
-  CheckCircle,
-  Crown,
-  Sparkles
+import {
+    ArrowRight,
+    Brush,
+    CheckCircle,
+    Code,
+    Crown,
+    Database,
+    Download,
+    Gamepad2,
+    Globe,
+    Play,
+    Sparkles,
+    Star,
+    Store,
+    Users,
+    Zap
 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';

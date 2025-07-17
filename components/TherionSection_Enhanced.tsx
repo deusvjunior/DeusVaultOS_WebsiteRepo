@@ -1,25 +1,19 @@
-import { 
-  Brain, 
-  Zap, 
-  Eye, 
-  Cpu, 
-  Target,
-  Shield,
-  Sparkles,
-  ArrowRight,
-  Crown,
-  Play,
-  Infinity,
-  Code,
-  ChevronRight,
-  Activity,
-  Layers
+import { motion } from "framer-motion";
+import {
+    Activity,
+    ArrowRight,
+    Brain,
+    ChevronRight,
+    Crown,
+    Eye,
+    Infinity,
+    Play,
+    Shield,
+    Zap
 } from "lucide-react";
-import { Card, CardContent } from "./ui/card";
-import { InteractiveElement } from "./InteractiveElement";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { motion } from "framer-motion";
+import { Card, CardContent } from "./ui/card";
 
 export function TherionSection() {
   const therionAbilities = [

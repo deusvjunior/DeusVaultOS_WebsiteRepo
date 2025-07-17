@@ -1,18 +1,18 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { 
-  Gamepad2, 
-  Code, 
-  Users, 
-  GraduationCap, 
-  Heart, 
-  Cpu, 
-  Globe, 
-  Sparkles,
-  CheckCircle,
-  ArrowRight,
-  Zap
+import {
+    ArrowRight,
+    CheckCircle,
+    Code,
+    Cpu,
+    Gamepad2,
+    Globe,
+    GraduationCap,
+    Heart,
+    Sparkles,
+    Users,
+    Zap
 } from 'lucide-react';
+import { useState } from 'react';
 
 export function UserSegments() {
   const [activeTab, setActiveTab] = useState('developers');

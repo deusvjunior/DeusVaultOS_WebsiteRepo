@@ -1,17 +1,16 @@
 import { motion } from 'framer-motion';
-import { 
-  Sparkles, 
-  Download,
-  Github,
-  ChevronRight,
-  Play,
-  PlayCircle,
-  Monitor,
-  Smartphone,
-  Globe,
-  Code,
-  Zap,
-  Shield
+import {
+    ChevronRight,
+    Code,
+    Download,
+    Github,
+    Globe,
+    Monitor,
+    PlayCircle,
+    Shield,
+    Smartphone,
+    Sparkles,
+    Zap
 } from 'lucide-react';
 
 export function HeroSection() {

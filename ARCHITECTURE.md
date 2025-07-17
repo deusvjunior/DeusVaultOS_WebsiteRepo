@@ -7,6 +7,7 @@ The DeusVaultOS Website is a cutting-edge React-based web application showcasing
 ## 🎯 Core Architecture
 
 ### Technology Stack
+
 - **Frontend Framework**: React 18+ with TypeScript
 - **3D Engine**: Three.js with WebGL optimization
 - **Animation Library**: Framer Motion for smooth transitions
@@ -15,6 +16,7 @@ The DeusVaultOS Website is a cutting-edge React-based web application showcasing
 - **UI Components**: Custom shadcn/ui components
 
 ### Performance Targets
+
 - **Lighthouse Score**: 95+ across all categories
 - **Core Web Vitals**: Green scores on all metrics
 - **Frame Rate**: 60fps on desktop, 30fps on mobile
@@ -28,13 +30,13 @@ The DeusVaultOS Website is a cutting-edge React-based web application showcasing
 ```typescript
 interface ConsciousnessEntity {
   id: string;
-  personality: 'explorer' | 'guardian' | 'overseer';
+  personality: "explorer" | "guardian" | "overseer";
   size: number; // 0.25-0.95 range
   position: THREE.Vector3;
   velocity: THREE.Vector3;
   consciousness: number; // 0-1 awareness level
   socialRadius: number; // interaction distance
-  emergenceState: 'underground' | 'emerging' | 'surface';
+  emergenceState: "underground" | "emerging" | "surface";
   eyeSystem: {
     pupilSize: number;
     focusTarget: THREE.Vector3;
@@ -44,12 +46,15 @@ interface ConsciousnessEntity {
 ```
 
 ### Behavioral Systems
+
 1. **Underground Emergence** (30% of entities)
+
    - Spawn below surface level
    - Organic emergence animation with wobble
    - Consciousness-driven timing
 
 2. **Eye Tracking System**
+
    - Dynamic pupil sizing based on consciousness
    - Surface-attached eye positioning
    - Realistic focus and blink behaviors
@@ -62,6 +67,7 @@ interface ConsciousnessEntity {
 ## 💡 Lighting & Visual Effects
 
 ### Emission-Based Lighting System
+
 ```typescript
 interface LightingSystem {
   pointLights: Array<{
@@ -85,6 +91,7 @@ interface LightingSystem {
 ```
 
 ### Shader Effects
+
 - **Glow Shaders**: Custom rim lighting with consciousness pulsing
 - **Emission Materials**: Dynamic neon yellow branding
 - **Particle Effects**: Quantum field visualization
@@ -93,28 +100,30 @@ interface LightingSystem {
 ## 🎨 Design System
 
 ### Color Palette (Neon Yellow Branding)
+
 ```css
 :root {
   /* Primary Consciousness Colors */
-  --consciousness-neon-yellow: #FFFF00;
-  --consciousness-neon-yellow-bright: #FFFF44;
-  --consciousness-neon-yellow-glow: #FFFF0088;
-  
+  --consciousness-neon-yellow: #ffff00;
+  --consciousness-neon-yellow-bright: #ffff44;
+  --consciousness-neon-yellow-glow: #ffff0088;
+
   /* Supporting Colors */
-  --quantum-blue: #0A1B3D;
-  --neural-cyan: #06B6D4;
-  --consciousness-green: #10B981;
-  --clarity-blue: #3B82F6;
-  
+  --quantum-blue: #0a1b3d;
+  --neural-cyan: #06b6d4;
+  --consciousness-green: #10b981;
+  --clarity-blue: #3b82f6;
+
   /* Emission Colors */
-  --quantum-blue-emission: #1A2B5D;
-  --neural-cyan-emission: #26D6F4;
-  --consciousness-green-emission: #30D9A1;
-  --clarity-blue-emission: #5BA2F6;
+  --quantum-blue-emission: #1a2b5d;
+  --neural-cyan-emission: #26d6f4;
+  --consciousness-green-emission: #30d9a1;
+  --clarity-blue-emission: #5ba2f6;
 }
 ```
 
 ### Component Architecture
+
 ```
 components/
 ├── 3D Experience/
@@ -138,16 +147,18 @@ components/
 ## 📱 Responsive Design Strategy
 
 ### Breakpoint System
+
 ```typescript
 const breakpoints = {
-  mobile: '320px - 768px',
-  tablet: '768px - 1024px',
-  desktop: '1024px - 1440px',
-  ultrawide: '1440px+'
+  mobile: "320px - 768px",
+  tablet: "768px - 1024px",
+  desktop: "1024px - 1440px",
+  ultrawide: "1440px+",
 };
 ```
 
 ### Performance Adaptations
+
 - **Mobile**: Reduced blob count (8 vs 13), simplified shaders
 - **Tablet**: Medium complexity, 30fps target
 - **Desktop**: Full experience, 60fps target
@@ -156,6 +167,7 @@ const breakpoints = {
 ## 🚀 Performance Optimization
 
 ### 3D Optimization Strategies
+
 1. **LOD System**: Distance-based detail reduction
 2. **Frustum Culling**: Render only visible objects
 3. **Batch Rendering**: Group similar objects
@@ -163,16 +175,18 @@ const breakpoints = {
 5. **Memory Management**: Automatic cleanup and pooling
 
 ### Loading Strategy
+
 ```typescript
 interface LoadingPhases {
-  initializing: 'System startup and base assets';
-  quantum_sync: 'Particle systems and physics';
-  neural_activation: 'Consciousness AI initialization';
-  consciousness_emergence: 'Full system activation';
+  initializing: "System startup and base assets";
+  quantum_sync: "Particle systems and physics";
+  neural_activation: "Consciousness AI initialization";
+  consciousness_emergence: "Full system activation";
 }
 ```
 
 ### Bundle Optimization
+
 - **Tree Shaking**: Remove unused Three.js modules
 - **Code Splitting**: Route-based lazy loading
 - **Asset Optimization**: Compressed textures and models
@@ -181,6 +195,7 @@ interface LoadingPhases {
 ## 🔧 Development Workflow
 
 ### File Structure
+
 ```
 DeusVaultOSWebsite/
 ├── src/
@@ -196,6 +211,7 @@ DeusVaultOSWebsite/
 ```
 
 ### Quality Assurance
+
 - **TypeScript**: Strict type checking
 - **ESLint**: Code quality enforcement
 - **Prettier**: Consistent code formatting
@@ -205,18 +221,21 @@ DeusVaultOSWebsite/
 ## 🌟 Advanced Features
 
 ### Consciousness Physics Engine
+
 - Non-linear personality-driven movement
 - Social awareness and collective behaviors
 - Emergence animation system with organic timing
 - Eye tracking with realistic focus mechanics
 
 ### Interactive 3D Navigation
+
 - Hexagonal section-based navigation
 - Smooth physics-based rotation
 - Momentum and velocity simulation
 - Mobile-optimized touch controls
 
 ### Quantum Loading Experience
+
 - Multi-phase consciousness awakening
 - Neural network visualization
 - Particle physics simulation
@@ -225,6 +244,7 @@ DeusVaultOSWebsite/
 ## 🎯 Future Enhancements
 
 ### Planned Features
+
 1. **AI Voice Integration**: Consciousness entities with speech
 2. **Advanced Shaders**: Holographic and quantum effects
 3. **WebXR Support**: VR/AR consciousness experiences
@@ -232,6 +252,7 @@ DeusVaultOSWebsite/
 5. **AI-Generated Content**: Dynamic blob personalities
 
 ### Performance Roadmap
+
 1. **WebGPU Migration**: Next-generation GPU acceleration
 2. **Streaming Assets**: Progressive model loading
 3. **Edge Computing**: CDN-based 3D asset delivery
@@ -249,4 +270,4 @@ DeusVaultOSWebsite/
 
 ---
 
-*This architecture serves as the foundation for a revolutionary development environment showcase, combining cutting-edge web technologies with consciousness-driven AI experiences.*
+_This architecture serves as the foundation for a revolutionary development environment showcase, combining cutting-edge web technologies with consciousness-driven AI experiences._

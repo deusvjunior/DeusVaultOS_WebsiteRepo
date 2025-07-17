@@ -1,17 +1,16 @@
 import { motion } from 'framer-motion';
-import { 
-  Cpu, 
-  Database, 
-  Shield, 
-  Zap,
-  GitBranch,
-  Bot,
-  Globe,
-  Rocket,
-  CheckCircle,
-  Clock,
-  AlertCircle,
-  Star
+import {
+    AlertCircle,
+    Bot,
+    CheckCircle,
+    Clock,
+    Database,
+    GitBranch,
+    Globe,
+    Rocket,
+    Shield,
+    Star,
+    Zap
 } from 'lucide-react';
 import { VideoPlaceholder } from './VideoPlaceholder';
 

@@ -1,22 +1,22 @@
 import { motion } from "framer-motion";
-import { 
-  Download, 
-  ArrowRight, 
-  Star, 
-  Users, 
-  Code, 
-  Shield, 
-  Play,
-  CheckCircle,
-  Crown,
-  Zap,
-  Globe,
-  Github,
-  Twitter,
-  MessageCircle
+import {
+    ArrowRight,
+    CheckCircle,
+    Code,
+    Crown,
+    Download,
+    Github,
+    Globe,
+    MessageCircle,
+    Play,
+    Shield,
+    Star,
+    Twitter,
+    Users,
+    Zap
 } from "lucide-react";
-import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 
 export function CTASection() {

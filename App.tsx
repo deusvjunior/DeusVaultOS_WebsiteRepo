@@ -3,33 +3,30 @@ import {
     ArrowLeft,
     ArrowRight,
     Home,
-    Users,
-    Zap,
-    Target,
     Map,
     MessageCircle,
-    Eye,
-    EyeOff
+    Target,
+    Users,
+    Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import main sections for final site
-import { HeroSection } from "./components/HeroSection";
-import { FeaturesSection } from "./components/FeaturesSection";
 import { CTASection } from "./components/CTASection";
-import { UserSegments } from "./components/UserSegments";
-import { TherionSection } from "./components/TherionSection_New";
-import { MarketplaceSection } from "./components/MarketplaceSection";
+import { FeaturesSection } from "./components/FeaturesSection";
 import { Footer } from "./components/Footer";
+import { HeroSection } from "./components/HeroSection";
+import { MarketplaceSection } from "./components/MarketplaceSection";
 import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
+import { TherionSection } from "./components/TherionSection_New";
+import { UserSegments } from "./components/UserSegments";
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [observerMode, setObserverMode] = useState(false); // **OBSERVER MODE STATE**
 
   const sections = [
     {
@@ -130,21 +127,17 @@ export default function App() {
           break;
         case 'o':
         case 'O':
-          e.preventDefault();
-          setObserverMode(!observerMode);
+          // Removed observer mode functionality
           break;
         case 'Escape':
-          if (observerMode) {
-            e.preventDefault();
-            setObserverMode(false);
-          }
+          // Removed observer mode functionality
           break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [sections.length, observerMode]);
+  }, [sections.length]);
 
   // Auto-advance sections disabled per user request
   /*
@@ -182,20 +175,16 @@ export default function App() {
       <SEOOptimizer {...seoConfigs.home} />
       
       {/* 3D Background Scene - Enhanced visibility */}
-      <div className={`fixed inset-0 z-0 ${observerMode ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+      <div className="fixed inset-0 z-0 pointer-events-none">
         <ThreeJSScene
           currentSection={currentSection}
           reducedMotion={reducedMotion}
-          observerMode={observerMode}
         />
       </div>
 
       {/* **PROFESSIONAL HEADER** */}
-            {/* **OBSERVER MODE - HIDE ALL UI EXCEPT 3D SCENE** */}
-      {!observerMode && (
-        <>
-          {/* Header */}
-          <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/10">
+      <>
+        <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/10">
             <div className="container mx-auto px-6 py-3">
               <div className="flex items-center justify-between">
                 
@@ -230,21 +219,6 @@ export default function App() {
                     {sections[currentSection].title}
                   </span>
                 </div>
-
-                {/* **OBSERVER MODE TOGGLE** */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setObserverMode(!observerMode)}
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 border ${
-                    observerMode 
-                      ? 'bg-cyan-400 text-black border-cyan-400 shadow-lg shadow-cyan-400/50' 
-                      : 'bg-white/10 text-cyan-400 border-white/20 hover:bg-white/20 hover:text-white'
-                  }`}
-                  title={observerMode ? "Exit Observer Mode (O)" : "Observer Mode - Hide All UI (O)"}
-                >
-                  {observerMode ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </motion.button>
               </div>
             </div>
           </div>
@@ -353,27 +327,6 @@ export default function App() {
             <Footer />
           </div>
         </>
-      )}
-
-      {/* **OBSERVER MODE - FLOATING EXIT BUTTON** */}
-      {observerMode && (
-        <motion.div
-          className="fixed top-6 right-6 z-50"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setObserverMode(false)}
-            className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-cyan-400/30 hover:border-cyan-400 shadow-lg shadow-black/50"
-            title="Exit Observer Mode (O/Esc)"
-          >
-            <EyeOff className="h-6 w-6" />
-          </motion.button>
-        </motion.div>
-      )}
 
       {/* Navigation */}
       <motion.div

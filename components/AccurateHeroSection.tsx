@@ -1,16 +1,16 @@
 import { motion } from "framer-motion";
-import { 
-  Download, 
-  ArrowRight, 
-  Cpu, 
-  Shield, 
-  Infinity,
-  Users,
-  Coins,
-  ChevronDown
+import {
+    ArrowRight,
+    ChevronDown,
+    Coins,
+    Cpu,
+    Download,
+    Infinity,
+    Shield,
+    Users
 } from "lucide-react";
-import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 import { VideoPlaceholder } from "./VideoPlaceholder";
 
 export function AccurateHeroSection() {

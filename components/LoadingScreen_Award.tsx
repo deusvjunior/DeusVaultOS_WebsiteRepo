@@ -28,8 +28,8 @@
  * @version 5.0.0 - AWARD-WINNING EXCELLENCE
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;

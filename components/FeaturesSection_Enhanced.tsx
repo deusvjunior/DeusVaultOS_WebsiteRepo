@@ -1,25 +1,22 @@
+import { motion } from "framer-motion";
+import {
+    ArrowRight,
+    Brain,
+    CheckCircle,
+    Cloud,
+    Cpu,
+    Download,
+    Gamepad2,
+    Globe,
+    Layers,
+    MonitorSpeaker,
+    Play,
+    Shield,
+    Sparkles
+} from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { 
-  Code2, 
-  Brain, 
-  Gamepad2, 
-  Layers, 
-  Zap, 
-  ArrowRight,
-  Sparkles,
-  CheckCircle,
-  Download,
-  Play,
-  Cpu,
-  Cloud,
-  Shield,
-  Globe,
-  Smartphone,
-  MonitorSpeaker
-} from "lucide-react";
-import { motion } from "framer-motion";
 
 export function FeaturesSection() {
   const heroFeatures = [

@@ -22,8 +22,8 @@
  * @version 3.0.0 - GLASSMORPHISM ELEGANCE
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;

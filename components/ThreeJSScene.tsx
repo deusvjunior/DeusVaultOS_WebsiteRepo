@@ -22,18 +22,15 @@
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 interface ThreeJSSceneProps {
   currentSection: number;
   reducedMotion?: boolean;
-  observerMode?: boolean;
 }
 
 const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({ 
   currentSection, 
-  reducedMotion = false,
-  observerMode = false
+  reducedMotion = false
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -1145,7 +1142,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // **REFINED HEXAGONAL PROGRESSION** - Balanced positioning for smooth transitions
+    // **REFINED HEXAGONAL PROGRESSION** - Balanced positioning with elevated final views
     const cameraConfigs = [
       // Page 0: Front face of hexagon (0°) - Hero Introduction
       { radius: 15, height: 4, angle: 0, tilt: -0.05, label: "Front Face" },
@@ -1157,10 +1154,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { radius: 15, height: 4, angle: Math.PI, tilt: -0.05, label: "Back Face" },
       // Page 4: Left-back face (240°) - THERION AI showcase  
       { radius: 15, height: 4, angle: (4 * Math.PI) / 3, tilt: -0.05, label: "Left-Back Face" },
-      // Page 5: Left-front face (280°) - **IMPROVED POSITION** - Better transition flow
-      { radius: 15, height: 4, angle: (14 * Math.PI) / 9, tilt: -0.05, label: "Left-Front Face" }, // 280° instead of 300° for smoother flow
-      // Page 6: Near-front face (320°) - Call to Action **IMPROVED FINAL POSITION**
-      { radius: 15, height: 4, angle: (16 * Math.PI) / 9, tilt: -0.05, label: "Near-Front Face" } // 320° instead of 330° for better approach to 0°
+      // Page 5: Left-front face (280°) - **ELEVATED PERSPECTIVE** 
+      { radius: 18, height: 8, angle: (14 * Math.PI) / 9, tilt: -0.15, label: "Left-Front Elevated" },
+      // Page 6: **HIGH OVERVIEW SHOT** - Dramatic elevated view looking down at scene
+      { radius: 12, height: 12, angle: (16 * Math.PI) / 9, tilt: -0.25, label: "High Overview" }
     ];
     
     const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
@@ -1208,9 +1205,9 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // **STIFFER ROTATION - INCREASED SPRING STRENGTH**
-    const springStrength = 0.025; // **INCREASED from 0.008** - Much stiffer, more responsive spring
-    const damping = 0.92; // **REDUCED from 0.98** - Less damping for snappier response
+    // **INCREASED SPRING STIFFNESS** - Even more responsive physics
+    const springStrength = 0.035; // **INCREASED from 0.025** - Maximum responsiveness
+    const damping = 0.90; // **REDUCED from 0.92** - Less damping for snappier feel
     
     // Anti-jitter threshold - prevent micro-movements
     const angleDifference = targetRotationY.current - currentRotationY.current;
@@ -1283,24 +1280,6 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Create Apple-grade hexagon structure
     createAppleGradeHexagon(hexagonGroup);
     
-    // **ORBIT CONTROLS FOR OBSERVER MODE** - Professional camera interaction
-    let orbitControls: OrbitControls | null = null;
-    if (observerMode) {
-      orbitControls = new OrbitControls(camera, renderer.domElement);
-      orbitControls.enableDamping = true;
-      orbitControls.dampingFactor = 0.05;
-      orbitControls.screenSpacePanning = false;
-      orbitControls.minDistance = 8;
-      orbitControls.maxDistance = 30;
-      orbitControls.maxPolarAngle = Math.PI / 1.8; // Prevent going too low
-      orbitControls.target.set(0, 0, 0); // Always look at center
-      orbitControls.mouseButtons = {
-        LEFT: THREE.MOUSE.ROTATE,
-        MIDDLE: THREE.MOUSE.DOLLY,
-        RIGHT: THREE.MOUSE.PAN
-      };
-    }
-    
     // Advanced animation loop with proper frame timing
     let lastTime = 0;
     const animate = (currentTime: number) => {
@@ -1311,20 +1290,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       const elapsedTime = clockRef.current.getElapsedTime();
 
-      // Apple-grade rotation with physics-based easing (ONLY in normal mode)
-      if (!observerMode) {
-        updateRotationWithPhysics(deltaTime);
-      }
+      // Apple-grade rotation with physics-based easing
+      updateRotationWithPhysics(deltaTime);
 
       // Advanced material updates with performance optimization
       updateAdvancedMaterials(elapsedTime, deltaTime);
       
-      // Camera movements (normal mode) OR orbit controls update (observer mode)
-      if (observerMode && orbitControls) {
-        orbitControls.update(); // Update orbit controls for smooth interaction
-      } else {
-        updateCameraMovement(elapsedTime); // Normal hexagon camera system
-      }
+      // Subtle camera movements for depth
+      updateCameraMovement(elapsedTime);
 
       renderer.render(scene, camera);
     };
@@ -1355,16 +1328,12 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         cancelAnimationFrame(frameRef.current);
       }
       
-      if (orbitControls) {
-        orbitControls.dispose();
-      }
-      
       if (rendererRef.current && mountRef.current) {
         mountRef.current.removeChild(rendererRef.current.domElement);
         rendererRef.current.dispose();
       }
     };
-  }, [currentSection, reducedMotion, observerMode]);
+  }, [currentSection, reducedMotion]);
 
   return (
     <div 

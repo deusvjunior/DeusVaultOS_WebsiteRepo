@@ -1,20 +1,20 @@
+import { motion } from "framer-motion";
+import {
+    Brain,
+    Crown,
+    Download,
+    ExternalLink,
+    Github,
+    Globe,
+    Mail,
+    MessageCircle,
+    Shield,
+    Twitter,
+    Zap
+} from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
-import { 
-  Crown, 
-  Shield, 
-  Download, 
-  Github, 
-  Twitter, 
-  MessageCircle,
-  Mail,
-  Globe,
-  Zap,
-  Brain,
-  ExternalLink
-} from "lucide-react";
-import { motion } from "framer-motion";
 
 export function Footer() {
   const quickLinks = [

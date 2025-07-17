@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { CheckCircle, Cpu, Shield, Zap, Globe, Code, Users, Download } from "lucide-react";
-import { Button } from "./ui/button";
+import { CheckCircle, Code, Cpu, Globe, Shield, Users, Zap } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 
 export function EnterpriseSection() {

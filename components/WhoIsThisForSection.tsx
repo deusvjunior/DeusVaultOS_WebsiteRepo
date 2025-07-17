@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
-import { 
-  Code2, 
-  Building2, 
-  Rocket, 
-  Users, 
-  Brain, 
-  Shield,
-  Zap,
-  Globe
+import {
+    Brain,
+    Building2,
+    Code2,
+    Globe,
+    Rocket,
+    Shield,
+    Users,
+    Zap
 } from 'lucide-react';
 import { VideoPlaceholder } from './VideoPlaceholder';
 
