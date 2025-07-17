@@ -27,14 +27,28 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Section rotation mapping (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
-  // Optimized lighting setup for better performance and soft colors
+  // Cyberpunk lighting setup with dramatic rim lighting and bloom
   const setupAdvancedLighting = (scene: THREE.Scene) => {
-    // Key light - primary illumination (optimized)
-    const keyLight = new THREE.DirectionalLight(0x4ECDC4, 1.8); // Softer cyan
+    // Dramatic orange/yellow rim light from underneath
+    const rimLight = new THREE.DirectionalLight(0xFF6600, 2.5); // Intense orange
+    rimLight.position.set(0, -10, 0); // From below pointing up
+    rimLight.target.position.set(0, 0, 0);
+    rimLight.castShadow = false; // No shadows for rim effect
+    scene.add(rimLight);
+    scene.add(rimLight.target);
+
+    // Secondary yellow rim light for variation
+    const yellowRimLight = new THREE.DirectionalLight(0xFFFF00, 1.8); // Bright yellow
+    yellowRimLight.position.set(-5, -8, 3); // Angled from below
+    yellowRimLight.castShadow = false;
+    scene.add(yellowRimLight);
+
+    // Key light - primary illumination (cooler for contrast)
+    const keyLight = new THREE.DirectionalLight(0x00FFFF, 1.2); // Cyan key
     keyLight.position.set(8, 12, 6);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 1024; // Reduced for performance
-    keyLight.shadow.mapSize.height = 1024;
+    keyLight.shadow.mapSize.width = 2048; // Higher quality shadows
+    keyLight.shadow.mapSize.height = 2048;
     keyLight.shadow.camera.near = 0.1;
     keyLight.shadow.camera.far = 50;
     keyLight.shadow.camera.left = -15;
@@ -43,19 +57,15 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     keyLight.shadow.camera.bottom = -15;
     scene.add(keyLight);
 
-    // Warm fill light
-    const fillLight = new THREE.DirectionalLight(0xFFE66D, 0.8); // Warm yellow
-    fillLight.position.set(-6, 8, 4);
-    scene.add(fillLight);
-
-    // Ambient light for soft base illumination
-    const ambientLight = new THREE.AmbientLight(0x95E1D3, 0.4); // Soft mint
-    scene.add(ambientLight);
-
-    // Single accent point light (optimized)
-    const accentLight = new THREE.PointLight(0xA8E6CF, 1.2, 25);
-    accentLight.position.set(0, 8, 0);
+    // Green accent light for neon effect
+    const accentLight = new THREE.PointLight(0x00FF00, 2.0, 15);
+    accentLight.position.set(0, 3, 0);
+    accentLight.castShadow = false;
     scene.add(accentLight);
+
+    // Ambient light for base illumination
+    const ambientLight = new THREE.AmbientLight(0x004444, 0.3); // Dark cyan ambient
+    scene.add(ambientLight);
   };
 
   // Enhanced living blobs with dramatic size variation and personality
@@ -87,9 +97,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const category = sizeCategories[i];
       const baseSize = category.size[0] + Math.random() * (category.size[1] - category.size[0]);
       
-      // Optimized geometry with size-based complexity
-      const complexity = category.type === 'large' ? [16, 12] : category.type === 'medium' ? [14, 10] : [12, 8];
+      // Enhanced high-quality geometry with modern smoothness
+      const complexity = category.type === 'large' ? [32, 24] : category.type === 'medium' ? [24, 18] : [20, 16];
       const blobGeometry = new THREE.SphereGeometry(baseSize, complexity[0], complexity[1]);
+      
+      // Smooth normals for modern appearance
+      blobGeometry.computeVertexNormals();
+      
       const positions = blobGeometry.attributes.position;
       
       // Store original vertices for jelly deformation
@@ -102,69 +116,69 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         );
       }
       
-      // Enhanced vibrant colors with stronger personality
+      // Enhanced cyberpunk neon colors with cyan and yellow palette
       const colorsBySize = {
         small: [
-          0xFF6B6B, // Vibrant coral red
-          0x4ECDC4, // Bright turquoise
-          0xFFE66D, // Golden yellow
-          0x95E1D3, // Mint green
-          0xFF8A80, // Light pink
-          0x81C784, // Fresh green
-          0x64B5F6, // Sky blue
-          0xFFB74D, // Orange
+          0x00FFFF, // Neon cyan
+          0x00E6E6, // Bright cyan
+          0x40FFFF, // Light cyan
+          0x00CCCC, // Deep cyan
+          0x66FFFF, // Soft cyan
+          0x00B3B3, // Dark cyan
+          0x80FFFF, // Pale cyan
+          0x009999, // Teal cyan
         ],
         medium: [
-          0x9C27B0, // Deep purple
-          0x2196F3, // Blue
-          0x00BCD4, // Cyan
-          0x8BC34A, // Light green
+          0xFFFF00, // Pure neon yellow
+          0xFFE600, // Bright yellow
+          0xFFCC00, // Golden yellow
+          0xFFB300, // Orange yellow
         ],
         large: [
-          0x6A1B9A, // Royal purple - the king blob
+          0x00FF00, // Neon green accent - the king blob
         ]
       };
       
       const colorPalette = colorsBySize[category.type as keyof typeof colorsBySize];
       const selectedColor = colorPalette[i % colorPalette.length];
       
-      // Enhanced material with stronger pulsating emission
+      // Enhanced cyberpunk material with neon glow
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
-        metalness: 0.0,
-        roughness: 0.9,
-        clearcoat: 0.0,
+        metalness: 0.1, // Slight metallic for neon effect
+        roughness: 0.3, // Smoother for better light reflection
+        clearcoat: 0.2, // Slight coating for neon look
         transmission: 0,
         transparent: false,
         opacity: 1.0,
         emissive: selectedColor,
-        emissiveIntensity: category.type === 'large' ? 0.15 : category.type === 'medium' ? 0.12 : 0.1,
+        emissiveIntensity: category.type === 'large' ? 0.25 : category.type === 'medium' ? 0.2 : 0.18, // Stronger neon glow
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       (blobMesh as any).isBlob = true;
       
-      // Strategic positioning within hexagon interior with vertical personality layers
+      // Enhanced positioning INSIDE hexagon center area
       let validPosition = false;
       let attempts = 0;
       const maxAttempts = 50;
       
       while (!validPosition && attempts < maxAttempts) {
-        // Enhanced positioning INSIDE hexagon area with personality-based layers
+        // Position blobs in CENTER of hexagon, not edges
         const angle = Math.random() * Math.PI * 2;
-        const radius = 0.8 + Math.random() * 2.8; // Inner area: 0.8 to 3.6 radius
+        const radius = Math.random() * 2.5; // Center area: 0 to 2.5 radius (well within hexagon)
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
         
-        // Enhanced size-based vertical layers with dramatic range
+        // Enhanced size-based vertical layers within center
         let y;
-        const verticalLayers = {
-          small: { min: -1.2, max: 0.2 }, // Energetic swimmers - upper waters
-          medium: { min: -2.0, max: -0.5 }, // Middle layer swimmers
-          large: { min: -2.8, max: -1.5 } // Deep, majestic swimmer - ocean depths
+        const centralLayers = {
+          small: { min: -1.0, max: 0.5 }, // Upper center waters
+          medium: { min: -1.8, max: -0.2 }, // Middle center layer
+          large: { min: -2.2, max: -0.8 } // Deep center dwelling
         };
         
-        const range = verticalLayers[category.type as keyof typeof verticalLayers];
+        const range = centralLayers[category.type as keyof typeof centralLayers];
         y = range.min + Math.random() * (range.max - range.min);
         
         const testPosition = new THREE.Vector3(x, y, z);
@@ -190,14 +204,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         attempts++;
       }
       
-      // Enhanced fallback position with size-appropriate layers
+      // Enhanced fallback position in hexagon center
       if (!validPosition) {
         const fallbackAngle = (i / blobCount) * Math.PI * 2;
-        const fallbackY = category.type === 'large' ? -2.2 : category.type === 'medium' ? -1.5 : -0.8;
+        const fallbackY = category.type === 'large' ? -1.5 : category.type === 'medium' ? -1.0 : -0.5;
         blobMesh.position.set(
-          Math.cos(fallbackAngle) * 2.5, // Inner hexagon area
-          fallbackY, // Size-appropriate layer
-          Math.sin(fallbackAngle) * 2.5
+          Math.cos(fallbackAngle) * 1.8, // Center hexagon area
+          fallbackY, // Size-appropriate center layer
+          Math.sin(fallbackAngle) * 1.8
         );
       }
 
@@ -276,7 +290,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
                    category.type === 'medium' ? 0.8 + Math.random() * 0.6 : 
                    0.4 + Math.random() * 0.4, // Size-based pulse speed
         pulseOffset: Math.random() * Math.PI * 2,
-        baseEmission: category.type === 'large' ? 0.15 : category.type === 'medium' ? 0.12 : 0.1,
+        baseEmission: category.type === 'large' ? 0.25 : category.type === 'medium' ? 0.2 : 0.18,
         
         // Enhanced jelly physics with personality
         jellyVertices: new Float32Array(originalVertices),
@@ -410,6 +424,23 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
   // Apple-grade hexagon with premium materials and effects
   const createAppleGradeHexagon = (group: THREE.Group) => {
+    // Create mirror ground surface
+    const mirrorGeometry = new THREE.PlaneGeometry(15, 15);
+    const mirrorMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x001122,
+      metalness: 1.0, // Full metallic for mirror effect
+      roughness: 0.0, // Perfect smoothness for reflection
+      reflectivity: 1.0,
+      transmission: 0,
+      transparent: false,
+      emissive: 0x000044,
+      emissiveIntensity: 0.1,
+    });
+    const mirrorMesh = new THREE.Mesh(mirrorGeometry, mirrorMaterial);
+    mirrorMesh.rotation.x = -Math.PI / 2; // Horizontal
+    mirrorMesh.position.y = -2.5; // Below everything
+    group.add(mirrorMesh);
+
     // Create spaceship-style base platform
     const baseGeometry = new THREE.CylinderGeometry(6.5, 7.0, 0.3, 32);
     const baseMaterial = new THREE.MeshPhysicalMaterial({
@@ -529,14 +560,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Enhanced pulsating emission with personality-based intensity
+        // Enhanced pulsating emission with cyberpunk neon intensity
         if (index % 3 === Math.floor(time * 10) % 3) { // Optimized update frequency
           const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
           const basePulse = userData.baseEmission;
-          const pulseAmplitude = userData.sizeCategory === 'large' ? 0.08 : 
-                               userData.sizeCategory === 'medium' ? 0.06 : 0.05;
+          const pulseAmplitude = userData.sizeCategory === 'large' ? 0.15 : 
+                               userData.sizeCategory === 'medium' ? 0.12 : 0.1;
           const pulseIntensity = basePulse + Math.sin(pulseTime) * pulseAmplitude;
-          userData.baseMaterial.emissiveIntensity = Math.max(0.05, pulseIntensity);
+          userData.baseMaterial.emissiveIntensity = Math.max(0.1, pulseIntensity);
         }
         
         // Advanced collision detection with static meshes (hexagon structure)
@@ -697,12 +728,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           blob.position.add(userData.velocity);
         }
         
-        // Enhanced boundary collision with smooth containment
+        // Enhanced boundary collision with hexagon CENTER containment
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
-        if (distanceFromCenter > hexagonInnerRadius - userData.radius) {
+        const centerRadius = 2.8; // Keep within center area (well inside hexagon)
+        
+        if (distanceFromCenter > centerRadius - userData.radius) {
           const angle = Math.atan2(blob.position.z, blob.position.x);
-          const targetX = Math.cos(angle) * (hexagonInnerRadius - userData.radius);
-          const targetZ = Math.sin(angle) * (hexagonInnerRadius - userData.radius);
+          const targetX = Math.cos(angle) * (centerRadius - userData.radius);
+          const targetZ = Math.sin(angle) * (centerRadius - userData.radius);
           
           // Smooth boundary correction instead of instant snap
           blob.position.x = THREE.MathUtils.lerp(blob.position.x, targetX, 0.2);
@@ -860,21 +893,22 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
-    // Advanced renderer with Apple-grade quality
+    // Enhanced renderer with bloom and cyberpunk quality
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
       powerPreference: "high-performance",
       stencil: false,
-      depth: true
+      depth: true,
+      preserveDrawingBuffer: true // For better quality
     });
     
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMapping = THREE.ReinhardToneMapping; // Better for neon colors
+    renderer.toneMappingExposure = 1.8; // Increased for bloom effect
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     
     rendererRef.current = renderer;
