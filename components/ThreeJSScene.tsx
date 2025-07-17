@@ -51,8 +51,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Six-sided hexagon navigation system (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
-  // 💡 ADVANCED LIGHTING SYSTEM WITH VOLUMETRIC FOG SUPPORT
-  // Optimized lighting setup for consciousness environments with atmospheric effects
+  // 💡 ADVANCED LIGHTING SYSTEM
+  // Optimized lighting setup for consciousness environments with soft colors
   const setupAdvancedLighting = (scene: THREE.Scene) => {
     // Key light - primary illumination (optimized)
     const keyLight = new THREE.DirectionalLight(0x4ECDC4, 1.8); // Softer cyan
@@ -81,38 +81,6 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     const accentLight = new THREE.PointLight(0xA8E6CF, 1.2, 25);
     accentLight.position.set(0, 8, 0);
     scene.add(accentLight);
-
-    // 🌫️ TRUE VOLUMETRIC FOG SYSTEM - ATMOSPHERIC CLOUD EFFECTS
-    // Using Three.js native fog system with ground plane for realistic atmosphere
-    const setupVolumetricFog = () => {
-      // Ground plane for fog base (partially submerged ground)
-      const groundGeometry = new THREE.PlaneGeometry(50, 50);
-      const groundMaterial = new THREE.MeshLambertMaterial({ 
-        color: 0x1a1a1a, 
-        transparent: true, 
-        opacity: 0.7,
-        fog: true // Enable fog on ground material
-      });
-      const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
-      groundMesh.rotation.x = -Math.PI / 2;
-      groundMesh.position.y = -4;
-      groundMesh.receiveShadow = true;
-      scene.add(groundMesh);
-
-      // TRUE THREE.JS VOLUMETRIC FOG - Exponential fog for realistic atmospheric effect
-      // FogExp2 creates exponential fog that gets denser with distance
-      const baseFogColor = new THREE.Color(0x6ec5f7); // Cool blue-cyan base
-      scene.fog = new THREE.FogExp2(baseFogColor, 0.02); // Density: 0.02 for subtle atmospheric effect
-      
-      // Store fog reference for dynamic color updates based on blob emissions
-      (scene as any).volumetricFog = scene.fog;
-      (scene as any).baseFogColor = baseFogColor.clone();
-      
-      return scene.fog;
-    };
-
-    // Create the true volumetric fog system
-    setupVolumetricFog();
   };
 
   // Enhanced blob creation with size variation and Nexus color system
@@ -1174,7 +1142,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // **REFINED HEXAGONAL PROGRESSION** - Perfect positioning for all 6 pages
+    // **REFINED HEXAGONAL PROGRESSION** - Balanced positioning for smooth transitions
     const cameraConfigs = [
       // Page 0: Front face of hexagon (0°) - Hero Introduction
       { radius: 15, height: 4, angle: 0, tilt: -0.05, label: "Front Face" },
@@ -1186,8 +1154,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { radius: 15, height: 4, angle: Math.PI, tilt: -0.05, label: "Back Face" },
       // Page 4: Left-back face (240°) - THERION AI showcase  
       { radius: 15, height: 4, angle: (4 * Math.PI) / 3, tilt: -0.05, label: "Left-Back Face" },
-      // Page 5: Left-front face (300°) - Marketplace view **OPTIMIZED POSITION**
-      { radius: 15, height: 3, angle: (5 * Math.PI) / 3, tilt: 0, label: "Left-Front Face" }
+      // Page 5: Left-front face (300°) - Marketplace view **CORRECTED POSITION**
+      { radius: 15, height: 4, angle: (5 * Math.PI) / 3, tilt: -0.05, label: "Left-Front Face" },
+      // Page 6: Near-front face (330°) - Call to Action **PROPER FINAL POSITION**
+      { radius: 15, height: 4, angle: (11 * Math.PI) / 6, tilt: -0.05, label: "Near-Front Face" }
     ];
     
     const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
@@ -1211,112 +1181,33 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     cameraRef.current.lookAt(0, lookAtY, 0);
   };
 
-  // Apple-grade smooth camera transitions with curved interpolation (NO ABRUPT MOVEMENT)
-  const updateRotationWithPhysics = (deltaTime: number) => {
+  // Apple-grade rotation with physics simulation (SMOOTHER & ANTI-JITTER)
+  const updateRotationWithPhysics = (_deltaTime: number) => {
     if (!isInteracting && !reducedMotion) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // SMOOTH CURVED INTERPOLATION using easing function for natural movement
+    // Enhanced physics-based rotation with anti-jitter system
+    const springStrength = 0.015; // Even gentler for smoother motion
+    const damping = 0.95; // Higher damping for stability
+    
+    // Anti-jitter threshold - prevent micro-movements
     const angleDifference = targetRotationY.current - currentRotationY.current;
     const normalizedDiff = ((angleDifference + Math.PI) % (2 * Math.PI)) - Math.PI; // Normalize to -π to π
     
-    // Smooth easing-based interpolation for natural camera movement
-    const distance = Math.abs(normalizedDiff);
-    
-    // Dynamic speed based on distance - faster for larger differences, slower for fine adjustments
-    let lerpFactor;
-    if (distance > Math.PI / 2) {
-      // Large rotations: smooth but responsive
-      lerpFactor = Math.min(deltaTime * 1.5, 0.08);
-    } else if (distance > Math.PI / 4) {
-      // Medium rotations: balanced speed
-      lerpFactor = Math.min(deltaTime * 1.2, 0.05);
+    if (Math.abs(normalizedDiff) > 0.001) { // Only apply force if significant difference
+      const force = normalizedDiff * springStrength;
+      velocityRef.current += force;
+      velocityRef.current *= damping;
+      currentRotationY.current += velocityRef.current;
     } else {
-      // Small adjustments: gentle precision
-      lerpFactor = Math.min(deltaTime * 0.8, 0.03);
-    }
-    
-    // Apply easing curve for smooth acceleration/deceleration
-    const easedFactor = 1 - Math.pow(1 - lerpFactor, 3); // Cubic ease-out
-    
-    if (distance > 0.001) {
-      currentRotationY.current += normalizedDiff * easedFactor;
-    } else {
-      // Snap to target when very close to prevent drift
-      currentRotationY.current = targetRotationY.current;
+      // Gradual settling to prevent jitter
+      velocityRef.current *= 0.98;
+      currentRotationY.current = THREE.MathUtils.lerp(currentRotationY.current, targetRotationY.current, 0.05);
     }
     
     if (hexagonRef.current) {
       hexagonRef.current.rotation.y = currentRotationY.current;
-    }
-  };
-
-  // 🌫️ DYNAMIC VOLUMETRIC FOG COLOR SYSTEM
-  // Updates fog colors based on nearby blob emissions for ethereal atmospheric effects
-  const updateVolumetricFogColors = (scene: THREE.Scene, elapsedTime: number) => {
-    const volumetricFog = (scene as any).volumetricFog;
-    if (!volumetricFog || !hexagonRef.current) return;
-
-    // Get all blob meshes from the hexagon group
-    const blobs: THREE.Mesh[] = [];
-    hexagonRef.current.traverse((child) => {
-      if (child instanceof THREE.Mesh && (child as any).userData?.blobType) {
-        blobs.push(child);
-      }
-    });
-
-    // Calculate average emission influence
-    let totalCyanInfluence = 0;
-    let totalYellowInfluence = 0;
-    let totalInfluence = 0;
-
-    blobs.forEach((blob) => {
-      const userData = (blob as any).userData;
-      if (!userData.emissionColor) return;
-
-      // Calculate distance influence (closer blobs have more effect)
-      const distance = blob.position.length();
-      const influenceStrength = Math.max(0, 1 - distance / 20);
-      
-      if (userData.emissionColor === 0x44FFFF) {
-        // Cyan blob influence
-        totalCyanInfluence += influenceStrength;
-      } else if (userData.emissionColor === 0xFFE55C || userData.emissionColor === 0xFFBF47) {
-        // Yellow blob influence
-        totalYellowInfluence += influenceStrength;
-      }
-      totalInfluence += influenceStrength;
-    });
-
-    if (totalInfluence > 0) {
-      // Normalize influences
-      const cyanRatio = totalCyanInfluence / totalInfluence;
-      const yellowRatio = totalYellowInfluence / totalInfluence;
-      
-      // Create dynamic fog color based on blob emissions
-      const baseFogColor = new THREE.Color(0x1a2a3a); // Cool base
-      const cyanTint = new THREE.Color(0x44FFFF);
-      const yellowTint = new THREE.Color(0xFFE55C);
-      
-      // Mix colors based on blob influence
-      const finalFogColor = baseFogColor.clone()
-        .lerp(cyanTint, cyanRatio * 0.3)
-        .lerp(yellowTint, yellowRatio * 0.3);
-      
-      // Apply subtle pulsing effect
-      const pulseIntensity = 1 + Math.sin(elapsedTime * 2) * 0.1;
-      finalFogColor.multiplyScalar(pulseIntensity);
-      
-      // Update scene fog color
-      if (scene.fog && scene.fog instanceof THREE.FogExp2) {
-        scene.fog.color = finalFogColor;
-      }
-      
-      // Update volumetric fog material color
-      if (volumetricFog.material) {
-        volumetricFog.material.color = finalFogColor;
-      }
     }
   };
 
@@ -1326,8 +1217,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Advanced scene setup with Apple-grade rendering
     const scene = new THREE.Scene();
     scene.background = null; // Transparent for layering
-    // Enhanced atmospheric fog with color mixing
-    scene.fog = new THREE.FogExp2(0x1a2a3a, 0.008); // Denser exponential fog for atmosphere
+    scene.fog = new THREE.Fog(0x000000, 5, 25); // Depth perception
     sceneRef.current = scene;
 
     // Professional camera setup with responsive characteristics
@@ -1387,9 +1277,6 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
       // Advanced material updates with performance optimization
       updateAdvancedMaterials(elapsedTime, deltaTime);
-      
-      // 🌫️ DYNAMIC FOG COLOR INFLUENCE FROM BLOB EMISSIONS
-      updateVolumetricFogColors(scene, elapsedTime);
       
       // Subtle camera movements for depth
       updateCameraMovement(elapsedTime);
