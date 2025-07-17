@@ -58,21 +58,21 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     scene.add(accentLight);
   };
 
-  // Enhanced living blobs with volumetric merging physics and water droplet behavior
+  // Enhanced living blobs with jelly physics, eyes, and cute movement
   const createCuteBlobsWithJellyPhysics = (group: THREE.Group) => {
-    const blobCount = 12; // Doubled for more life
+    const blobCount = 12; // Doubled from 6 to 12
     const blobs: any[] = [];
-    const hexagonRadius = 5.5;
+    const hexagonRadius = 5.5; // Slightly smaller boundary
 
     for (let i = 0; i < blobCount; i++) {
       // Smaller, cuter blob sizes (halved)
-      const baseSize = 0.3 + Math.random() * 0.2; // 0.3 to 0.5 (half the original)
+      const baseSize = 0.3 + Math.random() * 0.2; // 0.3 to 0.5 (halved from 0.6-1.0)
       
       // Create jelly-like geometry with vertex displacement capability
-      const blobGeometry = new THREE.SphereGeometry(baseSize, 16, 12);
+      const blobGeometry = new THREE.SphereGeometry(baseSize, 16, 12); // Lower poly for better performance
       const positions = blobGeometry.attributes.position;
       
-      // Store original vertices for jelly deformation and merging
+      // Store original vertices for jelly deformation
       const originalVertices = [];
       for (let j = 0; j < positions.count; j++) {
         originalVertices.push(
@@ -82,7 +82,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         );
       }
       
-      // Soft, cute colors (fully opaque)
+      // Soft, cute colors (NO TRANSPARENCY)
       const colorOptions = [
         0x4ECDC4, // Soft cyan
         0xFFE66D, // Warm yellow
@@ -92,32 +92,32 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       ];
       const selectedColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
       
-      // Fully opaque, water-like material
+      // Completely opaque material (NO transparency)
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
         metalness: 0.0,
-        roughness: 0.2, // More water-like
-        clearcoat: 0.8,
-        transmission: 0, // No transparency
-        transparent: false, // Fully opaque
-        opacity: 1.0, // Completely solid
+        roughness: 0.4,
+        clearcoat: 0.3,
+        transmission: 0, // NO transparency
+        transparent: false, // NO transparency 
+        opacity: 1.0, // Fully opaque
         emissive: selectedColor,
-        emissiveIntensity: 0.01, // Minimal emission
+        emissiveIntensity: 0.02, // Very subtle emission
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       
-      // Position within safe zone with better distribution
+      // Better distribution for 12 blobs
       const angle = (i / blobCount) * Math.PI * 2 + Math.random() * 0.5;
-      const radius = 0.5 + Math.random() * 2.5; // Spread them out more
+      const radius = 0.5 + Math.random() * 3; // Varied radius
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
-      const y = -1 + Math.random() * 2;
+      const y = -2 + Math.random() * 4; // Full height range
       
       blobMesh.position.set(x, y, z);
 
-      // Create cute black dot eyes (smaller for smaller blobs)
-      const eyeSize = baseSize * 0.06; // Smaller eyes for smaller blobs
+      // Create SINGLE SET of cute black dot eyes (fix duplication)
+      const eyeSize = baseSize * 0.12; // Slightly larger relative to smaller blobs
       const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6);
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
         color: 0x000000 // Black dots
@@ -128,63 +128,56 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       // Position eyes on front of blob
       const eyeOffset = baseSize * 0.35;
-      leftEye.position.set(-eyeOffset, eyeOffset * 0.25, baseSize * 0.9);
-      rightEye.position.set(eyeOffset, eyeOffset * 0.25, baseSize * 0.9);
+      leftEye.position.set(-eyeOffset, eyeOffset * 0.2, baseSize * 0.9);
+      rightEye.position.set(eyeOffset, eyeOffset * 0.2, baseSize * 0.9);
       
+      // Add eyes to blob (only once)
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Store comprehensive animation data including merging physics
+      // Store comprehensive animation data
       blobMesh.userData = {
         size: baseSize,
         originalVertices,
-        originalSize: baseSize,
         leftEye,
         rightEye,
         
-        // Volumetric merging properties
-        isMerged: false,
-        mergePartners: [],
-        mergeScale: 1.0,
-        separationTimer: 0,
-        mergeStrength: 0,
-        
         // Slow, cute swimming
-        swimSpeed: 0.15 + Math.random() * 0.25,
+        swimSpeed: 0.2 + Math.random() * 0.3, // Very slow
         swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 0.4 + Math.random() * 0.4,
+        swimAmplitude: 0.5 + Math.random() * 0.5,
         
         // Individual direction per blob
         targetDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 0.3,
+          (Math.random() - 0.5) * 0.5,
           (Math.random() - 0.5) * 2
         ).normalize(),
         currentDirection: new THREE.Vector3(),
         
         // Jelly physics
         jellyVertices: new Float32Array(originalVertices),
-        jellySpeed: 0.4 + Math.random() * 0.4,
-        jellyIntensity: 0.08 + Math.random() * 0.08,
+        jellySpeed: 0.5 + Math.random() * 0.5,
+        jellyIntensity: 0.1 + Math.random() * 0.1,
         
         // Spiral emergence from ground
         spiralAngle: Math.random() * Math.PI * 2,
-        spiralSpeed: 0.25 + Math.random() * 0.3,
-        spiralRadius: 0.15 + Math.random() * 0.2,
-        isEmerging: y < -0.3,
-        emergenceTarget: y + 1.5,
+        spiralSpeed: 0.3 + Math.random() * 0.4,
+        spiralRadius: 0.2 + Math.random() * 0.3,
+        isEmerging: y < -0.5,
+        emergenceTarget: y + 2,
         
         // Cute blinking
-        blinkTimer: 1.5 + Math.random() * 3,
+        blinkTimer: 1 + Math.random() * 3,
         isBlinking: false,
         
         // Squishy scale animation  
-        squishiness: 0.04 + Math.random() * 0.04,
-        squishSpeed: 0.6 + Math.random() * 0.3,
+        squishiness: 0.05 + Math.random() * 0.05,
+        squishSpeed: 0.8 + Math.random() * 0.4,
         squishOffset: Math.random() * Math.PI * 2,
         
         // Gentle rotation
-        rotationSpeed: (Math.random() - 0.5) * 0.008,
+        rotationSpeed: (Math.random() - 0.5) * 0.01,
         
         // Ground intersection effect
         groundIntersection: 0,
@@ -408,88 +401,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
     }
 
-    // Animate cute jelly blobs with volumetric merging physics
+    // Animate cute jelly blobs with squishy physics and spiral emergence
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
-      const hexagonRadius = 5.5;
+      const hexagonRadius = 5.5; // Boundary radius
       
       blobs.forEach((blob: any, index: number) => {
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Volumetric merging physics - check for nearby blobs
-        let nearbyBlobs: Array<{blob: any, distance: number, index: number}> = [];
-        blobs.forEach((otherBlob: any, otherIndex: number) => {
-          if (index !== otherIndex) {
-            const distance = blob.position.distanceTo(otherBlob.position);
-            const mergeDistance = userData.size + otherBlob.userData.size + 0.1;
-            
-            if (distance < mergeDistance) {
-              nearbyBlobs.push({blob: otherBlob, distance, index: otherIndex});
-            }
-          }
-        });
-        
-        // Handle volumetric merging like water droplets
-        if (nearbyBlobs.length > 0 && !userData.isMerged) {
-          userData.isMerged = true;
-          userData.mergePartners = nearbyBlobs;
-          userData.separationTimer = 2 + Math.random() * 3; // Stay merged for 2-5 seconds
-          
-          // Calculate merged scale based on nearby blob volumes
-          let totalVolume = Math.pow(userData.originalSize, 3);
-          nearbyBlobs.forEach(({blob: nearBlob}) => {
-            totalVolume += Math.pow(nearBlob.userData.originalSize, 3);
-            nearBlob.userData.isMerged = true;
-            nearBlob.userData.mergeStrength = 1.0;
-          });
-          
-          // Scale up based on combined volume (water droplet physics)
-          userData.mergeScale = Math.pow(totalVolume / Math.pow(userData.originalSize, 3), 1/3);
-          userData.mergeStrength = 1.0;
-          
-          // Merge positions - pull blobs together
-          const avgPosition = blob.position.clone();
-          nearbyBlobs.forEach(({blob: nearBlob}) => {
-            avgPosition.add(nearBlob.position);
-          });
-          avgPosition.divideScalar(nearbyBlobs.length + 1);
-          
-          // Smoothly move to merged position
-          blob.position.lerp(avgPosition, 0.1);
-        }
-        
-        // Handle separation after merge timer
-        if (userData.isMerged) {
-          userData.separationTimer -= deltaTime;
-          
-          if (userData.separationTimer <= 0) {
-            // Separate like water droplets splitting
-            userData.isMerged = false;
-            userData.mergeScale = 1.0;
-            userData.mergeStrength = 0;
-            
-            // Give separation impulse
-            userData.targetDirection.set(
-              (Math.random() - 0.5) * 2,
-              (Math.random() - 0.5) * 0.5,
-              (Math.random() - 0.5) * 2
-            ).normalize();
-            
-            // Reset merge partners
-            userData.mergePartners.forEach(({blob: nearBlob}: {blob: any}) => {
-              nearBlob.userData.isMerged = false;
-              nearBlob.userData.mergeScale = 1.0;
-              nearBlob.userData.mergeStrength = 0;
-            });
-            userData.mergePartners = [];
-          }
-        }
-        
-        // Apply volumetric scale from merging
-        const currentMergeScale = userData.isMerged ? userData.mergeScale : 1.0;
-        
-        // Jelly vertex deformation for squishiness (enhanced for merged blobs)
+        // Jelly vertex deformation for squishiness
         const geometry = blob.geometry;
         const positions = geometry.attributes.position;
         
@@ -499,97 +420,95 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           const originalY = userData.originalVertices[i3 + 1];  
           const originalZ = userData.originalVertices[i3 + 2];
           
-          // Enhanced jelly wobble when merged
-          const jellyMultiplier = userData.isMerged ? 1.5 : 1.0;
-          const wobbleX = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity * jellyMultiplier;
-          const wobbleY = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity * jellyMultiplier;
-          const wobbleZ = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity * jellyMultiplier;
+          // Add jelly wobble based on position and time
+          const wobbleX = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity;
+          const wobbleY = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity;
+          const wobbleZ = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity;
           
           positions.setXYZ(i, 
-            (originalX + wobbleX) * currentMergeScale,
-            (originalY + wobbleY) * currentMergeScale, 
-            (originalZ + wobbleZ) * currentMergeScale
+            originalX + wobbleX,
+            originalY + wobbleY, 
+            originalZ + wobbleZ
           );
         }
         positions.needsUpdate = true;
         
-        // Only move if not strongly merged
-        if (!userData.isMerged || userData.mergeStrength < 0.8) {
-          // Individual directional movement (slow & cute)
-          const moveTime = time * userData.swimSpeed;
-          userData.currentDirection.lerp(userData.targetDirection, 0.008);
+        // Individual directional movement (slow & cute)
+        const moveTime = time * userData.swimSpeed;
+        userData.currentDirection.lerp(userData.targetDirection, 0.01);
+        
+        // Change direction occasionally
+        if (Math.random() < 0.002) {
+          userData.targetDirection.set(
+            (Math.random() - 0.5) * 2,
+            (Math.random() - 0.5) * 0.5,
+            (Math.random() - 0.5) * 2
+          ).normalize();
+        }
+        
+        // Spiral emergence from ground effect
+        if (userData.isEmerging && blob.position.y < userData.emergenceTarget) {
+          userData.spiralAngle += userData.spiralSpeed * deltaTime;
+          const spiralX = Math.cos(userData.spiralAngle) * userData.spiralRadius;
+          const spiralZ = Math.sin(userData.spiralAngle) * userData.spiralRadius;
           
-          // Change direction occasionally (less when merged)
-          const directionChangeChance = userData.isMerged ? 0.0005 : 0.0015;
-          if (Math.random() < directionChangeChance) {
-            userData.targetDirection.set(
-              (Math.random() - 0.5) * 2,
-              (Math.random() - 0.5) * 0.4,
-              (Math.random() - 0.5) * 2
-            ).normalize();
+          blob.position.x += spiralX * deltaTime;
+          blob.position.z += spiralZ * deltaTime;
+          blob.position.y += userData.spiralSpeed * deltaTime;
+          
+          // Ground intersection fade effect (no transparency changes)
+          if (blob.position.y < 0) {
+            userData.intersectionFade = Math.max(0.3, (blob.position.y + 2) / 2);
+            // No opacity changes since material is opaque
           }
           
-          // Spiral emergence from ground effect
-          if (userData.isEmerging && blob.position.y < userData.emergenceTarget) {
-            userData.spiralAngle += userData.spiralSpeed * deltaTime;
-            const spiralX = Math.cos(userData.spiralAngle) * userData.spiralRadius;
-            const spiralZ = Math.sin(userData.spiralAngle) * userData.spiralRadius;
-            
-            blob.position.x += spiralX * deltaTime;
-            blob.position.z += spiralZ * deltaTime;
-            blob.position.y += userData.spiralSpeed * deltaTime;
-            
-            if (blob.position.y >= userData.emergenceTarget) {
-              userData.isEmerging = false;
-            }
-          } else {
-            // Normal cute swimming motion
-            const swimOffset = Math.sin(moveTime + userData.swimOffset);
-            const moveDistance = userData.swimAmplitude * deltaTime * (userData.isMerged ? 0.3 : 1.0);
-            
-            blob.position.add(
-              userData.currentDirection.clone().multiplyScalar(moveDistance * swimOffset)
-            );
+          if (blob.position.y >= userData.emergenceTarget) {
+            userData.isEmerging = false;
+            // No opacity changes since material is opaque
           }
+        } else {
+          // Normal cute swimming motion
+          const swimOffset = Math.sin(moveTime + userData.swimOffset);
+          const moveDistance = userData.swimAmplitude * deltaTime;
+          
+          blob.position.add(
+            userData.currentDirection.clone().multiplyScalar(moveDistance * swimOffset)
+          );
         }
         
         // Soft boundary checking (bounce gently)
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
-        const effectiveSize = userData.size * currentMergeScale;
-        
-        if (distanceFromCenter > hexagonRadius - effectiveSize) {
+        if (distanceFromCenter > hexagonRadius - userData.size) {
           const angle = Math.atan2(blob.position.z, blob.position.x);
-          blob.position.x = Math.cos(angle) * (hexagonRadius - effectiveSize);
-          blob.position.z = Math.sin(angle) * (hexagonRadius - effectiveSize);
+          blob.position.x = Math.cos(angle) * (hexagonRadius - userData.size);
+          blob.position.z = Math.sin(angle) * (hexagonRadius - userData.size);
           
           // Gently reverse direction
-          userData.targetDirection.multiplyScalar(-0.6);
+          userData.targetDirection.multiplyScalar(-0.7);
         }
         
         // Vertical bounds (with ground emergence)
-        if (blob.position.y > 2.0) {
-          blob.position.y = 2.0;
-          userData.targetDirection.y *= -0.7;
-        } else if (blob.position.y < -2.0 && !userData.isEmerging) {
-          blob.position.y = -2.0;
-          userData.targetDirection.y *= -0.7;
+        if (blob.position.y > 2.5) {
+          blob.position.y = 2.5;
+          userData.targetDirection.y *= -0.8;
+        } else if (blob.position.y < -2.5 && !userData.isEmerging) {
+          blob.position.y = -2.5;
+          userData.targetDirection.y *= -0.8;
         }
         
-        // Squishy scale animation (influenced by merging)
+        // Squishy scale animation
         const squishTime = time * userData.squishSpeed + userData.squishOffset;
         const squishScale = 1 + Math.sin(squishTime) * userData.squishiness;
-        const squishScaleY = 1 + Math.sin(squishTime * 1.1) * userData.squishiness * 0.7;
-        const baseScale = currentMergeScale * squishScale;
-        blob.scale.set(baseScale, currentMergeScale * squishScaleY, baseScale);
+        const squishScaleY = 1 + Math.sin(squishTime * 1.2) * userData.squishiness * 0.8;
+        blob.scale.set(squishScale, squishScaleY, squishScale);
         
         // Gentle rotation towards movement direction
-        blob.rotation.y += userData.rotationSpeed * (userData.isMerged ? 0.5 : 1.0);
+        blob.rotation.y += userData.rotationSpeed;
         
-        // Cute blinking animation (slower when merged)
+        // Cute blinking animation
         userData.blinkTimer -= deltaTime;
-        const blinkInterval = userData.isMerged ? 4 : 2.5;
         if (userData.blinkTimer <= 0) {
-          userData.blinkTimer = blinkInterval + Math.random() * 3;
+          userData.blinkTimer = 2 + Math.random() * 4; // Slower blinking
           
           // Cute synchronized blink
           userData.leftEye.scale.y = 0.1;
@@ -598,7 +517,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           setTimeout(() => {
             userData.leftEye.scale.y = 1;
             userData.rightEye.scale.y = 1;
-          }, 120);
+          }, 150);
         }
       });
     }
@@ -765,14 +684,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         rendererRef.current.dispose();
       }
     };
-  }, []); // Only initialize once at start, never recreate
-
-  // Separate effect for handling section changes without recreating blobs
-  useEffect(() => {
-    if (hexagonRef.current) {
-      targetRotationY.current = faceAngles[currentSection];
-    }
-  }, [currentSection]);
+  }, [reducedMotion]); // Removed currentSection to prevent recreation
 
   return (
     <div 
