@@ -29,8 +29,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
   // Professional lighting setup for depth and atmosphere
   const setupAdvancedLighting = (scene: THREE.Scene) => {
-    // Key light - primary illumination
-    const keyLight = new THREE.DirectionalLight(0x00e1ff, 0.8);
+    // Key light - primary illumination (brighter)
+    const keyLight = new THREE.DirectionalLight(0x00e1ff, 1.2);
     keyLight.position.set(10, 10, 5);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
@@ -39,13 +39,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     keyLight.shadow.camera.far = 50;
     scene.add(keyLight);
 
-    // Fill light - soften shadows
-    const fillLight = new THREE.DirectionalLight(0x39ff14, 0.3);
+    // Fill light - soften shadows (brighter)
+    const fillLight = new THREE.DirectionalLight(0x39ff14, 0.6);
     fillLight.position.set(-5, 5, 5);
     scene.add(fillLight);
 
-    // Rim light - edge definition
-    const rimLight = new THREE.DirectionalLight(0xffd700, 0.4);
+    // Rim light - edge definition (brighter)
+    const rimLight = new THREE.DirectionalLight(0xffd700, 0.8);
     rimLight.position.set(0, -5, -10);
     scene.add(rimLight);
 
