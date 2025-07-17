@@ -68,7 +68,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   // Enhanced living blobs with organic movement and personality - INDEPENDENT OF PAGE
   const createOrganicBlobs = (group: THREE.Group) => {
     const blobs: any[] = [];
-    const blobCount = 45 + Math.floor(Math.random() * 20); // 45-65 blobs for much better density
+    const blobCount = 35 + Math.floor(Math.random() * 15); // 35-50 blobs for optimal density
     
     // Create blobs with better spacing and much wider distribution
     const positions: THREE.Vector3[] = [];
@@ -81,8 +81,8 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       
       do {
         const angle = Math.random() * Math.PI * 2;
-        const radius = 0.8 + Math.random() * 6.2; // Much wider spread: 0.8 to 7.0 radius
-        const height = -2.0 + Math.random() * 8.0; // Much more vertical: -2.0 to 6.0 height
+        const radius = 1.0 + Math.random() * 5.0; // 1.0 to 6.0 radius
+        const height = -1.5 + Math.random() * 6.0; // -1.5 to 4.5 height
         
         position = new THREE.Vector3(
           Math.cos(angle) * radius,
