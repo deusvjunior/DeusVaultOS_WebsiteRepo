@@ -128,13 +128,13 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [sections.length]);
 
-  // Auto-advance sections (slower timing)
+  // Auto-advance sections (much slower timing)
   useEffect(() => {
     if (reducedMotion) return;
 
     const interval = setInterval(() => {
       setCurrentSection((prev: number) => (prev + 1) % sections.length);
-    }, 20000); // 20 seconds per section
+    }, 45000); // 45 seconds per section (was 20)
 
     return () => clearInterval(interval);
   }, [reducedMotion, sections.length]);
@@ -280,10 +280,15 @@ export default function App() {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSection}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ 
+              duration: 1.2, 
+              ease: "easeInOut",
+              opacity: { duration: 0.8 },
+              y: { duration: 1.0 }
+            }}
             className="min-h-screen"
           >
             {sections[currentSection].component}

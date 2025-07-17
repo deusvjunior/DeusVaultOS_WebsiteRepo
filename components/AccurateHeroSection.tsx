@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
-  ChevronDown,
-  Coins,
-  Cpu,
-  Download,
-  Infinity,
-  Shield,
-  Users
+    ArrowRight,
+    ChevronDown,
+    Coins,
+    Cpu,
+    Download,
+    Infinity,
+    Shield,
+    Users
 } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -151,7 +151,7 @@ export function AccurateHeroSection() {
                 placeholder="DeusVault OS Platform Demo"
                 className="w-full"
                 autoplay={false}
-                loop={true}
+                loop={false}
                 overlay={true}
               />
               

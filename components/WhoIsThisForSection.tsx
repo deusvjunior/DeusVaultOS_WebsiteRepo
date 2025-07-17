@@ -1,87 +1,87 @@
 import { motion } from 'framer-motion';
 import {
-    Brain,
-    Building2,
-    Code2,
     Globe,
-    Rocket,
-    Shield,
-    Users,
-    Zap
+    GraduationCap,
+    Heart,
+    Lightbulb,
+    Palette,
+    PenTool,
+    Sparkles,
+    Video
 } from 'lucide-react';
 import { VideoPlaceholder } from './VideoPlaceholder';
 
 export const WhoIsThisForSection = () => {
   const userTypes = [
     {
-      icon: <Code2 className="h-8 w-8" />,
-      title: "AI Developers",
-      description: "Build next-generation AI applications with integrated development tools",
+      icon: <Palette className="h-8 w-8" />,
+      title: "Digital Artists",
+      description: "Create stunning visual art with AI-powered design tools",
       details: [
-        "Pre-configured AI/ML environments",
-        "Integrated model training pipelines", 
-        "Auto-scaling compute resources",
-        "Collaborative AI workspaces"
+        "AI-assisted drawing & painting",
+        "Style transfer & enhancement",
+        "Generative art workflows", 
+        "Creative asset libraries"
       ],
       gradient: "from-cyan-400 to-blue-500"
     },
     {
-      icon: <Building2 className="h-8 w-8" />,
-      title: "Enterprise Teams", 
-      description: "Scale AI initiatives across your organization with enterprise-grade security",
+      icon: <Video className="h-8 w-8" />,
+      title: "Content Creators", 
+      description: "Produce engaging content with intelligent editing and optimization",
       details: [
-        "Enterprise SSO integration",
-        "Compliance-ready environments",
-        "Team collaboration tools",
-        "Advanced security controls"
+        "Automated video editing",
+        "Voice synthesis & effects",
+        "Multi-platform optimization",
+        "Audience engagement tools"
       ],
       gradient: "from-green-400 to-emerald-500"
     },
     {
-      icon: <Rocket className="h-8 w-8" />,
-      title: "AI Startups",
-      description: "Launch AI products faster with our comprehensive development platform",
+      icon: <PenTool className="h-8 w-8" />,
+      title: "Writers & Authors",
+      description: "Craft compelling stories with AI writing assistance",
       details: [
-        "Rapid prototyping tools",
-        "MVP development acceleration", 
-        "Investor-ready demos",
-        "Scalable infrastructure"
+        "Creative writing support",
+        "Research & fact-checking",
+        "Style adaptation tools",
+        "Publishing workflows"
       ],
       gradient: "from-purple-400 to-pink-500"
     },
     {
-      icon: <Brain className="h-8 w-8" />,
-      title: "Research Teams",
-      description: "Conduct cutting-edge AI research with unlimited computational resources",
+      icon: <Lightbulb className="h-8 w-8" />,
+      title: "Innovators & Makers",
+      description: "Turn ideas into reality with rapid prototyping tools",
       details: [
-        "Jupyter lab environments",
-        "HPC cluster access",
-        "Reproducible experiments", 
-        "Academic collaboration"
+        "Concept development",
+        "Design iteration tools",
+        "Market validation", 
+        "Prototype creation"
       ],
       gradient: "from-orange-400 to-red-500"
     },
     {
-      icon: <Users className="h-8 w-8" />,
-      title: "Dev Communities",
-      description: "Join a thriving ecosystem of AI developers and contributors",
+      icon: <GraduationCap className="h-8 w-8" />,
+      title: "Educators & Trainers",
+      description: "Create engaging learning experiences with interactive tools",
       details: [
-        "Open source contributions",
-        "Knowledge sharing forums",
-        "Hackathon platforms",
-        "Mentorship programs"
+        "Course content generation",
+        "Interactive lesson plans",
+        "Student assessment tools",
+        "Knowledge sharing platforms"
       ],
       gradient: "from-teal-400 to-cyan-500"
     },
     {
-      icon: <Globe className="h-8 w-8" />,
-      title: "Digital Nomads",
-      description: "Work from anywhere with cloud-native AI development environments",
+      icon: <Heart className="h-8 w-8" />,
+      title: "Creative Communities",
+      description: "Collaborate and share in spaces designed for creative minds",
       details: [
-        "Global edge computing",
-        "Low-latency access",
-        "Mobile-optimized tools",
-        "Offline sync capabilities"
+        "Collaborative workspaces",
+        "Resource sharing networks",
+        "Community-driven tools",
+        "Cross-platform integration"
       ],
       gradient: "from-indigo-400 to-purple-500"
     }
@@ -183,38 +183,38 @@ export const WhoIsThisForSection = () => {
               >
                 Trusted by{' '}
                 <span className="bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">
-                  10,000+ Developers
+                  10,000+ Creators
                 </span>
               </h2>
               
               <div className="space-y-8">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center flex-shrink-0">
-                    <Shield className="h-6 w-6 text-white" />
+                    <Sparkles className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Enterprise Ready</h3>
-                    <p className="text-gray-300">SOC 2 compliant, GDPR ready, with enterprise-grade security</p>
+                    <h3 className="text-xl font-semibold text-white mb-2">Creativity First</h3>
+                    <p className="text-gray-300">Tools designed by creators for creators, not by tech companies</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center flex-shrink-0">
-                    <Zap className="h-6 w-6 text-white" />
+                    <Heart className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Lightning Fast</h3>
-                    <p className="text-gray-300">Deploy AI models 10x faster than traditional platforms</p>
+                    <h3 className="text-xl font-semibold text-white mb-2">Human-Centered AI</h3>
+                    <p className="text-gray-300">AI that amplifies human creativity instead of replacing it</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center flex-shrink-0">
-                    <Users className="h-6 w-6 text-white" />
+                    <Globe className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Community Driven</h3>
-                    <p className="text-gray-300">Join thousands of AI developers in our thriving community</p>
+                    <h3 className="text-xl font-semibold text-white mb-2">Open Creative Ecosystem</h3>
+                    <p className="text-gray-300">Share, collaborate, and build upon each other's creative work</p>
                   </div>
                 </div>
               </div>
@@ -223,10 +223,10 @@ export const WhoIsThisForSection = () => {
             {/* Video placeholder */}
             <div>
               <VideoPlaceholder
-                placeholder="Success Stories - Community Developer Testimonials"
+                placeholder="Creative Stories - How Artists & Creators Use DeusVaultOS"
                 aspectRatio="16:9"
-                autoplay={true}
-                loop={true}
+                autoplay={false}
+                loop={false}
                 overlay={true}
               />
             </div>

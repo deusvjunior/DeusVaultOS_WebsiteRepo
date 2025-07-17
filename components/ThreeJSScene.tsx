@@ -133,65 +133,105 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           break;
       }
       
-      // Add enhanced personality and movement properties
+      // Living blob personality and swimming behavior
       blob.userData = {
         originalPosition: blob.position.clone(),
         originalScale: scale.clone(),
-        swimmingSpeed: 0.2 + Math.random() * 0.4,
+        
+        // Swimming behavior - natural blob movement
+        swimmingSpeed: 0.8 + Math.random() * 0.4, // Proper swimming speed: 0.8-1.2
         swimmingDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 1,
+          (Math.random() - 0.5) * 0.8,
           (Math.random() - 0.5) * 2
         ).normalize(),
+        swimmingPhase: Math.random() * Math.PI * 2,
+        
+        // Organic breathing and pulsing
         breathingPhase: Math.random() * Math.PI * 2,
-        breathingSpeed: 0.3 + Math.random() * 0.7,
+        breathingSpeed: 1.5 + Math.random() * 1.0, // Natural breathing: 1.5-2.5
+        
+        // Natural rotation for swimming orientation
         rotationSpeed: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.015,
-          (Math.random() - 0.5) * 0.015,
-          (Math.random() - 0.5) * 0.015
+          (Math.random() - 0.5) * 0.02,
+          (Math.random() - 0.5) * 0.02,
+          (Math.random() - 0.5) * 0.02
         ),
+        
+        // Individual blob characteristics
         isRareBlackBlob,
         age: 0,
-        orbitalRadius: radius,
-        orbitalSpeed: 0.05 + Math.random() * 0.1,
-        orbitalPhase: angle,
+        personalityType: Math.floor(Math.random() * 4), // 0: curious, 1: shy, 2: playful, 3: lazy
+        
+        // Swimming area and boundaries
+        homePosition: blob.position.clone(),
+        wanderRadius: 1.5 + Math.random() * 2, // How far they roam: 1.5-3.5
+        currentTarget: null,
+        targetReachTime: 0,
+        
+        // Rest and activity cycles
+        restCycle: Math.random() * 300 + 180, // Rest every 3-8 seconds
+        restDuration: Math.random() * 120 + 60, // Rest for 1-3 seconds
+        isResting: false,
+        restTimer: 0,
+        
+        // Eye movement
+        eyeLookDirection: new THREE.Vector3(0, 0, 1),
+        eyeBlinkTimer: Math.random() * 180,
+        
         behaviorType,
-        mergeTarget: null,
-        splitCooldown: 0,
-        currentSize: baseScale,
-        maxSize: baseScale * 4,
-        energy: 0.3 + Math.random() * 0.7,
-        socialRadius: 0.3 + Math.random() * 0.2,
-        goalPosition: null,
-        patternPhase: Math.random() * Math.PI * 2
+        energy: 0.5 + Math.random() * 0.5
       };
       
-      // Add black eyes (no red eyes)
+      // Add proper black eyes that are clearly visible
       if (!isRareBlackBlob) {
-        const eyeGeometry = new THREE.SphereGeometry(0.15, 8, 6);
-        const eyeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
+        // Regular blob with black eyes
+        const eyeGeometry = new THREE.SphereGeometry(0.08, 8, 6); // Smaller but more visible
+        const eyeMaterial = new THREE.MeshPhongMaterial({ 
+          color: 0x000000,
+          shininess: 100
+        });
         
         const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
         const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
         
-        leftEye.position.set(-0.3, 0.2, 0.7);
-        rightEye.position.set(0.3, 0.2, 0.7);
+        // Position eyes on the front face, more prominent
+        leftEye.position.set(-0.25, 0.15, 0.85);
+        rightEye.position.set(0.25, 0.15, 0.85);
+        
+        // Add slight emissive glow to make eyes more visible
+        eyeMaterial.emissive = new THREE.Color(0x111111);
+        eyeMaterial.emissiveIntensity = 0.1;
         
         blob.add(leftEye);
         blob.add(rightEye);
+        
+        // Store eye references for animation
+        blob.userData.leftEye = leftEye;
+        blob.userData.rightEye = rightEye;
+        
       } else {
-        // White eyes for rare black blobs
-        const eyeGeometry = new THREE.SphereGeometry(0.15, 8, 6);
-        const eyeMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+        // Rare black blob with glowing white eyes
+        const eyeGeometry = new THREE.SphereGeometry(0.08, 8, 6);
+        const eyeMaterial = new THREE.MeshPhongMaterial({ 
+          color: 0xffffff,
+          emissive: 0xffffff,
+          emissiveIntensity: 0.3,
+          shininess: 100
+        });
         
         const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
         const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
         
-        leftEye.position.set(-0.3, 0.2, 0.7);
-        rightEye.position.set(0.3, 0.2, 0.7);
+        leftEye.position.set(-0.25, 0.15, 0.85);
+        rightEye.position.set(0.25, 0.15, 0.85);
         
         blob.add(leftEye);
         blob.add(rightEye);
+        
+        // Store eye references for animation
+        blob.userData.leftEye = leftEye;
+        blob.userData.rightEye = rightEye;
       }
       
       scene.add(blob);
@@ -407,7 +447,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       }
     }
 
-    // Animate page-specific blobs with procedural behaviors
+    // Animate living blobs with natural swimming behavior
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs && Array.isArray(blobs)) {
       blobs.forEach((blob: any, index: number) => {
@@ -415,39 +455,120 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         if (!userData) return;
         
         userData.age += deltaTime;
-        const time = elapsedTime;
+        userData.restTimer += deltaTime * 60; // Convert to frames
         
-        // Base swimming motion
-        const swimmingOffset = new THREE.Vector3()
-          .copy(userData.swimmingDirection)
-          .multiplyScalar(Math.sin(time * userData.swimmingSpeed) * 0.3);
-        
-        // Breathing animation
-        const breathingScale = 1 + Math.sin(time * userData.breathingSpeed + userData.breathingPhase) * 0.1;
-        blob.scale.copy(userData.originalScale).multiplyScalar(breathingScale);
-        
-        // Rotation
-        blob.rotation.x += userData.rotationSpeed.x;
-        blob.rotation.y += userData.rotationSpeed.y;
-        blob.rotation.z += userData.rotationSpeed.z;
-        
-        // Apply swimming motion
-        blob.position.add(swimmingOffset);
-        
-        // Keep within bounds
-        const maxDistance = 2.5;
-        if (blob.position.length() > maxDistance) {
-          blob.position.normalize().multiplyScalar(maxDistance);
-          userData.swimmingDirection.negate();
+        // Rest cycle - blobs sometimes pause like real creatures
+        if (userData.restTimer >= userData.restCycle) {
+          userData.isResting = true;
+          userData.restTimer = 0;
         }
         
-        // Orbital movement
-        const orbitalAngle = userData.orbitalPhase + time * userData.orbitalSpeed;
-        const orbitalX = Math.cos(orbitalAngle) * userData.orbitalRadius * 0.3;
-        const orbitalZ = Math.sin(orbitalAngle) * userData.orbitalRadius * 0.3;
+        if (userData.isResting && userData.restTimer >= userData.restDuration) {
+          userData.isResting = false;
+          userData.restCycle = Math.random() * 300 + 180; // New rest cycle
+          userData.restDuration = Math.random() * 120 + 60; // New rest duration
+          
+          // Choose new swimming direction after rest
+          userData.swimmingDirection = new THREE.Vector3(
+            (Math.random() - 0.5) * 2,
+            (Math.random() - 0.5) * 0.8,
+            (Math.random() - 0.5) * 2
+          ).normalize();
+        }
         
-        blob.position.x += (orbitalX - blob.position.x) * 0.02;
-        blob.position.z += (orbitalZ - blob.position.z) * 0.02;
+        // Natural breathing animation - more pronounced when active
+        const breathingIntensity = userData.isResting ? 0.05 : 0.12;
+        const breathingScale = 1 + Math.sin(elapsedTime * userData.breathingSpeed + userData.breathingPhase) * breathingIntensity;
+        blob.scale.copy(userData.originalScale).multiplyScalar(breathingScale);
+        
+        if (!userData.isResting) {
+          // Swimming movement - fluid and natural
+          const swimmingAmplitude = 0.008; // How much they move per frame
+          const swimmingWave = Math.sin(elapsedTime * userData.swimmingSpeed + userData.swimmingPhase);
+          
+          // Apply swimming motion with personality
+          const personalityMultiplier = userData.personalityType === 2 ? 1.5 : // playful
+                                       userData.personalityType === 3 ? 0.6 : // lazy
+                                       userData.personalityType === 1 ? 0.8 : // shy
+                                       1.0; // curious
+          
+          const swimmingOffset = new THREE.Vector3()
+            .copy(userData.swimmingDirection)
+            .multiplyScalar(swimmingWave * swimmingAmplitude * personalityMultiplier);
+          
+          blob.position.add(swimmingOffset);
+          
+          // Gentle rotation while swimming - looks more natural
+          blob.rotation.x += userData.rotationSpeed.x * (0.5 + swimmingWave * 0.5);
+          blob.rotation.y += userData.rotationSpeed.y * (0.5 + swimmingWave * 0.5);
+          blob.rotation.z += userData.rotationSpeed.z * (0.5 + swimmingWave * 0.5);
+          
+          // Wander behavior - choose new targets occasionally
+          if (!userData.currentTarget || userData.targetReachTime > 300) {
+            const wanderAngle = Math.random() * Math.PI * 2;
+            const wanderDistance = Math.random() * userData.wanderRadius;
+            userData.currentTarget = new THREE.Vector3(
+              userData.homePosition.x + Math.cos(wanderAngle) * wanderDistance,
+              userData.homePosition.y + (Math.random() - 0.5) * 0.5,
+              userData.homePosition.z + Math.sin(wanderAngle) * wanderDistance
+            );
+            userData.targetReachTime = 0;
+          }
+          
+          // Move toward target gently
+          if (userData.currentTarget) {
+            const directionToTarget = new THREE.Vector3()
+              .subVectors(userData.currentTarget, blob.position)
+              .normalize()
+              .multiplyScalar(0.005); // Gentle movement toward target
+            
+            blob.position.add(directionToTarget);
+            userData.targetReachTime++;
+            
+            // If close to target, choose a new one
+            if (blob.position.distanceTo(userData.currentTarget) < 0.2) {
+              userData.currentTarget = null;
+            }
+          }
+        }
+        
+        // Keep blobs within reasonable bounds
+        const maxDistance = 3.5;
+        if (blob.position.length() > maxDistance) {
+          // Gently guide back toward center
+          const returnDirection = new THREE.Vector3().copy(blob.position).normalize().multiplyScalar(-0.01);
+          blob.position.add(returnDirection);
+          
+          // Update home position to prevent endless bouncing
+          userData.homePosition.copy(blob.position).multiplyScalar(0.8);
+        }
+        
+        // Eye animation - make eyes look around
+        if (userData.leftEye && userData.rightEye) {
+          userData.eyeBlinkTimer++;
+          
+          // Occasional blink
+          if (userData.eyeBlinkTimer > 200 + Math.random() * 300) {
+            const blinkScale = Math.sin(userData.eyeBlinkTimer * 0.5) * 0.1 + 0.9;
+            userData.leftEye.scale.y = blinkScale;
+            userData.rightEye.scale.y = blinkScale;
+            
+            if (userData.eyeBlinkTimer > 220) {
+              userData.eyeBlinkTimer = 0;
+              userData.leftEye.scale.y = 1;
+              userData.rightEye.scale.y = 1;
+            }
+          }
+          
+          // Eye follow movement - eyes look in swimming direction
+          const lookDirection = userData.swimmingDirection.clone().normalize();
+          const eyeOffset = lookDirection.multiplyScalar(0.02);
+          
+          userData.leftEye.position.x = -0.25 + eyeOffset.x;
+          userData.leftEye.position.y = 0.15 + eyeOffset.y;
+          userData.rightEye.position.x = 0.25 + eyeOffset.x;
+          userData.rightEye.position.y = 0.15 + eyeOffset.y;
+        }
       });
     }
 

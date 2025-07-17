@@ -1,21 +1,20 @@
-import { Badge } from "./ui/badge";
-import { Card, CardContent } from "./ui/card";
-import { Button } from "./ui/button";
-import { 
-  Check, 
-  X, 
-  Crown, 
-  Zap, 
-  AlertTriangle, 
-  Shield,
-  Brain,
-  Infinity,
-  Target,
-  Star,
-  ChevronRight,
-  Globe
-} from "lucide-react";
 import { motion } from "framer-motion";
+import {
+    AlertTriangle,
+    Brain,
+    Check,
+    ChevronRight,
+    Crown,
+    Globe,
+    Infinity,
+    Star,
+    Target,
+    X,
+    Zap
+} from "lucide-react";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card";
 
 export function ComparisonSection() {
   const comparisons = [

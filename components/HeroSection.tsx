@@ -33,7 +33,7 @@ export function HeroSection() {
           <div className="inline-flex items-center gap-3 glass-refined rounded-lg px-8 py-4 border border-cyber-cyan/50 relative">
             <Sparkles className="h-6 w-6 text-cyber-cyan" />
             <span className="font-mono text-lg font-bold text-cyber-cyan tracking-wider">
-              SELF-EVOLVING OS
+              AI-POWERED CREATIVITY
             </span>
             <ChevronRight className="h-5 w-5 text-cyber-cyan" />
           </div>
@@ -47,20 +47,20 @@ export function HeroSection() {
           className="space-y-6"
         >
           <h1 className="font-display text-5xl lg:text-8xl text-gradient leading-tight relative">
-            <span className="block">The Development Environment</span>
+            <span className="block">The Creative Environment</span>
             <span className="block relative">
               That{" "}
-              <span className="text-cyber-cyan">Built Itself</span>
+              <span className="text-cyber-cyan">Evolves With You</span>
             </span>
           </h1>
           
           <p className="font-subtitle text-xl lg:text-2xl text-cyber-dark-200 max-w-4xl mx-auto leading-relaxed">
-            Deus Vault is a revolutionary Linux-based development environment that runs{" "}
-            <span className="text-cyber-mint-bright font-semibold">any OS</span>,{" "}
-            <span className="text-cyber-yellow font-semibold">any app</span>, with{" "}
-            <span className="text-cyber-cyan font-semibold">perfect compatibility</span>.
+            DeusVaultOS is a revolutionary creative platform that amplifies{" "}
+            <span className="text-cyber-mint-bright font-semibold">your vision</span>,{" "}
+            <span className="text-cyber-yellow font-semibold">your tools</span>, with{" "}
+            <span className="text-cyber-cyan font-semibold">infinite possibility</span>.
             <br />
-            Built by AI, for developers who demand the impossible.
+            Built by creators, for minds that shape the future.
           </p>
         </motion.div>
 
@@ -79,10 +79,10 @@ export function HeroSection() {
             <Infinity className="h-8 w-8 text-cyber-cyan" />
           </div>
           <h3 className="font-title text-xl text-cyber-white mb-4 group-hover:text-cyber-cyan transition-colors">
-            Universal Compatibility
+            Infinite Creative Tools
           </h3>
           <p className="font-body text-cyber-dark-300 group-hover:text-cyber-dark-200 transition-colors">
-            Run Windows, macOS, and Linux applications natively. Perfect compatibility, zero compromises.
+            Access any creative application, any workflow, any medium. All your tools in one place.
           </p>
         </div>
 
@@ -91,10 +91,10 @@ export function HeroSection() {
             <Cpu className="h-8 w-8 text-cyber-mint-bright" />
           </div>
           <h3 className="font-title text-xl text-cyber-white mb-4 group-hover:text-cyber-mint-bright transition-colors">
-            AI-Powered Core
+            AI Creative Partner
           </h3>
           <p className="font-body text-cyber-dark-300 group-hover:text-cyber-dark-200 transition-colors">
-            Self-optimizing architecture that learns and evolves. Better performance with every use.
+            Intelligent assistance that learns your style and amplifies your creative vision.
           </p>
         </div>
 
@@ -103,10 +103,10 @@ export function HeroSection() {
             <Shield className="h-8 w-8 text-cyber-yellow" />
           </div>
           <h3 className="font-title text-xl text-cyber-white mb-4 group-hover:text-cyber-yellow transition-colors">
-            Enterprise Security
+            Your Creative Vault
           </h3>
           <p className="font-body text-cyber-dark-300 group-hover:text-cyber-dark-200 transition-colors">
-            Military-grade security with quantum-resistant encryption. Your code, completely protected.
+            Secure, private creative space. Your ideas, your work, completely under your control.
           </p>
         </div>
 
