@@ -171,24 +171,23 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const blobConfig = blobConfigs[i];
       const baseSize = blobConfig.size;
       
+      // CIRCULAR SWIMMING PARAMETERS - Each blob gets unique circular path
+      const heightLane = i % 6; // Assign each blob to one of 6 height lanes
+      const laneHeight = (heightLane - 2.5) * 1.2; // Lanes at: -3, -1.8, -0.6, 0.6, 1.8, 3
+      const orbitRadius = 1.5 + Math.random() * 2; // Varied orbit sizes
+      const orbitSpeed = (Math.random() > 0.5 ? 1 : -1) * (0.1 + Math.random() * 0.2); // Random clockwise/counterclockwise
+      const orbitPhase = Math.random() * Math.PI * 2; // Random starting position on circle
+      
       // ENHANCED 3D POSITIONING WITH VERTICAL VARIATION
       let position: THREE.Vector3 | undefined;
       let attempts = 0;
       
       while (attempts < maxPoissonAttempts) {
-        // 3D spherical distribution with STRATIFIED VERTICAL LANES
-        const phi = Math.acos(2 * Math.random() - 1); // Full sphere phi
-        const theta = Math.random() * Math.PI * 2; // Full rotation
-        const radius = Math.random() * distributionSphereRadius;
+        const laneVariation = (Math.random() - 0.5) * 0.3; // Small variation within lane
         
-        // STRATIFIED HEIGHT SYSTEM - 6 distinct vertical lanes
-        const heightLane = i % 6; // Assign each blob to one of 6 height lanes
-        const laneHeight = (heightLane - 2.5) * 1.2; // Lanes at: -3, -1.8, -0.6, 0.6, 1.8, 3
-        const laneVariation = (Math.random() - 0.5) * 0.4; // Small variation within lane
-        
-        const x = radius * Math.sin(phi) * Math.cos(theta);
-        const y = laneHeight + laneVariation; // Use stratified lane height instead of random
-        const z = radius * Math.cos(phi);
+        const x = Math.cos(orbitPhase) * orbitRadius;
+        const y = laneHeight + laneVariation;
+        const z = Math.sin(orbitPhase) * orbitRadius;
         
         const candidatePosition = new THREE.Vector3(x, y, z);
         
@@ -399,39 +398,45 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Store enhanced consciousness-driven animation data with glow and light references
-      blobMesh.userData = {
-        size: baseSize,
-        type: blobConfig.type,
-        colorData: colorData,
-        originalVertices,
-        leftEye,
-        rightEye,
-        staticMeshes,
-        
-        // Christmas tree emission animation data
-        hasChristmasEmission,
-        christmasIntensity,
-        emissionSpeed,
-        originalEmission: christmasIntensity,
-        
-        // Enhanced physics with consciousness flow
-        radius: baseSize * 1.2,
-        velocity: new THREE.Vector3(),
-        lastValidPosition: blobMesh.position.clone(),
-        
-        // ULTRA HIGH ENERGY consciousness movement - completely alive!
-        swimSpeed: 0.8 + Math.random() * 0.6, // MUCH MUCH faster swimming (was 0.3-0.7, now 0.8-1.4)
-        swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 1.2 + Math.random() * 0.8, // Much more amplitude for fluid movement
-        
-        // Enhanced vertical swimming patterns with MAXIMUM ENERGY
-        verticalSwimSpeed: 0.6 + Math.random() * 0.5, // MUCH faster vertical movement (was 0.2-0.5, now 0.6-1.1)
-        verticalAmplitude: 1.0 + (blobConfig.type === 'large' ? 0.5 : blobConfig.type === 'medium' ? 0.4 : 0.3), // Higher amplitude
-        verticalOffset: Math.random() * Math.PI * 2,
-        baseDepth: blobMesh.position.y,
-        
-        // Enhanced directional movement with consciousness awareness
+        // Store enhanced consciousness-driven animation data with circular swimming
+        blobMesh.userData = {
+          size: baseSize,
+          type: blobConfig.type,
+          colorData: colorData,
+          originalVertices,
+          leftEye,
+          rightEye,
+          staticMeshes,
+          
+          // Christmas tree emission animation data
+          hasChristmasEmission,
+          christmasIntensity,
+          emissionSpeed,
+          originalEmission: christmasIntensity,
+          
+          // Enhanced physics with consciousness flow
+          radius: baseSize * 1.2,
+          velocity: new THREE.Vector3(),
+          lastValidPosition: blobMesh.position.clone(),
+          
+          // CIRCULAR SWIMMING SYSTEM - Lane-based orbital movement
+          orbitRadius: orbitRadius,
+          orbitSpeed: orbitSpeed,
+          orbitPhase: orbitPhase,
+          currentLane: heightLane,
+          targetLane: heightLane,
+          laneHeight: laneHeight,
+          laneSwitchCooldown: 0,
+          
+          // LANE SWITCHING & AVOIDANCE SYSTEM
+          avoidanceRadius: baseSize * 3, // Detection radius for other blobs
+          lanePreference: Math.random() > 0.5 ? 1 : -1, // Prefer to go up or down when avoiding
+          
+          // Enhanced vertical swimming patterns with MAXIMUM ENERGY
+          verticalSwimSpeed: 0.3 + Math.random() * 0.2, // Gentler vertical movement
+          verticalAmplitude: 0.2 + Math.random() * 0.3, // Smaller amplitude for lane-based system
+          verticalOffset: Math.random() * Math.PI * 2,
+          baseDepth: laneHeight,        // Enhanced directional movement with consciousness awareness
         targetDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
           (Math.random() - 0.5) * 0.6,
@@ -831,53 +836,84 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           blob.position.y = THREE.MathUtils.lerp(blob.position.y, targetY, deltaTime * 1.8);
         }
         
-        // Enhanced horizontal swimming with curiosity-driven exploration
-        if (!userData.isEmerging) { // Don't interfere with emergence
-          const swimTime = time * userData.swimSpeed + userData.swimOffset;
-          const explorationFactor = userData.curiosity * 2 + 1;
+        // ENHANCED CIRCULAR SWIMMING WITH LANE SWITCHING - Emergent Behavior System
+        if (!userData.isEmerging) {
+          // Update circular orbit phase
+          userData.orbitPhase += userData.orbitSpeed * deltaTime;
           
-          const swimX = Math.sin(swimTime) * userData.swimAmplitude * explorationFactor;
-          const swimZ = Math.cos(swimTime * 1.2) * userData.swimAmplitude * explorationFactor;
+          // Check for nearby blobs and perform lane switching if needed
+          let needsLaneSwitching = false;
+          let nearbyBlob = null;
           
-          // Apply swimming movement with direction blending
-          userData.targetDirection.lerp(
-            new THREE.Vector3(swimX, 0, swimZ).normalize(),
-            deltaTime * 0.5
-          );
+          for (let j = 0; j < blobs.length; j++) {
+            if (j === index) continue;
+            const otherBlob = blobs[j];
+            const distance = blob.position.distanceTo(otherBlob.position);
+            
+            if (distance < userData.avoidanceRadius) {
+              // Determine which blob should switch lanes (smaller one or clockwise one)
+              const shouldSwitch = userData.size < otherBlob.userData.size || 
+                                 (userData.size === otherBlob.userData.size && userData.orbitSpeed > 0);
+              
+              if (shouldSwitch && userData.laneSwitchCooldown <= 0) {
+                needsLaneSwitching = true;
+                nearbyBlob = otherBlob;
+                break;
+              }
+            }
+          }
+          
+          // Perform lane switching if needed
+          if (needsLaneSwitching && userData.laneSwitchCooldown <= 0) {
+            const availableLanes = [0, 1, 2, 3, 4, 5];
+            const currentLaneIndex = userData.currentLane;
+            
+            // Find best lane to switch to (prefer up/down based on preference)
+            let targetLaneIndex = currentLaneIndex;
+            if (userData.lanePreference > 0 && currentLaneIndex < 5) {
+              targetLaneIndex = currentLaneIndex + 1;
+            } else if (userData.lanePreference < 0 && currentLaneIndex > 0) {
+              targetLaneIndex = currentLaneIndex - 1;
+            } else {
+              // Reverse preference if can't go in preferred direction
+              targetLaneIndex = userData.lanePreference > 0 ? 
+                Math.max(0, currentLaneIndex - 1) : 
+                Math.min(5, currentLaneIndex + 1);
+            }
+            
+            userData.targetLane = targetLaneIndex;
+            userData.laneSwitchCooldown = 3; // 3 second cooldown
+          }
+          
+          // Smooth lane transitions
+          if (userData.currentLane !== userData.targetLane) {
+            const targetLaneHeight = (userData.targetLane - 2.5) * 1.2;
+            userData.laneHeight = THREE.MathUtils.lerp(userData.laneHeight, targetLaneHeight, deltaTime * 0.5);
+            
+            // Complete lane switch when close enough
+            if (Math.abs(userData.laneHeight - targetLaneHeight) < 0.1) {
+              userData.currentLane = userData.targetLane;
+              userData.laneHeight = targetLaneHeight;
+              userData.baseDepth = targetLaneHeight;
+            }
+          }
+          
+          // Calculate circular swimming position
+          const orbitX = Math.cos(userData.orbitPhase) * userData.orbitRadius;
+          const orbitZ = Math.sin(userData.orbitPhase) * userData.orbitRadius;
+          
+          // Apply gentle circular movement
+          const targetPosition = new THREE.Vector3(orbitX, userData.laneHeight, orbitZ);
+          blob.position.lerp(targetPosition, deltaTime * 0.8);
+          
+          // Add small vertical variation within lane
+          const verticalTime = time * userData.verticalSwimSpeed + userData.verticalOffset;
+          const verticalVariation = Math.sin(verticalTime) * userData.verticalAmplitude;
+          blob.position.y = userData.laneHeight + verticalVariation;
         }
         
-        // Consciousness-driven movement with smooth acceleration
-        userData.velocity.lerp(userData.targetDirection, deltaTime * 0.8);
-        userData.velocity.multiplyScalar(0.95); // Natural friction
-        
-        // Apply movement with 50% reduced displacement for calmer animation
-        const movement = userData.velocity.clone().multiplyScalar(deltaTime * 1); // Reduced from 2 to 1 (50% reduction)
-        blob.position.add(movement);
-        
-        // 🐛 DIRECTIONAL SWIMMING BEHAVIOR - Caterpillar in Water Effect
-        // Calculate movement direction and apply smooth rotation
-        if (movement.length() > 0.001) { // Only rotate if actually moving
-          const movementDirection = movement.clone().normalize();
-          
-          // Calculate target rotation to face movement direction
-          const targetRotationY = Math.atan2(movementDirection.x, movementDirection.z);
-          
-          // Smooth rotation interpolation for organic caterpillar-like movement
-          const currentRotationY = blob.rotation.y;
-          let deltaRotation = targetRotationY - currentRotationY;
-          
-          // Handle rotation wrapping (shortest path)
-          if (deltaRotation > Math.PI) deltaRotation -= Math.PI * 2;
-          if (deltaRotation < -Math.PI) deltaRotation += Math.PI * 2;
-          
-          // Apply smooth rotation with organic timing
-          blob.rotation.y += deltaRotation * deltaTime * 2.5; // Gentle rotation speed
-          
-          // Add subtle tilt based on movement for enhanced swimming effect
-          const tiltIntensity = Math.min(movement.length() * 15, 0.3); // Max tilt of ~17 degrees
-          blob.rotation.x = Math.sin(time * userData.swimSpeed * 2) * tiltIntensity * 0.5;
-          blob.rotation.z = Math.cos(time * userData.swimSpeed * 1.5) * tiltIntensity * 0.3;
-        }
+        // Update cooldowns
+        userData.laneSwitchCooldown = Math.max(0, userData.laneSwitchCooldown - deltaTime);
         
         // Enhanced hexagon boundary containment with consciousness reflection
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
@@ -1063,43 +1099,43 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     }
   };
 
-  // 🎬 CINEMATIC ORBIT CAMERA SYSTEM - Complete Circle Around Scene
+  // 🎬 REDESIGNED CINEMATIC CAMERA SYSTEM - Natural Flow Transitions
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // CINEMATIC CAMERA POSITIONS - Complete orbital progression
+    // NATURAL CINEMATIC PROGRESSION - Smooth natural flow around scene
     const cameraConfigs = [
-      // Page 0: Front view - classic introduction angle
-      { radius: 12, height: 2, angle: 0, tilt: 0 },
-      // Page 1: Right side - 60 degrees around
-      { radius: 14, height: 3.5, angle: Math.PI / 3, tilt: -0.1 },
-      // Page 2: Back-right - 120 degrees around
-      { radius: 13, height: 1, angle: (2 * Math.PI) / 3, tilt: 0.05 },
-      // Page 3: Back view - 180 degrees around
-      { radius: 15, height: 4, angle: Math.PI, tilt: -0.15 },
-      // Page 4: Back-left - 240 degrees around
-      { radius: 11, height: 2.5, angle: (4 * Math.PI) / 3, tilt: 0.1 },
-      // Page 5: Final overview - elevated dramatic angle (300 degrees)
-      { radius: 16, height: 8, angle: (5 * Math.PI) / 3, tilt: -0.2 }
+      // Page 0: Classic front introduction - slightly elevated
+      { radius: 12, height: 3, angle: 0, tilt: -0.05, label: "Front Introduction" },
+      // Page 1: Gentle right drift - smooth 45° transition
+      { radius: 13, height: 2.5, angle: Math.PI / 4, tilt: 0, label: "Right Drift" },
+      // Page 2: Right side - continue smooth flow
+      { radius: 14, height: 4, angle: Math.PI / 2, tilt: -0.1, label: "Right Side" },
+      // Page 3: Back-right approach - gentle climb
+      { radius: 13.5, height: 5, angle: (3 * Math.PI) / 4, tilt: -0.15, label: "Back Approach" },
+      // Page 4: Back view - dramatic but smooth
+      { radius: 15, height: 3.5, angle: Math.PI, tilt: 0.05, label: "Back View" },
+      // Page 5: Final overview - majestic elevation
+      { radius: 16, height: 8, angle: (5 * Math.PI) / 4, tilt: -0.2, label: "Final Overview" }
     ];
     
     const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
     
-    // Calculate target camera position with cinematic orbit
+    // Calculate target camera position with smooth orbital progression
     const targetX = Math.cos(currentConfig.angle) * currentConfig.radius;
     const targetZ = Math.sin(currentConfig.angle) * currentConfig.radius;
     const targetY = currentConfig.height;
     
-    // Smooth breathing motion (reduced)
-    const breathingOffset = Math.sin(elapsedTime * 0.2) * 0.03;
+    // Gentle breathing motion (very subtle)
+    const breathingOffset = Math.sin(elapsedTime * 0.15) * 0.02;
     
-    // SMOOTH INTERPOLATION to prevent jittering and immersion breaks
-    const lerpSpeed = 0.02; // Slow smooth transitions between pages
+    // ULTRA SMOOTH INTERPOLATION - Prevent jarring transitions
+    const lerpSpeed = 0.008; // Much slower for ultra-smooth transitions
     cameraRef.current.position.x = THREE.MathUtils.lerp(cameraRef.current.position.x, targetX, lerpSpeed);
     cameraRef.current.position.y = THREE.MathUtils.lerp(cameraRef.current.position.y, targetY + breathingOffset, lerpSpeed);
     cameraRef.current.position.z = THREE.MathUtils.lerp(cameraRef.current.position.z, targetZ, lerpSpeed);
     
-    // Smooth look-at with cinematic tilt
+    // Smooth look-at with gentle tilt
     const lookAtY = currentConfig.tilt;
     cameraRef.current.lookAt(0, lookAtY, 0);
   };
