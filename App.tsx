@@ -7,7 +7,9 @@ import {
     Zap,
     Target,
     Map,
-    MessageCircle
+    MessageCircle,
+    Eye,
+    EyeOff
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
@@ -27,6 +29,7 @@ export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [observerMode, setObserverMode] = useState(false); // **OBSERVER MODE STATE**
 
   const sections = [
     {
@@ -125,12 +128,23 @@ export default function App() {
           e.preventDefault();
           setCurrentSection(sections.length - 1);
           break;
+        case 'o':
+        case 'O':
+          e.preventDefault();
+          setObserverMode(!observerMode);
+          break;
+        case 'Escape':
+          if (observerMode) {
+            e.preventDefault();
+            setObserverMode(false);
+          }
+          break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [sections.length]);
+  }, [sections.length, observerMode]);
 
   // Auto-advance sections disabled per user request
   /*
@@ -176,44 +190,189 @@ export default function App() {
       </div>
 
       {/* **PROFESSIONAL HEADER** */}
-      <div className="fixed top-0 left-0 right-0 z-30 bg-black/30 backdrop-blur-xl border-b border-cyan-400/20">
-        <div className="container mx-auto px-6 py-3">
-          <div className="flex items-center justify-between">
-            
-            {/* **ENHANCED LOGO & BRAND** */}
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 flex items-center justify-center">
-                <img 
-                  src="/DVLogo.png" 
-                  alt="DeusVaultOS Logo" 
-                  className="w-full h-full object-contain drop-shadow-lg"
-                  style={{
-                    filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.4))'
-                  }}
-                />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent">
-                  DeusVaultOS
-                </h1>
-                <p className="text-xs text-cyan-400/80 font-medium tracking-wide">
-                  Revolutionary Development Environment
-                </p>
-              </div>
-            </div>
+            {/* **OBSERVER MODE - HIDE ALL UI EXCEPT 3D SCENE** */}
+      {!observerMode && (
+        <>
+          {/* Header */}
+          <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/10">
+            <div className="container mx-auto px-6 py-3">
+              <div className="flex items-center justify-between">
+                
+                {/* **ENHANCED LOGO & BRAND** */}
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    <img 
+                      src="/DVLogo.png" 
+                      alt="DeusVaultOS Logo" 
+                      className="w-full h-full object-contain drop-shadow-lg"
+                      style={{
+                        filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.4))'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent">
+                      DeusVaultOS
+                    </h1>
+                    <p className="text-xs text-cyan-400/80 font-medium tracking-wide">
+                      Revolutionary Development Environment
+                    </p>
+                  </div>
+                </div>
 
-            {/* Section Info */}
-            <div className="hidden md:flex items-center gap-3">
-              <div className="text-cyan-400">
-                {sections[currentSection].icon}
+                {/* Section Info */}
+                <div className="hidden md:flex items-center gap-3">
+                  <div className="text-cyan-400">
+                    {sections[currentSection].icon}
+                  </div>
+                  <span className="text-white font-medium" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
+                    {sections[currentSection].title}
+                  </span>
+                </div>
+
+                {/* **OBSERVER MODE TOGGLE** */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setObserverMode(!observerMode)}
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 border ${
+                    observerMode 
+                      ? 'bg-cyan-400 text-black border-cyan-400 shadow-lg shadow-cyan-400/50' 
+                      : 'bg-white/10 text-cyan-400 border-white/20 hover:bg-white/20 hover:text-white'
+                  }`}
+                  title={observerMode ? "Exit Observer Mode (O)" : "Observer Mode - Hide All UI (O)"}
+                >
+                  {observerMode ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </motion.button>
               </div>
-              <span className="text-white font-medium" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
-                {sections[currentSection].title}
-              </span>
             </div>
           </div>
-        </div>
-      </div>
+
+          {/* Navigation */}
+          <motion.div
+            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-30"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+          >
+            <div className="bg-black/20 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+              <div className="flex items-center gap-4">
+                
+                {/* Previous */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={prevSection}
+                  className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-cyan-400 hover:text-white transition-colors border border-white/20"
+                  title="Previous Section (A/←)"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </motion.button>
+
+                {/* Section dots */}
+                <div className="flex items-center gap-3 px-4">
+                  {sections.map((section, index) => (
+                    <motion.button
+                      key={index}
+                      whileHover={{ scale: 1.3 }}
+                      whileTap={{ scale: 0.8 }}
+                      onClick={() => navigateToSection(index)}
+                      className={`relative w-3 h-3 rounded-full transition-all duration-300 ${
+                        index === currentSection
+                          ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
+                          : 'bg-white/30 hover:bg-white/50'
+                      }`}
+                      title={section.title}
+                    >
+                      {/* Progress ring for current section */}
+                      {index === currentSection && (
+                        <motion.div
+                          className="absolute inset-0 rounded-full border-2 border-cyan-400"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 2, opacity: 0 }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+
+                {/* Next */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={nextSection}
+                  className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-cyan-400 hover:text-white transition-colors border border-white/20"
+                  title="Next Section (D/→)"
+                >
+                  <ArrowRight className="h-5 w-5" />
+                </motion.button>
+
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Content Area - Proper Layout with Margins */}
+          <div className="relative z-20">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSection}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="page-section"
+              >
+                {sections[currentSection].component}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Side Navigation Indicator */}
+          <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
+            <div className="flex flex-col gap-3">
+              {sections.map((section, index) => (
+                <motion.button
+                  key={index}
+                  whileHover={{ scale: 1.2 }}
+                  onClick={() => navigateToSection(index)}
+                  className={`w-3 h-8 rounded-full transition-all duration-300 ${
+                    index === currentSection
+                      ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
+                      : 'bg-white/20 hover:bg-white/40'
+                  }`}
+                  title={section.title}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="relative z-20">
+            <Footer />
+          </div>
+        </>
+      )}
+
+      {/* **OBSERVER MODE - FLOATING EXIT BUTTON** */}
+      {observerMode && (
+        <motion.div
+          className="fixed top-6 right-6 z-50"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setObserverMode(false)}
+            className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-cyan-400/30 hover:border-cyan-400 shadow-lg shadow-black/50"
+            title="Exit Observer Mode (O/Esc)"
+          >
+            <EyeOff className="h-6 w-6" />
+          </motion.button>
+        </motion.div>
+      )}
 
       {/* Navigation */}
       <motion.div
