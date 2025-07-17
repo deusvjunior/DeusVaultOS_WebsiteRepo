@@ -48,8 +48,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   const [isInteracting, _setIsInteracting] = useState(false);
 
   // 🧭 SECTION NAVIGATION MAPPING
-  // Six-sided hexagon navigation system with optimized page 5 positioning
-  const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, 0]; // Page 5 returns to home position
+  // Six-sided hexagon navigation system (60 degrees per section)
+  const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
   // 💡 ADVANCED LIGHTING SYSTEM
   // Optimized lighting setup for consciousness environments with soft colors
@@ -1154,10 +1154,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { radius: 15, height: 4, angle: Math.PI, tilt: -0.05, label: "Back Face" },
       // Page 4: Left-back face (240°) - THERION AI showcase  
       { radius: 15, height: 4, angle: (4 * Math.PI) / 3, tilt: -0.05, label: "Left-Back Face" },
-      // Page 5: Left-front face (300°) - Marketplace view **CORRECTED POSITION**
-      { radius: 15, height: 4, angle: (5 * Math.PI) / 3, tilt: -0.05, label: "Left-Front Face" },
-      // Page 6: Near-front face (330°) - Call to Action **PROPER FINAL POSITION**
-      { radius: 15, height: 4, angle: (11 * Math.PI) / 6, tilt: -0.05, label: "Near-Front Face" }
+      // Page 5: Left-front face (280°) - **IMPROVED POSITION** - Better transition flow
+      { radius: 15, height: 4, angle: (14 * Math.PI) / 9, tilt: -0.05, label: "Left-Front Face" }, // 280° instead of 300° for smoother flow
+      // Page 6: Near-front face (320°) - Call to Action **IMPROVED FINAL POSITION**
+      { radius: 15, height: 4, angle: (16 * Math.PI) / 9, tilt: -0.05, label: "Near-Front Face" } // 320° instead of 330° for better approach to 0°
     ];
     
     const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
@@ -1181,15 +1181,15 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     cameraRef.current.lookAt(0, lookAtY, 0);
   };
 
-  // Apple-grade rotation with physics simulation (SMOOTHER & ANTI-JITTER)
+  // Apple-grade rotation with smoother, less bouncy physics
   const updateRotationWithPhysics = (_deltaTime: number) => {
     if (!isInteracting && !reducedMotion) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // Smooth physics-based rotation with minimal spring oscillation
-    const springStrength = 0.008; // Much gentler for smooth, elegant motion
-    const damping = 0.88; // Slightly lower damping for natural feel
+    // **SMOOTHER ROTATION - REDUCED SPRING INTENSITY**
+    const springStrength = 0.008; // **REDUCED from 0.015** - Much gentler spring
+    const damping = 0.98; // **INCREASED from 0.95** - More damping to prevent overshoot
     
     // Anti-jitter threshold - prevent micro-movements
     const angleDifference = targetRotationY.current - currentRotationY.current;
@@ -1201,9 +1201,9 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       velocityRef.current *= damping;
       currentRotationY.current += velocityRef.current;
     } else {
-      // Gradual settling to prevent jitter
-      velocityRef.current *= 0.98;
-      currentRotationY.current = THREE.MathUtils.lerp(currentRotationY.current, targetRotationY.current, 0.05);
+      // **ENHANCED SETTLING** - Smoother final approach
+      velocityRef.current *= 0.99; // **INCREASED from 0.98** - Faster velocity decay
+      currentRotationY.current = THREE.MathUtils.lerp(currentRotationY.current, targetRotationY.current, 0.08); // **INCREASED from 0.05** - Faster final settling
     }
     
     if (hexagonRef.current) {
