@@ -58,7 +58,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   };
 
   // Enhanced living blobs with organic movement and personality - INDEPENDENT OF PAGE
-  const createOrganicBlobs = (scene: THREE.Scene) => {
+  const createOrganicBlobs = (group: THREE.Group) => {
     const blobs: any[] = [];
     const blobCount = 18 + Math.floor(Math.random() * 7); // 18-25 blobs
     
@@ -100,23 +100,36 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       // Create blob geometry
       const geometry = new THREE.SphereGeometry(1, 12, 10);
       
-      // Opaque materials with varied colors
+      // Opaque materials with vibrant neon colors and emission
       let material;
       if (isRareBlackBlob) {
         material = new THREE.MeshPhongMaterial({
           color: new THREE.Color(0x0a0a0a),
+          emissive: new THREE.Color(0x001155),
+          emissiveIntensity: 0.2,
           transparent: false,
-          shininess: 80
+          shininess: 100
         });
       } else {
-        const hue = Math.random() * 360;
-        const saturation = 40 + Math.random() * 60;
-        const lightness = 25 + Math.random() * 50;
+        // Enhanced vibrant neon colors with strong emission for aquarium effect
+        const colorChoices = [
+          { color: 0x00ffff, emissive: 0x0088cc }, // Bright neon cyan
+          { color: 0x0099ff, emissive: 0x0066cc }, // Bright electric blue  
+          { color: 0xffff00, emissive: 0xcccc00 }, // Bright neon yellow
+          { color: 0x00ff99, emissive: 0x00cc77 }, // Bright aqua-green
+          { color: 0xff9900, emissive: 0xcc6600 }, // Bright electric orange
+          { color: 0x9900ff, emissive: 0x6600cc }, // Bright electric purple
+          { color: 0xff0099, emissive: 0xcc0077 }, // Bright electric magenta
+        ];
+        
+        const choice = colorChoices[Math.floor(Math.random() * colorChoices.length)];
         
         material = new THREE.MeshPhongMaterial({
-          color: new THREE.Color().setHSL(hue / 360, saturation / 100, lightness / 100),
+          color: new THREE.Color(choice.color),
+          emissive: new THREE.Color(choice.emissive),
+          emissiveIntensity: 0.5 + Math.random() * 0.3, // 0.5-0.8 strong emission for aquarium glow
           transparent: false,
-          shininess: 20 + Math.random() * 40
+          shininess: 80 + Math.random() * 20 // 80-100 maximum shine for aquarium creatures
         });
       }
       
@@ -132,25 +145,27 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         originalPosition: blob.position.clone(),
         originalScale: scale.clone(),
         
-        // Natural swimming behavior
-        swimmingSpeed: 0.6 + Math.random() * 0.8, // 0.6-1.4 speed
+        // More fluid swimming behavior for aquarium effect
+        swimmingSpeed: 0.4 + Math.random() * 0.8, // 0.4-1.2 speed
         swimmingDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 0.6,
+          (Math.random() - 0.5) * 0.8,
           (Math.random() - 0.5) * 2
         ).normalize(),
         swimmingPhase: Math.random() * Math.PI * 2,
         
-        // Organic pulsing
+        // More pronounced organic pulsing
         breathingPhase: Math.random() * Math.PI * 2,
-        breathingSpeed: 1.2 + Math.random() * 0.8, // 1.2-2.0
+        breathingSpeed: 1.0 + Math.random() * 1.0, // 1.0-2.0
         
-        // Natural rotation
+        // Natural rotation and bobbing
         rotationSpeed: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.015,
-          (Math.random() - 0.5) * 0.015,
-          (Math.random() - 0.5) * 0.015
+          (Math.random() - 0.5) * 0.02,
+          (Math.random() - 0.5) * 0.02,
+          (Math.random() - 0.5) * 0.02
         ),
+        bobbingPhase: Math.random() * Math.PI * 2,
+        bobbingSpeed: 0.8 + Math.random() * 0.6, // 0.8-1.4
         
         // Individual characteristics
         isRareBlackBlob,
@@ -158,10 +173,10 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         
         // Swimming territory
         homePosition: position.clone(),
-        wanderRadius: 1.0 + Math.random() * 1.5, // 1.0-2.5 wander distance
+        wanderRadius: 1.2 + Math.random() * 1.8, // 1.2-3.0 wander distance
         currentTarget: null,
         targetReachTime: 0,
-        avoidanceRadius: 0.3, // Distance to maintain from other blobs
+        avoidanceRadius: 0.25, // Closer for more interaction
         
         // Activity cycles
         restCycle: Math.random() * 400 + 200, // Rest every 3-10 seconds
@@ -180,12 +195,14 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         energy: 0.4 + Math.random() * 0.6
       };
       
-      // Add proper black eyes that are clearly visible
+      // Add proper neon eyes that glow
       if (!isRareBlackBlob) {
-        // Regular blob with black eyes
-        const eyeGeometry = new THREE.SphereGeometry(0.08, 8, 6); // Smaller but more visible
+        // Regular blob with glowing black eyes
+        const eyeGeometry = new THREE.SphereGeometry(0.09, 8, 6); // Slightly larger
         const eyeMaterial = new THREE.MeshPhongMaterial({ 
           color: 0x000000,
+          emissive: 0x001133,
+          emissiveIntensity: 0.2,
           shininess: 100
         });
         
@@ -196,10 +213,6 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         leftEye.position.set(-0.25, 0.15, 0.85);
         rightEye.position.set(0.25, 0.15, 0.85);
         
-        // Add slight emissive glow to make eyes more visible
-        eyeMaterial.emissive = new THREE.Color(0x111111);
-        eyeMaterial.emissiveIntensity = 0.1;
-        
         blob.add(leftEye);
         blob.add(rightEye);
         
@@ -208,12 +221,12 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         blob.userData.rightEye = rightEye;
         
       } else {
-        // Rare black blob with glowing white eyes
-        const eyeGeometry = new THREE.SphereGeometry(0.08, 8, 6);
+        // Rare black blob with bright glowing white/cyan eyes
+        const eyeGeometry = new THREE.SphereGeometry(0.09, 8, 6);
         const eyeMaterial = new THREE.MeshPhongMaterial({ 
           color: 0xffffff,
-          emissive: 0xffffff,
-          emissiveIntensity: 0.3,
+          emissive: 0x00ffff,
+          emissiveIntensity: 0.6,
           shininess: 100
         });
         
@@ -231,7 +244,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         blob.userData.rightEye = rightEye;
       }
       
-      scene.add(blob);
+      group.add(blob);
       blobs.push(blob);
     }
     
@@ -411,7 +424,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
     }
 
     // Add living blobs and enhanced particles - INDEPENDENT OF PAGE CHANGES
-    const blobs = createOrganicBlobs(scene); // Independent swimming behavior
+    const blobs = createOrganicBlobs(group); // Independent swimming behavior, now part of rotating group
     const particles = createEnhancedParticles(group);
     
     // Store references for animation updates
@@ -500,7 +513,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           ).normalize();
         }
         
-        // Natural breathing - varies with personality and activity
+        // Natural breathing - varies with personality and activity + aquarium bobbing
         const breathingIntensity = userData.isResting ? 0.04 : 
                                    userData.personalityType === 2 ? 0.15 : // playful
                                    userData.personalityType === 3 ? 0.06 : // lazy
@@ -509,8 +522,13 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         const breathingScale = 1 + Math.sin(elapsedTime * userData.breathingSpeed + userData.breathingPhase) * breathingIntensity;
         blob.scale.copy(userData.originalScale).multiplyScalar(breathingScale);
         
+        // Add aquarium-like floating and bobbing motion
+        const floatBob = Math.sin(elapsedTime * userData.breathingSpeed * 0.6 + userData.swimmingPhase) * 0.12;
+        const slowDrift = Math.sin(elapsedTime * 0.15 + index * 2.1) * 0.08;
+        const baseY = userData.homePosition.y + floatBob + slowDrift;
+        
         if (!userData.isResting) {
-          // Swimming movement with personality
+          // Swimming movement with personality + enhanced aquarium motion
           const personalitySpeed = userData.personalityType === 2 ? 1.3 : // playful
                                    userData.personalityType === 3 ? 0.5 : // lazy
                                    userData.personalityType === 1 ? 0.7 : // shy
@@ -525,12 +543,14 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           swimmingOffset.add(userData.separationForce);
           
           blob.position.add(swimmingOffset);
+          blob.position.y = baseY; // Maintain floating motion
           
-          // Natural rotation while swimming
+          // Enhanced natural rotation while swimming with aquarium-like motion
           const rotationIntensity = 0.3 + swimmingWave * 0.7;
-          blob.rotation.x += userData.rotationSpeed.x * rotationIntensity;
+          const aquariumSway = Math.sin(elapsedTime * 0.8 + userData.swimmingPhase) * 0.004;
+          blob.rotation.x += userData.rotationSpeed.x * rotationIntensity + aquariumSway;
           blob.rotation.y += userData.rotationSpeed.y * rotationIntensity;
-          blob.rotation.z += userData.rotationSpeed.z * rotationIntensity;
+          blob.rotation.z += userData.rotationSpeed.z * rotationIntensity + aquariumSway * 0.5;
           
           // Organic wandering behavior
           if (!userData.currentTarget || userData.targetReachTime > 400) {
@@ -576,55 +596,84 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           }
         }
         
-        // Eye animation with natural movement tracking
+        // Enhanced eye animation with natural movement tracking and aquarium curiosity
         if (userData.leftEye && userData.rightEye) {
           userData.eyeBlinkTimer++;
           
-          // Natural blinking
+          // Enhanced eye tracking with aquarium curiosity behavior
+          const lookDirection = new THREE.Vector3(
+            Math.sin(elapsedTime * 0.4 + index) * 0.35,
+            Math.cos(elapsedTime * 0.3 + index) * 0.25,
+            0
+          );
+          
+          // Apply eye movement
+          userData.leftEye.position.x = -0.25 + lookDirection.x;
+          userData.leftEye.position.y = 0.15 + lookDirection.y;
+          userData.rightEye.position.x = 0.25 + lookDirection.x;
+          userData.rightEye.position.y = 0.15 + lookDirection.y;
+          
+          // Natural blinking with enhanced glow effects
           if (userData.eyeBlinkTimer > 180 + Math.random() * 360) {
             const blinkProgress = (userData.eyeBlinkTimer - 180) / 40;
             const blinkScale = Math.max(0.1, 1.0 - Math.sin(blinkProgress * Math.PI) * 0.9);
             userData.leftEye.scale.y = blinkScale;
             userData.rightEye.scale.y = blinkScale;
             
-            if (userData.eyeBlinkTimer > 220) {
+            if (blinkProgress > 1.0) {
               userData.eyeBlinkTimer = 0;
-              userData.leftEye.scale.y = 1;
-              userData.rightEye.scale.y = 1;
+            }
+          } else {
+            userData.leftEye.scale.y = 1;
+            userData.rightEye.scale.y = 1;
+            
+            // Enhanced pulsing glow for eyes based on personality and aquarium ambiance
+            const baseGlow = userData.personalityType === 0 ? 0.25 : // curious - brighter
+                             userData.personalityType === 2 ? 0.35 : // playful - brightest  
+                             0.15; // others - dimmer
+            
+            const glowPulse = Math.sin(elapsedTime * 2.5 + userData.breathingPhase) * 0.15;
+            const finalGlow = baseGlow + glowPulse;
+            
+            if (userData.leftEye.material && userData.leftEye.material.emissiveIntensity !== undefined) {
+              userData.leftEye.material.emissiveIntensity = finalGlow;
+              userData.rightEye.material.emissiveIntensity = finalGlow;
             }
           }
+        }
+        
+        // Enhanced body glow pulsing tied to breathing and aquarium ambiance
+        if (blob.material && blob.material.emissive) {
+          const breathingPulse = Math.sin(elapsedTime * userData.breathingSpeed + userData.breathingPhase) * 0.2;
+          const personalityBoost = userData.personalityType === 2 ? 0.15 : // playful gets extra glow
+                                   userData.personalityType === 0 ? 0.1 : // curious gets some glow
+                                   0; // others normal
           
-          // Eyes track swimming direction more naturally
-          const lookDirection = userData.swimmingDirection.clone();
-          const eyeMovement = lookDirection.multiplyScalar(0.015);
-          
-          // Add slight random eye movement for more life
-          eyeMovement.x += (Math.random() - 0.5) * 0.01;
-          eyeMovement.y += (Math.random() - 0.5) * 0.005;
-          
-          userData.leftEye.position.x = -0.25 + eyeMovement.x;
-          userData.leftEye.position.y = 0.15 + eyeMovement.y;
-          userData.rightEye.position.x = 0.25 + eyeMovement.x;
-          userData.rightEye.position.y = 0.15 + eyeMovement.y;
+          const baseEmission = 0.4;
+          const finalEmission = Math.min(0.8, baseEmission + breathingPulse + personalityBoost);
+          blob.material.emissiveIntensity = finalEmission;
         }
       });
     }
 
-    // Animate enhanced particles
+    // Animate enhanced particles with aquarium ambiance
     const particles = (hexagonRef.current as any).particles;
-    if (particles) {
+    if (particles && particles.userData) {
       particles.rotation.y += 0.0005; // Slower rotation
       const positions = particles.geometry.attributes.position.array as Float32Array;
       const velocities = particles.userData.velocities;
+      const originalPositions = particles.userData.originalPositions;
       
       for (let i = 0; i < positions.length; i += 3) {
-        // Apply velocities
+        // Apply velocities with aquarium floating motion
         positions[i] += velocities[i];
         positions[i + 1] += velocities[i + 1];
         positions[i + 2] += velocities[i + 2];
         
-        // Gentle wave motion
-        positions[i + 1] += Math.sin(elapsedTime * 2 + i * 0.1) * 0.002;
+        // Enhanced gentle wave motion for aquarium feel
+        positions[i] = originalPositions[i] + Math.sin(elapsedTime * 1.5 + i * 0.1) * 0.003;
+        positions[i + 1] = originalPositions[i + 1] + Math.sin(elapsedTime * 2 + i * 0.1) * 0.002;
+        positions[i + 2] = originalPositions[i + 2] + Math.cos(elapsedTime * 1.8 + i * 0.1) * 0.003;
         
         // Boundary wrapping
         if (Math.abs(positions[i]) > 8) velocities[i] *= -0.8;
