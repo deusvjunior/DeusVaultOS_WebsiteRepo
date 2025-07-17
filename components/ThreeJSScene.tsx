@@ -49,14 +49,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     fillLight.position.set(-8, 10, -6);
     scene.add(fillLight);
 
-    // Rim light for edge definition (strong cyan)
-    const rimLight = new THREE.DirectionalLight(0x00e1ff, 2.2); // Neon cyan
+    // Rim light for edge definition (additive white)
+    const rimLight = new THREE.DirectionalLight(0xffffff, 1.8); // Additive white
     rimLight.position.set(0, 8, -15);
     rimLight.castShadow = false;
     scene.add(rimLight);
 
-    // Enhanced ambient for realistic base illumination
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.3); // Neutral gray
+    // Enhanced ambient with minimum 2% emission (not black)
+    const ambientLight = new THREE.AmbientLight(0x1a1a2e, 0.4); // Dark blue-gray with 2% emission
     scene.add(ambientLight);
 
     // Point lights for accent
@@ -143,11 +143,9 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           leftEye,
           rightEye,
           
-          // Physics collision properties
-          radius: baseSize, // Collision sphere radius
-          velocity: new THREE.Vector3(),
-          
-          // Slow, cute swimming
+        // Physics collision properties (larger colliders)
+        radius: baseSize * 1.5, // 50% larger collision sphere
+        velocity: new THREE.Vector3(),          // Slow, cute swimming
           swimSpeed: 0.2 + Math.random() * 0.3, // Very slow
           swimOffset: Math.random() * Math.PI * 2,
           swimAmplitude: 0.5 + Math.random() * 0.5,
@@ -301,16 +299,18 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
   // UE5-grade hexagon with modern reflective materials
   const createAppleGradeHexagon = (group: THREE.Group) => {
-    // Modern platform base with realistic materials
+    // Dark-fade mirror ground for blob reflections
     const baseGeometry = new THREE.CylinderGeometry(6.5, 7.0, 0.3, 32);
     const baseMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x181a1b, // Matte dark, non-reflective
-      metalness: 0.0, // No reflection
-      roughness: 0.95, // Matte
-      clearcoat: 0.0,
-      reflectivity: 0.0,
-      emissive: 0x000000,
-      emissiveIntensity: 0.0,
+      color: 0x0a0a0f, // Very dark base
+      metalness: 0.8, // High metallic for mirror effect
+      roughness: 0.3, // Some roughness for dark-fade effect
+      clearcoat: 0.9, // Strong clear coat
+      clearcoatRoughness: 0.2, // Slightly rough clear coat for fade
+      reflectivity: 0.7, // Good reflection but not perfect mirror
+      emissive: 0x050508, // Minimum 2% emission
+      emissiveIntensity: 0.02,
+      envMapIntensity: 0.8, // Moderate environment reflection
     });
     const baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
     baseMesh.position.y = -1.0;
@@ -341,16 +341,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     const radius = 5.0;
     for (let i = 0; i < sections; i++) {
       const angle = (i * Math.PI * 2) / sections;
-      // Neon box frame
+      // Dark box frame for better text readability
       const frameGeometry = new THREE.BoxGeometry(3.5, 2.5, 0.3);
       const frameMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0xfff600, // Neon yellow
-        metalness: 0.0, // No reflection
-        roughness: 0.2,
-        clearcoat: 0.0,
-        reflectivity: 0.0,
-        emissive: 0xfff600,
-        emissiveIntensity: 0.25 + Math.random() * 0.15, // More emissive
+        color: 0x0f0f17, // Very dark for readability
+        metalness: 0.1, // Minimal metallic
+        roughness: 0.8, // Mostly matte
+        clearcoat: 0.2, // Subtle clear coat
+        reflectivity: 0.1, // Very low reflection
+        emissive: 0x0a0a0f, // Dark emission
+        emissiveIntensity: 0.02, // Very low emission for readability
       });
       const frameMesh = new THREE.Mesh(frameGeometry, frameMaterial);
       const x = Math.cos(angle) * radius;
@@ -424,10 +424,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Animate cute jelly blobs with physics collision and pulsating emission
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
-      // Declare boundaries inside updateAdvancedMaterials scope
-      const hexagonRadius = 5.5;
-      const groundLevel = -2.5;
-      const ceilingLevel = 2.5;
+      // Declare boundaries inside updateAdvancedMaterials scope (enhanced collision)
+      const hexagonRadius = 5.0; // Smaller boundary for better collision
+      const groundLevel = -1.8; // Higher ground level to prevent clipping
+      const ceilingLevel = 2.2; // Lower ceiling for better containment
       blobs.forEach((blob: any, index: number) => {
         const userData = blob.userData;
         const time = elapsedTime;
@@ -436,24 +436,24 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const pulseIntensity = 0.08 + Math.sin(pulseTime) * 0.08;
         userData.baseMaterial.emissiveIntensity = pulseIntensity;
         
-        // Sphere collision detection with other blobs
+        // Enhanced collision detection with other blobs (larger collision spheres)
         for (let j = index + 1; j < blobs.length; j++) {
           const otherBlob = blobs[j];
           const distance = blob.position.distanceTo(otherBlob.position);
-          const minDistance = userData.radius + otherBlob.userData.radius + 0.1; // Small buffer
+          const minDistance = userData.radius + otherBlob.userData.radius + 0.2; // Larger buffer
           
           if (distance < minDistance) {
             // Calculate collision response
             const direction = blob.position.clone().sub(otherBlob.position).normalize();
-            const separation = (minDistance - distance) * 0.5;
+            const separation = (minDistance - distance) * 0.6; // Stronger separation
             
-            // Separate blobs gently
+            // Separate blobs more aggressively
             blob.position.add(direction.clone().multiplyScalar(separation));
             otherBlob.position.sub(direction.clone().multiplyScalar(separation));
             
             // Bounce effect - reverse directions softly
-            userData.targetDirection.reflect(direction).multiplyScalar(0.7);
-            otherBlob.userData.targetDirection.reflect(direction.clone().negate()).multiplyScalar(0.7);
+            userData.targetDirection.reflect(direction).multiplyScalar(0.8);
+            otherBlob.userData.targetDirection.reflect(direction.clone().negate()).multiplyScalar(0.8);
           }
         }
         
@@ -534,24 +534,38 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           );
         }
         
-        // Box collider boundaries (walls, floor, ceiling)
+        // Box collider boundaries (walls, floor, ceiling) with enhanced collision
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
         if (distanceFromCenter > hexagonRadius - userData.radius) {
           const angle = Math.atan2(blob.position.z, blob.position.x);
           blob.position.x = Math.cos(angle) * (hexagonRadius - userData.radius);
           blob.position.z = Math.sin(angle) * (hexagonRadius - userData.radius);
           
-          // Bounce off walls
-          userData.targetDirection.reflect(new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle))).multiplyScalar(0.8);
+          // Bounce off walls with more force
+          userData.targetDirection.reflect(new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle))).multiplyScalar(0.9);
+        }
+
+        // Enhanced box collision detection (prevent clipping through monitor frames)
+        for (let i = 0; i < 6; i++) {
+          const angle = (i * Math.PI * 2) / 6;
+          const boxX = Math.cos(angle) * 5.0;
+          const boxZ = Math.sin(angle) * 5.0;
+          const boxDistance = Math.sqrt((blob.position.x - boxX) ** 2 + (blob.position.z - boxZ) ** 2);
+          
+          if (boxDistance < userData.radius + 1.8) { // Box collision radius
+            const boxDirection = new THREE.Vector3(blob.position.x - boxX, 0, blob.position.z - boxZ).normalize();
+            blob.position.copy(new THREE.Vector3(boxX, blob.position.y, boxZ).add(boxDirection.multiplyScalar(userData.radius + 1.8)));
+            userData.targetDirection.reflect(boxDirection.negate()).multiplyScalar(0.8);
+          }
         }
         
-        // Floor and ceiling collision
+        // Floor and ceiling collision with better containment
         if (blob.position.y > ceilingLevel - userData.radius) {
           blob.position.y = ceilingLevel - userData.radius;
-          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * -0.8; // Bounce down
+          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * -0.9; // Stronger bounce down
         } else if (blob.position.y < groundLevel + userData.radius && !userData.isEmerging) {
           blob.position.y = groundLevel + userData.radius;
-          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * 0.8; // Bounce up
+          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * 0.9; // Stronger bounce up
         }
         
         // Squishy scale animation
