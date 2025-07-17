@@ -11,7 +11,9 @@ import {
   Maximize,
   Minimize,
   Volume2,
-  VolumeX
+  VolumeX,
+  Navigation,
+  Gamepad2
 } from 'lucide-react';
 
 // Real-time blob control parameters
@@ -53,6 +55,7 @@ export function GameControls({
   const [observerMode, setObserverMode] = useState(false);
   const [showBlobControls, setShowBlobControls] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [pulseActive, setPulseActive] = useState(false);
 
   // Real-time blob control state
   const [blobControls, setBlobControls] = useState<BlobControls>({
