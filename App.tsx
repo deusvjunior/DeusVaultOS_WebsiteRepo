@@ -10,7 +10,7 @@ import {
     MessageCircle
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import LoadingScreen from './components/LoadingScreen';
+import LoadingScreen from './components/LoadingScreen_Spectacular';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import accurate content components
