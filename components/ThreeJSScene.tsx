@@ -109,17 +109,17 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { size: 0.4 + Math.random() * 0.2, type: 'large' } // 0.4-0.6 (was 0.7-0.95)
     ];
     
-    // 🎨 NEXUS CONSCIOUSNESS COLOR PALETTE
-    // VIBRANT neon colors for high-energy consciousness entities
+    // 🎨 STRICT CYAN & YELLOW ONLY PALETTE
+    // Adhering to user's exact color requirements
     const nexusColors = [
       { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan' },        // Electric cyan
-      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_neon_yellow' }, // Bright neon yellow  
-      { color: 0xFF00FF, emission: 0xFF44FF, name: 'vivid_magenta' },        // Vivid magenta
-      { color: 0x00FF88, emission: 0x44FFAA, name: 'electric_green' },       // Electric green
-      { color: 0xFF8800, emission: 0xFFAA44, name: 'energy_orange' },        // Energy orange
-      { color: 0x8800FF, emission: 0xAA44FF, name: 'cosmic_purple' },        // Cosmic purple
-      { color: 0xFF0088, emission: 0xFF44AA, name: 'plasma_pink' },          // Plasma pink
-      { color: 0x88FF00, emission: 0xAAFF44, name: 'laser_lime' },           // Laser lime
+      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow' }, // Bright yellow  
+      { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan_2' },      // Electric cyan (variant)
+      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_2' }, // Bright yellow (variant)
+      { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan_3' },      // Electric cyan (variant)
+      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_3' }, // Bright yellow (variant)
+      { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan_4' },      // Electric cyan (variant)
+      { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_4' }, // Bright yellow (variant)
     ];
     
     // 🎲 NATURAL DISTRIBUTION ALGORITHM
