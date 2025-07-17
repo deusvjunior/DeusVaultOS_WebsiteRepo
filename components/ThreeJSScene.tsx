@@ -57,8 +57,8 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
     scene.add(hemisphereLight);
   };
 
-  // Enhanced living blobs with organic movement and personality
-  const createPageSpecificBlobs = (pageIndex: number, scene: THREE.Scene) => {
+  // Enhanced living blobs with organic movement and personality - INDEPENDENT OF PAGE
+  const createOrganicBlobs = (scene: THREE.Scene) => {
     const blobs: any[] = [];
     const blobCount = 18 + Math.floor(Math.random() * 7); // 18-25 blobs
     
@@ -411,7 +411,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
     }
 
     // Add living blobs and enhanced particles - INDEPENDENT OF PAGE CHANGES
-    const blobs = createPageSpecificBlobs(0, scene); // Use fixed pageIndex to maintain consistency
+    const blobs = createOrganicBlobs(scene); // Independent swimming behavior
     const particles = createEnhancedParticles(group);
     
     // Store references for animation updates
