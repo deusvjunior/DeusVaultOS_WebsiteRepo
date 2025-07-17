@@ -17,7 +17,7 @@ import ThreeJSScene from './components/ThreeJSScene';
 import { HeroSection } from "./components/HeroSection";
 import { FeaturesSection } from "./components/FeaturesSection";
 import { CTASection } from "./components/CTASection";
-import { ComparisonSection } from "./components/ComparisonSection";
+import { UserSegments } from "./components/UserSegments"; // **NEW USER SEGMENTS PAGE**
 import { TherionSection } from "./components/TherionSection_New";
 import { MarketplaceSection } from "./components/MarketplaceSection";
 import { Footer } from "./components/Footer";
@@ -43,15 +43,15 @@ export default function App() {
       component: <FeaturesSection />
     },
     {
-      id: 'comparison',
-      title: 'Why DeusVaultOS',
-      icon: <Target className="h-4 w-4" />,
-      component: <ComparisonSection />
+      id: 'user-segments',
+      title: 'Who Uses DeusVaultOS',
+      icon: <Users className="h-4 w-4" />,
+      component: <UserSegments />
     },
     {
       id: 'therion',
       title: 'THERION AI',
-      icon: <Users className="h-4 w-4" />,
+      icon: <Target className="h-4 w-4" />,
       component: <TherionSection />
     },
     {

@@ -249,7 +249,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const christmasIntensity = hasChristmasEmission ? (0.15 + Math.random() * 0.25) : 0;
       const emissionSpeed = hasChristmasEmission ? (0.5 + Math.random() * 1.5) : 0;
       
-      // Enhanced material with restored emission effects
+      // Enhanced material with DELAYED emission effects (NO BLINKS FOR FIRST 2 SECONDS)
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: colorData.color,
         metalness: 0.0,
@@ -258,8 +258,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         transmission: 0,
         transparent: false,
         opacity: 1.0,
-        emissive: hasChristmasEmission ? colorData.color : 0x000000,
-        emissiveIntensity: christmasIntensity,
+        emissive: 0x000000, // **START WITH NO EMISSION** - will activate after 2 seconds
+        emissiveIntensity: 0.0, // **START WITH NO EMISSION INTENSITY**
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
@@ -465,8 +465,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         squishSpeed: 1.0 + Math.random() * 0.6, // MUCH faster squish animation
         squishOffset: Math.random() * Math.PI * 2,
         
-        // FASTER rotation with size-based variation
-        rotationSpeed: (Math.random() - 0.5) * (blobConfig.type === 'large' ? 0.025 : 0.035), // ULTRA fast rotation for alive feeling
+        // **GENTLER rotation with size-based variation** (reduced jitter)
+        rotationSpeed: (Math.random() - 0.5) * (blobConfig.type === 'large' ? 0.012 : 0.018), // Reduced from 0.025/0.035 for smoother feel
         
         // Happiness and personality factors
         happiness: 0.7 + Math.random() * 0.3, // Base happiness level
@@ -713,11 +713,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // 🎄 CHRISTMAS TREE PULSATING EMISSION ANIMATION
-        // Enhanced consciousness pulsing with Christmas tree effects
+        // 🎄 CHRISTMAS TREE PULSATING EMISSION ANIMATION WITH STARTUP DELAY
+        // **2-SECOND STARTUP DELAY** - No blinking for first 2 seconds (less distracting)
+        const startupDelay = 2.0; // 2 seconds of calm startup
         const shouldUpdateThisFrame = (index + Math.floor(time * 6)) % 3 === 0; // Non-synchronous updates
-        if (shouldUpdateThisFrame) {
-          // Christmas tree emission for selected blobs
+        
+        if (shouldUpdateThisFrame && time >= startupDelay) {
+          // **DELAYED CHRISTMAS EMISSION** - Only after startup delay
           if (userData.hasChristmasEmission) {
             const emissionTime = time * userData.emissionSpeed;
             const christmasBase = userData.originalEmission;
@@ -726,7 +728,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             
             userData.baseMaterial.emissiveIntensity = Math.max(0.05, christmasIntensity);
           } else {
-            // Standard consciousness pulsing for non-Christmas blobs
+            // **DELAYED STANDARD CONSCIOUSNESS PULSING** - Only after startup delay
             const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
             const basePulse = userData.pulseIntensity;
             const consciousness = Math.sin(pulseTime) * 0.2;
@@ -736,9 +738,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             userData.baseMaterial.emissiveIntensity = Math.max(0.15, finalIntensity);
           }
           
-          // Color temperature variation for living feel
+          // **DELAYED COLOR TEMPERATURE VARIATION** - Only after startup delay
           const colorVariation = 1 + Math.sin(time * 0.5 + userData.pulseOffset) * 0.1;
           userData.baseMaterial.color.setHex(userData.colorData.color).multiplyScalar(colorVariation);
+        } else if (time < startupDelay) {
+          // **STARTUP CALM STATE** - Keep blobs in their initial calm state
+          userData.baseMaterial.emissiveIntensity = 0.0;
+          userData.baseMaterial.emissive.setHex(0x000000);
         }
         
         // Enhanced collision detection with consciousness flow
@@ -1036,9 +1042,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const squishScaleY = 1 + Math.sin(squishTime * 1.2) * userData.squishiness * 0.8 * happinessMultiplier;
         blob.scale.set(squishScale, squishScaleY, squishScale);
         
-        // Enhanced consciousness-driven rotation
-        blob.rotation.y += userData.rotationSpeed * (0.5 + userData.happiness * 0.5);
-        blob.rotation.x += userData.rotationSpeed * 0.3 * Math.sin(time * 0.2);
+        // **SMOOTH CONSCIOUSNESS-DRIVEN ROTATION** (reduced jitter)
+        // Much gentler rotation speeds for professional feel
+        const rotationMultiplier = (0.2 + userData.happiness * 0.3); // Reduced from aggressive multipliers
+        blob.rotation.y += userData.rotationSpeed * rotationMultiplier * deltaTime * 20; // Frame-rate independent
+        blob.rotation.x += userData.rotationSpeed * 0.15 * Math.sin(time * 0.15) * deltaTime * 20; // Gentler X rotation
         
         // Enhanced non-synchronous consciousness-aware blinking system
         userData.blinkTimer -= deltaTime;
@@ -1163,7 +1171,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     const breathingOffset = Math.sin(elapsedTime * 0.15) * 0.02;
     
     // ULTRA SMOOTH INTERPOLATION - Prevent jarring transitions
-    const lerpSpeed = 0.008; // Much slower for ultra-smooth transitions
+    const lerpSpeed = 0.004; // **SLOWED FROM 0.008** - Perfect camera transition speed (was 2x too fast)
     cameraRef.current.position.x = THREE.MathUtils.lerp(cameraRef.current.position.x, targetX, lerpSpeed);
     cameraRef.current.position.y = THREE.MathUtils.lerp(cameraRef.current.position.y, targetY + breathingOffset, lerpSpeed);
     cameraRef.current.position.z = THREE.MathUtils.lerp(cameraRef.current.position.z, targetZ, lerpSpeed);
