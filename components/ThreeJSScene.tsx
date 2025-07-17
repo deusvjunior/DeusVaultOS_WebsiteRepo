@@ -100,47 +100,67 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       // Create blob geometry
       const geometry = new THREE.SphereGeometry(1, 12, 10);
       
-      // Opaque materials with vibrant neon colors and emission
-      let material;
-      if (isRareBlackBlob) {
-        material = new THREE.MeshPhongMaterial({
-          color: new THREE.Color(0x0a0a0a),
-          emissive: new THREE.Color(0x001155),
-          emissiveIntensity: 0.2,
-          transparent: false,
-          shininess: 100
-        });
-      } else {
-        // Enhanced vibrant neon colors with strong emission for aquarium effect
-        const colorChoices = [
-          { color: 0x00ffff, emissive: 0x0088cc }, // Bright neon cyan
-          { color: 0x0099ff, emissive: 0x0066cc }, // Bright electric blue  
-          { color: 0xffff00, emissive: 0xcccc00 }, // Bright neon yellow
-          { color: 0x00ff99, emissive: 0x00cc77 }, // Bright aqua-green
-          { color: 0xff9900, emissive: 0xcc6600 }, // Bright electric orange
-          { color: 0x9900ff, emissive: 0x6600cc }, // Bright electric purple
-          { color: 0xff0099, emissive: 0xcc0077 }, // Bright electric magenta
-        ];
-        
-        const choice = colorChoices[Math.floor(Math.random() * colorChoices.length)];
-        
-        material = new THREE.MeshPhongMaterial({
-          color: new THREE.Color(choice.color),
-          emissive: new THREE.Color(choice.emissive),
-          emissiveIntensity: 0.5 + Math.random() * 0.3, // 0.5-0.8 strong emission for aquarium glow
-          transparent: false,
-          shininess: 80 + Math.random() * 20 // 80-100 maximum shine for aquarium creatures
-        });
+      // Strict neon palette: cyan, yellow, and in-between
+      const neonPalette = [
+        { color: 0x00ffff, emissive: 0x00eedd, type: 'cyan' },
+        { color: 0xffff00, emissive: 0xeedd00, type: 'yellow' },
+        { color: 0x88ffee, emissive: 0x44eecc, type: 'mix' },
+        { color: 0xffee88, emissive: 0xeedd44, type: 'mix' }
+      ];
+      const isUnique = Math.random() < 0.08;
+      let paletteChoice = neonPalette[Math.floor(Math.random() * neonPalette.length)];
+      if (isUnique) {
+        paletteChoice = { color: 0xffffff, emissive: 0x00ffff, type: 'unique' };
       }
-      
+      const material = new THREE.MeshPhongMaterial({
+        color: new THREE.Color(paletteChoice.color),
+        emissive: new THREE.Color(paletteChoice.emissive),
+        emissiveIntensity: isUnique ? 0.8 : 0.6,
+        transparent: false,
+        shininess: 90
+      });
       const blob = new THREE.Mesh(geometry, material);
       blob.position.copy(position);
       blob.scale.copy(scale);
+      // Random start rotation for organic look
+      blob.rotation.set(
+        Math.random() * Math.PI * 2,
+        Math.random() * Math.PI * 2,
+        Math.random() * Math.PI * 2
+      );
+      
+      // --- Eyes ---
+      const eyeGeometry = new THREE.SphereGeometry(isUnique ? 0.15 : 0.12, 8, 6); // Bigger eyes
+      const eyeMaterial = new THREE.MeshPhongMaterial({
+        color: isUnique ? 0xffffff : 0x000000,
+        emissive: isUnique ? 0x00ffff : 0x001133,
+        emissiveIntensity: isUnique ? 0.6 : 0.3,
+        shininess: 100
+      });
+      const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+      const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+      leftEye.position.set(-0.28, 0.18, 0.85);
+      rightEye.position.set(0.28, 0.18, 0.85);
+      blob.add(leftEye);
+      blob.add(rightEye);
+      blob.userData.leftEye = leftEye;
+      blob.userData.rightEye = rightEye;
+      
+      // --- Personality & Energy ---
+      let energy = 1.0;
+      let behaviorType = 'neutral';
+      if (paletteChoice.type === 'cyan') {
+        energy = 0.5 + Math.random() * 0.3;
+        behaviorType = 'calm';
+      } else if (paletteChoice.type === 'yellow') {
+        energy = 1.2 + Math.random() * 0.4;
+        behaviorType = 'energetic';
+      } else if (paletteChoice.type === 'unique') {
+        energy = 1.5;
+        behaviorType = 'unique';
+      }
       
       // Personality-driven behavior (independent of page)
-      const personalityType = Math.floor(Math.random() * 4);
-      
-      // Living blob personality and swimming behavior - INDEPENDENT OF PAGE CHANGES
       blob.userData = {
         originalPosition: blob.position.clone(),
         originalScale: scale.clone(),
@@ -169,7 +189,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         
         // Individual characteristics
         isRareBlackBlob,
-        personalityType, // 0: curious, 1: shy, 2: playful, 3: lazy
+        personalityType: Math.floor(Math.random() * 4), // 0: curious, 1: shy, 2: playful, 3: lazy
         
         // Swimming territory
         homePosition: position.clone(),
@@ -192,7 +212,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         neighbors: [],
         separationForce: new THREE.Vector3(),
         
-        energy: 0.4 + Math.random() * 0.6
+        energy
       };
       
       // Add proper neon eyes that glow
