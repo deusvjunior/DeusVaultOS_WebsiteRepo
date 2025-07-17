@@ -14,12 +14,16 @@ import LoadingScreen from './components/LoadingScreen';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import content components
+import { FeaturesSection } from "./components/FeaturesSection";
 import { Footer } from "./components/Footer";
-import { ProfessionalHeroSection } from "./components/ProfessionalHeroSection";
-import { ProfessionalFeaturesSection } from "./components/ProfessionalFeaturesSection";
-import { ProfessionalFooter } from "./components/ProfessionalFooter";
+import { HeroSection } from "./components/HeroSection";
+import { ImprovedHeroSection } from "./components/ImprovedHeroSection";
+import { CTASection } from "./components/CTASection";
+import { EnterpriseSection } from "./components/EnterpriseSection";
+import { MarketplaceSection } from "./components/MarketplaceSection";
 import { MicrosoftComparisonSection } from "./components/MicrosoftComparisonSection";
 import { UserSegments } from "./components/UserSegments";
+import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
 import { WebVitalsMonitor } from "./components/WebVitalsMonitor";
 
 export default function App() {
@@ -30,9 +34,9 @@ export default function App() {
   const sections = [
     {
       id: 'hero',
-      title: 'DeusVaultOS',
+      title: 'Welcome to Deus Vault',
       icon: <Home className="h-4 w-4" />,
-      component: <ProfessionalHeroSection />
+      component: <ImprovedHeroSection />
     },
     {
       id: 'segments',
@@ -42,17 +46,37 @@ export default function App() {
     },
     {
       id: 'features',
-      title: 'Technical Architecture',
+      title: 'Core Features',
       icon: <Zap className="h-4 w-4" />,
-      component: <ProfessionalFeaturesSection />
+      component: <FeaturesSection />
+    },
+    {
+      id: 'enterprise',
+      title: 'Enterprise',
+      icon: <BarChart3 className="h-4 w-4" />,
+      component: <EnterpriseSection />
+    },
+    {
+      id: 'marketplace',
+      title: 'Marketplace',
+      icon: <ShoppingCart className="h-4 w-4" />,
+      component: <MarketplaceSection />
     },
     {
       id: 'comparison',
-      title: 'Enterprise Comparison',
+      title: 'Platform Comparison',
       icon: <BarChart3 className="h-4 w-4" />,
       component: <MicrosoftComparisonSection />
+    },
+    {
+      id: 'cta',
+      title: 'Get Started',
+      icon: <Mail className="h-4 w-4" />,
+      component: <CTASection />
     }
-  ];  // Detect reduced motion preference
+  ];
+
+  // Detect reduced motion preference
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setReducedMotion(mediaQuery.matches);
@@ -132,7 +156,10 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen antialiased relative" style={{ background: 'var(--tldark-primary)', color: 'var(--text-primary)' }}>
+    <div className="min-h-screen bg-cyber-black text-cyber-white antialiased relative">
+      
+      {/* SEO Optimization */}
+      <SEOOptimizer {...seoConfigs.home} />
       
       {/* Web Vitals Monitoring */}
       <WebVitalsMonitor enableReporting={true} />
@@ -143,15 +170,15 @@ export default function App() {
         reducedMotion={reducedMotion}
       />
 
-      {/* Professional Glass Header */}
-      <div className="fixed top-0 left-0 right-0 z-30 tldark-glass-card" style={{ borderRadius: 0, borderTop: 'none', borderLeft: 'none', borderRight: 'none' }}>
+      {/* Clean Title Ribbon */}
+      <div className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-r from-cyber-dark-900/95 via-cyber-dark-800/95 to-cyber-dark-900/95 backdrop-blur-md border-b border-cyber-cyan/20">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             
-            {/* Professional Logo */}
+            {/* Logo */}
             <div className="flex items-center gap-4">
               <div className="w-8 h-8 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-full h-full" style={{ color: 'var(--accent-cyan)' }}>
+                <svg viewBox="0 0 24 24" className="w-full h-full text-cyber-cyan">
                   <polygon
                     points="12,2 20,6 20,18 12,22 4,18 4,6"
                     fill="none"
@@ -161,26 +188,22 @@ export default function App() {
                 </svg>
               </div>
               <div>
-                <h1 className="tldark-heading text-xl">
-                  <span style={{ color: 'var(--text-primary)' }}>DEUS</span>
-                  <span style={{ color: 'var(--accent-cyan)' }}>VAULT</span>
-                  <span style={{ color: 'var(--accent-neon-yellow)' }}>OS</span>
-                </h1>
-                <p className="text-xs tldark-text--muted">Professional Development Environment</p>
+                <h1 className="font-title text-xl text-cyber-white">DEUS VAULT</h1>
+                <p className="font-caption text-xs text-cyber-dark-400">Linux Development Environment</p>
               </div>
             </div>
 
             {/* Current Section Info */}
             <div className="flex items-center gap-4">
               <div className="hidden md:flex items-center gap-3">
-                <div style={{ color: 'var(--accent-cyan)' }}>
+                <div className="text-cyber-cyan">
                   {sections[currentSection].icon}
                 </div>
                 <div>
-                  <div className="text-sm tldark-text font-semibold">
+                  <div className="font-subtitle text-sm text-cyber-white">
                     {sections[currentSection].title}
                   </div>
-                  <div className="text-xs tldark-text--muted">
+                  <div className="font-caption text-xs text-cyber-dark-400">
                     Section {currentSection + 1} of {sections.length}
                   </div>
                 </div>
@@ -188,7 +211,7 @@ export default function App() {
               
               {/* Mobile indicator */}
               <div className="md:hidden">
-                <div className="font-mono text-sm" style={{ color: 'var(--accent-cyan)' }}>
+                <div className="font-mono text-sm text-cyber-cyan">
                   {currentSection + 1}/{sections.length}
                 </div>
               </div>
@@ -198,7 +221,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Professional Navigation Controls */}
+      {/* Enhanced Navigation Controls */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -206,15 +229,15 @@ export default function App() {
       >
             <div className="flex items-center gap-4">
               
-              {/* Professional Control Panel */}
-              <div className="flex items-center gap-2 tldark-glass-card px-6 py-4">
+              {/* Control Panel */}
+              <div className="flex items-center gap-2 glass-refined rounded-lg px-6 py-4">
                 
                 {/* Reset to Home */}
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={resetToHome}
-                  className="w-10 h-10 tldark-glass-button rounded-md flex items-center justify-center tldark-text--accent hover:scale-110 transition-all group"
+                  className="w-10 h-10 glass-refined rounded-md flex items-center justify-center text-cyber-cyan hover:text-cyber-white transition-colors group"
                   title="Reset to Home (R)"
                 >
                   <Home className="h-4 w-4" />
@@ -225,13 +248,13 @@ export default function App() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={prevSection}
-                  className="w-12 h-12 tldark-glass-button rounded-lg flex items-center justify-center tldark-text--accent hover:scale-105 transition-all"
+                  className="w-12 h-12 glass-refined rounded-lg flex items-center justify-center text-cyber-cyan hover:text-cyber-white transition-colors"
                   title="Previous Section (A/←)"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </motion.button>
 
-                {/* Professional Section dots */}
+                {/* Section dots with enhanced interactivity */}
                 <div className="flex items-center gap-3 px-4">
                   {sections.map((section, index) => (
                     <motion.button
@@ -241,21 +264,16 @@ export default function App() {
                       onClick={() => navigateToSection(index)}
                       className={`relative w-3 h-3 rounded-full transition-all duration-300 ${
                         index === currentSection
-                          ? 'shadow-lg'
-                          : 'hover:opacity-75'
+                          ? 'bg-cyber-cyan shadow-lg shadow-cyber-cyan/50'
+                          : 'bg-cyber-dark-600 hover:bg-cyber-dark-400'
                       }`}
-                      style={{ 
-                        background: index === currentSection ? 'var(--accent-cyan)' : 'var(--glass-border)',
-                        boxShadow: index === currentSection ? '0 0 20px var(--accent-cyan-glow)' : 'none'
-                      }}
                       title={`${section.title} (${index + 1})`}
                     >
                       {index === currentSection && (
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          className="absolute inset-0 border-2 rounded-full animate-ping"
-                          style={{ borderColor: 'var(--accent-cyan)' }}
+                          className="absolute inset-0 border-2 border-cyber-cyan rounded-full animate-ping"
                         />
                       )}
                     </motion.button>
@@ -267,7 +285,7 @@ export default function App() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={nextSection}
-                  className="w-12 h-12 tldark-glass-button rounded-lg flex items-center justify-center tldark-text--accent hover:scale-105 transition-all"
+                  className="w-12 h-12 glass-refined rounded-lg flex items-center justify-center text-cyber-cyan hover:text-cyber-white transition-colors"
                   title="Next Section (D/→)"
                 >
                   <ArrowRight className="h-5 w-5" />
@@ -278,26 +296,54 @@ export default function App() {
             </div>
           </motion.div>
 
-      {/* Professional Content Area */}
-      <div className="relative z-20 pt-20">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSection}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="min-h-screen"
-          >
-            {sections[currentSection].component}
-          </motion.div>
-        </AnimatePresence>
-        
-        {/* Professional Footer */}
-        <ProfessionalFooter />
+      {/* Content Area */}
+      <div className="fixed inset-0 z-20 pointer-events-none pt-20">
+        <div className="h-full flex items-center justify-center p-4 lg:p-8">
+          <div className="w-full max-w-5xl mx-auto pointer-events-auto">
+            
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSection}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="relative"
+              >
+                
+                {/* Content Background */}
+                <div className="glass-refined rounded-lg p-8 lg:p-12 max-h-[calc(100vh-200px)] overflow-y-auto">
+                  
+                  {/* Section header */}
+                  <div className="text-center mb-8">
+                    <div className="flex items-center justify-center gap-4 mb-4">
+                      <div className="w-12 h-px bg-gradient-to-r from-transparent to-cyber-cyan" />
+                      <div className="text-cyber-cyan text-xl">
+                        {sections[currentSection].icon}
+                      </div>
+                      <div className="w-12 h-px bg-gradient-to-l from-transparent to-cyber-cyan" />
+                    </div>
+                    
+                    <h2 className="font-title text-2xl lg:text-3xl text-cyber-white mb-2">
+                      {sections[currentSection].title}
+                    </h2>
+                  </div>
+
+                  {/* Content */}
+                  <div className="min-h-[400px]">
+                    {sections[currentSection].component}
+                  </div>
+                  
+                </div>
+                
+              </motion.div>
+            </AnimatePresence>
+            
+          </div>
+        </div>
       </div>
 
-      {/* Professional Side Navigation */}
+      {/* Side Navigation Indicator */}
       <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
         <div className="flex flex-col gap-3">
           {sections.map((section, index) => (
@@ -306,31 +352,47 @@ export default function App() {
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.8 }}
               onClick={() => setCurrentSection(index)}
-              className="w-3 h-3 rounded-full transition-all duration-300"
-              style={{ 
-                background: index === currentSection ? 'var(--accent-cyan)' : 'var(--glass-border)',
-                boxShadow: index === currentSection ? '0 0 10px var(--accent-cyan-glow)' : 'none'
-              }}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentSection
+                  ? 'bg-cyber-cyan shadow-md shadow-cyber-cyan/50'
+                  : 'bg-cyber-dark-600 hover:bg-cyber-dark-400'
+              }`}
               title={section.title}
             />
           ))}
         </div>
       </div>
 
-      {/* Professional Controls Help */}
+      {/* Controls Help */}
       <div className="fixed bottom-6 right-6 z-30">
-        <div className="tldark-glass-card p-3 text-xs">
-          <div className="space-y-1 font-mono tldark-text--muted">
+        <div className="glass-refined rounded-lg p-3 text-xs">
+          <div className="space-y-1 font-mono text-cyber-dark-300">
             <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 tldark-glass-card rounded text-xs">A/D</kbd>
+              <kbd className="px-2 py-1 bg-cyber-dark-700 rounded">A/D</kbd>
               <span>Navigate</span>
             </div>
             <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 tldark-glass-card rounded text-xs">R</kbd>
-              <span>Reset</span>
+              <kbd className="px-2 py-1 bg-cyber-dark-700 rounded">DRAG</kbd>
+              <span>Rotate</span>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Subtle ambient effects */}
+      <div className="fixed inset-0 pointer-events-none z-10">
+        <motion.div
+          className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyber-cyan/20 to-transparent"
+          animate={{ 
+            x: ['-100%', '100%'],
+            opacity: [0, 0.5, 0]
+          }}
+          transition={{ 
+            duration: 10, 
+            repeat: Infinity, 
+            ease: "easeInOut"
+          }}
+        />
       </div>
 
     </div>
