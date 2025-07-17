@@ -173,8 +173,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       // CIRCULAR SWIMMING PARAMETERS - Each blob gets unique circular path
       const heightLane = i % 6; // Assign each blob to one of 6 height lanes
-      const laneHeight = (heightLane - 2.5) * 1.2; // Lanes at: -3, -1.8, -0.6, 0.6, 1.8, 3
-      const orbitRadius = 1.5 + Math.random() * 2; // Varied orbit sizes
+      const laneHeight = (heightLane * 1.8) + 2; // Elevated lanes at: 2, 3.8, 5.6, 7.4, 9.2, 11 (no floor clipping)
+      const orbitRadius = 2.5 + Math.random() * 3.5; // Larger orbit radii between 2.5 and 6
       const orbitSpeed = (Math.random() > 0.5 ? 1 : -1) * (0.1 + Math.random() * 0.2); // Random clockwise/counterclockwise
       const orbitPhase = Math.random() * Math.PI * 2; // Random starting position on circle
       
@@ -887,7 +887,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           
           // Smooth lane transitions
           if (userData.currentLane !== userData.targetLane) {
-            const targetLaneHeight = (userData.targetLane - 2.5) * 1.2;
+            const targetLaneHeight = (userData.targetLane * 1.8) + 2; // Use new elevated height calculation
             userData.laneHeight = THREE.MathUtils.lerp(userData.laneHeight, targetLaneHeight, deltaTime * 0.5);
             
             // Complete lane switch when close enough
@@ -1099,45 +1099,44 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     }
   };
 
-  // 🎬 REDESIGNED CINEMATIC CAMERA SYSTEM - Natural Flow Transitions
+  // 🔷 HEXAGONAL CAMERA SYSTEM - Perfect 60° Rotation Navigation
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // NATURAL CINEMATIC PROGRESSION - Smooth natural flow around scene
-    const cameraConfigs = [
-      // Page 0: Classic front introduction - slightly elevated
-      { radius: 12, height: 3, angle: 0, tilt: -0.05, label: "Front Introduction" },
-      // Page 1: Gentle right drift - smooth 45° transition
-      { radius: 13, height: 2.5, angle: Math.PI / 4, tilt: 0, label: "Right Drift" },
-      // Page 2: Right side - continue smooth flow
-      { radius: 14, height: 4, angle: Math.PI / 2, tilt: -0.1, label: "Right Side" },
-      // Page 3: Back-right approach - gentle climb
-      { radius: 13.5, height: 5, angle: (3 * Math.PI) / 4, tilt: -0.15, label: "Back Approach" },
-      // Page 4: Back view - dramatic but smooth
-      { radius: 15, height: 3.5, angle: Math.PI, tilt: 0.05, label: "Back View" },
-      // Page 5: Final overview - majestic elevation
-      { radius: 16, height: 8, angle: (5 * Math.PI) / 4, tilt: -0.2, label: "Final Overview" }
+    // HEXAGONAL NAVIGATION - Each page = one side of hexagon (60° increments)
+    const hexagonalConfigs = [
+      // Page 0: Side 1 - 0° (Front)
+      { radius: 16, height: 5, angle: 0, label: "Hexagon Side 1" },
+      // Page 1: Side 2 - 60° (Front-Right)  
+      { radius: 16, height: 5, angle: Math.PI / 3, label: "Hexagon Side 2" },
+      // Page 2: Side 3 - 120° (Back-Right)
+      { radius: 16, height: 5, angle: (2 * Math.PI) / 3, label: "Hexagon Side 3" },
+      // Page 3: Side 4 - 180° (Back)
+      { radius: 16, height: 5, angle: Math.PI, label: "Hexagon Side 4" },
+      // Page 4: Side 5 - 240° (Back-Left)
+      { radius: 16, height: 5, angle: (4 * Math.PI) / 3, label: "Hexagon Side 5" },
+      // Page 5: Side 6 - 300° (Front-Left) 
+      { radius: 16, height: 5, angle: (5 * Math.PI) / 3, label: "Hexagon Side 6" }
     ];
     
-    const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
+    const currentConfig = hexagonalConfigs[currentSection] || hexagonalConfigs[0];
     
-    // Calculate target camera position with smooth orbital progression
+    // Calculate hexagonal camera position
     const targetX = Math.cos(currentConfig.angle) * currentConfig.radius;
     const targetZ = Math.sin(currentConfig.angle) * currentConfig.radius;
     const targetY = currentConfig.height;
     
-    // Gentle breathing motion (very subtle)
-    const breathingOffset = Math.sin(elapsedTime * 0.15) * 0.02;
+    // Gentle breathing motion for organic feel
+    const breathingOffset = Math.sin(elapsedTime * 0.12) * 0.15;
     
-    // ULTRA SMOOTH INTERPOLATION - Prevent jarring transitions
-    const lerpSpeed = 0.008; // Much slower for ultra-smooth transitions
+    // Smooth hexagonal rotation interpolation
+    const lerpSpeed = 0.005; // Smooth hexagonal transitions
     cameraRef.current.position.x = THREE.MathUtils.lerp(cameraRef.current.position.x, targetX, lerpSpeed);
     cameraRef.current.position.y = THREE.MathUtils.lerp(cameraRef.current.position.y, targetY + breathingOffset, lerpSpeed);
     cameraRef.current.position.z = THREE.MathUtils.lerp(cameraRef.current.position.z, targetZ, lerpSpeed);
     
-    // Smooth look-at with gentle tilt
-    const lookAtY = currentConfig.tilt;
-    cameraRef.current.lookAt(0, lookAtY, 0);
+    // Always look at elevated center of blob system
+    cameraRef.current.lookAt(0, 6, 0); // Look at center height of elevated blob system
   };
 
   // Apple-grade rotation with physics simulation (SMOOTHER & ANTI-JITTER)

@@ -18,7 +18,7 @@ import { HeroSection } from "./components/HeroSection";
 import { FeaturesSection } from "./components/FeaturesSection";
 import { CTASection } from "./components/CTASection";
 import { ComparisonSection } from "./components/ComparisonSection";
-import { TherionSection } from "./components/TherionSection";
+import { TherionSection } from "./components/TherionSection_New";
 import { MarketplaceSection } from "./components/MarketplaceSection";
 import { Footer } from "./components/Footer";
 import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
