@@ -23,6 +23,23 @@ export function HeroSection() {
         className="space-y-8 relative z-10"
       >
         
+        {/* DeusVaultOS Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.8 }}
+          className="relative mb-6"
+        >
+          <img 
+            src="/DVLogo.png" 
+            alt="DeusVaultOS" 
+            className="h-24 w-24 mx-auto drop-shadow-2xl"
+            style={{
+              filter: 'drop-shadow(0 0 20px rgba(0, 255, 255, 0.5))'
+            }}
+          />
+        </motion.div>
+        
         {/* Floating Badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

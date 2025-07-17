@@ -50,36 +50,40 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
     'Ready to Transform Your Workflow!'
   ];
 
-  // 🚀 ENHANCED LOADING PROGRESSION - SLOWER FOR VISIBILITY
+  // 🚀 ENHANCED LOADING PROGRESSION - PROPER 0-100% WITHOUT PREMATURE COMPLETION
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
-        const next = prev + Math.random() * 1.2 + 0.8; // SLOWER: Reduced increment for better visibility
+        const next = prev + Math.random() * 0.8 + 0.4; // CONTROLLED: Slower increments for realistic progression
         
-        // **PROPER PROGRESS SCALING** - Real progression with smooth completion
-        const displayProgress = Math.min(next, 100); // Show actual progress, no fake jumping
+        // **REALISTIC PROGRESSION** - No fake jumps, proper 0-100%
+        const displayProgress = Math.min(next, 99); // Cap at 99% until complete
         
         // Update loading text based on actual progress
-        if (next >= 80) {
+        if (next >= 85) {
           setLoadingText(loadingMessages[4]);
-        } else if (next >= 60) {
+        } else if (next >= 65) {
           setLoadingText(loadingMessages[3]);
-        } else if (next >= 40) {
+        } else if (next >= 45) {
           setLoadingText(loadingMessages[2]);
-        } else if (next >= 20) {
+        } else if (next >= 25) {
           setLoadingText(loadingMessages[1]);
         } else {
           setLoadingText(loadingMessages[0]);
         }
         
-        if (next >= 100) { // Complete at 100% for proper progression
+        if (next >= 99) { // Complete at 99% for smooth final transition
           clearInterval(interval);
-          setTimeout(() => onLoadingComplete(), 800); // Slightly longer for smooth transition
-          return 100;
+          // Final jump to 100% then fade
+          setTimeout(() => {
+            setProgress(100);
+            setTimeout(() => onLoadingComplete(), 600);
+          }, 200);
+          return 99;
         }
         return displayProgress;
       });
-    }, 120); // SLOWER: Increased from 80ms to 120ms for better visibility
+    }, 140); // PROPER TIMING: Realistic loading speed
 
     return () => clearInterval(interval);
   }, [onLoadingComplete]);
@@ -156,39 +160,23 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
               }}
             >
               
-              {/* 🎮 DEUSVAULTOS LOGO WITH REAL ASSETS */}
+              {/* 🎮 DEUSVAULTOS LOGO ONLY */}
               <motion.div className="mb-8">
-                {/* Main Logo Images */}
-                <motion.div className="flex items-center justify-center gap-6 mb-4">
-                  {/* DeusVault Logo */}
+                {/* DeusVault Logo */}
+                <motion.div className="flex items-center justify-center mb-6">
                   <motion.img
                     src="/DVLogo.png"
                     alt="DeusVault Logo"
-                    className="h-16 w-16"
+                    className="h-20 w-20"
                     animate={{ 
                       scale: [1, 1.1, 1],
                       filter: [
                         'drop-shadow(0 0 10px #00FFFF)',
-                        'drop-shadow(0 0 20px #FFFF00)',
+                        'drop-shadow(0 0 20px #00FFFF)',
                         'drop-shadow(0 0 10px #00FFFF)'
                       ]
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  
-                  {/* THERION Logo */}
-                  <motion.img
-                    src="/Therion.png"
-                    alt="THERION AI"
-                    className="h-12 w-12"
-                    animate={{ 
-                      rotate: [0, 360],
-                      scale: [1, 1.05, 1]
-                    }}
-                    transition={{ 
-                      rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                      scale: { duration: 3, repeat: Infinity }
-                    }}
                   />
                 </motion.div>
                 
@@ -197,14 +185,14 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
                   animate={{ 
                     textShadow: [
                       '0 0 20px #00FFFF',
-                      '0 0 30px #FFFF00',
+                      '0 0 30px #00FFFF',
                       '0 0 20px #00FFFF'
                     ]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
                   className="text-5xl font-bold mb-4"
                   style={{
-                    background: 'linear-gradient(45deg, #00FFFF, #FFFF00)',
+                    background: 'linear-gradient(45deg, #00FFFF, #FFFFFF)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text'
