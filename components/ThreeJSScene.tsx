@@ -71,12 +71,12 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Enhanced living blobs with organic movement and personality
   const createLivingBlobs = (scene: THREE.Scene) => {
     const blobs = [];
-    const numBlobs = 15; // More blobs for richer environment
+    const numBlobs = 12; // Reduced from 15 for better performance and visual clarity
     
     for (let i = 0; i < numBlobs; i++) {
-      // Create unique blob geometry with varied complexity
+      // Create unique blob geometry with smaller, more contained sizes
       const geometry = new THREE.SphereGeometry(
-        0.3 + Math.random() * 0.8, // Size variation: 0.3 to 1.1
+        0.15 + Math.random() * 0.4, // Smaller size variation: 0.15 to 0.55
         20 + Math.floor(Math.random() * 12), // Segment variation: 20-32
         10 + Math.floor(Math.random() * 10)  // Ring variation: 10-20
       );
@@ -116,13 +116,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       const blob = new THREE.Mesh(geometry, material);
       
-      // More varied positioning in 3D space
-      const radius = 6 + Math.random() * 16; // Distance from center: 6-22 units
+      // More contained positioning in a sphere around center, avoiding floor
+      const radius = 4 + Math.random() * 8; // Distance from center: 4-12 units (reduced)
       const theta = Math.random() * Math.PI * 2; // Random angle
-      const phi = Math.random() * Math.PI; // Random elevation
+      const phi = Math.PI * 0.2 + Math.random() * Math.PI * 0.6; // Elevation: 20% to 80% of hemisphere (avoid floor)
       
       blob.position.x = radius * Math.sin(phi) * Math.cos(theta);
-      blob.position.y = (Math.random() - 0.5) * 20; // Y: -10 to 10
+      blob.position.y = Math.max(2, radius * Math.cos(phi)); // Ensure Y is always above 2 (floor level)
       blob.position.z = radius * Math.sin(phi) * Math.sin(theta);
       
       // Random initial rotation
@@ -130,8 +130,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       blob.rotation.y = Math.random() * Math.PI * 2;
       blob.rotation.z = Math.random() * Math.PI * 2;
       
-      // More varied scale
-      const scale = 0.4 + Math.random() * 1.2; // Scale: 0.4x to 1.6x
+      // Smaller scale variation
+      const scale = 0.6 + Math.random() * 0.8; // Scale: 0.6x to 1.4x (reduced)
       blob.scale.setScalar(scale);
       
       // Enhanced personality traits for more distinct behaviors
@@ -139,11 +139,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         // Movement behavior types
         behaviorType: Math.floor(Math.random() * 5), // 5 different behavior types
         
-        // Swimming behavior
-        swimSpeed: 0.2 + Math.random() * 0.8, // Speed: 0.2 to 1.0
+        // Swimming behavior with reduced range
+        swimSpeed: 0.2 + Math.random() * 0.6, // Speed: 0.2 to 0.8
         swimDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 0.6, // Slightly more Y movement
+          (Math.random() - 0.5) * 0.4, // Reduced Y movement to stay away from floor
           (Math.random() - 0.5) * 2
         ).normalize(),
         
@@ -167,15 +167,15 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           z: (Math.random() - 0.5) * 0.04
         },
         
-        // Orbital motion with more complexity
-        orbitRadius: 1 + Math.random() * 7,
+        // Orbital motion with smaller radius for containment
+        orbitRadius: 0.5 + Math.random() * 3, // Reduced orbit radius
         orbitSpeed: (Math.random() - 0.5) * 0.025,
         orbitAngle: Math.random() * Math.PI * 2,
-        orbitTilt: (Math.random() - 0.5) * Math.PI * 0.5, // Tilted orbits
+        orbitTilt: (Math.random() - 0.5) * Math.PI * 0.3, // Reduced tilt for containment
         
-        // Bobbing motion
+        // Bobbing motion with floor awareness
         bobSpeed: 0.5 + Math.random() * 1.5,
-        bobIntensity: 0.5 + Math.random() * 2.0,
+        bobIntensity: 0.3 + Math.random() * 1.0, // Reduced intensity
         
         // Original position for reference
         originalPosition: blob.position.clone(),
@@ -408,16 +408,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blobData;
         const timeWithOffset = time + userData.timeOffset;
         
-        // Behavior-based movement system
+        // Behavior-based movement system with containment
         switch (userData.behaviorType) {
           case 0: // Orbital swimmers
             {
               const orbitX = Math.cos(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
               const orbitZ = Math.sin(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
-              const orbitY = Math.sin(timeWithOffset * userData.orbitSpeed * 0.5 + userData.orbitTilt) * userData.orbitRadius * 0.3;
+              const orbitY = Math.sin(timeWithOffset * userData.orbitSpeed * 0.5 + userData.orbitTilt) * userData.orbitRadius * 0.2;
               
               blobData.mesh.position.x = userData.originalPosition.x + orbitX;
-              blobData.mesh.position.y = userData.originalPosition.y + orbitY;
+              blobData.mesh.position.y = Math.max(2, userData.originalPosition.y + orbitY); // Prevent floor clipping
               blobData.mesh.position.z = userData.originalPosition.z + orbitZ;
             }
             break;
@@ -425,25 +425,25 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           case 1: // Figure-8 swimmers
             {
               const swimTime = timeWithOffset * userData.swimSpeed;
-              const figureX = Math.sin(swimTime) * 4;
-              const figureZ = Math.sin(swimTime * 2) * 2;
-              const figureY = Math.cos(swimTime * 0.5) * 1.5;
+              const figureX = Math.sin(swimTime) * 2; // Reduced range
+              const figureZ = Math.sin(swimTime * 2) * 1; // Reduced range
+              const figureY = Math.cos(swimTime * 0.5) * 0.8; // Reduced range
               
               blobData.mesh.position.x = userData.originalPosition.x + figureX;
-              blobData.mesh.position.y = userData.originalPosition.y + figureY;
+              blobData.mesh.position.y = Math.max(2, userData.originalPosition.y + figureY);
               blobData.mesh.position.z = userData.originalPosition.z + figureZ;
             }
             break;
             
           case 2: // Pulsing floaters
             {
-              const pulseIntensity = userData.isPulser ? 3 : 1;
+              const pulseIntensity = userData.isPulser ? 1.5 : 0.8; // Reduced intensity
               const pulseX = Math.sin(timeWithOffset * 0.7) * pulseIntensity;
-              const pulseY = Math.cos(timeWithOffset * 0.5) * pulseIntensity;
+              const pulseY = Math.cos(timeWithOffset * 0.5) * pulseIntensity * 0.5; // Reduced Y movement
               const pulseZ = Math.sin(timeWithOffset * 0.9) * pulseIntensity;
               
               blobData.mesh.position.x = userData.originalPosition.x + pulseX;
-              blobData.mesh.position.y = userData.originalPosition.y + pulseY;
+              blobData.mesh.position.y = Math.max(2, userData.originalPosition.y + pulseY);
               blobData.mesh.position.z = userData.originalPosition.z + pulseZ;
             }
             break;
@@ -458,9 +458,9 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
                 direction.normalize();
               }
               
-              const swimDistance = timeWithOffset * userData.swimSpeed * 2;
+              const swimDistance = timeWithOffset * userData.swimSpeed * 1; // Reduced distance
               blobData.mesh.position.x = userData.originalPosition.x + direction.x * swimDistance;
-              blobData.mesh.position.y = userData.originalPosition.y + Math.sin(timeWithOffset * (userData.bobSpeed || 1)) * (userData.bobIntensity || 1);
+              blobData.mesh.position.y = Math.max(2, userData.originalPosition.y + Math.sin(timeWithOffset * (userData.bobSpeed || 1)) * (userData.bobIntensity || 0.5));
               blobData.mesh.position.z = userData.originalPosition.z + direction.z * swimDistance;
             }
             break;
@@ -468,11 +468,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           case 4: // Spiral swimmers
             {
               const spiralTime = timeWithOffset * userData.swimSpeed;
-              const spiralRadius = 2 + Math.sin(spiralTime * 0.3) * 2;
-              const spiralHeight = spiralTime * 0.5;
+              const spiralRadius = 1 + Math.sin(spiralTime * 0.3) * 1; // Reduced spiral radius
+              const spiralHeight = spiralTime * 0.25; // Reduced height change
               
               blobData.mesh.position.x = userData.originalPosition.x + Math.cos(spiralTime) * spiralRadius;
-              blobData.mesh.position.y = userData.originalPosition.y + Math.sin(spiralHeight) * 3;
+              blobData.mesh.position.y = Math.max(2, userData.originalPosition.y + Math.sin(spiralHeight) * 1.5);
               blobData.mesh.position.z = userData.originalPosition.z + Math.sin(spiralTime) * spiralRadius;
             }
             break;
@@ -484,11 +484,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
               const swimTimeZ = time * userData.swimSpeed * 1.1 + (userData.swimOffset || 0) * 0.8;
               
               const swimX = Math.sin(swimTimeX) * (userData.swimAmplitude || 1) * (userData.swimDirectionX || 1);
-              const swimY = Math.sin(swimTimeY) * (userData.swimAmplitude || 1) * 0.5 * (userData.swimDirectionY || 1);
+              const swimY = Math.sin(swimTimeY) * (userData.swimAmplitude || 1) * 0.3 * (userData.swimDirectionY || 1); // Reduced Y amplitude
               const swimZ = Math.cos(swimTimeZ) * (userData.swimAmplitude || 1) * (userData.swimDirectionZ || 1);
               
               blobData.mesh.position.x = userData.originalPosition.x + swimX;
-              blobData.mesh.position.y = userData.originalPosition.y + swimY;
+              blobData.mesh.position.y = Math.max(2, userData.originalPosition.y + swimY);
               blobData.mesh.position.z = userData.originalPosition.z + swimZ;
             }
         }
@@ -513,11 +513,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           blobData.mesh.scale.setScalar(breathing);
         }
         
-        // Hyperactive behavior - more erratic movement
+        // Hyperactive behavior - more erratic movement (reduced intensity)
         if (userData.isHyperactive) {
-          const jitter = 0.3;
+          const jitter = 0.15; // Reduced jitter
           blobData.mesh.position.x += (Math.random() - 0.5) * jitter;
-          blobData.mesh.position.y += (Math.random() - 0.5) * jitter;
+          blobData.mesh.position.y += Math.max(0, (Math.random() - 0.5) * jitter); // Prevent downward jitter
           blobData.mesh.position.z += (Math.random() - 0.5) * jitter;
         }
         
@@ -531,12 +531,20 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           }
         }
         
-        // Keep blobs within bounds and create wrapping effect
-        const maxDistance = 25;
-        if (blobData.mesh.position.length() > maxDistance) {
-          blobData.mesh.position.normalize().multiplyScalar(maxDistance);
-          // Randomly adjust original position to create variety
-          userData.originalPosition = blobData.mesh.position.clone();
+        // Keep blobs within containment sphere and above floor
+        const containmentRadius = 15; // Reduced containment radius
+        const currentPos = blobData.mesh.position;
+        const distanceFromCenter = currentPos.length();
+        
+        if (distanceFromCenter > containmentRadius) {
+          currentPos.normalize().multiplyScalar(containmentRadius);
+          userData.originalPosition = currentPos.clone();
+        }
+        
+        // Floor prevention
+        if (currentPos.y < 2) {
+          currentPos.y = 2;
+          userData.originalPosition.y = Math.max(2, userData.originalPosition.y);
         }
       });
     }
