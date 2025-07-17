@@ -2,7 +2,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
     ArrowLeft,
     ArrowRight,
+    BarChart3,
     Home,
+    Mail,
+    ShoppingCart,
     Users,
     Zap
 } from 'lucide-react';
@@ -11,9 +14,9 @@ import LoadingScreen from './components/LoadingScreen';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import accurate content components
-import { AccurateCTASection } from "./components/AccurateCTASection";
 import { AccurateHeroSection } from "./components/AccurateHeroSection";
 import { AccuratePlatformFeatures } from "./components/AccuratePlatformFeatures";
+import { AccurateCTASection } from "./components/AccurateCTASection";
 import { Footer } from "./components/Footer";
 import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
 import { WebVitalsMonitor } from "./components/WebVitalsMonitor";

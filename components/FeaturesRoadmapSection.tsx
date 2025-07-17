@@ -1,90 +1,92 @@
 import { motion } from 'framer-motion';
-import {
-    AlertCircle,
-    CheckCircle,
-    Clock,
-    Heart,
-    Lightbulb,
-    Palette,
-    PenTool,
-    Sparkles,
-    Star,
-    Video
+import { 
+  Cpu, 
+  Database, 
+  Shield, 
+  Zap,
+  GitBranch,
+  Bot,
+  Globe,
+  Rocket,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+  Star
 } from 'lucide-react';
 import { VideoPlaceholder } from './VideoPlaceholder';
 
 export const FeaturesRoadmapSection = () => {
   const coreFeatures = [
     {
-      icon: <Palette className="h-8 w-8" />,
-      title: "AI Creative Assistant",
-      description: "Intelligent design suggestions, style matching, and creative ideation",
+      icon: <Bot className="h-8 w-8" />,
+      title: "AI-Powered Development",
+      description: "Intelligent code generation, optimization, and debugging assistance",
       status: "live",
       details: [
-        "AI-powered design suggestions",
-        "Style transfer and matching", 
-        "Creative brainstorming tools",
-        "Automatic asset generation"
+        "GPT-4 integrated coding assistant",
+        "Automated code review and optimization", 
+        "Intelligent error detection and fixes",
+        "AI-powered documentation generation"
       ]
     },
     {
-      icon: <Video className="h-8 w-8" />,
-      title: "Media Production Suite",
-      description: "Professional video, audio, and image editing with AI enhancement",
+      icon: <Database className="h-8 w-8" />,
+      title: "Distributed Computing",
+      description: "Scale your AI workloads across global cloud infrastructure",
       status: "live", 
       details: [
-        "Intelligent video editing",
-        "Voice synthesis and effects",
-        "Image enhancement tools",
-        "Multi-format optimization"
+        "Auto-scaling compute clusters",
+        "GPU/TPU resource allocation",
+        "Global edge computing nodes",
+        "Real-time load balancing"
       ]
     },
     {
-      icon: <PenTool className="h-8 w-8" />,
-      title: "Creative Writing Tools",
-      description: "AI-assisted writing, research, and content optimization",
+      icon: <GitBranch className="h-8 w-8" />,
+      title: "Version Control Plus",
+      description: "Advanced version control with AI model versioning and experiments",
       status: "live",
       details: [
-        "Writing assistance and enhancement",
-        "Research and fact-checking",
-        "Style adaptation tools", 
-        "Publishing workflow automation"
+        "Git integration with AI enhancements",
+        "ML model version tracking",
+        "Experiment branch management", 
+        "Automated testing pipelines"
       ]
     },
     {
-      icon: <Lightbulb className="h-8 w-8" />,
-      title: "Idea Development Platform",
-      description: "Turn concepts into reality with rapid prototyping tools",
+      icon: <Shield className="h-8 w-8" />,
+      title: "Enterprise Security",
+      description: "Military-grade security for your most sensitive AI projects",
       status: "live",
       details: [
-        "Concept visualization tools",
-        "Rapid prototyping environment",
-        "Market validation assistance",
-        "Collaborative ideation spaces"
+        "End-to-end encryption",
+        "Zero-trust architecture",
+        "SOC 2 Type II compliance",
+        "Advanced threat detection"
       ]
     },
     {
-      icon: <Heart className="h-8 w-8" />,
-      title: "Creative Community Hub",
-      description: "Share, collaborate, and inspire within the creative ecosystem",
+      icon: <Globe className="h-8 w-8" />,
+      title: "Community Marketplace",
+      description: "Share, discover, and monetize AI tools and models",
       status: "beta",
       details: [
-        "Creative project sharing",
-        "Collaboration tools",
-        "Community challenges",
-        "Cross-disciplinary networking"
+        "AI model marketplace",
+        "Tool and extension sharing",
+        "Revenue sharing for contributors",
+        "Community-driven development"
       ]
     },
     {
-      icon: <Sparkles className="h-8 w-8" />,
-      title: "AI-Powered Creativity Engine",
-      description: "Next-generation creative AI that evolves with your artistic style",
+      icon: <Zap className="h-8 w-8" />,
+      title: "Quantum Integration",
+      description: "Future-ready quantum computing integration for advanced AI",
       status: "planned",
       details: [
-        "Personalized AI creativity models",
-        "Style evolution tracking",
-        "Cross-medium inspiration",
-        "Advanced creative algorithms"
+        "Quantum-classical hybrid computing",
+        "Quantum machine learning algorithms",
+        "Quantum simulation environments",
+        "Advanced quantum optimization"
       ]
     }
   ];
@@ -92,50 +94,50 @@ export const FeaturesRoadmapSection = () => {
   const roadmapItems = [
     {
       quarter: "Q2 2025",
-      title: "Enhanced Creative AI",
-      description: "Advanced multimodal AI for visual and audio creativity",
+      title: "Enhanced AI Assistant",
+      description: "Advanced multimodal AI with vision and code understanding",
       status: "in-progress",
       features: [
-        "Vision-based creative analysis",
-        "Natural language to visual conversion",
-        "Advanced style transfer",
-        "Multi-media creative assistance"
+        "Vision-based code analysis",
+        "Natural language to code conversion",
+        "Advanced debugging assistance",
+        "Multi-language support expansion"
       ]
     },
     {
       quarter: "Q3 2025", 
-      title: "Creative Marketplace Launch",
-      description: "Full creative community marketplace with monetization",
+      title: "Marketplace Launch",
+      description: "Full community marketplace with monetization",
       status: "planned",
       features: [
-        "Creative asset trading platform",
-        "Template and tool marketplace",
-        "Revenue sharing for creators",
+        "AI model trading platform",
+        "Tool marketplace launch",
+        "Revenue sharing system",
         "Creator incentive programs"
       ]
     },
     {
       quarter: "Q4 2025",
-      title: "Mobile Creative Suite",
-      description: "Native mobile apps for on-the-go creative work",
+      title: "Mobile Development",
+      description: "Native mobile apps for on-the-go development",
       status: "planned", 
       features: [
-        "iOS and Android creative apps",
-        "Mobile design and editing tools",
-        "Offline creative capabilities",
-        "Cloud sync for all projects"
+        "iOS and Android apps",
+        "Mobile code editor",
+        "Offline development capabilities",
+        "Cloud sync optimization"
       ]
     },
     {
       quarter: "Q1 2026",
-      title: "AI Creative Evolution",
-      description: "Personalized AI that learns and evolves with your style",
+      title: "Quantum Computing",
+      description: "Integration with quantum computing platforms",
       status: "research",
       features: [
-        "Personal creative AI models",
-        "Style evolution tracking",
-        "Creative preference learning",
-        "Advanced artistic collaboration"
+        "Quantum simulator access",
+        "Hybrid computing workflows",
+        "Quantum ML algorithms",
+        "Research collaboration tools"
       ]
     }
   ];
@@ -156,14 +158,14 @@ export const FeaturesRoadmapSection = () => {
       case 'live': return <CheckCircle className="h-5 w-5" />;
       case 'beta': return <Star className="h-5 w-5" />;
       case 'in-progress': return <Clock className="h-5 w-5" />;
-      case 'planned': return <Lightbulb className="h-5 w-5" />;
+      case 'planned': return <Rocket className="h-5 w-5" />;
       case 'research': return <AlertCircle className="h-5 w-5" />;
       default: return <Clock className="h-5 w-5" />;
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 pb-32">
+    <div className="min-h-screen flex items-center justify-center p-6">
       <div className="max-w-7xl mx-auto space-y-20">
         
         {/* Header */}
@@ -177,34 +179,18 @@ export const FeaturesRoadmapSection = () => {
             className="text-5xl md:text-6xl font-bold mb-6 text-white"
             style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
           >
-            Creative Tools &{' '}
+            Features &{' '}
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              Evolving Features
+              Roadmap
             </span>
           </h1>
           <p 
-            className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8"
+            className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
             style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}
           >
-            Creative tools that grow with you. As AI evolves, so do our features - 
-            constantly improving and adapting to serve the creative community.
+            From cutting-edge AI assistance to quantum computing integration, 
+            see what's available now and what's coming next.
           </p>
-
-          {/* Rolling Features Philosophy */}
-          <div className="max-w-4xl mx-auto bg-black/20 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center">
-                <Heart className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-white">Power to the People</h3>
-            </div>
-            <p className="text-gray-300 leading-relaxed">
-              We believe creativity shouldn't be locked behind corporate gates. Our rolling feature updates 
-              bring you the latest AI capabilities as they emerge, not when quarterly releases allow. 
-              As the AI ecosystem matures, your creative tools evolve with it - automatically, transparently, 
-              and always in service of your creative vision.
-            </p>
-          </div>
         </motion.div>
 
         {/* Core Features */}

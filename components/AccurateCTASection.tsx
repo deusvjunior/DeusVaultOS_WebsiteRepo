@@ -1,16 +1,16 @@
 import { motion } from "framer-motion";
-import {
-    ArrowRight,
-    Code,
-    Coins,
-    Download,
-    Globe,
-    Heart,
-    Users,
-    Zap
+import { 
+  Download, 
+  ArrowRight, 
+  Users, 
+  Coins, 
+  Code, 
+  Heart,
+  Globe,
+  Zap
 } from "lucide-react";
-import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 import { VideoPlaceholder } from "./VideoPlaceholder";
 
 export function AccurateCTASection() {

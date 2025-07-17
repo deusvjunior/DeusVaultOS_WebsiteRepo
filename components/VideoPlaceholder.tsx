@@ -1,111 +1,85 @@
-import { motion } from 'framer-motion';
-import { Play, Video } from 'lucide-react';
-import { useState } from 'react';
+import { Play, Volume2 } from "lucide-react";
+import { useState } from "react";
 
 interface VideoPlaceholderProps {
-  placeholder: string;
-  aspectRatio?: '16:9' | '4:3' | '1:1';
+  className?: string;
+  aspectRatio?: "16:9" | "1:1" | "4:3";
   autoplay?: boolean;
   loop?: boolean;
+  muted?: boolean;
+  placeholder?: string;
   overlay?: boolean;
-  className?: string;
 }
 
-export const VideoPlaceholder = ({ 
-  placeholder, 
-  aspectRatio = '16:9', 
-  autoplay = false, 
-  loop = false, 
-  overlay = true,
-  className = ''
-}: VideoPlaceholderProps) => {
-  const [isPlaying, setIsPlaying] = useState(false); // Never autoplay
+export function VideoPlaceholder({ 
+  className = "", 
+  aspectRatio = "16:9", 
+  autoplay = true,
+  loop = true,
+  muted = true,
+  placeholder = "Demo Video Placeholder",
+  overlay = false
+}: VideoPlaceholderProps) {
   const [isHovered, setIsHovered] = useState(false);
-
-  const aspectRatioClasses = {
-    '16:9': 'aspect-video',
-    '4:3': 'aspect-[4/3]',
-    '1:1': 'aspect-square'
-  };
-
-  const handlePlay = () => {
-    setIsPlaying(true);
+  
+  const aspectClasses = {
+    "16:9": "aspect-video",
+    "1:1": "aspect-square", 
+    "4:3": "aspect-[4/3]"
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6 }}
-      className={`relative ${aspectRatioClasses[aspectRatio]} bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden group cursor-pointer ${className}`}
-      onClick={handlePlay}
+    <div 
+      className={`relative ${aspectClasses[aspectRatio]} bg-gradient-to-br from-cyan-900/20 to-purple-900/20 rounded-xl overflow-hidden border border-cyan-400/30 ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 to-purple-900/20" />
+      {/* Video Background Pattern */}
+      <div className="absolute inset-0 bg-black/40">
+        <div className="absolute inset-0 opacity-30">
+          <div className="w-full h-full bg-gradient-to-r from-cyan-400/10 via-transparent to-purple-400/10" />
+          <div className="absolute inset-0 bg-dots-pattern opacity-20" />
+        </div>
+      </div>
       
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]" />
-      </div>
-
-      {/* Play Button Overlay */}
-      {!isPlaying && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="absolute inset-0 flex items-center justify-center"
-        >
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className={`bg-white/20 backdrop-blur-md rounded-full p-6 border border-white/30 transition-all duration-300 ${isHovered ? 'bg-white/30' : ''}`}
-          >
-            <Play className="h-8 w-8 text-white ml-1" fill="currentColor" />
-          </motion.div>
-        </motion.div>
-      )}
-
-      {/* Video Icon */}
-      <div className="absolute top-4 left-4">
-        <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2">
-          <Video className="h-4 w-4 text-white/80" />
-        </div>
-      </div>
-
-      {/* Duration Badge */}
-      <div className="absolute top-4 right-4">
-        <div className="bg-black/40 backdrop-blur-sm rounded-lg px-2 py-1">
-          <span className="text-white/80 text-xs font-medium">2:45</span>
-        </div>
-      </div>
-
-      {/* Title Overlay */}
-      {overlay && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-          <h3 className="text-white font-semibold text-lg mb-1">{placeholder}</h3>
-          <p className="text-gray-300 text-sm">Click to play video</p>
-        </div>
-      )}
-
-      {/* Playing State */}
-      {isPlaying && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 bg-black flex items-center justify-center"
-        >
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-white">Loading video...</p>
+      {/* Content */}
+      <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="text-center">
+          {/* Play Button */}
+          <div className={`w-16 h-16 rounded-full bg-cyan-400/20 backdrop-blur-sm border border-cyan-400/50 flex items-center justify-center mb-4 mx-auto transition-all duration-300 ${isHovered ? 'scale-110 bg-cyan-400/30' : ''}`}>
+            <Play className="h-8 w-8 text-cyan-400 ml-1" fill="currentColor" />
           </div>
-        </motion.div>
+          
+          {/* Video Info */}
+          <div className="backdrop-blur-sm bg-black/20 rounded-lg p-3 border border-white/10">
+            <p className="text-sm text-white font-medium" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}>
+              {placeholder}
+            </p>
+            <p className="text-xs text-gray-300" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}>
+              Video will be replaced with actual content
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Overlay Effects */}
+      {overlay && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
       )}
-
-      {/* Shimmer Effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-    </motion.div>
+      
+      {/* Video Controls Indicator */}
+      <div className="absolute bottom-4 right-4 flex gap-2">
+        {autoplay && (
+          <div className="w-6 h-6 rounded bg-green-500/20 border border-green-400/40 flex items-center justify-center">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+          </div>
+        )}
+        {muted && (
+          <div className="w-6 h-6 rounded bg-gray-500/20 border border-gray-400/40 flex items-center justify-center">
+            <Volume2 className="h-3 w-3 text-gray-400" />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };

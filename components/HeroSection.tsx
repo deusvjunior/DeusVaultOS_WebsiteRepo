@@ -1,16 +1,15 @@
 import { motion } from 'framer-motion';
-import {
-    ChevronRight,
-    Cpu,
-    Download,
-    Github,
-    Infinity,
-    Layers,
-    Shield,
-    Sparkles,
-    Zap
+import { 
+  Sparkles, 
+  Infinity, 
+  Cpu, 
+  Shield, 
+  Layers,
+  Zap,
+  Download,
+  Github,
+  ChevronRight
 } from 'lucide-react';
-import ReadableContainer from './ReadableContainer';
 
 export function HeroSection() {
   return (
@@ -34,7 +33,7 @@ export function HeroSection() {
           <div className="inline-flex items-center gap-3 glass-refined rounded-lg px-8 py-4 border border-cyber-cyan/50 relative">
             <Sparkles className="h-6 w-6 text-cyber-cyan" />
             <span className="font-mono text-lg font-bold text-cyber-cyan tracking-wider">
-              AI-POWERED CREATIVITY
+              SELF-EVOLVING OS
             </span>
             <ChevronRight className="h-5 w-5 text-cyber-cyan" />
           </div>
@@ -48,23 +47,21 @@ export function HeroSection() {
           className="space-y-6"
         >
           <h1 className="font-display text-5xl lg:text-8xl text-gradient leading-tight relative">
-            <span className="block">The Creative Environment</span>
+            <span className="block">The Development Environment</span>
             <span className="block relative">
               That{" "}
-              <span className="text-cyber-cyan">Evolves With You</span>
+              <span className="text-cyber-cyan">Built Itself</span>
             </span>
           </h1>
           
-          <ReadableContainer transparency="medium" className="max-w-4xl mx-auto">
-            <p className="font-subtitle text-xl lg:text-2xl text-white leading-relaxed">
-              DeusVaultOS is a revolutionary creative platform that amplifies{" "}
-              <span className="text-cyber-mint-bright font-semibold">your vision</span>,{" "}
-              <span className="text-cyber-yellow font-semibold">your tools</span>, with{" "}
-              <span className="text-cyber-cyan font-semibold">infinite possibility</span>.
-              <br />
-              Built by creators, for minds that shape the future.
-            </p>
-          </ReadableContainer>
+          <p className="font-subtitle text-xl lg:text-2xl text-cyber-dark-200 max-w-4xl mx-auto leading-relaxed">
+            Deus Vault is a revolutionary Linux-based development environment that runs{" "}
+            <span className="text-cyber-mint-bright font-semibold">any OS</span>,{" "}
+            <span className="text-cyber-yellow font-semibold">any app</span>, with{" "}
+            <span className="text-cyber-cyan font-semibold">perfect compatibility</span>.
+            <br />
+            Built by AI, for developers who demand the impossible.
+          </p>
         </motion.div>
 
       </motion.div>
@@ -82,10 +79,10 @@ export function HeroSection() {
             <Infinity className="h-8 w-8 text-cyber-cyan" />
           </div>
           <h3 className="font-title text-xl text-cyber-white mb-4 group-hover:text-cyber-cyan transition-colors">
-            Infinite Creative Tools
+            Universal Compatibility
           </h3>
           <p className="font-body text-cyber-dark-300 group-hover:text-cyber-dark-200 transition-colors">
-            Access any creative application, any workflow, any medium. All your tools in one place.
+            Run Windows, macOS, and Linux applications natively. Perfect compatibility, zero compromises.
           </p>
         </div>
 
@@ -94,10 +91,10 @@ export function HeroSection() {
             <Cpu className="h-8 w-8 text-cyber-mint-bright" />
           </div>
           <h3 className="font-title text-xl text-cyber-white mb-4 group-hover:text-cyber-mint-bright transition-colors">
-            AI Creative Partner
+            AI-Powered Core
           </h3>
           <p className="font-body text-cyber-dark-300 group-hover:text-cyber-dark-200 transition-colors">
-            Intelligent assistance that learns your style and amplifies your creative vision.
+            Self-optimizing architecture that learns and evolves. Better performance with every use.
           </p>
         </div>
 
@@ -106,10 +103,10 @@ export function HeroSection() {
             <Shield className="h-8 w-8 text-cyber-yellow" />
           </div>
           <h3 className="font-title text-xl text-cyber-white mb-4 group-hover:text-cyber-yellow transition-colors">
-            Your Creative Vault
+            Enterprise Security
           </h3>
           <p className="font-body text-cyber-dark-300 group-hover:text-cyber-dark-200 transition-colors">
-            Secure, private creative space. Your ideas, your work, completely under your control.
+            Military-grade security with quantum-resistant encryption. Your code, completely protected.
           </p>
         </div>
 

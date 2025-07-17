@@ -1,14 +1,18 @@
 import { motion } from "framer-motion";
-import {
-    Brain,
-    CheckCircle,
-    Coins,
-    Database,
-    Users,
-    Zap
+import { 
+  Brain, 
+  Coins, 
+  Users, 
+  Shield, 
+  Zap,
+  Database,
+  Network,
+  Code,
+  ArrowRight,
+  CheckCircle
 } from "lucide-react";
-import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
+import { Badge } from "./ui/badge";
 import { VideoPlaceholder } from "./VideoPlaceholder";
 
 export function AccuratePlatformFeatures() {

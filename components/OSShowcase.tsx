@@ -1,19 +1,19 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import {
-    Brain,
-    Code,
-    Eye,
-    Gamepad2,
-    Maximize2,
-    Monitor,
-    Play
-} from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { InteractiveElement } from './InteractiveElement';
-import { ReadableContainer } from './ReadableContainer';
+import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import { 
+  Play, 
+  Maximize2, 
+  Terminal, 
+  Code, 
+  Gamepad2, 
+  Brain,
+  Monitor,
+  Eye
+} from 'lucide-react';
 
 export function OSShowcase() {
   const [activeDemo, setActiveDemo] = useState(0);
@@ -381,11 +381,9 @@ export function OSShowcase() {
             <h2 className="text-4xl md:text-6xl mb-6 bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
               See Deus Vault in Action
             </h2>
-            <ReadableContainer transparency="medium" className="max-w-3xl mx-auto">
-              <p className="text-xl text-white">
-                This isn't just a concept - it's your new reality. Watch the OS that thinks, learns, and evolves.
-              </p>
-            </ReadableContainer>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              This isn't just a concept - it's your new reality. Watch the OS that thinks, learns, and evolves.
+            </p>
           </motion.div>
         </InteractiveElement>
 

@@ -3,26 +3,26 @@ import {
     ArrowLeft,
     ArrowRight,
     Home,
-    Map,
-    MessageCircle,
-    Target,
     Users,
-    Zap
+    Zap,
+    Target,
+    Map,
+    MessageCircle
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import LoadingScreenCyberpunk from './components/LoadingScreenCyberpunk';
+import LoadingScreen from './components/LoadingScreen';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import accurate content components
-import { AccurateCTASection } from "./components/AccurateCTASection";
 import { AccurateHeroSection } from "./components/AccurateHeroSection";
 import { AccuratePlatformFeatures } from "./components/AccuratePlatformFeatures";
-import { ContactSection } from "./components/ContactSection";
+import { AccurateCTASection } from "./components/AccurateCTASection";
+import { WhoIsThisForSection } from "./components/WhoIsThisForSection";
 import { FeaturesRoadmapSection } from "./components/FeaturesRoadmapSection";
+import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
 import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
 import { WebVitalsMonitor } from "./components/WebVitalsMonitor";
-import { WhoIsThisForSection } from "./components/WhoIsThisForSection";
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -128,14 +128,16 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [sections.length]);
 
-  // Auto-advance disabled per user request
-  // useEffect(() => {
-  //   if (reducedMotion) return;
-  //   const interval = setInterval(() => {
-  //     setCurrentSection((prev: number) => (prev + 1) % sections.length);
-  //   }, 45000);
-  //   return () => clearInterval(interval);
-  // }, [reducedMotion, sections.length]);
+  // Auto-advance sections (slower timing)
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    const interval = setInterval(() => {
+      setCurrentSection((prev: number) => (prev + 1) % sections.length);
+    }, 20000); // 20 seconds per section
+
+    return () => clearInterval(interval);
+  }, [reducedMotion, sections.length]);
 
   const nextSection = () => {
     setCurrentSection((prev: number) => (prev + 1) % sections.length);
@@ -150,7 +152,7 @@ export default function App() {
   };
 
   if (isLoading) {
-    return <LoadingScreenCyberpunk onLoadingComplete={() => setIsLoading(false)} />;
+    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
   }
 
   return (
@@ -165,7 +167,6 @@ export default function App() {
       {/* 3D Background Scene - Enhanced visibility */}
       <div className="fixed inset-0 z-0">
         <ThreeJSScene
-          pageIndex={currentSection}
           currentSection={currentSection}
           reducedMotion={reducedMotion}
         />
@@ -273,21 +274,15 @@ export default function App() {
         </div>
       </motion.div>
 
-      {/* Content Area - Properly spaced for header */}
-      <div className="relative z-20 pt-20">
+      {/* Content Area - Much more transparent */}
+      <div className="relative z-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSection}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ 
-              duration: 1.2, 
-              ease: "easeInOut",
-              opacity: { duration: 0.8 },
-              y: { duration: 1.0 }
-            }}
-            className="min-h-screen"
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
           >
             {sections[currentSection].component}
           </motion.div>

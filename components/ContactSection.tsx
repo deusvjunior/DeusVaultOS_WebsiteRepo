@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
-import {
-    ArrowRight,
-    Calendar,
-    Github,
-    Linkedin,
-    Mail,
-    MapPin,
-    MessageCircle,
-    Phone,
-    Send,
-    Twitter
+import { 
+  Mail, 
+  MessageCircle, 
+  Calendar,
+  MapPin,
+  Phone,
+  Github,
+  Twitter,
+  Linkedin,
+  Send,
+  ArrowRight
 } from 'lucide-react';
 import { useState } from 'react';
 import { VideoPlaceholder } from './VideoPlaceholder';
@@ -41,36 +41,38 @@ export const ContactSection = () => {
     {
       icon: <Mail className="h-6 w-6" />,
       title: "Email Us",
-      description: "Share your creative vision with us",
-      contact: "create@deusvaultos.com",
-      action: "mailto:create@deusvaultos.com",
-      gradient: "from-cyan-400 to-blue-500"
+      description: "Get in touch for general inquiries",
+      contact: "hello@deusvaultos.com",
+      action: "mailto:hello@deusvaultos.com",
+      gradient: "from-blue-400 to-cyan-500"
     },
     {
       icon: <MessageCircle className="h-6 w-6" />,
       title: "Live Chat",
-      description: "Chat with our creative community team",
+      description: "Chat with our team in real-time",
       contact: "Available 24/7",
       action: "#",
       gradient: "from-green-400 to-emerald-500"
     },
     {
       icon: <Calendar className="h-6 w-6" />,
-      title: "Creative Demo",
-      description: "See the platform in action for creators",
+      title: "Schedule Demo",
+      description: "Book a personalized platform demo",
       contact: "30-minute sessions",
       action: "#",
       gradient: "from-purple-400 to-pink-500"
     },
     {
       icon: <Phone className="h-6 w-6" />,
-      title: "Creative Studios",
-      description: "Discuss solutions for creative teams",
-      contact: "+1 (555) 123-CREATE",
-      action: "tel:+15551232732",
+      title: "Enterprise Sales",
+      description: "Discuss enterprise solutions",
+      contact: "+1 (555) 123-4567",
+      action: "tel:+15551234567",
       gradient: "from-orange-400 to-red-500"
     }
-  ];  const socialLinks = [
+  ];
+
+  const socialLinks = [
     { icon: <Github className="h-5 w-5" />, label: "GitHub", url: "https://github.com/deusvaultos" },
     { icon: <Twitter className="h-5 w-5" />, label: "Twitter", url: "https://twitter.com/deusvaultos" },
     { icon: <Linkedin className="h-5 w-5" />, label: "LinkedIn", url: "https://linkedin.com/company/deusvaultos" }
@@ -95,7 +97,7 @@ export const ContactSection = () => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 pb-32">
+    <div className="min-h-screen flex items-center justify-center p-6">
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Header */}
@@ -118,7 +120,7 @@ export const ContactSection = () => {
             className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
             style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}
           >
-            Ready to amplify your creative potential? We're here to help you unlock new possibilities.
+            Ready to revolutionize your AI development workflow? We're here to help you get started.
           </p>
         </motion.div>
 

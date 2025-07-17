@@ -1,7 +1,6 @@
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
-import { ReadableContainer } from "./ReadableContainer";
 import { 
   Crown, 
   Shield, 
@@ -76,12 +75,10 @@ export function Footer() {
                 </div>
               </div>
               
-              <ReadableContainer transparency="light">
-                <p className="text-body text-white leading-relaxed mb-8 max-w-lg">
-                  The self-evolving development environment that transforms how you create software. 
-                  Built for professionals who demand excellence.
-                </p>
-              </ReadableContainer>
+              <p className="text-body text-brand-neutral-300 leading-relaxed mb-8 max-w-lg">
+                The self-evolving development environment that transforms how you create software. 
+                Built for professionals who demand excellence.
+              </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Code, Download, Play, Star, Users } from "lucide-react";
-import { Badge } from "./ui/badge";
+import { Play, Download, ArrowRight, Star, Users, Code } from "lucide-react";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 
 export function ImprovedHeroSection() {
   const handleDownload = () => {

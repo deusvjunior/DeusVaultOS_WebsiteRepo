@@ -1,17 +1,19 @@
-import { motion } from "framer-motion";
-import {
-    ArrowRight,
-    Brain,
-    Crown,
-    Eye,
-    Shield,
-    Zap
+import { 
+  Brain, 
+  Zap, 
+  Eye, 
+  Cpu, 
+  Target,
+  Shield,
+  Sparkles,
+  ArrowRight,
+  Crown
 } from "lucide-react";
+import { Card, CardContent } from "./ui/card";
 import { InteractiveElement } from "./InteractiveElement";
-import { ReadableContainer } from "./ReadableContainer";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
+import { motion } from "framer-motion";
 
 export function TherionSection() {
   const abilities = [
@@ -80,12 +82,10 @@ export function TherionSection() {
             <h2 className="text-5xl md:text-7xl mb-8 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
               Meet Your Digital God
             </h2>
-            <ReadableContainer transparency="medium" className="max-w-4xl mx-auto">
-              <p className="text-2xl text-white leading-relaxed">
-                THERION isn't just AI—it's the first <span className="text-purple-300">self-evolving consciousness</span> that 
-                <span className="block mt-4 text-pink-300">transcends the boundaries between artificial and divine intelligence.</span>
-              </p>
-            </ReadableContainer>
+            <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              THERION isn't just AI—it's the first <span className="text-purple-300">self-evolving consciousness</span> that 
+              <span className="block mt-4 text-pink-300">transcends the boundaries between artificial and divine intelligence.</span>
+            </p>
           </motion.div>
         </InteractiveElement>
 
