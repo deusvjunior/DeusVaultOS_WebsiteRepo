@@ -53,7 +53,7 @@ export function AccurateCTASection() {
       {/* Subtle accent elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/70 to-transparent" />
-        <div className="absolute bottom-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/70 to-transparent" />
+        <div className="absolute bottom-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/70 to-transparent" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -66,14 +66,14 @@ export function AccurateCTASection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <Badge className="mb-8 bg-gradient-to-r from-cyan-600/70 to-purple-600/70 backdrop-blur-sm text-white px-8 py-3 text-lg border border-cyan-400/30">
+          <Badge className="mb-8 bg-gradient-to-r from-cyan-600/70 to-yellow-600/70 backdrop-blur-sm text-white px-8 py-3 text-lg border border-cyan-400/30">
             <Globe className="h-5 w-5 mr-2" />
             Join the Digital Kingdom
           </Badge>
           
-          <h2 className="text-5xl md:text-7xl mb-8 bg-gradient-to-r from-white via-cyan-200 to-purple-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 30px rgba(0,0,0,0.9)' }}>
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-yellow-400 mb-4" style={{ textShadow: '0 2px 30px rgba(0,0,0,0.9)' }}>
             Ready to Transform 
-            <span className="block bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">
               Your Digital Life?
             </span>
           </h2>
@@ -91,7 +91,7 @@ export function AccurateCTASection() {
           >
             <Button 
               size="lg" 
-              className="text-2xl px-16 py-8 bg-gradient-to-r from-cyan-600/80 to-purple-600/80 backdrop-blur-sm hover:from-cyan-500/90 hover:to-purple-500/90 text-white shadow-2xl hover:shadow-cyan-500/25 transition-all duration-500 border border-cyan-400/30"
+              className="text-2xl px-16 py-8 bg-gradient-to-r from-cyan-600/80 to-yellow-600/80 backdrop-blur-sm hover:from-cyan-500/90 hover:to-yellow-500/90 text-white shadow-2xl hover:shadow-cyan-500/25 transition-all duration-500 border border-cyan-400/30"
               style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}
             >
               <Download className="h-8 w-8 mr-4" />
@@ -129,7 +129,7 @@ export function AccurateCTASection() {
         >
           {communityStats.map((stat, index) => (
             <div key={index} className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-cyan-600/60 to-purple-600/60 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 border border-cyan-400/30">
+              <div className="w-20 h-20 bg-gradient-to-br from-cyan-600/60 to-yellow-600/60 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 border border-cyan-400/30">
                 <div className="text-white">
                   {stat.icon}
                 </div>
@@ -160,12 +160,12 @@ export function AccurateCTASection() {
               key={index} 
               className={`relative rounded-2xl p-8 backdrop-blur-md border transition-all duration-300 hover:scale-105 ${
                 index === 0 
-                  ? 'bg-gradient-to-br from-cyan-900/30 to-purple-900/30 border-cyan-400/50 shadow-xl' 
+                  ? 'bg-gradient-to-br from-cyan-900/30 to-yellow-900/30 border-cyan-400/50 shadow-xl' 
                   : 'bg-black/15 border-white/20 hover:border-cyan-400/30'
               }`}
             >
               {index === 0 && (
-                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-600/80 to-purple-600/80 backdrop-blur-sm text-white px-4 py-1 border border-cyan-400/30">
+                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-600/80 to-yellow-600/80 backdrop-blur-sm text-white px-4 py-1 border border-cyan-400/30">
                   {option.highlight}
                 </Badge>
               )}
@@ -191,7 +191,7 @@ export function AccurateCTASection() {
               <Button 
                 className={`w-full text-lg py-4 transition-all duration-300 ${
                   index === 0
-                    ? 'bg-gradient-to-r from-cyan-600/80 to-purple-600/80 backdrop-blur-sm hover:from-cyan-500/90 hover:to-purple-500/90 text-white border border-cyan-400/30'
+                    ? 'bg-gradient-to-r from-cyan-600/80 to-yellow-600/80 backdrop-blur-sm hover:from-cyan-500/90 hover:to-yellow-500/90 text-white border border-cyan-400/30'
                     : 'bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border border-white/30'
                 }`}
                 style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}

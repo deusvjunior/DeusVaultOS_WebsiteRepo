@@ -36,7 +36,7 @@ export function AccurateHeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Badge className="bg-gradient-to-r from-cyan-600/70 to-purple-600/70 backdrop-blur-sm px-6 py-3 text-white border border-cyan-400/30">
+              <Badge className="bg-gradient-to-r from-cyan-600/70 to-yellow-600/70 backdrop-blur-sm px-6 py-3 text-white border border-cyan-400/30">
                 <Cpu className="h-4 w-4 mr-2" />
                 DeusVault OS AI Platform - Open Source Rolling Release
               </Badge>
@@ -50,11 +50,11 @@ export function AccurateHeroSection() {
               className="space-y-4 sm:space-y-6"
             >
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-tight font-bold">
-                <span className="bg-gradient-to-r from-white via-cyan-200 to-purple-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 30px rgba(0,0,0,0.9)' }}>
+                <span className="bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 30px rgba(0,0,0,0.9)' }}>
                   The AI Platform
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent" style={{ textShadow: '0 2px 30px rgba(0,0,0,0.9)' }}>
+                <span className="bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent" style={{ textShadow: '0 2px 30px rgba(0,0,0,0.9)' }}>
                   That Builds Itself
                 </span>
               </h1>
@@ -99,7 +99,7 @@ export function AccurateHeroSection() {
             >
               <Button 
                 size="lg"
-                className="text-lg px-8 py-6 bg-gradient-to-r from-cyan-600/80 to-purple-600/80 backdrop-blur-sm text-white border border-cyan-400/30 hover:scale-105 transition-all duration-300"
+                className="text-lg px-8 py-6 bg-gradient-to-r from-cyan-600/80 to-yellow-600/80 backdrop-blur-sm text-white border border-cyan-400/30 hover:scale-105 transition-all duration-300"
                 style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}
               >
                 <Download className="h-5 w-5 mr-2" />

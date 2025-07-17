@@ -144,12 +144,12 @@ export const FeaturesRoadmapSection = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'live': return 'from-green-400 to-emerald-500';
-      case 'beta': return 'from-blue-400 to-cyan-500';
-      case 'in-progress': return 'from-orange-400 to-yellow-500';
-      case 'planned': return 'from-purple-400 to-pink-500';
-      case 'research': return 'from-gray-400 to-slate-500';
-      default: return 'from-gray-400 to-gray-500';
+      case 'live': return 'from-cyan-400 to-yellow-400';
+      case 'beta': return 'from-cyan-400 to-yellow-400';
+      case 'in-progress': return 'from-cyan-400 to-yellow-400';
+      case 'planned': return 'from-cyan-400 to-yellow-400';
+      case 'research': return 'from-cyan-400 to-yellow-400';
+      default: return 'from-cyan-400 to-yellow-400';
     }
   };
 
@@ -180,7 +180,7 @@ export const FeaturesRoadmapSection = () => {
             style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
           >
             Features &{' '}
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">
               Roadmap
             </span>
           </h1>
@@ -272,7 +272,7 @@ export const FeaturesRoadmapSection = () => {
                 style={{ textShadow: '0 2px 15px rgba(0,0,0,0.8)' }}
               >
                 See It in{' '}
-                <span className="bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">
                   Action
                 </span>
               </h2>
@@ -289,11 +289,11 @@ export const FeaturesRoadmapSection = () => {
                   <span className="text-gray-300">Real-time AI assistance</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
                   <span className="text-gray-300">Automated testing and deployment</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
                   <span className="text-gray-300">Collaborative development workflows</span>
                 </div>
               </div>

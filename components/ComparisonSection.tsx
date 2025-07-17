@@ -94,7 +94,7 @@ export function ComparisonSection() {
       {/* Subtle accent lines */}
       <div className="absolute inset-0 opacity-15">
         <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
-        <div className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400/50 to-transparent" />
+        <div className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/50 to-transparent" />
       </div>
       
       <div className="content-container relative z-10">
@@ -108,13 +108,13 @@ export function ComparisonSection() {
           className="text-center mb-20"
         >
           <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-8 border border-white/10 inline-block">
-            <Badge className="bg-gradient-to-r from-cyan-600/80 to-green-600/80 backdrop-blur-sm px-6 py-3 mb-8 border border-cyan-400/30 text-white">
+            <Badge className="bg-gradient-to-r from-cyan-600/80 to-yellow-400/80 backdrop-blur-sm px-6 py-3 mb-8 border border-cyan-400/30 text-white">
               <Crown className="h-4 w-4 mr-3" />
               Market Comparison
             </Badge>
             
-            <h2 className="text-4xl md:text-6xl mb-6 bg-gradient-to-r from-white via-cyan-200 to-green-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
-              Why DeusVaultOS Leads the <span className="bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">Future</span>
+            <h2 className="text-4xl md:text-6xl mb-6 bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
+              Why DeusVaultOS Leads the <span className="bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">Future</span>
             </h2>
             
             <p className="text-xl text-white max-w-4xl mx-auto" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.7)' }}>

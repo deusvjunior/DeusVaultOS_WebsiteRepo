@@ -44,7 +44,7 @@ export const ContactSection = () => {
       description: "Get in touch for general inquiries",
       contact: "hello@deusvaultos.com",
       action: "mailto:hello@deusvaultos.com",
-      gradient: "from-blue-400 to-cyan-500"
+      gradient: "from-cyan-400 to-yellow-400"
     },
     {
       icon: <MessageCircle className="h-6 w-6" />,
@@ -52,7 +52,7 @@ export const ContactSection = () => {
       description: "Chat with our team in real-time",
       contact: "Available 24/7",
       action: "#",
-      gradient: "from-green-400 to-emerald-500"
+      gradient: "from-cyan-400 to-yellow-400"
     },
     {
       icon: <Calendar className="h-6 w-6" />,
@@ -60,7 +60,7 @@ export const ContactSection = () => {
       description: "Book a personalized platform demo",
       contact: "30-minute sessions",
       action: "#",
-      gradient: "from-purple-400 to-pink-500"
+      gradient: "from-cyan-400 to-yellow-400"
     },
     {
       icon: <Phone className="h-6 w-6" />,
@@ -68,7 +68,7 @@ export const ContactSection = () => {
       description: "Discuss enterprise solutions",
       contact: "+1 (555) 123-4567",
       action: "tel:+15551234567",
-      gradient: "from-orange-400 to-red-500"
+      gradient: "from-cyan-400 to-yellow-400"
     }
   ];
 
@@ -112,7 +112,7 @@ export const ContactSection = () => {
             style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
           >
             Get in{' '}
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
               Touch
             </span>
           </h1>
@@ -133,10 +133,7 @@ export const ContactSection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="bg-black/10 backdrop-blur-md rounded-3xl p-8 border border-white/20"
           >
-            <h2 
-              className="text-3xl font-bold text-white mb-8"
-              style={{ textShadow: '0 2px 15px rgba(0,0,0,0.8)' }}
-            >
+            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-yellow-400 mb-4">
               Send us a Message
             </h2>
             
@@ -238,7 +235,7 @@ export const ContactSection = () => {
                 type="submit"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold py-4 px-6 rounded-lg flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-cyan-400/25 transition-all duration-300"
+                className="w-full bg-gradient-to-r from-cyan-400 to-yellow-400 text-white font-semibold py-4 px-6 rounded-lg flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-cyan-400/25 transition-all duration-300"
               >
                 <Send className="h-5 w-5" />
                 Send Message

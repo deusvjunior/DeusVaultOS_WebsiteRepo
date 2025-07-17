@@ -23,7 +23,7 @@ export const WhoIsThisForSection = () => {
         "Auto-scaling compute resources",
         "Collaborative AI workspaces"
       ],
-      gradient: "from-cyan-400 to-blue-500"
+      gradient: "from-cyan-400 to-yellow-400"
     },
     {
       icon: <Building2 className="h-8 w-8" />,
@@ -35,7 +35,7 @@ export const WhoIsThisForSection = () => {
         "Team collaboration tools",
         "Advanced security controls"
       ],
-      gradient: "from-green-400 to-emerald-500"
+      gradient: "from-cyan-400 to-yellow-400"
     },
     {
       icon: <Rocket className="h-8 w-8" />,
@@ -47,7 +47,7 @@ export const WhoIsThisForSection = () => {
         "Investor-ready demos",
         "Scalable infrastructure"
       ],
-      gradient: "from-purple-400 to-pink-500"
+      gradient: "from-cyan-400 to-yellow-400"
     },
     {
       icon: <Brain className="h-8 w-8" />,
@@ -59,7 +59,7 @@ export const WhoIsThisForSection = () => {
         "Reproducible experiments", 
         "Academic collaboration"
       ],
-      gradient: "from-orange-400 to-red-500"
+      gradient: "from-cyan-400 to-yellow-400"
     },
     {
       icon: <Users className="h-8 w-8" />,
@@ -71,7 +71,7 @@ export const WhoIsThisForSection = () => {
         "Hackathon platforms",
         "Mentorship programs"
       ],
-      gradient: "from-teal-400 to-cyan-500"
+      gradient: "from-cyan-400 to-yellow-400"
     },
     {
       icon: <Globe className="h-8 w-8" />,
@@ -83,7 +83,7 @@ export const WhoIsThisForSection = () => {
         "Mobile-optimized tools",
         "Offline sync capabilities"
       ],
-      gradient: "from-indigo-400 to-purple-500"
+      gradient: "from-cyan-400 to-yellow-400"
     }
   ];
 
@@ -103,7 +103,7 @@ export const WhoIsThisForSection = () => {
             style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
           >
             Built for the Future of{' '}
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 via-yellow-400 to-yellow-500 bg-clip-text text-transparent">
               AI Development
             </span>
           </h1>
@@ -178,18 +178,18 @@ export const WhoIsThisForSection = () => {
             {/* Content */}
             <div>
               <h2 
-                className="text-4xl font-bold text-white mb-8"
+                className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-yellow-400 mb-4"
                 style={{ textShadow: '0 2px 15px rgba(0,0,0,0.8)' }}
               >
                 Trusted by{' '}
-                <span className="bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">
                   10,000+ Developers
                 </span>
               </h2>
               
               <div className="space-y-8">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-yellow-400 flex items-center justify-center flex-shrink-0">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -199,7 +199,7 @@ export const WhoIsThisForSection = () => {
                 </div>
                 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-yellow-400 flex items-center justify-center flex-shrink-0">
                     <Zap className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -209,7 +209,7 @@ export const WhoIsThisForSection = () => {
                 </div>
                 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-yellow-400 flex items-center justify-center flex-shrink-0">
                     <Users className="h-6 w-6 text-white" />
                   </div>
                   <div>

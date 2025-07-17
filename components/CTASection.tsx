@@ -46,7 +46,7 @@ export function CTASection() {
       {/* Subtle accent lines for visual interest */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent" />
-        <div className="absolute bottom-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400/60 to-transparent" />
+        <div className="absolute bottom-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -59,12 +59,12 @@ export function CTASection() {
           transition={{ duration: 0.8 }}
         >
           <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-8 border border-white/10 inline-block mb-8">
-            <Badge className="mb-6 bg-gradient-to-r from-cyan-600/80 to-green-600/80 backdrop-blur-sm text-white px-8 py-3 text-lg border border-cyan-400/30">
+            <Badge className="mb-6 bg-gradient-to-r from-cyan-600/80 to-yellow-400/80 backdrop-blur-sm text-white px-8 py-3 text-lg border border-cyan-400/30">
               <Download className="h-5 w-5 mr-2" />
               Ready to Transform Your Development?
             </Badge>
             
-            <h2 className="text-5xl md:text-7xl mb-8 bg-gradient-to-r from-white via-cyan-200 to-green-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
+            <h2 className="text-5xl md:text-7xl mb-8 bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
               Start Building the Future
             </h2>
             
@@ -82,7 +82,7 @@ export function CTASection() {
           >
             <Button 
               size="lg" 
-              className="text-2xl px-12 py-6 bg-gradient-to-r from-cyan-600/80 to-green-600/80 backdrop-blur-sm hover:from-cyan-500/90 hover:to-green-500/90 text-white shadow-xl hover:shadow-2xl transition-all duration-300 border border-cyan-400/30"
+              className="text-2xl px-12 py-6 bg-gradient-to-r from-cyan-600/80 to-yellow-400/80 backdrop-blur-sm hover:from-cyan-500/90 hover:to-yellow-300/90 text-white shadow-xl hover:shadow-2xl transition-all duration-300 border border-cyan-400/30"
               onClick={() => window.open('https://github.com/deusvault/releases', '_blank')}
               style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}
             >
@@ -103,7 +103,7 @@ export function CTASection() {
         >
           {trustIndicators.map((indicator, index) => (
             <div key={index} className="text-center group">
-              <div className="w-16 h-16 bg-gradient-to-br from-cyan-600/70 to-green-600/70 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 border border-cyan-400/30">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-600/70 to-yellow-400/70 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 border border-cyan-400/30">
                 {indicator.icon}
               </div>
               <div className="text-lg text-white mb-1" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>{indicator.text}</div>
@@ -125,14 +125,14 @@ export function CTASection() {
               key={index} 
               className={`relative rounded-2xl p-8 backdrop-blur-md border transition-all duration-300 hover:scale-105 ${
                 option.popular 
-                  ? 'bg-gradient-to-br from-cyan-900/40 to-green-900/40 border-cyan-400/60 shadow-xl' 
+                  ? 'bg-gradient-to-br from-cyan-900/40 to-yellow-900/40 border-cyan-400/60 shadow-xl' 
                   : index % 2 === 0 
                     ? 'bg-black/20 border-gray-600/30 hover:border-cyan-400/30' // Transparent cards
                     : 'bg-black/40 border-gray-600/40 hover:border-cyan-400/40' // Semi-opaque cards
               }`}
             >
               {option.popular && (
-                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-600/80 to-green-600/80 backdrop-blur-sm text-white px-4 py-1 border border-cyan-400/30">
+                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-600/80 to-yellow-400/80 backdrop-blur-sm text-white px-4 py-1 border border-cyan-400/30">
                   Most Popular
                 </Badge>
               )}
@@ -151,7 +151,7 @@ export function CTASection() {
               <ul className="space-y-3 mb-8">
                 {option.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-center text-gray-200" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.7)' }}>
-                    <ArrowRight className="h-4 w-4 text-green-400 mr-3 flex-shrink-0" />
+                    <ArrowRight className="h-4 w-4 text-yellow-400 mr-3 flex-shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -160,7 +160,7 @@ export function CTASection() {
               <Button 
                 className={`w-full text-lg py-3 transition-all duration-300 ${
                   option.popular
-                    ? 'bg-gradient-to-r from-cyan-600/80 to-green-600/80 backdrop-blur-sm hover:from-cyan-500/90 hover:to-green-500/90 text-white border border-cyan-400/30'
+                    ? 'bg-gradient-to-r from-cyan-600/80 to-yellow-400/80 backdrop-blur-sm hover:from-cyan-500/90 hover:to-yellow-300/90 text-white border border-cyan-400/30'
                     : 'bg-gray-800/60 backdrop-blur-sm hover:bg-gray-700/70 text-white border border-gray-600/40'
                 }`}
                 onClick={() => {
@@ -204,7 +204,7 @@ export function CTASection() {
               
               <Button 
                 size="lg"
-                className="text-lg px-8 py-3 bg-gradient-to-r from-green-600/80 to-cyan-600/80 backdrop-blur-sm text-white border border-green-400/30"
+                className="text-lg px-8 py-3 bg-gradient-to-r from-yellow-600/80 to-cyan-600/80 backdrop-blur-sm text-white border border-yellow-400/30"
                 onClick={() => window.open('https://discord.gg/deusvault', '_blank')}
                 style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}
               >

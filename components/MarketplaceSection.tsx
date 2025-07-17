@@ -56,7 +56,7 @@ export function MarketplaceSection() {
   };
 
   return (
-    <section className="section-premium bg-gradient-to-b from-brand-neutral-900 to-brand-neutral-950 relative">
+    <section className="section-premium bg-gradient-to-b from-black via-cyan-900/20 to-black relative">
       
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-circuit-pattern opacity-20" />
@@ -77,7 +77,7 @@ export function MarketplaceSection() {
           </Badge>
           
           <h2 className="font-hero text-premium-white mb-8">
-            Build Once, <span className="text-brand-gradient">Earn Forever</span>
+            Build Once, <span className="text-gradient-cyanyellow">Earn Forever</span>
           </h2>
           
           <p className="font-subtitle text-premium-muted max-w-4xl mx-auto">
@@ -127,7 +127,7 @@ export function MarketplaceSection() {
                     </p>
                   </div>
                   
-                  <Badge className="brand-gradient-premium text-white font-medium px-4 py-2">
+                  <Badge className="bg-gradient-to-r from-cyan-600 to-yellow-400 text-white font-medium px-4 py-2">
                     {feature.earnings}
                   </Badge>
                 </div>

@@ -59,7 +59,7 @@ export function FeaturesSection() {
       {/* Optional accent areas for contrast */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
-        <div className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400/50 to-transparent" />
+        <div className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/50 to-transparent" />
       </div>
       
       <div className="container mx-auto px-6 relative z-10">
@@ -73,13 +73,13 @@ export function FeaturesSection() {
           className="text-center mb-20"
         >
           <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-8 border border-white/10 inline-block">
-            <Badge className="bg-gradient-to-r from-cyan-600/80 to-purple-600/80 backdrop-blur-sm px-6 py-3 mb-8 border border-cyan-400/30 text-white">
-              <Sparkles className="h-4 w-4 mr-3" />
+            <Badge className="bg-gradient-to-r from-cyan-500/80 to-yellow-400/80 backdrop-blur-sm px-6 py-3 mb-8 border border-cyan-400/30 text-white">
+              <Sparkles className="h-4 w-4 mr-3 text-cyan-300" />
               Core Capabilities
             </Badge>
             
-            <h2 className="text-4xl md:text-6xl mb-6 bg-gradient-to-r from-white via-cyan-200 to-purple-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
-              Everything You Need to <span className="bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">Build Faster</span>
+            <h2 className="text-4xl md:text-6xl mb-6 bg-gradient-to-r from-cyan-200 via-yellow-200 to-cyan-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
+              Everything You Need to <span className="bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">Build Faster</span>
             </h2>
             
             <p className="text-xl text-white max-w-4xl mx-auto" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.7)' }}>
@@ -125,7 +125,7 @@ export function FeaturesSection() {
                   <ul className="space-y-3 mb-8">
                     {feature.benefits.map((benefit, i) => (
                       <li key={i} className="flex items-center gap-3 text-gray-200" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
-                        <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-cyan-400 flex-shrink-0" />
                         <span>{benefit}</span>
                       </li>
                     ))}
@@ -155,16 +155,16 @@ export function FeaturesSection() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-cyan-500/80 to-purple-500/80 backdrop-blur-sm text-white border border-cyan-400/30 hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-cyan-500/80 to-yellow-400/80 backdrop-blur-sm text-white border border-cyan-400/30 hover:scale-105 transition-all duration-300"
                 style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}
               >
-                <Download className="h-5 w-5 mr-2" />
+                <Download className="h-5 w-5 mr-2 text-yellow-300" />
                 Download Now
               </Button>
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="border-white/30 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all duration-300"
+                className="border-cyan-400/30 text-cyan-200 backdrop-blur-sm bg-cyan-400/10 hover:bg-yellow-400/20 transition-all duration-300"
                 style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}
               >
                 View Documentation
