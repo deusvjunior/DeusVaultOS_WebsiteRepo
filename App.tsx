@@ -136,16 +136,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [sections.length, observationMode]);
 
-  // Auto-advance sections (slower timing)
-  useEffect(() => {
-    if (reducedMotion) return;
-
-    const interval = setInterval(() => {
-      setCurrentSection((prev: number) => (prev + 1) % sections.length);
-    }, 20000); // 20 seconds per section
-
-    return () => clearInterval(interval);
-  }, [reducedMotion, sections.length]);
+  // Auto-advance removed for better user control
 
   const nextSection = () => {
     setCurrentSection((prev: number) => (prev + 1) % sections.length);

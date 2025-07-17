@@ -21,6 +21,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   const hexagonRef = useRef<THREE.Group | null>(null);
   const frameRef = useRef<number | null>(null);
   const clockRef = useRef(new THREE.Clock());
+  const blobsRef = useRef<any[]>([]); // Persistent blob reference
 
   // Camera control states
   const isMouseDown = useRef(false);
@@ -32,7 +33,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   const currentRotationY = useRef(0);
   const targetRotationY = useRef(0);
   const velocityRef = useRef(0);
-  const [isInteracting, _setIsInteracting] = useState(false);
+  const isInteractingRef = useRef(false);
+  const [isInteracting, setIsInteracting] = useState(false);
 
   // Section rotation mapping (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
@@ -71,58 +73,50 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Enhanced living blobs with organic movement and personality
   const createLivingBlobs = (scene: THREE.Scene) => {
     const blobs = [];
-    const numBlobs = 12; // Reduced from 15 for better performance and visual clarity
+    const numBlobs = 8; // Reduced for better performance and less clutter
     
     for (let i = 0; i < numBlobs; i++) {
       // Create unique blob geometry with smaller, more contained sizes
       const geometry = new THREE.SphereGeometry(
-        0.15 + Math.random() * 0.4, // Smaller size variation: 0.15 to 0.55
-        20 + Math.floor(Math.random() * 12), // Segment variation: 20-32
-        10 + Math.floor(Math.random() * 10)  // Ring variation: 10-20
+        0.08 + Math.random() * 0.15, // Much smaller: 0.08 to 0.23
+        16 + Math.floor(Math.random() * 8), // Segment variation: 16-24
+        8 + Math.floor(Math.random() * 6)   // Ring variation: 8-14
       );
       
-      // Create fully opaque materials with rich colors and varied finishes
-      const hue = Math.random() * 360;
-      const saturation = 0.6 + Math.random() * 0.4; // 60-100% saturation for vibrancy
-      const lightness = 0.4 + Math.random() * 0.3;  // 40-70% lightness
+      // Create cyan/neon yellow materials with gradient blending and emission
+      const colorChoice = Math.random();
+      let baseColor, emissiveColor;
       
-      // Different material types for variety
-      const materialType = Math.random();
-      let material;
-      
-      if (materialType < 0.3) {
-        // Metallic finish (30%)
-        material = new THREE.MeshStandardMaterial({
-          color: new THREE.Color().setHSL(hue / 360, saturation, lightness),
-          metalness: 0.7 + Math.random() * 0.3,
-          roughness: 0.1 + Math.random() * 0.3,
-          emissive: new THREE.Color().setHSL(hue / 360, saturation * 0.5, lightness * 0.1)
-        });
-      } else if (materialType < 0.6) {
-        // Glossy finish (30%)
-        material = new THREE.MeshPhongMaterial({
-          color: new THREE.Color().setHSL(hue / 360, saturation, lightness),
-          shininess: 80 + Math.random() * 120,
-          specular: new THREE.Color(0.2, 0.2, 0.2),
-          emissive: new THREE.Color().setHSL(hue / 360, saturation * 0.3, lightness * 0.05)
-        });
+      if (colorChoice < 0.6) {
+        // Cyan variants (60%)
+        baseColor = new THREE.Color().setHSL(0.5, 0.8 + Math.random() * 0.2, 0.4 + Math.random() * 0.3);
+        emissiveColor = new THREE.Color().setHSL(0.5, 0.6, 0.15 + Math.random() * 0.1);
       } else {
-        // Matte/Lambert finish (40%)
-        material = new THREE.MeshLambertMaterial({
-          color: new THREE.Color().setHSL(hue / 360, saturation, lightness),
-          emissive: new THREE.Color().setHSL(hue / 360, saturation * 0.2, lightness * 0.03)
-        });
+        // Neon yellow variants (40%)
+        baseColor = new THREE.Color().setHSL(0.16, 0.9 + Math.random() * 0.1, 0.5 + Math.random() * 0.2);
+        emissiveColor = new THREE.Color().setHSL(0.16, 0.7, 0.12 + Math.random() * 0.08);
       }
+      
+      // Enhanced materials with smooth emission and gradients
+      const material = new THREE.MeshStandardMaterial({
+        color: baseColor,
+        metalness: 0.1 + Math.random() * 0.2,
+        roughness: 0.3 + Math.random() * 0.4,
+        emissive: emissiveColor,
+        emissiveIntensity: 0.3 + Math.random() * 0.2,
+        transparent: false,
+        opacity: 1.0
+      });
       
       const blob = new THREE.Mesh(geometry, material);
       
-      // More contained positioning in a sphere around center, avoiding floor
-      const radius = 4 + Math.random() * 8; // Distance from center: 4-12 units (reduced)
+      // More centered positioning around the hexagon
+      const radius = 2 + Math.random() * 4; // Closer to center: 2-6 units
       const theta = Math.random() * Math.PI * 2; // Random angle
-      const phi = Math.PI * 0.2 + Math.random() * Math.PI * 0.6; // Elevation: 20% to 80% of hemisphere (avoid floor)
+      const phi = Math.PI * 0.3 + Math.random() * Math.PI * 0.4; // Elevation: 30% to 70% (more centered)
       
       blob.position.x = radius * Math.sin(phi) * Math.cos(theta);
-      blob.position.y = Math.max(2, radius * Math.cos(phi)); // Ensure Y is always above 2 (floor level)
+      blob.position.y = Math.max(1, radius * Math.cos(phi)); // Ensure Y is always above 1
       blob.position.z = radius * Math.sin(phi) * Math.sin(theta);
       
       // Random initial rotation
@@ -131,51 +125,48 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       blob.rotation.z = Math.random() * Math.PI * 2;
       
       // Smaller scale variation
-      const scale = 0.6 + Math.random() * 0.8; // Scale: 0.6x to 1.4x (reduced)
+      const scale = 0.8 + Math.random() * 0.4; // Scale: 0.8x to 1.2x
       blob.scale.setScalar(scale);
       
-      // Enhanced personality traits for more distinct behaviors
+      // Smooth personality traits for organic movement
       blob.userData = {
-        // Movement behavior types
-        behaviorType: Math.floor(Math.random() * 5), // 5 different behavior types
+        // Movement behavior - simpler, smoother
+        behaviorType: Math.floor(Math.random() * 3), // Only 3 smooth behavior types
         
-        // Swimming behavior with reduced range
-        swimSpeed: 0.2 + Math.random() * 0.6, // Speed: 0.2 to 0.8
+        // Gentle swimming behavior
+        swimSpeed: 0.1 + Math.random() * 0.3, // Slower: 0.1 to 0.4
         swimDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 0.4, // Reduced Y movement to stay away from floor
+          (Math.random() - 0.5) * 0.2, // Very limited Y movement
           (Math.random() - 0.5) * 2
         ).normalize(),
         
-        // Enhanced personality traits
-        isHyperactive: Math.random() < 0.25, // 25% are hyperactive
-        isShy: Math.random() < 0.15, // 15% are shy
-        isFloater: Math.random() < 0.3, // 30% prefer floating
-        isPulser: Math.random() < 0.4, // 40% do pulsing animations
-        isSpinner: Math.random() < 0.35, // 35% are spinners
+        // Reduced personality traits for smoother movement
+        isFloater: Math.random() < 0.5, // 50% prefer floating
+        isPulser: Math.random() < 0.3, // 30% do gentle pulsing
         
-        energy: Math.random(), // Energy level 0-1
+        energy: 0.3 + Math.random() * 0.4, // Lower energy level: 0.3-0.7
         
-        // Breathing/pulsing with more variation
-        breathingRate: 0.3 + Math.random() * 2.0, // Breathing speed
-        breathingIntensity: 0.03 + Math.random() * 0.15, // Scale variation
+        // Gentle breathing/pulsing
+        breathingRate: 0.5 + Math.random() * 1.0, // Slower breathing
+        breathingIntensity: 0.02 + Math.random() * 0.06, // Subtle scale variation
         
-        // Enhanced rotation behavior
+        // Smooth rotation behavior
         rotationSpeed: {
-          x: (Math.random() - 0.5) * 0.04,
-          y: (Math.random() - 0.5) * 0.04,
-          z: (Math.random() - 0.5) * 0.04
+          x: (Math.random() - 0.5) * 0.01, // Much slower rotation
+          y: (Math.random() - 0.5) * 0.01,
+          z: (Math.random() - 0.5) * 0.01
         },
         
-        // Orbital motion with smaller radius for containment
-        orbitRadius: 0.5 + Math.random() * 3, // Reduced orbit radius
-        orbitSpeed: (Math.random() - 0.5) * 0.025,
+        // Gentle orbital motion
+        orbitRadius: 0.3 + Math.random() * 1.5, // Smaller orbit radius
+        orbitSpeed: (Math.random() - 0.5) * 0.008, // Much slower orbiting
         orbitAngle: Math.random() * Math.PI * 2,
-        orbitTilt: (Math.random() - 0.5) * Math.PI * 0.3, // Reduced tilt for containment
+        orbitTilt: (Math.random() - 0.5) * Math.PI * 0.1, // Minimal tilt
         
-        // Bobbing motion with floor awareness
-        bobSpeed: 0.5 + Math.random() * 1.5,
-        bobIntensity: 0.3 + Math.random() * 1.0, // Reduced intensity
+        // Subtle bobbing motion
+        bobSpeed: 0.3 + Math.random() * 0.7,
+        bobIntensity: 0.1 + Math.random() * 0.3, // Gentle bobbing
         
         // Original position for reference
         originalPosition: blob.position.clone(),
@@ -183,9 +174,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         // Time offset for unique animation timing
         timeOffset: Math.random() * Math.PI * 2,
         
-        // Color shifting for some blobs
-        colorShift: Math.random() < 0.2, // 20% change colors slowly
-        originalHue: hue
+        // Individual pulsing emission
+        emissionPulseSpeed: 0.8 + Math.random() * 1.2,
+        emissionPulseIntensity: 0.1 + Math.random() * 0.2,
+        originalEmissiveIntensity: material.emissiveIntensity,
+        
+        // Color info for emission pulsing
+        originalHue: colorChoice < 0.6 ? 180 : 60 // Cyan or Yellow base hue
       };
       
       blobs.push(blob);
@@ -367,12 +362,26 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       (group as any)[`frame_${i}`] = frameMesh;
     }
 
-    // Add living blobs and enhanced particles
-    const blobs = createLivingBlobs(sceneRef.current!);
+    // Add living blobs and enhanced particles (only create once)
+    if (blobsRef.current.length === 0) {
+      const blobs = createLivingBlobs(sceneRef.current!);
+      blobsRef.current = blobs;
+      
+      // Store reference in group for animation updates
+      (group as any).blobs = blobs;
+    } else {
+      // Reuse existing blobs
+      blobsRef.current.forEach(blob => {
+        if (blob.parent !== sceneRef.current) {
+          sceneRef.current!.add(blob);
+        }
+      });
+      (group as any).blobs = blobsRef.current;
+    }
+    
     const particles = createEnhancedParticles(group);
     
     // Store references for animation updates
-    (group as any).blobs = blobs;
     (group as any).particles = particles;
   };
 
@@ -400,7 +409,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
     }
 
-    // Animate enhanced living blobs with organic swimming motion
+    // Animate enhanced living blobs with smooth organic swimming motion
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
       blobs.forEach((blob: any, index: number) => {
@@ -410,143 +419,86 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const timeWithOffset = time + userData.timeOffset;
         
-        // Behavior-based movement system with containment
+        // Smooth behavior-based movement system with gentle containment
         switch (userData.behaviorType) {
-          case 0: // Orbital swimmers
+          case 0: // Gentle orbital swimmers
             {
               const orbitX = Math.cos(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
               const orbitZ = Math.sin(timeWithOffset * userData.orbitSpeed + userData.orbitAngle) * userData.orbitRadius;
-              const orbitY = Math.sin(timeWithOffset * userData.orbitSpeed * 0.5 + userData.orbitTilt) * userData.orbitRadius * 0.2;
+              const orbitY = Math.sin(timeWithOffset * userData.orbitSpeed * 0.3 + userData.orbitTilt) * userData.orbitRadius * 0.1;
               
               blob.position.x = userData.originalPosition.x + orbitX;
-              blob.position.y = Math.max(2, userData.originalPosition.y + orbitY); // Prevent floor clipping
+              blob.position.y = Math.max(1, userData.originalPosition.y + orbitY);
               blob.position.z = userData.originalPosition.z + orbitZ;
             }
             break;
             
-          case 1: // Figure-8 swimmers
+          case 1: // Smooth sine wave swimmers
             {
               const swimTime = timeWithOffset * userData.swimSpeed;
-              const figureX = Math.sin(swimTime) * 2; // Reduced range
-              const figureZ = Math.sin(swimTime * 2) * 1; // Reduced range
-              const figureY = Math.cos(swimTime * 0.5) * 0.8; // Reduced range
+              const waveX = Math.sin(swimTime) * 0.8;
+              const waveZ = Math.sin(swimTime * 0.7) * 0.6;
+              const waveY = Math.cos(swimTime * 0.4) * 0.3;
               
-              blob.position.x = userData.originalPosition.x + figureX;
-              blob.position.y = Math.max(2, userData.originalPosition.y + figureY);
-              blob.position.z = userData.originalPosition.z + figureZ;
+              blob.position.x = userData.originalPosition.x + waveX;
+              blob.position.y = Math.max(1, userData.originalPosition.y + waveY);
+              blob.position.z = userData.originalPosition.z + waveZ;
             }
             break;
             
-          case 2: // Pulsing floaters
+          case 2: // Gentle floating with subtle drift
             {
-              const pulseIntensity = userData.isPulser ? 1.5 : 0.8; // Reduced intensity
-              const pulseX = Math.sin(timeWithOffset * 0.7) * pulseIntensity;
-              const pulseY = Math.cos(timeWithOffset * 0.5) * pulseIntensity * 0.5; // Reduced Y movement
-              const pulseZ = Math.sin(timeWithOffset * 0.9) * pulseIntensity;
+              const floatX = Math.sin(timeWithOffset * 0.3) * 0.5;
+              const floatY = Math.cos(timeWithOffset * 0.2) * 0.2;
+              const floatZ = Math.sin(timeWithOffset * 0.4) * 0.4;
               
-              blob.position.x = userData.originalPosition.x + pulseX;
-              blob.position.y = Math.max(2, userData.originalPosition.y + pulseY);
-              blob.position.z = userData.originalPosition.z + pulseZ;
+              blob.position.x = userData.originalPosition.x + floatX;
+              blob.position.y = Math.max(1, userData.originalPosition.y + floatY);
+              blob.position.z = userData.originalPosition.z + floatZ;
             }
             break;
             
-          case 3: // Linear swimmers with direction changes
+          default: // Very gentle bobbing in place
             {
-              const direction = userData.swimDirection || new THREE.Vector3(1, 0, 1).normalize();
-              // Change direction occasionally
-              if (Math.floor(timeWithOffset * 0.2) % 10 === 0) {
-                direction.x += (Math.random() - 0.5) * 0.1;
-                direction.z += (Math.random() - 0.5) * 0.1;
-                direction.normalize();
-              }
+              const bobX = Math.sin(timeWithOffset * userData.bobSpeed) * 0.2;
+              const bobY = Math.cos(timeWithOffset * userData.bobSpeed * 0.8) * 0.15;
+              const bobZ = Math.sin(timeWithOffset * userData.bobSpeed * 1.2) * 0.2;
               
-              const swimDistance = timeWithOffset * userData.swimSpeed * 1; // Reduced distance
-              blob.position.x = userData.originalPosition.x + direction.x * swimDistance;
-              blob.position.y = Math.max(2, userData.originalPosition.y + Math.sin(timeWithOffset * (userData.bobSpeed || 1)) * (userData.bobIntensity || 0.5));
-              blob.position.z = userData.originalPosition.z + direction.z * swimDistance;
-            }
-            break;
-            
-          case 4: // Spiral swimmers
-            {
-              const spiralTime = timeWithOffset * userData.swimSpeed;
-              const spiralRadius = 1 + Math.sin(spiralTime * 0.3) * 1; // Reduced spiral radius
-              const spiralHeight = spiralTime * 0.25; // Reduced height change
-              
-              blob.position.x = userData.originalPosition.x + Math.cos(spiralTime) * spiralRadius;
-              blob.position.y = Math.max(2, userData.originalPosition.y + Math.sin(spiralHeight) * 1.5);
-              blob.position.z = userData.originalPosition.z + Math.sin(spiralTime) * spiralRadius;
-            }
-            break;
-            
-          default: // Fallback to original swimming
-            {
-              const swimTimeX = time * userData.swimSpeed + (userData.swimOffset || 0);
-              const swimTimeY = time * userData.swimSpeed * 0.7 + (userData.swimOffset || 0) * 1.3;
-              const swimTimeZ = time * userData.swimSpeed * 1.1 + (userData.swimOffset || 0) * 0.8;
-              
-              const swimX = Math.sin(swimTimeX) * (userData.swimAmplitude || 1) * (userData.swimDirectionX || 1);
-              const swimY = Math.sin(swimTimeY) * (userData.swimAmplitude || 1) * 0.3 * (userData.swimDirectionY || 1); // Reduced Y amplitude
-              const swimZ = Math.cos(swimTimeZ) * (userData.swimAmplitude || 1) * (userData.swimDirectionZ || 1);
-              
-              blob.position.x = userData.originalPosition.x + swimX;
-              blob.position.y = Math.max(2, userData.originalPosition.y + swimY);
-              blob.position.z = userData.originalPosition.z + swimZ;
+              blob.position.x = userData.originalPosition.x + bobX;
+              blob.position.y = Math.max(1, userData.originalPosition.y + bobY);
+              blob.position.z = userData.originalPosition.z + bobZ;
             }
         }
         
-        // Enhanced rotation with personality
-        if (userData.isSpinner) {
-          blob.rotation.x += (userData.rotationSpeed?.x || 0.01) * 3; // Spinners rotate faster
-          blob.rotation.y += (userData.rotationSpeed?.y || 0.01) * 3;
-          blob.rotation.z += (userData.rotationSpeed?.z || 0.01) * 3;
-        } else {
-          blob.rotation.x += userData.rotationSpeed?.x || userData.rotationSpeedX || 0.01;
-          blob.rotation.y += userData.rotationSpeed?.y || userData.rotationSpeedY || 0.01;
-          blob.rotation.z += userData.rotationSpeed?.z || userData.rotationSpeedZ || 0.01;
+        // Smooth rotation
+        blob.rotation.x += userData.rotationSpeed.x;
+        blob.rotation.y += userData.rotationSpeed.y;
+        blob.rotation.z += userData.rotationSpeed.z;
+        
+        // Gentle breathing animation
+        const breathing = 1 + Math.sin(timeWithOffset * userData.breathingRate) * userData.breathingIntensity;
+        blob.scale.setScalar(breathing);
+        
+        // Individual emission pulsing for cute effect
+        if (blob.material && blob.material.emissive) {
+          const emissionPulse = Math.sin(timeWithOffset * userData.emissionPulseSpeed) * userData.emissionPulseIntensity;
+          blob.material.emissiveIntensity = userData.originalEmissiveIntensity + emissionPulse;
         }
         
-        // Enhanced breathing animation
-        if (userData.isPulser) {
-          const breathing = 1 + Math.sin(timeWithOffset * (userData.breathingRate || 1)) * (userData.breathingIntensity || 0.1) * 2;
-          blob.scale.setScalar(breathing);
-        } else {
-          const breathing = 1 + Math.sin(timeWithOffset * (userData.breathingRate || userData.breathingSpeed || 1)) * (userData.breathingIntensity || userData.breathingAmplitude || 0.1);
-          blob.scale.setScalar(breathing);
-        }
-        
-        // Hyperactive behavior - more erratic movement (reduced intensity)
-        if (userData.isHyperactive) {
-          const jitter = 0.15; // Reduced jitter
-          blob.position.x += (Math.random() - 0.5) * jitter;
-          blob.position.y += Math.max(0, (Math.random() - 0.5) * jitter); // Prevent downward jitter
-          blob.position.z += (Math.random() - 0.5) * jitter;
-        }
-        
-        // Color shifting for dynamic blobs
-        if (userData.colorShift && Math.random() < 0.001) {
-          const material = blob.material;
-          const newHue = (userData.originalHue + time * 10) % 360;
-          material.color.setHSL(newHue / 360, 0.7, 0.5);
-          if (material.emissive) {
-            material.emissive.setHSL(newHue / 360, 0.3, 0.1);
-          }
-        }
-        
-        // Keep blobs within containment sphere and above floor
-        const containmentRadius = 15; // Reduced containment radius
+        // Gentle containment - keep blobs near center
+        const containmentRadius = 8; // Smaller containment
         const currentPos = blob.position;
         const distanceFromCenter = currentPos.length();
         
         if (distanceFromCenter > containmentRadius) {
-          currentPos.normalize().multiplyScalar(containmentRadius);
+          currentPos.normalize().multiplyScalar(containmentRadius * 0.9);
           userData.originalPosition = currentPos.clone();
         }
         
         // Floor prevention
-        if (currentPos.y < 2) {
-          currentPos.y = 2;
-          userData.originalPosition.y = Math.max(2, userData.originalPosition.y);
+        if (currentPos.y < 1) {
+          currentPos.y = 1;
+          userData.originalPosition.y = Math.max(1, userData.originalPosition.y);
         }
       });
     }
@@ -577,36 +529,48 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     }
   };
 
-  // Subtle camera movement for depth perception (GENTLER)
+  // Very subtle camera movement for depth perception (ULTRA GENTLE)
   const updateCameraMovement = (elapsedTime: number) => {
-    if (!cameraRef.current) return;
+    if (!cameraRef.current || observationMode) return; // Don't move camera in observation mode
     
-    // Much gentler breathing motion
-    const breathingOffset = Math.sin(elapsedTime * 0.2) * 0.05; // Half the jiggle
+    // Ultra-gentle breathing motion
+    const breathingOffset = Math.sin(elapsedTime * 0.15) * 0.02; // Much more subtle
     cameraRef.current.position.y = breathingOffset;
     
-    // Minimal parallax for mouse interaction
-    const mouseInfluence = 0.01; // Half the movement
-    cameraRef.current.position.x = mouseInfluence;
-    cameraRef.current.position.z = 10 + mouseInfluence;
+    // Minimal parallax for subtle depth
+    cameraRef.current.position.x = 0;
+    cameraRef.current.position.z = 10;
     
     cameraRef.current.lookAt(0, 0, 0);
   };
 
-  // Apple-grade rotation with physics simulation (SLOWER & SMOOTHER)
+  // Apple-grade rotation with physics simulation (MUCH SMOOTHER)
   const updateRotationWithPhysics = (_deltaTime: number) => {
-    if (!isInteracting && !reducedMotion) {
+    if (!isInteractingRef.current && !reducedMotion && !observationMode) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // Physics-based rotation with gentler spring damping
-    const springStrength = 0.025; // Half the original speed
-    const damping = 0.9; // Higher damping for smoother motion
+    // Enhanced physics-based rotation with ultra-smooth spring damping
+    const springStrength = 0.012; // Much gentler spring for smoother motion
+    const damping = 0.95; // Higher damping for ultra-smooth motion
     
-    const force = (targetRotationY.current - currentRotationY.current) * springStrength;
+    const angleDifference = targetRotationY.current - currentRotationY.current;
+    
+    // Handle angle wrapping for shortest path
+    let normalizedDifference = angleDifference;
+    if (normalizedDifference > Math.PI) {
+      normalizedDifference -= 2 * Math.PI;
+    } else if (normalizedDifference < -Math.PI) {
+      normalizedDifference += 2 * Math.PI;
+    }
+    
+    const force = normalizedDifference * springStrength;
     velocityRef.current += force;
     velocityRef.current *= damping;
     currentRotationY.current += velocityRef.current;
+    
+    // Normalize rotation to 0-2π range
+    currentRotationY.current = ((currentRotationY.current % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
     
     if (hexagonRef.current) {
       hexagonRef.current.rotation.y = currentRotationY.current;
@@ -634,28 +598,34 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     if (!mountRef.current || !observationMode) return;
 
     const handleMouseDown = (event: MouseEvent) => {
+      if (!observationMode) return; // Extra check
       isMouseDown.current = true;
       mousePosition.current = { x: event.clientX, y: event.clientY };
+      if (setObservationMode) {
+        // Signal that we're actively interacting to prevent navigation interference
+        isInteractingRef.current = true;
+        setIsInteracting(true);
+      }
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isMouseDown.current || !cameraRef.current) return;
+      if (!isMouseDown.current || !cameraRef.current || !observationMode) return;
 
       const deltaX = event.clientX - mousePosition.current.x;
       const deltaY = event.clientY - mousePosition.current.y;
 
-      // Update camera rotation
-      cameraRotation.current.y += deltaX * 0.005;
-      cameraRotation.current.x += deltaY * 0.005;
+      // Update camera rotation with smoother sensitivity
+      cameraRotation.current.y += deltaX * 0.003; // Reduced sensitivity
+      cameraRotation.current.x += deltaY * 0.003;
 
       // Clamp vertical rotation
-      cameraRotation.current.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, cameraRotation.current.x));
+      cameraRotation.current.x = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, cameraRotation.current.x));
 
-      // Apply rotation to camera
-      const radius = 25;
-      cameraRef.current.position.x = radius * Math.cos(cameraRotation.current.x) * Math.cos(cameraRotation.current.y);
+      // Apply rotation to camera with smooth orbital movement
+      const radius = 18; // Slightly closer
+      cameraRef.current.position.x = radius * Math.cos(cameraRotation.current.x) * Math.sin(cameraRotation.current.y);
       cameraRef.current.position.y = radius * Math.sin(cameraRotation.current.x);
-      cameraRef.current.position.z = radius * Math.cos(cameraRotation.current.x) * Math.sin(cameraRotation.current.y);
+      cameraRef.current.position.z = radius * Math.cos(cameraRotation.current.x) * Math.cos(cameraRotation.current.y);
       
       cameraRef.current.lookAt(0, 0, 0);
 
@@ -664,21 +634,26 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
     const handleMouseUp = () => {
       isMouseDown.current = false;
+      if (setObservationMode) {
+        // Release interaction lock after a brief delay
+        setTimeout(() => {
+          isInteractingRef.current = false;
+          setIsInteracting(false);
+        }, 100);
+      }
     };
 
     const element = mountRef.current;
     element.addEventListener('mousedown', handleMouseDown);
-    element.addEventListener('mousemove', handleMouseMove);
-    element.addEventListener('mouseup', handleMouseUp);
-    element.addEventListener('mouseleave', handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove); // Listen on document for better tracking
+    document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
       element.removeEventListener('mousedown', handleMouseDown);
-      element.removeEventListener('mousemove', handleMouseMove);
-      element.removeEventListener('mouseup', handleMouseUp);
-      element.removeEventListener('mouseleave', handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [observationMode]);
+  }, [observationMode, setObservationMode]);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -780,7 +755,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         rendererRef.current.dispose();
       }
     };
-  }, [currentSection, reducedMotion]);
+  }, [reducedMotion]); // Removed currentSection dependency to prevent regeneration
 
   return (
     <div 
