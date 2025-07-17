@@ -7,9 +7,7 @@ import {
     Zap,
     Target,
     Map,
-    MessageCircle,
-    Eye,
-    EyeOff
+    MessageCircle
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
@@ -30,7 +28,6 @@ export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [observationMode, setObservationMode] = useState(false);
 
   const sections = [
     {
@@ -124,19 +121,23 @@ export default function App() {
           e.preventDefault();
           setCurrentSection(sections.length - 1);
           break;
-        case 'o':
-        case 'O':
-          e.preventDefault();
-          setObservationMode(!observationMode);
-          break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [sections.length, observationMode]);
+  }, [sections.length]);
 
-  // Auto-advance removed for better user control
+  // Auto-advance sections DISABLED (as requested by user)
+  // useEffect(() => {
+  //   if (reducedMotion) return;
+
+  //   const interval = setInterval(() => {
+  //     setCurrentSection((prev: number) => (prev + 1) % sections.length);
+  //   }, 20000); // 20 seconds per section
+
+  //   return () => clearInterval(interval);
+  // }, [reducedMotion, sections.length]);
 
   const nextSection = () => {
     setCurrentSection((prev: number) => (prev + 1) % sections.length);
@@ -168,51 +169,48 @@ export default function App() {
         <ThreeJSScene
           currentSection={currentSection}
           reducedMotion={reducedMotion}
-          observationMode={observationMode}
-          setObservationMode={setObservationMode}
         />
       </div>
 
       {/* Minimal Header */}
-      {!observationMode && (
-        <div className="fixed top-0 left-0 right-0 z-30 bg-black/20 backdrop-blur-md border-b border-cyan-400/10">
-          <div className="container mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              
-              {/* Logo */}
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 flex items-center justify-center relative">
-                  <img 
-                    src="/DVLogo.png" 
-                    alt="DeusVault OS" 
-                    className="w-full h-full object-contain"
+      <div className="fixed top-0 left-0 right-0 z-30 bg-black/20 backdrop-blur-md border-b border-cyan-400/10">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            
+            {/* Logo */}
+            <div className="flex items-center gap-4">
+              <div className="w-8 h-8 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" className="w-full h-full text-cyan-400">
+                  <polygon
+                    points="12,2 20,6 20,18 12,22 4,18 4,6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
                   />
-                  {/* Subtle glow effect */}
-                  <div className="absolute inset-0 w-full h-full rounded-full bg-cyan-400/20 blur-sm animate-pulse"></div>
-                </div>
-                <div>
-                  <h1 className="text-xl text-white font-bold" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
-                    DEUSVAULT OS
-                  </h1>
-                  <p className="text-xs text-gray-300" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
-                    AI Platform & Operating System
-                  </p>
-                </div>
+                </svg>
               </div>
+              <div>
+                <h1 className="text-xl text-white font-bold" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
+                  DEUSVAULT OS
+                </h1>
+                <p className="text-xs text-gray-300" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
+                  AI Platform & Operating System
+                </p>
+              </div>
+            </div>
 
-              {/* Section Info */}
-              <div className="hidden md:flex items-center gap-3">
-                <div className="text-cyan-400">
-                  {sections[currentSection].icon}
-                </div>
-                <span className="text-white font-medium" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
-                  {sections[currentSection].title}
-                </span>
+            {/* Section Info */}
+            <div className="hidden md:flex items-center gap-3">
+              <div className="text-cyan-400">
+                {sections[currentSection].icon}
               </div>
+              <span className="text-white font-medium" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
+                {sections[currentSection].title}
+              </span>
             </div>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Navigation */}
       <motion.div
@@ -272,89 +270,48 @@ export default function App() {
               <ArrowRight className="h-5 w-5" />
             </motion.button>
 
-            {/* Divider */}
-            <div className="w-px h-8 bg-white/20" />
-
-            {/* Observation Mode Toggle */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setObservationMode(!observationMode)}
-              className={`w-12 h-12 backdrop-blur-sm rounded-lg flex items-center justify-center transition-all border ${
-                observationMode 
-                  ? 'bg-cyan-400/20 text-cyan-400 border-cyan-400/50 shadow-lg shadow-cyan-400/25' 
-                  : 'bg-white/10 text-white/70 hover:text-white border-white/20'
-              }`}
-              title={observationMode ? "Exit Observation Mode (O)" : "Enter Observation Mode (O)"}
-            >
-              {observationMode ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-            </motion.button>
-
           </div>
         </div>
       </motion.div>
 
       {/* Content Area - Much more transparent */}
-      {!observationMode && (
-        <div className="relative z-20">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentSection}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-            >
-              {sections[currentSection].component}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      )}
+      <div className="relative z-20">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSection}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            {sections[currentSection].component}
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {/* Side Navigation Indicator */}
-      {!observationMode && (
-        <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
-          <div className="flex flex-col gap-3">
-            {sections.map((section, index) => (
-              <motion.button
-                key={index}
-                whileHover={{ scale: 1.2 }}
-                onClick={() => navigateToSection(index)}
-                className={`w-3 h-8 rounded-full transition-all duration-300 ${
-                  index === currentSection
-                    ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                    : 'bg-white/20 hover:bg-white/40'
-                }`}
-                title={section.title}
-              />
-            ))}
-          </div>
+      <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
+        <div className="flex flex-col gap-3">
+          {sections.map((section, index) => (
+            <motion.button
+              key={index}
+              whileHover={{ scale: 1.2 }}
+              onClick={() => navigateToSection(index)}
+              className={`w-3 h-8 rounded-full transition-all duration-300 ${
+                index === currentSection
+                  ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
+                  : 'bg-white/20 hover:bg-white/40'
+              }`}
+              title={section.title}
+            />
+          ))}
         </div>
-      )}
-
-      {/* Observation Mode Indicator */}
-      {observationMode && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40"
-        >
-          <div className="bg-cyan-400/20 backdrop-blur-md rounded-2xl px-6 py-3 border border-cyan-400/50">
-            <div className="flex items-center gap-3 text-cyan-400">
-              <Eye className="h-5 w-5" />
-              <span className="font-medium">Observation Mode</span>
-              <span className="text-cyan-300 text-sm">• Drag to orbit • Press O to exit</span>
-            </div>
-          </div>
-        </motion.div>
-      )}
+      </div>
 
       {/* Footer */}
-      {!observationMode && (
-        <div className="relative z-20">
-          <Footer />
-        </div>
-      )}
+      <div className="relative z-20">
+        <Footer />
+      </div>
 
     </div>
   );
