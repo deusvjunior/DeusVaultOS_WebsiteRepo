@@ -4,7 +4,10 @@ import {
     ArrowRight,
     Home,
     Users,
-    Zap
+    Zap,
+    Target,
+    Map,
+    MessageCircle
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
@@ -14,6 +17,9 @@ import ThreeJSScene from './components/ThreeJSScene';
 import { AccurateHeroSection } from "./components/AccurateHeroSection";
 import { AccuratePlatformFeatures } from "./components/AccuratePlatformFeatures";
 import { AccurateCTASection } from "./components/AccurateCTASection";
+import { WhoIsThisForSection } from "./components/WhoIsThisForSection";
+import { FeaturesRoadmapSection } from "./components/FeaturesRoadmapSection";
+import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
 import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
 import { WebVitalsMonitor } from "./components/WebVitalsMonitor";
@@ -31,10 +37,28 @@ export default function App() {
       component: <AccurateHeroSection />
     },
     {
+      id: 'who-is-this-for',
+      title: 'Who Is This For',
+      icon: <Target className="h-4 w-4" />,
+      component: <WhoIsThisForSection />
+    },
+    {
       id: 'platform',
       title: 'Platform Features',
       icon: <Zap className="h-4 w-4" />,
       component: <AccuratePlatformFeatures />
+    },
+    {
+      id: 'features-roadmap',
+      title: 'Features & Roadmap',
+      icon: <Map className="h-4 w-4" />,
+      component: <FeaturesRoadmapSection />
+    },
+    {
+      id: 'contact',
+      title: 'Contact Us',
+      icon: <MessageCircle className="h-4 w-4" />,
+      component: <ContactSection />
     },
     {
       id: 'cta',
