@@ -23,11 +23,42 @@ import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
 import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
 import { WebVitalsMonitor } from "./components/WebVitalsMonitor";
+import { GameControls } from "./components/GameControls";
+
+interface BlobControls {
+  movementSpeed: number;
+  randomDirectionFactor: number;
+  randomSizeFactor: number;
+  eyeSizeMin: number;
+  eyeSizeMax: number;
+  blobSizeMin: number;
+  blobSizeMax: number;
+  verticalityFactor: number;
+  jiggleIntensity: number;
+  avoidanceDistance: number;
+  emergenceRate: number;
+  rotationSpeed: number;
+}
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [observerMode, setObserverMode] = useState(false);
+  const [blobControls, setBlobControls] = useState<BlobControls>({
+    movementSpeed: 1.0,
+    randomDirectionFactor: 1.0,
+    randomSizeFactor: 1.0,
+    eyeSizeMin: 0.1,
+    eyeSizeMax: 0.2,
+    blobSizeMin: 0.8,
+    blobSizeMax: 1.5,
+    verticalityFactor: 1.0,
+    jiggleIntensity: 1.0,
+    avoidanceDistance: 2.0,
+    emergenceRate: 1.0,
+    rotationSpeed: 1.0
+  });
 
   const sections = [
     {
@@ -171,45 +202,25 @@ export default function App() {
         <ThreeJSScene
           currentSection={currentSection}
           reducedMotion={reducedMotion}
+          blobControls={blobControls}
         />
       </div>
 
       {/* Minimal Header */}
-      <div className="fixed top-0 left-0 right-0 z-30 bg-black/20 backdrop-blur-md border-b border-cyan-400/10">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            
-            {/* Logo */}
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 flex items-center justify-center">
-                <img 
-                  src="/DVLogo.png" 
-                  alt="DeusVaultOS Logo" 
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <div>
-                <h1 className="text-xl text-white font-bold" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
-                  DEUSVAULT OS
-                </h1>
-                <p className="text-xs text-gray-300" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
-                  AI Platform & Operating System
-                </p>
-              </div>
+            {/* Minimal Header */}
+      {!observerMode && (
+        <div className="fixed top-0 left-0 w-full z-40 bg-black/20 backdrop-blur-sm border-b border-cyan-400/20">
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-yellow-400 rounded-lg"></div>
+              <span className="text-cyan-400 font-bold text-lg">DeusVault OS</span>
             </div>
-
-            {/* Section Info */}
-            <div className="hidden md:flex items-center gap-3">
-              <div className="text-cyan-400">
-                {sections[currentSection].icon}
-              </div>
-              <span className="text-white font-medium" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
-                {sections[currentSection].title}
-              </span>
+            <div className="text-cyan-400 text-sm opacity-80">
+              {sections[currentSection].title}
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Navigation */}
       <motion.div
@@ -274,43 +285,61 @@ export default function App() {
       </motion.div>
 
       {/* Content Area - Much more transparent */}
-      <div className="relative z-20">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSection}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            {sections[currentSection].component}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      {!observerMode && (
+        <div className="relative z-20">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSection}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              {sections[currentSection].component}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* Side Navigation Indicator */}
-      <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
-        <div className="flex flex-col gap-3">
-          {sections.map((section, index) => (
-            <motion.button
-              key={index}
-              whileHover={{ scale: 1.2 }}
-              onClick={() => navigateToSection(index)}
-              className={`w-3 h-8 rounded-full transition-all duration-300 ${
-                index === currentSection
-                  ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                  : 'bg-white/20 hover:bg-white/40'
-              }`}
-              title={section.title}
-            />
-          ))}
+      {!observerMode && (
+        <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
+          <div className="flex flex-col gap-3">
+            {sections.map((section, index) => (
+              <motion.button
+                key={index}
+                whileHover={{ scale: 1.2 }}
+                onClick={() => navigateToSection(index)}
+                className={`w-3 h-8 rounded-full transition-all duration-300 ${
+                  index === currentSection
+                    ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
+                    : 'bg-white/20 hover:bg-white/40'
+                }`}
+                title={section.title}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Footer */}
-      <div className="relative z-20">
-        <Footer />
-      </div>
+      {!observerMode && (
+        <div className="relative z-20">
+          <Footer />
+        </div>
+      )}
+
+      {/* Game Controls - Always visible but conditionally hidden in observer mode */}
+      {!observerMode && (
+        <GameControls
+          currentSection={currentSection}
+          totalSections={sections.length}
+          onSectionChange={setCurrentSection}
+          isTransitioning={false}
+          onObserverModeChange={setObserverMode}
+          onBlobControlsChange={setBlobControls}
+        />
+      )}
 
     </div>
   );

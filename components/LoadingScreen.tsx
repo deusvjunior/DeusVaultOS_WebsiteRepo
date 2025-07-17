@@ -70,16 +70,18 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
-        const newProgress = Math.min(prevProgress + 1.2, 100);
+        // Fix the 30% → 100% jump by having proper progression
+        const increment = prevProgress < 40 ? 2.0 : 1.0; // Faster initial loading, then normal
+        const newProgress = Math.min(prevProgress + increment, 100);
         
         // Update phases based on progress
-        if (newProgress >= 20 && phase === 'digital_void') {
+        if (newProgress >= 15 && phase === 'digital_void') {
           setPhase('neural_spark');
-        } else if (newProgress >= 40 && phase === 'neural_spark') {
+        } else if (newProgress >= 35 && phase === 'neural_spark') {
           setPhase('entity_formation');
-        } else if (newProgress >= 70 && phase === 'entity_formation') {
+        } else if (newProgress >= 65 && phase === 'entity_formation') {
           setPhase('consciousness_awakening');
-        } else if (newProgress >= 90 && phase === 'consciousness_awakening') {
+        } else if (newProgress >= 85 && phase === 'consciousness_awakening') {
           setPhase('ready_to_connect');
         } else if (newProgress >= 100) {
           setPhase('complete');
@@ -90,7 +92,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
         
         return newProgress;
       });
-    }, 45);
+    }, 40); // Slightly faster updates for smoother progression
 
     return () => clearInterval(interval);
   }, [phase, onLoadingComplete]);
