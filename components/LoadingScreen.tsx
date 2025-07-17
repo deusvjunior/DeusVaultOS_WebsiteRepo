@@ -50,36 +50,36 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
     'Ready to Transform Your Workflow!'
   ];
 
-  // 🚀 ENHANCED LOADING PROGRESSION - Faster with smooth 100% fake completion
+  // 🚀 ENHANCED LOADING PROGRESSION - SLOWER FOR VISIBILITY
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
-        const next = prev + Math.random() * 4 + 2; // FASTER: was 1.5+0.5, now 4+2 for rapid loading
+        const next = prev + Math.random() * 1.2 + 0.8; // SLOWER: Reduced increment for better visibility
         
-        // **FAKE 100% AT 10% REAL PROGRESS** - Smooth transition effect
-        const displayProgress = next >= 10 ? 100 : next * 10; // When 10% reached, display as 100%
+        // **PROPER PROGRESS SCALING** - Real progression with smooth completion
+        const displayProgress = Math.min(next, 100); // Show actual progress, no fake jumping
         
         // Update loading text based on actual progress
-        if (next >= 8) {
+        if (next >= 80) {
           setLoadingText(loadingMessages[4]);
-        } else if (next >= 6) {
+        } else if (next >= 60) {
           setLoadingText(loadingMessages[3]);
-        } else if (next >= 4) {
+        } else if (next >= 40) {
           setLoadingText(loadingMessages[2]);
-        } else if (next >= 2) {
+        } else if (next >= 20) {
           setLoadingText(loadingMessages[1]);
         } else {
           setLoadingText(loadingMessages[0]);
         }
         
-        if (next >= 12) { // Complete at 12% actual progress (displays as 100%)
+        if (next >= 100) { // Complete at 100% for proper progression
           clearInterval(interval);
-          setTimeout(() => onLoadingComplete(), 500); // Faster transition
+          setTimeout(() => onLoadingComplete(), 800); // Slightly longer for smooth transition
           return 100;
         }
         return displayProgress;
       });
-    }, 80); // FASTER: was 150ms, now 80ms for rapid appearance
+    }, 120); // SLOWER: Increased from 80ms to 120ms for better visibility
 
     return () => clearInterval(interval);
   }, [onLoadingComplete]);
@@ -156,8 +156,42 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
               }}
             >
               
-              {/* 🎮 DEUSVAULTOS LOGO WITH ENHANCED ANIMATION */}
+              {/* 🎮 DEUSVAULTOS LOGO WITH REAL ASSETS */}
               <motion.div className="mb-8">
+                {/* Main Logo Images */}
+                <motion.div className="flex items-center justify-center gap-6 mb-4">
+                  {/* DeusVault Logo */}
+                  <motion.img
+                    src="/DVLogo.png"
+                    alt="DeusVault Logo"
+                    className="h-16 w-16"
+                    animate={{ 
+                      scale: [1, 1.1, 1],
+                      filter: [
+                        'drop-shadow(0 0 10px #00FFFF)',
+                        'drop-shadow(0 0 20px #FFFF00)',
+                        'drop-shadow(0 0 10px #00FFFF)'
+                      ]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  
+                  {/* THERION Logo */}
+                  <motion.img
+                    src="/Therion.png"
+                    alt="THERION AI"
+                    className="h-12 w-12"
+                    animate={{ 
+                      rotate: [0, 360],
+                      scale: [1, 1.05, 1]
+                    }}
+                    transition={{ 
+                      rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                      scale: { duration: 3, repeat: Infinity }
+                    }}
+                  />
+                </motion.div>
+                
                 {/* Main Logo Text */}
                 <motion.div
                   animate={{ 
@@ -177,37 +211,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
                   }}
                 >
                   DeusVaultOS
-                </motion.div>
-                
-                {/* Animated Logo Symbol - Hexagonal Badge */}
-                <motion.div
-                  animate={{ 
-                    rotate: [0, 360],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{ 
-                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                    scale: { duration: 2, repeat: Infinity }
-                  }}
-                  className="flex justify-center"
-                >
-                  <div 
-                    className="w-16 h-16 border-2 border-cyan-400 bg-gradient-to-br from-cyan-400/20 to-yellow-400/20"
-                    style={{
-                      clipPath: 'polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)',
-                      boxShadow: '0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(255, 255, 0, 0.2)'
-                    }}
-                  >
-                    <div className="w-full h-full flex items-center justify-center">
-                      <motion.div
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                        className="text-cyan-300 text-xl font-bold"
-                      >
-                        ⚔️
-                      </motion.div>
-                    </div>
-                  </div>
                 </motion.div>
               </motion.div>
 

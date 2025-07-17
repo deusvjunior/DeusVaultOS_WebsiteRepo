@@ -52,9 +52,9 @@ export function TherionSection() {
   ];
 
   return (
-    <section className="min-h-screen bg-black text-white relative overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-black to-yellow-900/20" />
+    <section className="min-h-screen text-white relative overflow-hidden">
+      {/* Background Gradient - NO SOLID BLACK */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 via-transparent to-yellow-900/10" />
       
       {/* Content Container */}
       <div className="container-responsive relative z-10 flex flex-col justify-center min-h-screen">

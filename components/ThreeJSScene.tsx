@@ -173,7 +173,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       // CIRCULAR SWIMMING PARAMETERS - Each blob gets unique circular path
       const heightLane = i % 6; // Assign each blob to one of 6 height lanes
-      const laneHeight = (heightLane - 2.5) * 2.0; // EXPANDED Lanes at: -5, -3, -1, 1, 3, 5 (no floor clipping)
+      const laneHeight = (heightLane - 1.5) * 2.0; // NEW Lanes at: -3, -1, 1, 3, 5, 7 (NO FLOOR CLIPPING)
       const orbitRadius = 1.5 + Math.random() * 2; // Varied orbit sizes
       const orbitSpeed = (Math.random() > 0.5 ? 1 : -1) * (0.1 + Math.random() * 0.2); // Random clockwise/counterclockwise
       const orbitPhase = Math.random() * Math.PI * 2; // Random starting position on circle
@@ -841,24 +841,37 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           // Update circular orbit phase
           userData.orbitPhase += userData.orbitSpeed * deltaTime;
           
-          // Check for nearby blobs and perform lane switching if needed
+          // ENHANCED COLLISION DETECTION - Unity-style trigger colliders
           let needsLaneSwitching = false;
           let nearbyBlob = null;
+          userData.avoidanceRadius = 3.5; // Increased from 1.5 to 3.5 for better detection
           
           for (let j = 0; j < blobs.length; j++) {
             if (j === index) continue;
             const otherBlob = blobs[j];
             const distance = blob.position.distanceTo(otherBlob.position);
             
+            // AGGRESSIVE COLLISION DETECTION - Trigger at larger distance
             if (distance < userData.avoidanceRadius) {
-              // Determine which blob should switch lanes (smaller one or clockwise one)
-              const shouldSwitch = userData.size < otherBlob.userData.size || 
-                                 (userData.size === otherBlob.userData.size && userData.orbitSpeed > 0);
+              // Additional collision prediction - check future positions
+              const futureDistance = blob.position.clone()
+                .add(new THREE.Vector3(
+                  Math.cos(userData.orbitPhase + userData.orbitSpeed * 0.5) * userData.orbitRadius - blob.position.x,
+                  0,
+                  Math.sin(userData.orbitPhase + userData.orbitSpeed * 0.5) * userData.orbitRadius - blob.position.z
+                ).normalize().multiplyScalar(2))
+                .distanceTo(otherBlob.position);
               
-              if (shouldSwitch && userData.laneSwitchCooldown <= 0) {
-                needsLaneSwitching = true;
-                nearbyBlob = otherBlob;
-                break;
+              // Trigger if currently close OR will be close soon
+              if (distance < userData.avoidanceRadius || futureDistance < userData.avoidanceRadius) {
+                const shouldSwitch = userData.size < otherBlob.userData.size || 
+                                   (userData.size === otherBlob.userData.size && userData.orbitSpeed > 0);
+                
+                if (shouldSwitch && userData.laneSwitchCooldown <= 0) {
+                  needsLaneSwitching = true;
+                  nearbyBlob = otherBlob;
+                  break;
+                }
               }
             }
           }
@@ -905,7 +918,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           
           // Smooth lane transitions
           if (userData.currentLane !== userData.targetLane) {
-            const targetLaneHeight = (userData.targetLane - 2.5) * 2.0; // Updated to match new lane spacing
+            const targetLaneHeight = (userData.targetLane - 1.5) * 2.0; // Updated to match new lane spacing
             userData.laneHeight = THREE.MathUtils.lerp(userData.laneHeight, targetLaneHeight, deltaTime * 0.5);
             
             // Complete lane switch when close enough

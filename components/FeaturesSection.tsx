@@ -62,7 +62,7 @@ export function FeaturesSection() {
         <div className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/50 to-transparent" />
       </div>
       
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container-responsive relative z-10">
         
         {/* Section Header - Semi-transparent */}
         <motion.div

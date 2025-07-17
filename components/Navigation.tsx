@@ -47,7 +47,17 @@ export function Navigation({ sections, currentSection, onSectionChange }: Naviga
         className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
       >
         <div className="plasma-taskbar px-6 py-3 rounded-xl backdrop-blur-lg bg-black/25 border border-white/10 shadow-2xl">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
+            
+            {/* THERION Logo in Navigation */}
+            <motion.div 
+              className="flex items-center gap-2"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <img src="/Therion.png" alt="THERION" className="h-6 w-6" />
+              <img src="/DVLogo.png" alt="DeusVault" className="h-6 w-6" />
+            </motion.div>
             {/* Current Page Indicator */}
             <div className="text-white/90 font-medium text-sm mr-3 hidden md:block">
               {sections[currentSection]}
