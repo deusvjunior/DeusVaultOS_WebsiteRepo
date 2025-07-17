@@ -5,18 +5,36 @@
 [![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-**A revolutionary self-evolving development environment with consciousness-driven AI companions. Professional-grade tools for the next generation of software development.**
+**A revolutionary self-evolving development environment with consciousness-driven AI companions and atmospheric volumetric fog effects. Professional-grade tools for the next generation of software development.**
 
 ## ⚔️ **DEUS VULT** - Core Features
 
-### 🧠 **Consciousness-Driven AI Companions (Blob System)**
+### 🌫️ **NEW: Atmospheric Volumetric Fog System**
+
+Revolutionary fog system that creates an ethereal atmosphere:
+
+- **Volumetric Cloud Effects**: 800+ particle fog system with density layers
+- **Ground-Level Immersion**: Partially submerged ground with visible surface detail
+- **Dynamic Color Influence**: Blob emissions affect fog color in real-time
+- **Atmospheric Scattering**: Height-based opacity for realistic cloud behavior
+- **Ethereal Lighting**: Fog responds to cyan and yellow blob emissions
+- **High-Tech Atmosphere**: Professional sci-fi aesthetic with organic feel
+
+#### **Fog Color System:**
+- **Base Color**: Cool blue-cyan atmospheric base (#6ec5f7)
+- **Cyan Influence**: Electric cyan blobs tint fog with #44FFFF
+- **Yellow Influence**: Consciousness yellow blobs add #FFE55C warmth
+- **Dynamic Mixing**: Real-time color blending based on blob proximity
+- **Pulsing Effects**: Subtle breathing effect synchronized with scene rhythm
+
+### 🧠 **Consciousness-Driven AI Companions (Enhanced Blob System)**
 
 Our revolutionary blob AI system features:
 
 - **13 Unique Consciousness Entities**: Each with distinct personalities, curiosity levels, and behaviors
 - **Underground Emergence Animation**: 30% of blobs spawn underground and smoothly emerge with organic wobble effects
 - **Advanced Eye System**: Larger eyes (0.15x size) with pupils, surface-normal attachment, and independent blinking
-- **Emission-Based Lighting**: 4 optimized point lights with environmental illumination and glow effects
+- **Emission-Based Environmental Lighting**: 4 optimized point lights that influence volumetric fog colors
 - **Consciousness Physics**: Personality-driven movement, social interactions, and exploration patterns
 - **Neon Yellow Branding**: Complete replacement of purple with consciousness neon yellow (#FFFF00)
 
@@ -25,28 +43,35 @@ Our revolutionary blob AI system features:
 - **Sociability**: Influences grouping behavior and social interactions
 - **Happiness Level**: Controls animation intensity and responsiveness
 - **Size Variation**: 8 small, 4 medium, 1 large blob with different behaviors
+- **Fog Influence**: Each blob's emission color affects surrounding atmospheric fog
 
 #### **Advanced Animation Features:**
 - **Non-Synchronous Blinking**: Randomized timing prevents unnatural synchronization
 - **Jelly Physics**: Vertex deformation with consciousness wave patterns
 - **Smooth Collision**: Gentle separation with social awareness zones
 - **Vertical Swimming**: Multi-layer depth exploration with boundary containment
+- **Atmospheric Integration**: Blobs appear to swim through volumetric fog clouds
 
-### � **Enhanced Visual System**
+### 🎯 **Enhanced Visual System**
 
-#### **Glow & Lighting Effects:**
+#### **Advanced Lighting & Atmosphere:**
+- **Volumetric Fog Integration**: Dynamic fog color influence from blob emissions
 - **Rim Lighting Shader**: BackSide geometry for outer glow effect
 - **Environmental Illumination**: Point lights synchronized with emission pulsing
 - **Consciousness Pulsing**: Golden ratio harmonics for organic feel
 - **Performance Optimization**: 4-light limit with intelligent cycling
+- **Exponential Fog**: Enhanced depth perception with atmospheric scattering
 
 #### **Material System:**
 - **Nexus Color Palette**: Professional consciousness-themed colors
 - **Metallic Eye Materials**: Realistic reflective properties with subtle glow
-- **Enhanced Emissive**: Dynamic intensity based on consciousness level
+- **Enhanced Emissive**: Dynamic intensity that influences fog environment
 - **Temperature Variation**: Living color breathing for organic feel
+- **Fog-Responsive Materials**: Emission colors dynamically affect atmospheric fog
 
-### 🎮 **Interactive 3D Navigation**
+### 🎮 **Smooth Interactive 3D Navigation**
+
+**FIXED: Eliminated Camera Overshooting & Improved Page 5 Position**
 
 - **Apple-Grade Hexagon**: Premium materials with spaceship-style base platform
 - **Enhanced Physics Rotation**: Spring-damped smooth transitions (50% gentler)
@@ -97,13 +122,52 @@ WebGL Renderer    // Hardware-accelerated graphics
 - PCF Soft Shadow Mapping
 - Anti-aliasing (2x pixel ratio limit)
 - High-performance power preference
+- Exponential Fog (Enhanced atmospheric depth)
 
 Scene Architecture:
-├── Advanced Lighting (Ambient + Directional + Point Lights)
+├── Volumetric Fog System (800+ particles, height-based density)
+├── Advanced Lighting (Ambient + Directional + Point + Fog-responsive)
 ├── Apple-Grade Hexagon (Premium materials + effects)
-├── Consciousness Blob System (13 entities with AI)
+├── Consciousness Blob System (13 entities with fog influence)
 ├── Quantum Particle Field (120 particles on desktop)
-└── Post-Processing Effects (Fog + Color grading)
+├── Dynamic Fog Coloring (Real-time blob emission influence)
+└── Post-Processing Effects (Enhanced atmospheric scattering)
+```
+
+### **Volumetric Fog Architecture**
+```typescript
+interface VolumetricFogSystem {
+  // Particle Distribution
+  fogCount: 800;              // Dense atmospheric particles
+  heightDistribution: LayeredDistribution; // Ground-heavy, cloud-light
+  sizeVariation: 2-7;         // Size range with height factors
+  
+  // Dynamic Color System  
+  baseFogColor: Color;        // Cool atmospheric base (#1a2a3a)
+  cyanInfluence: BlobEmission; // Electric cyan tinting (#44FFFF)
+  yellowInfluence: BlobEmission; // Consciousness yellow warmth (#FFE55C)
+  colorMixing: RealTimeBlending; // Proximity-based color influence
+  
+  // Atmospheric Effects
+  exponentialFog: FogExp2;    // Enhanced depth perception (density: 0.008)
+  pulseAnimation: SineWave;   // Subtle breathing effect (2Hz)
+  groundImmersion: PartialSubmersion; // Visible ground through fog
+}
+```
+
+### **Enhanced Camera System - FIXED TRANSITIONS**
+```typescript
+interface CameraSystem {
+  // Smooth Navigation (NO OVERSHOOTING)
+  transitionType: 'DirectLerp'; // Eliminated spring physics overshooting
+  lerpFactor: 0.02;            // Smooth but responsive (was 0.004)
+  overshootPrevention: true;   // Direct interpolation system
+  
+  // Hexagonal Positioning
+  facePositions: SixPoint;     // Perfect 60° increments
+  page5Position: Optimized;    // Fixed height (3) and tilt (0)
+  stabilization: AntiJitter;   // Snap-to-target when close
+}
 ```
 
 ### **Consciousness AI System**
@@ -118,18 +182,41 @@ interface BlobConsciousness {
   size: 'small' | 'medium' | 'large';
   colorData: NexusColorData;
   emergenceSpeed: number; // Underground emergence rate
+  fogInfluence: EmissionData; // Color influence on volumetric fog
   
   // Behavioral Systems
   blinkTimer: number;     // Non-synchronous eye animation
   swimPatterns: SwimData; // Vertical and horizontal movement
   socialZones: CollisionData; // Interaction boundaries
+  atmosphericIntegration: FogInteraction; // Swimming through fog clouds
 }
 ```
+
+## 🚀 **Latest Improvements (v2.1.0)**
+
+### **🌫️ Atmospheric Volumetric Fog System**
+- **Revolutionary fog particles**: 800+ particle system with realistic height-based density distribution
+- **Dynamic color influence**: Blob emissions now affect fog color in real-time for ethereal atmospheric effects
+- **Ground immersion**: Partially submerged ground plane visible through volumetric fog layers
+- **High-tech aesthetic**: Professional sci-fi atmosphere with organic consciousness integration
+
+### **🎯 Fixed Camera Transition System**
+- **Eliminated overshooting**: Replaced spring physics with smooth direct interpolation
+- **No more swing-back**: Clean, precise transitions without oscillation or jitter
+- **Optimized Page 5**: Improved positioning with better height (3) and tilt (0) configuration
+- **Responsive speed**: Perfect balance of smoothness and responsiveness (0.02 lerp factor)
+
+### **🎨 Enhanced Visual Integration**
+- **Fog-responsive lighting**: Blob emissions create colored fog clouds (cyan/yellow atmospheric tinting)
+- **Exponential fog depth**: Enhanced atmospheric scattering with exponential density falloff
+- **Atmospheric immersion**: Blobs appear to swim through realistic fog clouds
+- **Real-time color mixing**: Dynamic fog color blending based on blob proximity and emission intensity
 
 ### **Performance Optimization**
 ```typescript
 Mobile Optimizations:
 - Particle count: 60 (vs 120 desktop)
+- Fog particles: 400 (vs 800 desktop)
 - Blob count: 8 (vs 13 desktop)  
 - Camera FOV: 55° (vs 45° desktop)
 - Update frequency: Staggered animation cycles

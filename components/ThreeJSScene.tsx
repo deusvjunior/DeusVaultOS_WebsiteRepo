@@ -51,8 +51,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Six-sided hexagon navigation system (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
-  // 💡 ADVANCED LIGHTING SYSTEM
-  // Optimized lighting setup for consciousness environments with soft colors
+  // 💡 ADVANCED LIGHTING SYSTEM WITH VOLUMETRIC FOG SUPPORT
+  // Optimized lighting setup for consciousness environments with atmospheric effects
   const setupAdvancedLighting = (scene: THREE.Scene) => {
     // Key light - primary illumination (optimized)
     const keyLight = new THREE.DirectionalLight(0x4ECDC4, 1.8); // Softer cyan
@@ -81,6 +81,72 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     const accentLight = new THREE.PointLight(0xA8E6CF, 1.2, 25);
     accentLight.position.set(0, 8, 0);
     scene.add(accentLight);
+
+    // 🌫️ VOLUMETRIC FOG SYSTEM - ATMOSPHERIC CLOUD EFFECTS
+    // Create volumetric fog that blobs can influence with their emission colors
+    const setupVolumetricFog = () => {
+      // Ground plane for fog base (partially submerged ground)
+      const groundGeometry = new THREE.PlaneGeometry(50, 50);
+      const groundMaterial = new THREE.MeshLambertMaterial({ 
+        color: 0x1a1a1a, 
+        transparent: true, 
+        opacity: 0.7 
+      });
+      const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
+      groundMesh.rotation.x = -Math.PI / 2;
+      groundMesh.position.y = -4;
+      groundMesh.receiveShadow = true;
+      scene.add(groundMesh);
+
+      // Volumetric fog particles system
+      const fogGeometry = new THREE.BufferGeometry();
+      const fogCount = 800; // Dense fog for atmospheric effect
+      const positions = new Float32Array(fogCount * 3);
+      const opacities = new Float32Array(fogCount);
+      const sizes = new Float32Array(fogCount);
+
+      for (let i = 0; i < fogCount; i++) {
+        // Create layered fog distribution - denser near ground, lighter up high
+        const i3 = i * 3;
+        positions[i3] = (Math.random() - 0.5) * 60; // X spread
+        positions[i3 + 1] = Math.random() * 15 - 2; // Y: -2 to 13 (ground level to clouds)
+        positions[i3 + 2] = (Math.random() - 0.5) * 60; // Z spread
+        
+        // Height-based opacity - denser at ground level
+        const height = positions[i3 + 1];
+        const heightFactor = Math.max(0, 1 - (height + 2) / 15);
+        opacities[i] = heightFactor * 0.1 + Math.random() * 0.05;
+        
+        // Size variation based on height
+        sizes[i] = 2 + Math.random() * 3 + heightFactor * 2;
+      }
+
+      fogGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      fogGeometry.setAttribute('opacity', new THREE.BufferAttribute(opacities, 1));
+      fogGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+      // Advanced fog shader material with blob color influence
+      const fogMaterial = new THREE.PointsMaterial({
+        color: 0x6ec5f7, // Base fog color (cool blue-cyan)
+        transparent: true,
+        opacity: 0.3,
+        size: 3,
+        sizeAttenuation: true,
+        blending: THREE.AdditiveBlending,
+        vertexColors: false
+      });
+
+      const fogMesh = new THREE.Points(fogGeometry, fogMaterial);
+      scene.add(fogMesh);
+
+      // Store fog for dynamic color updates based on blob emissions
+      (scene as any).volumetricFog = fogMesh;
+      
+      return fogMesh;
+    };
+
+    // Create the volumetric fog system
+    setupVolumetricFog();
   };
 
   // Enhanced blob creation with size variation and Nexus color system
@@ -1142,7 +1208,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // **REFINED HEXAGONAL PROGRESSION** - Balanced positioning for smooth transitions
+    // **REFINED HEXAGONAL PROGRESSION** - Perfect positioning for all 6 pages
     const cameraConfigs = [
       // Page 0: Front face of hexagon (0°) - Hero Introduction
       { radius: 15, height: 4, angle: 0, tilt: -0.05, label: "Front Face" },
@@ -1154,10 +1220,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { radius: 15, height: 4, angle: Math.PI, tilt: -0.05, label: "Back Face" },
       // Page 4: Left-back face (240°) - THERION AI showcase  
       { radius: 15, height: 4, angle: (4 * Math.PI) / 3, tilt: -0.05, label: "Left-Back Face" },
-      // Page 5: Left-front face (300°) - Marketplace view **CORRECTED POSITION**
-      { radius: 15, height: 4, angle: (5 * Math.PI) / 3, tilt: -0.05, label: "Left-Front Face" },
-      // Page 6: Near-front face (330°) - Call to Action **PROPER FINAL POSITION**
-      { radius: 15, height: 4, angle: (11 * Math.PI) / 6, tilt: -0.05, label: "Near-Front Face" }
+      // Page 5: Left-front face (300°) - Marketplace view **OPTIMIZED POSITION**
+      { radius: 15, height: 3, angle: (5 * Math.PI) / 3, tilt: 0, label: "Left-Front Face" }
     ];
     
     const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
@@ -1181,33 +1245,96 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     cameraRef.current.lookAt(0, lookAtY, 0);
   };
 
-  // Apple-grade rotation with physics simulation (SMOOTHER & ANTI-JITTER)
+  // Apple-grade rotation with SMOOTH physics simulation (NO OVERSHOOTING)
   const updateRotationWithPhysics = (_deltaTime: number) => {
     if (!isInteracting && !reducedMotion) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // Enhanced physics-based rotation with anti-jitter system
-    const springStrength = 0.015; // Even gentler for smoother motion
-    const damping = 0.95; // Higher damping for stability
-    
-    // Anti-jitter threshold - prevent micro-movements
+    // SMOOTH DIRECT INTERPOLATION - NO SPRING PHYSICS (prevents overshooting)
     const angleDifference = targetRotationY.current - currentRotationY.current;
     const normalizedDiff = ((angleDifference + Math.PI) % (2 * Math.PI)) - Math.PI; // Normalize to -π to π
     
-    if (Math.abs(normalizedDiff) > 0.001) { // Only apply force if significant difference
-      const force = normalizedDiff * springStrength;
-      velocityRef.current += force;
-      velocityRef.current *= damping;
-      currentRotationY.current += velocityRef.current;
+    // Direct smooth interpolation with appropriate speed
+    const lerpFactor = 0.02; // Smooth but responsive (was 0.004 - too slow)
+    
+    if (Math.abs(normalizedDiff) > 0.001) {
+      currentRotationY.current += normalizedDiff * lerpFactor;
     } else {
-      // Gradual settling to prevent jitter
-      velocityRef.current *= 0.98;
-      currentRotationY.current = THREE.MathUtils.lerp(currentRotationY.current, targetRotationY.current, 0.05);
+      // Snap to target when very close to prevent drift
+      currentRotationY.current = targetRotationY.current;
     }
     
     if (hexagonRef.current) {
       hexagonRef.current.rotation.y = currentRotationY.current;
+    }
+  };
+
+  // 🌫️ DYNAMIC VOLUMETRIC FOG COLOR SYSTEM
+  // Updates fog colors based on nearby blob emissions for ethereal atmospheric effects
+  const updateVolumetricFogColors = (scene: THREE.Scene, elapsedTime: number) => {
+    const volumetricFog = (scene as any).volumetricFog;
+    if (!volumetricFog || !hexagonRef.current) return;
+
+    // Get all blob meshes from the hexagon group
+    const blobs: THREE.Mesh[] = [];
+    hexagonRef.current.traverse((child) => {
+      if (child instanceof THREE.Mesh && (child as any).userData?.blobType) {
+        blobs.push(child);
+      }
+    });
+
+    // Calculate average emission influence
+    let totalCyanInfluence = 0;
+    let totalYellowInfluence = 0;
+    let totalInfluence = 0;
+
+    blobs.forEach((blob) => {
+      const userData = (blob as any).userData;
+      if (!userData.emissionColor) return;
+
+      // Calculate distance influence (closer blobs have more effect)
+      const distance = blob.position.length();
+      const influenceStrength = Math.max(0, 1 - distance / 20);
+      
+      if (userData.emissionColor === 0x44FFFF) {
+        // Cyan blob influence
+        totalCyanInfluence += influenceStrength;
+      } else if (userData.emissionColor === 0xFFE55C || userData.emissionColor === 0xFFBF47) {
+        // Yellow blob influence
+        totalYellowInfluence += influenceStrength;
+      }
+      totalInfluence += influenceStrength;
+    });
+
+    if (totalInfluence > 0) {
+      // Normalize influences
+      const cyanRatio = totalCyanInfluence / totalInfluence;
+      const yellowRatio = totalYellowInfluence / totalInfluence;
+      
+      // Create dynamic fog color based on blob emissions
+      const baseFogColor = new THREE.Color(0x1a2a3a); // Cool base
+      const cyanTint = new THREE.Color(0x44FFFF);
+      const yellowTint = new THREE.Color(0xFFE55C);
+      
+      // Mix colors based on blob influence
+      const finalFogColor = baseFogColor.clone()
+        .lerp(cyanTint, cyanRatio * 0.3)
+        .lerp(yellowTint, yellowRatio * 0.3);
+      
+      // Apply subtle pulsing effect
+      const pulseIntensity = 1 + Math.sin(elapsedTime * 2) * 0.1;
+      finalFogColor.multiplyScalar(pulseIntensity);
+      
+      // Update scene fog color
+      if (scene.fog && scene.fog instanceof THREE.FogExp2) {
+        scene.fog.color = finalFogColor;
+      }
+      
+      // Update volumetric fog material color
+      if (volumetricFog.material) {
+        volumetricFog.material.color = finalFogColor;
+      }
     }
   };
 
@@ -1217,7 +1344,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Advanced scene setup with Apple-grade rendering
     const scene = new THREE.Scene();
     scene.background = null; // Transparent for layering
-    scene.fog = new THREE.Fog(0x000000, 5, 25); // Depth perception
+    // Enhanced atmospheric fog with color mixing
+    scene.fog = new THREE.FogExp2(0x1a2a3a, 0.008); // Denser exponential fog for atmosphere
     sceneRef.current = scene;
 
     // Professional camera setup with responsive characteristics
@@ -1277,6 +1405,9 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
       // Advanced material updates with performance optimization
       updateAdvancedMaterials(elapsedTime, deltaTime);
+      
+      // 🌫️ DYNAMIC FOG COLOR INFLUENCE FROM BLOB EMISSIONS
+      updateVolumetricFogColors(scene, elapsedTime);
       
       // Subtle camera movements for depth
       updateCameraMovement(elapsedTime);
