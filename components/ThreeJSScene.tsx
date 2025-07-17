@@ -163,9 +163,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const eyeSize = baseSize * 0.12;
       const eyeGeometry = new THREE.SphereGeometry(eyeSize, 16, 12);
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0xffffff,
-        emissive: 0x00ffff,
-        emissiveIntensity: 0.5
+        color: 0xffffff
       });
       
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
