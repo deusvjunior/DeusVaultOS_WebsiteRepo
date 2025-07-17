@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-size: 16px;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --card: #131619;
+  --card-foreground: #ffffff;
+  --popover: #131619;
+  --popover-foreground: #ffffff;
+  --primary: #00e1ff;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1a1d20;
+  --secondary-foreground: #ffffff;
+  --muted: #343a40;
+  --muted-foreground: #adb5bd;
+  --accent: #39ff14;
+  --accent-foreground: #0a0a0a;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #343a40;
+  --input: #1a1d20;
+  --ring: #00e1ff;
+  
+  /* Cyberpunk Colors */
+  --cyber-black: #0a0a0a;
+  --cyber-white: #ffffff;
+  --cyber-cyan: #00e1ff;
+  --cyber-mint-bright: #39ff14;
+  --cyber-yellow: #ffd700;
+  --cyber-dark-950: #0a0a0a;
+  --cyber-dark-900: #131619;
+  --cyber-dark-850: #1a1d20;
+  --cyber-dark-800: #212529;
+  --cyber-dark-750: #2d3338;
+  --cyber-dark-700: #343a40;
+  --cyber-dark-650: #495057;
+  --cyber-dark-600: #6c757d;
+  --cyber-dark-500: #adb5bd;
+  --cyber-dark-400: #ced4da;
+  --cyber-dark-300: #dee2e6;
+  --cyber-dark-200: #e9ecef;
+  --cyber-dark-100: #f8f9fa;
+}
+
+@layer base {
+  * {
+    border-color: rgb(52, 58, 64);
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    font-optical-sizing: auto;
+    background: radial-gradient(circle at 20% 80%, var(--cyber-dark-950) 0%, var(--cyber-black) 40%),
+                radial-gradient(circle at 80% 20%, var(--cyber-dark-900) 0%, var(--cyber-black) 40%),
+                linear-gradient(180deg, var(--cyber-black) 0%, var(--cyber-dark-950) 100%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  /* Glass morphism effect */
+  .glass-refined {
+    background: rgba(19, 22, 25, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 225, 255, 0.2);
+    border-radius: 12px;
+  }
+  
+  /* Interactive elements */
+  .interactive-element {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  
+  .interactive-element:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 225, 255, 0.3);
+  }
+  
+  /* Button styling */
+  .button-refined {
+    background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-mint-bright));
+    border: none;
+    color: var(--cyber-black);
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .button-refined:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 225, 255, 0.4);
+    filter: brightness(1.1);
+  }
+}
+
+/* Cyberpunk animations */
+@keyframes cyber-glow {
+  0%, 100% { text-shadow: 0 0 5px var(--cyber-cyan), 0 0 10px var(--cyber-cyan), 0 0 15px var(--cyber-cyan); }
+  50% { text-shadow: 0 0 10px var(--cyber-cyan), 0 0 20px var(--cyber-cyan), 0 0 30px var(--cyber-cyan); }
+}
+
+@keyframes hexagon-spin {
+  from { transform: rotateZ(0deg); }
+  to { transform: rotateZ(360deg); }
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(0, 225, 255, 0.3); }
+  50% { border-color: rgba(0, 225, 255, 0.8); }
+}
+
+/* Utility classes */
+.cyber-glow {
+  animation: cyber-glow 2s ease-in-out infinite;
+}
+
+.hexagon-rotation {
+  animation: hexagon-spin 20s linear infinite;
+}
+
+.pulse-border-animation {
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+/* Text styles */
+.cyber-title {
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-mint-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cyber-subtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--cyber-dark-400);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .glass-refined {
+    backdrop-filter: blur(8px);
+  }
+  
+  .button-refined {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
