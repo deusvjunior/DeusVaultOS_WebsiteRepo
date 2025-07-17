@@ -27,203 +27,160 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Section rotation mapping (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
-  // Professional lighting setup for depth and atmosphere
+  // Optimized lighting setup for better performance and soft colors
   const setupAdvancedLighting = (scene: THREE.Scene) => {
-    // Key light - primary illumination (much brighter with extended range)
-    const keyLight = new THREE.DirectionalLight(0x00e1ff, 2.5); // Increased from 1.2
-    keyLight.position.set(10, 10, 5);
+    // Key light - primary illumination (optimized)
+    const keyLight = new THREE.DirectionalLight(0x4ECDC4, 1.8); // Softer cyan
+    keyLight.position.set(8, 12, 6);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 4096; // Increased resolution
-    keyLight.shadow.mapSize.height = 4096;
+    keyLight.shadow.mapSize.width = 1024; // Reduced for performance
+    keyLight.shadow.mapSize.height = 1024;
     keyLight.shadow.camera.near = 0.1;
-    keyLight.shadow.camera.far = 100; // Extended range
-    keyLight.shadow.camera.left = -30;
-    keyLight.shadow.camera.right = 30;
-    keyLight.shadow.camera.top = 30;
-    keyLight.shadow.camera.bottom = -30;
+    keyLight.shadow.camera.far = 50;
+    keyLight.shadow.camera.left = -15;
+    keyLight.shadow.camera.right = 15;
+    keyLight.shadow.camera.top = 15;
+    keyLight.shadow.camera.bottom = -15;
     scene.add(keyLight);
 
-    // Fill light - soften shadows (enhanced)
-    const fillLight = new THREE.DirectionalLight(0x39ff14, 1.2); // Increased from 0.6
-    fillLight.position.set(-5, 5, 5);
+    // Warm fill light
+    const fillLight = new THREE.DirectionalLight(0xFFE66D, 0.8); // Warm yellow
+    fillLight.position.set(-6, 8, 4);
     scene.add(fillLight);
 
-    // Rim light - edge definition (enhanced)
-    const rimLight = new THREE.DirectionalLight(0xffd700, 1.5); // Increased from 0.8
-    rimLight.position.set(0, -5, -10);
-    scene.add(rimLight);
-
-    // Additional directional light from opposite side
-    const backLight = new THREE.DirectionalLight(0x00ffff, 1.0);
-    backLight.position.set(-10, -10, -8);
-    scene.add(backLight);
-
-    // Ambient light - global illumination (brighter)
-    const ambientLight = new THREE.AmbientLight(0x1a1d20, 0.8); // Increased from 0.2
+    // Ambient light for soft base illumination
+    const ambientLight = new THREE.AmbientLight(0x95E1D3, 0.4); // Soft mint
     scene.add(ambientLight);
 
-    // Environment light for reflections (enhanced)
-    const hemisphereLight = new THREE.HemisphereLight(0x00e1ff, 0x131619, 0.7); // Increased from 0.3
-    scene.add(hemisphereLight);
-
-    // Additional point lights for enhanced depth
-    const pointLight1 = new THREE.PointLight(0x00ffff, 1.5, 40); // Cyan with extended range
-    pointLight1.position.set(-12, 8, 3);
-    scene.add(pointLight1);
-
-    const pointLight2 = new THREE.PointLight(0x39ff14, 1.2, 35); // Green accent
-    pointLight2.position.set(12, -5, 6);
-    scene.add(pointLight2);
-
-    const pointLight3 = new THREE.PointLight(0xffff00, 1.0, 30); // Yellow accent
-    pointLight3.position.set(0, 12, -8);
-    scene.add(pointLight3);
+    // Single accent point light (optimized)
+    const accentLight = new THREE.PointLight(0xA8E6CF, 1.2, 25);
+    accentLight.position.set(0, 8, 0);
+    scene.add(accentLight);
   };
 
-  // Enhanced living blobs with organic movement and personality
-  const createLivingBlobs = (group: THREE.Group) => {
-    const blobCount = 8; // Reduced count to prevent overcrowding
+  // Enhanced living blobs with jelly physics, eyes, and cute movement
+  const createCuteBlobsWithJellyPhysics = (group: THREE.Group) => {
+    const blobCount = 6; // Reduced for performance
     const blobs: any[] = [];
-    const hexagonRadius = 6; // Define hexagon boundary for collision detection
+    const hexagonRadius = 5.5; // Slightly smaller boundary
 
     for (let i = 0; i < blobCount; i++) {
-      // Smaller, more uniform blob sizes
-      const baseSize = 0.3 + Math.random() * 0.4; // 0.3 to 0.7 (smaller than before)
+      // Smaller, cuter blob sizes
+      const baseSize = 0.6 + Math.random() * 0.4; // 0.6 to 1.0
       
-      // Perfect sphere geometry (no stretching)
-      const blobGeometry = new THREE.SphereGeometry(baseSize, 32, 24); // Higher quality sphere
+      // Create jelly-like geometry with vertex displacement capability
+      const blobGeometry = new THREE.SphereGeometry(baseSize, 16, 12); // Lower poly for better performance
+      const positions = blobGeometry.attributes.position;
       
-      // Neon cyan/yellow color palette with green accents
+      // Store original vertices for jelly deformation
+      const originalVertices = [];
+      for (let j = 0; j < positions.count; j++) {
+        originalVertices.push(
+          positions.getX(j),
+          positions.getY(j), 
+          positions.getZ(j)
+        );
+      }
+      
+      // Soft, cute colors (less emissive)
       const colorOptions = [
-        0x00ffff, // Neon cyan
-        0xffff00, // Neon yellow  
-        0x00ff88, // Light green accent
-        0x88ffff, // Light cyan
-        0xffff88, // Light yellow
+        0x4ECDC4, // Soft cyan
+        0xFFE66D, // Warm yellow
+        0x95E1D3, // Mint green
+        0xA8E6CF, // Light green
+        0xFFB6C1, // Light pink
       ];
       const selectedColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
       
+      // Soft, jelly-like material
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
-        metalness: 0.1,
-        roughness: 0.3,
-        clearcoat: 0.8,
-        transmission: 0, // Fully opaque
-        transparent: false, // No transparency
-        opacity: 1.0, // Fully opaque
+        metalness: 0.0,
+        roughness: 0.4,
+        clearcoat: 0.3,
+        transmission: 0.1, // Slight translucency for jelly effect
+        transparent: true,
+        opacity: 0.9,
         emissive: selectedColor,
-        emissiveIntensity: 0.1 + Math.random() * 0.2, // Subtle pulsating emission
+        emissiveIntensity: 0.02, // Very subtle emission
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       
-      // Position within hexagon boundaries with collision detection
-      let positionValid = false;
-      let attempts = 0;
-      let x, y, z;
+      // Position within safe zone
+      const angle = (i / blobCount) * Math.PI * 2;
+      const radius = 1 + Math.random() * 2; // Close to center
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      const y = -1 + Math.random() * 2; // Mostly below surface
       
-      while (!positionValid && attempts < 50) {
-        const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * (hexagonRadius - baseSize - 1); // Keep away from edges
-        x = Math.cos(angle) * radius;
-        z = Math.sin(angle) * radius;
-        y = (Math.random() - 0.5) * 3; // Limited height range
-        
-        // Check collision with existing blobs
-        let collides = false;
-        for (const existingBlob of blobs) {
-          const distance = Math.sqrt(
-            Math.pow(x - existingBlob.position.x, 2) +
-            Math.pow(y - existingBlob.position.y, 2) +
-            Math.pow(z - existingBlob.position.z, 2)
-          );
-          if (distance < (baseSize + existingBlob.userData.size + 0.5)) {
-            collides = true;
-            break;
-          }
-        }
-        
-        positionValid = !collides;
-        attempts++;
-      }
-      
-      blobMesh.position.set(x || 0, y || 0, z || 0);
-      
-      // No scale distortion - keep perfect sphere shape
-      blobMesh.scale.set(1, 1, 1);
-      
-      // Random initial rotation
-      blobMesh.rotation.set(
-        Math.random() * Math.PI * 2,
-        Math.random() * Math.PI * 2,
-        Math.random() * Math.PI * 2
-      );
+      blobMesh.position.set(x, y, z);
 
-      // Create eyes with neon glow
-      const eyeSize = baseSize * 0.12;
-      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 16, 12);
+      // Create cute black dot eyes
+      const eyeSize = baseSize * 0.08;
+      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6);
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0xffffff
+        color: 0x000000 // Black dots
       });
       
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       
-      // Position eyes based on blob size
-      const eyeOffset = baseSize * 0.3;
-      leftEye.position.set(-eyeOffset, eyeOffset * 0.5, baseSize * 0.8);
-      rightEye.position.set(eyeOffset, eyeOffset * 0.5, baseSize * 0.8);
+      // Position eyes on front of blob
+      const eyeOffset = baseSize * 0.4;
+      leftEye.position.set(-eyeOffset, eyeOffset * 0.3, baseSize * 0.85);
+      rightEye.position.set(eyeOffset, eyeOffset * 0.3, baseSize * 0.85);
       
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Store blob data for animation
+      // Store comprehensive animation data
       blobMesh.userData = {
         size: baseSize,
-        originalPosition: blobMesh.position.clone(),
+        originalVertices,
         leftEye,
         rightEye,
         
-        // Slower swimming motion parameters
-        swimSpeed: 0.1 + Math.random() * 0.3, // Much slower: 0.1 to 0.4
+        // Slow, cute swimming
+        swimSpeed: 0.2 + Math.random() * 0.3, // Very slow
         swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 0.3 + Math.random() * 0.5, // Smaller movement range
-        swimDirectionX: (Math.random() - 0.5) * 0.5,
-        swimDirectionY: (Math.random() - 0.5) * 0.3,
-        swimDirectionZ: (Math.random() - 0.5) * 0.5,
+        swimAmplitude: 0.5 + Math.random() * 0.5,
         
-        // Slower rotation animation
-        rotationSpeedX: (Math.random() - 0.5) * 0.005,
-        rotationSpeedY: (Math.random() - 0.5) * 0.005,
-        rotationSpeedZ: (Math.random() - 0.5) * 0.005,
+        // Individual direction per blob
+        targetDirection: new THREE.Vector3(
+          (Math.random() - 0.5) * 2,
+          (Math.random() - 0.5) * 0.5,
+          (Math.random() - 0.5) * 2
+        ).normalize(),
+        currentDirection: new THREE.Vector3(),
         
-        // Gentle breathing animation
-        breathingSpeed: 0.2 + Math.random() * 0.4,
-        breathingOffset: Math.random() * Math.PI * 2,
-        breathingAmplitude: 0.05 + Math.random() * 0.1,
+        // Jelly physics
+        jellyVertices: new Float32Array(originalVertices),
+        jellySpeed: 0.5 + Math.random() * 0.5,
+        jellyIntensity: 0.1 + Math.random() * 0.1,
         
-        // Eye animation
-        blinkTimer: Math.random() * 5,
-        blinkDuration: 0.1 + Math.random() * 0.1,
+        // Spiral emergence from ground
+        spiralAngle: Math.random() * Math.PI * 2,
+        spiralSpeed: 0.3 + Math.random() * 0.4,
+        spiralRadius: 0.2 + Math.random() * 0.3,
+        isEmerging: y < -0.5,
+        emergenceTarget: y + 2,
+        
+        // Cute blinking
+        blinkTimer: 1 + Math.random() * 3,
         isBlinking: false,
-        lookDirection: new THREE.Vector3(),
-        lookTimer: Math.random() * 3,
-        lookSpeed: 0.01 + Math.random() * 0.02,
         
-        // Gentle orbital motion
-        orbitalAngle: Math.random() * Math.PI * 2,
-        orbitalSpeed: (Math.random() - 0.5) * 0.002, // Much slower orbital motion
-        orbitalRadius: Math.sqrt((x||0)*(x||0) + (z||0)*(z||0)),
+        // Squishy scale animation  
+        squishiness: 0.05 + Math.random() * 0.05,
+        squishSpeed: 0.8 + Math.random() * 0.4,
+        squishOffset: Math.random() * Math.PI * 2,
         
-        // Personality traits
-        isHyperactive: Math.random() > 0.8, // 20% chance of hyperactivity
-        isShy: Math.random() > 0.8, // 20% chance of being shy
-        energy: Math.random(), // Overall energy level
+        // Gentle rotation
+        rotationSpeed: (Math.random() - 0.5) * 0.01,
         
-        // Emission pulsing
-        originalEmissiveIntensity: blobMaterial.emissiveIntensity,
-        pulseSpeed: 0.5 + Math.random() * 1.0,
-        pulseOffset: Math.random() * Math.PI * 2,
+        // Ground intersection effect
+        groundIntersection: 0,
+        intersectionFade: 1,
       };
 
       blobs.push(blobMesh);
@@ -407,13 +364,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       (group as any)[`frame_${i}`] = frameMesh;
     }
 
-    // Add living blobs and enhanced particles
-    const blobs = createLivingBlobs(group);
-    const particles = createEnhancedParticles(group);
-    
-    // Store references for animation updates
-    (group as any).blobs = blobs;
-    (group as any).particles = particles;
+    // Add cute jelly blobs with physics ONLY ONCE
+    if (!(group as any).blobsCreated) {
+      const blobs = createCuteBlobsWithJellyPhysics(group);
+      const particles = createEnhancedParticles(group);
+      
+      // Store references for animation updates  
+      (group as any).blobs = blobs;
+      (group as any).particles = particles;
+      (group as any).blobsCreated = true; // Prevent recreation
+    }
   };
 
   // Advanced material updates with living blob animation
@@ -440,122 +400,123 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
     }
 
-    // Animate enhanced living blobs with organic swimming motion and boundary checking
+    // Animate cute jelly blobs with squishy physics and spiral emergence
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
-      const hexagonRadius = 6; // Boundary radius
+      const hexagonRadius = 5.5; // Boundary radius
       
       blobs.forEach((blob: any, index: number) => {
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Slower, more elegant swimming motion
-        const swimTimeX = time * userData.swimSpeed + userData.swimOffset;
-        const swimTimeY = time * userData.swimSpeed * 0.7 + userData.swimOffset * 1.3;
-        const swimTimeZ = time * userData.swimSpeed * 1.1 + userData.swimOffset * 0.8;
+        // Jelly vertex deformation for squishiness
+        const geometry = blob.geometry;
+        const positions = geometry.attributes.position;
         
-        // Gentle organic swimming patterns
-        const swimX = Math.sin(swimTimeX) * userData.swimAmplitude * userData.swimDirectionX;
-        const swimY = Math.sin(swimTimeY) * userData.swimAmplitude * 0.5 * userData.swimDirectionY;
-        const swimZ = Math.cos(swimTimeZ) * userData.swimAmplitude * userData.swimDirectionZ;
-        
-        // Calculate new position
-        let newX = userData.originalPosition.x + swimX;
-        let newY = userData.originalPosition.y + swimY;
-        let newZ = userData.originalPosition.z + swimZ;
-        
-        // Add gentle orbital motion
-        userData.orbitalAngle += userData.orbitalSpeed * (userData.energy + 0.5);
-        const orbitalX = Math.cos(userData.orbitalAngle) * userData.orbitalRadius * 0.1;
-        const orbitalZ = Math.sin(userData.orbitalAngle) * userData.orbitalRadius * 0.1;
-        newX += orbitalX;
-        newZ += orbitalZ;
-        
-        // Boundary checking - keep within hexagon
-        const distanceFromCenter = Math.sqrt(newX * newX + newZ * newZ);
-        if (distanceFromCenter > hexagonRadius - userData.size) {
-          // Bounce off walls by reversing direction
-          const angle = Math.atan2(newZ, newX);
-          newX = Math.cos(angle) * (hexagonRadius - userData.size);
-          newZ = Math.sin(angle) * (hexagonRadius - userData.size);
+        for (let i = 0; i < positions.count; i++) {
+          const i3 = i * 3;
+          const originalX = userData.originalVertices[i3];
+          const originalY = userData.originalVertices[i3 + 1];  
+          const originalZ = userData.originalVertices[i3 + 2];
           
-          // Reverse swimming direction to create bounce effect
-          userData.swimDirectionX *= -0.8;
-          userData.swimDirectionZ *= -0.8;
+          // Add jelly wobble based on position and time
+          const wobbleX = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity;
+          const wobbleY = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity;
+          const wobbleZ = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity;
+          
+          positions.setXYZ(i, 
+            originalX + wobbleX,
+            originalY + wobbleY, 
+            originalZ + wobbleZ
+          );
+        }
+        positions.needsUpdate = true;
+        
+        // Individual directional movement (slow & cute)
+        const moveTime = time * userData.swimSpeed;
+        userData.currentDirection.lerp(userData.targetDirection, 0.01);
+        
+        // Change direction occasionally
+        if (Math.random() < 0.002) {
+          userData.targetDirection.set(
+            (Math.random() - 0.5) * 2,
+            (Math.random() - 0.5) * 0.5,
+            (Math.random() - 0.5) * 2
+          ).normalize();
         }
         
-        // Keep vertical movement within bounds
-        if (newY > 3) {
-          newY = 3;
-          userData.swimDirectionY *= -0.8;
-        } else if (newY < -3) {
-          newY = -3;
-          userData.swimDirectionY *= -0.8;
-        }
-        
-        // Collision detection with other blobs
-        blobs.forEach((otherBlob: any, otherIndex: number) => {
-          if (index !== otherIndex) {
-            const otherUserData = otherBlob.userData;
-            const dx = newX - otherBlob.position.x;
-            const dy = newY - otherBlob.position.y;
-            const dz = newZ - otherBlob.position.z;
-            const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-            const minDistance = userData.size + otherUserData.size + 0.2;
-            
-            if (distance < minDistance) {
-              // Push blobs apart gently
-              const pushFactor = (minDistance - distance) * 0.5;
-              const pushX = (dx / distance) * pushFactor;
-              const pushY = (dy / distance) * pushFactor;
-              const pushZ = (dz / distance) * pushFactor;
-              
-              newX += pushX;
-              newY += pushY;
-              newZ += pushZ;
-            }
+        // Spiral emergence from ground effect
+        if (userData.isEmerging && blob.position.y < userData.emergenceTarget) {
+          userData.spiralAngle += userData.spiralSpeed * deltaTime;
+          const spiralX = Math.cos(userData.spiralAngle) * userData.spiralRadius;
+          const spiralZ = Math.sin(userData.spiralAngle) * userData.spiralRadius;
+          
+          blob.position.x += spiralX * deltaTime;
+          blob.position.z += spiralZ * deltaTime;
+          blob.position.y += userData.spiralSpeed * deltaTime;
+          
+          // Ground intersection fade effect
+          if (blob.position.y < 0) {
+            userData.intersectionFade = Math.max(0.3, (blob.position.y + 2) / 2);
+            blob.material.opacity = userData.intersectionFade;
           }
-        });
+          
+          if (blob.position.y >= userData.emergenceTarget) {
+            userData.isEmerging = false;
+            blob.material.opacity = 0.9;
+          }
+        } else {
+          // Normal cute swimming motion
+          const swimOffset = Math.sin(moveTime + userData.swimOffset);
+          const moveDistance = userData.swimAmplitude * deltaTime;
+          
+          blob.position.add(
+            userData.currentDirection.clone().multiplyScalar(moveDistance * swimOffset)
+          );
+        }
         
-        // Apply new position
-        blob.position.set(newX, newY, newZ);
+        // Soft boundary checking (bounce gently)
+        const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
+        if (distanceFromCenter > hexagonRadius - userData.size) {
+          const angle = Math.atan2(blob.position.z, blob.position.x);
+          blob.position.x = Math.cos(angle) * (hexagonRadius - userData.size);
+          blob.position.z = Math.sin(angle) * (hexagonRadius - userData.size);
+          
+          // Gently reverse direction
+          userData.targetDirection.multiplyScalar(-0.7);
+        }
         
-        // Slower rotation animation
-        blob.rotation.x += userData.rotationSpeedX * (userData.isHyperactive ? 1.5 : 1);
-        blob.rotation.y += userData.rotationSpeedY * (userData.isHyperactive ? 1.5 : 1);
-        blob.rotation.z += userData.rotationSpeedZ * (userData.isHyperactive ? 1.5 : 1);
+        // Vertical bounds (with ground emergence)
+        if (blob.position.y > 2.5) {
+          blob.position.y = 2.5;
+          userData.targetDirection.y *= -0.8;
+        } else if (blob.position.y < -2.5 && !userData.isEmerging) {
+          blob.position.y = -2.5;
+          userData.targetDirection.y *= -0.8;
+        }
         
-        // Gentle breathing/pulsing scale animation
-        const breathingTime = time * userData.breathingSpeed + userData.breathingOffset;
-        const breathingScale = 1 + Math.sin(breathingTime) * userData.breathingAmplitude;
-        blob.scale.setScalar(breathingScale); // Keep perfect sphere shape
+        // Squishy scale animation
+        const squishTime = time * userData.squishSpeed + userData.squishOffset;
+        const squishScale = 1 + Math.sin(squishTime) * userData.squishiness;
+        const squishScaleY = 1 + Math.sin(squishTime * 1.2) * userData.squishiness * 0.8;
+        blob.scale.set(squishScale, squishScaleY, squishScale);
         
-        // Subtle emission pulsing for neon glow
-        const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
-        const pulseIntensity = userData.originalEmissiveIntensity * (1 + Math.sin(pulseTime) * 0.3);
-        blob.material.emissiveIntensity = pulseIntensity;
+        // Gentle rotation towards movement direction
+        blob.rotation.y += userData.rotationSpeed;
         
-        // Eye blinking animation
+        // Cute blinking animation
         userData.blinkTimer -= deltaTime;
         if (userData.blinkTimer <= 0) {
-          userData.blinkTimer = userData.isShy ? (1 + Math.random() * 2) : (2 + Math.random() * 4);
-          userData.isBlinking = true;
+          userData.blinkTimer = 2 + Math.random() * 4; // Slower blinking
           
-          // Synchronized eye blinking
+          // Cute synchronized blink
           userData.leftEye.scale.y = 0.1;
           userData.rightEye.scale.y = 0.1;
           
           setTimeout(() => {
             userData.leftEye.scale.y = 1;
             userData.rightEye.scale.y = 1;
-            userData.isBlinking = false;
-          }, userData.blinkDuration * 1000);
-        }
-        
-        // Gentle eye tracking
-        userData.lookTimer -= deltaTime;
-        if (userData.lookTimer <= 0) {
-          userData.lookTimer = 1 + Math.random() * 3;
+          }, 150);
         }
       });
     }
