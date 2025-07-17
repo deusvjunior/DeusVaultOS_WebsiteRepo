@@ -103,7 +103,8 @@ export function MicrosoftComparisonSection() {
   };
 
   const handleLearnMore = () => {
-    window.open('https://docs.deusvault.com/vs-microsoft', '_blank');
+    // Show detailed comparison information
+    alert('Detailed comparison documentation coming soon! Check our GitHub repository for current information.');
   };
 
   return (

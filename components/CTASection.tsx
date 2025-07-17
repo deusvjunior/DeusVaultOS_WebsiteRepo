@@ -80,7 +80,10 @@ export function CTASection() {
             <Button 
               size="lg" 
               className="text-2xl px-12 py-6 bg-gradient-to-r from-cyan-600 to-green-600 hover:from-cyan-500 hover:to-green-500 text-white shadow-xl hover:shadow-2xl transition-all duration-300"
-              onClick={() => window.open('https://github.com/deusvault/releases', '_blank')}
+              onClick={() => {
+                // Scroll to top to see download section  
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
             >
               <Download className="h-6 w-6 mr-3" />
               Download DeusVaultOS
@@ -161,9 +164,11 @@ export function CTASection() {
                 }`}
                 onClick={() => {
                   if (option.buttonText === "Contact Sales") {
-                    window.open('mailto:enterprise@deusvault.com?subject=Enterprise%20Inquiry', '_blank');
+                    // Contact enterprise team
+                    alert('Enterprise contact: Please reach out through our GitHub repository for enterprise inquiries.');
                   } else {
-                    window.open('https://github.com/deusvault/releases', '_blank');
+                    // Navigate to download section
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }
                 }}
               >
@@ -190,7 +195,10 @@ export function CTASection() {
               variant="outline" 
               size="lg"
               className="text-lg px-8 py-3 border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10"
-              onClick={() => window.open('https://docs.deusvault.com', '_blank')}
+              onClick={() => {
+                // Scroll to documentation section or show info modal
+                alert('Documentation coming soon! Check our GitHub repository for current guides.');
+              }}
             >
               View Documentation
             </Button>
@@ -199,7 +207,7 @@ export function CTASection() {
               variant="outline" 
               size="lg"
               className="text-lg px-8 py-3 border-green-400/50 text-green-400 hover:bg-green-400/10"
-              onClick={() => window.open('https://github.com/deusvault/deusvault', '_blank')}
+              onClick={() => window.open('https://github.com/AngeloGkOne/DeusVaultOS_WebsiteRepo', '_blank')}
             >
               Star on GitHub
             </Button>

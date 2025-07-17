@@ -42,11 +42,13 @@ export function EnterpriseSection() {
   ];
 
   const handleEnterpriseContact = () => {
-    window.open('mailto:enterprise@deusvault.com?subject=Enterprise%20Demo%20Request', '_blank');
+    // Contact enterprise team
+    alert('Enterprise demo: Please contact us through GitHub repository for enterprise demonstrations.');
   };
 
   const handleScheduleDemo = () => {
-    window.open('https://calendly.com/deusvault/enterprise-demo', '_blank');
+    // Schedule enterprise demo
+    alert('Demo scheduling: Please contact us through GitHub repository to schedule an enterprise demonstration.');
   };
 
   return (

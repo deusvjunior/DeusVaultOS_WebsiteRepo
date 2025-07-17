@@ -10,7 +10,8 @@ export function ImprovedHeroSection() {
       event_category: 'conversion',
       event_label: 'hero_download'
     });
-    window.open('https://github.com/deusvault/releases', '_blank');
+    // Navigate to download section
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDemo = () => {
@@ -19,7 +20,8 @@ export function ImprovedHeroSection() {
       event_category: 'engagement',
       event_label: 'hero_demo'
     });
-    window.open('https://demo.deusvault.com', '_blank');
+    // Show interactive demo section
+    alert('Interactive demo coming soon! Download DeusVaultOS to experience the full development environment.');
   };
 
   const socialProof = [

@@ -29,33 +29,65 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
   // Professional lighting setup for depth and atmosphere
   const setupAdvancedLighting = (scene: THREE.Scene) => {
-    // Key light - primary illumination
-    const keyLight = new THREE.DirectionalLight(0x00e1ff, 0.8);
-    keyLight.position.set(10, 10, 5);
+    // Clear existing lights
+    const existingLights = scene.children.filter(child => child instanceof THREE.Light);
+    existingLights.forEach(light => scene.remove(light));
+
+    // Primary key light - main illumination with enhanced intensity
+    const keyLight = new THREE.DirectionalLight(0x00e1ff, 1.2);
+    keyLight.position.set(15, 15, 10);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 2048;
-    keyLight.shadow.mapSize.height = 2048;
-    keyLight.shadow.camera.near = 0.5;
-    keyLight.shadow.camera.far = 50;
+    keyLight.shadow.mapSize.width = 4096;
+    keyLight.shadow.mapSize.height = 4096;
+    keyLight.shadow.camera.near = 0.1;
+    keyLight.shadow.camera.far = 100;
+    keyLight.shadow.camera.left = -20;
+    keyLight.shadow.camera.right = 20;
+    keyLight.shadow.camera.top = 20;
+    keyLight.shadow.camera.bottom = -20;
+    keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
 
-    // Fill light - soften shadows
-    const fillLight = new THREE.DirectionalLight(0x39ff14, 0.3);
-    fillLight.position.set(-5, 5, 5);
+    // Secondary fill light - reduce harsh shadows
+    const fillLight = new THREE.DirectionalLight(0x39ff14, 0.6);
+    fillLight.position.set(-10, 8, 8);
+    fillLight.castShadow = true;
+    fillLight.shadow.mapSize.width = 2048;
+    fillLight.shadow.mapSize.height = 2048;
     scene.add(fillLight);
 
-    // Rim light - edge definition
-    const rimLight = new THREE.DirectionalLight(0xffd700, 0.4);
-    rimLight.position.set(0, -5, -10);
+    // Accent rim light - edge definition and dramatic effect
+    const rimLight = new THREE.DirectionalLight(0xffd700, 0.8);
+    rimLight.position.set(0, -8, -15);
     scene.add(rimLight);
 
-    // Ambient light - global illumination
-    const ambientLight = new THREE.AmbientLight(0x1a1d20, 0.2);
+    // Enhanced ambient light - better global illumination
+    const ambientLight = new THREE.AmbientLight(0x1a2025, 0.4);
     scene.add(ambientLight);
 
-    // Environment light for reflections
-    const hemisphereLight = new THREE.HemisphereLight(0x00e1ff, 0x131619, 0.3);
+    // Environment hemisphere light for natural color gradation
+    const hemisphereLight = new THREE.HemisphereLight(0x00e1ff, 0x131619, 0.5);
+    hemisphereLight.position.set(0, 20, 0);
     scene.add(hemisphereLight);
+
+    // Additional accent lights for dynamic atmosphere
+    const accentLight1 = new THREE.PointLight(0x00ffff, 0.8, 30);
+    accentLight1.position.set(12, 5, 12);
+    scene.add(accentLight1);
+
+    const accentLight2 = new THREE.PointLight(0xff00ff, 0.6, 25);
+    accentLight2.position.set(-12, 8, -8);
+    scene.add(accentLight2);
+
+    // Volumetric spotlight for dramatic depth
+    const spotLight = new THREE.SpotLight(0x00e1ff, 1.0, 50, Math.PI / 6, 0.3);
+    spotLight.position.set(0, 25, 0);
+    spotLight.target.position.set(0, 0, 0);
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize.width = 2048;
+    spotLight.shadow.mapSize.height = 2048;
+    scene.add(spotLight);
+    scene.add(spotLight.target);
   };
 
   // Cute living blobs with eyes system
