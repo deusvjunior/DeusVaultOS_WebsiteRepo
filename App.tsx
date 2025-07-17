@@ -128,16 +128,18 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [sections.length]);
 
-  // Auto-advance sections DISABLED (as requested by user)
-  // useEffect(() => {
-  //   if (reducedMotion) return;
+  // Auto-advance sections disabled per user request
+  /*
+  useEffect(() => {
+    if (reducedMotion) return;
 
-  //   const interval = setInterval(() => {
-  //     setCurrentSection((prev: number) => (prev + 1) % sections.length);
-  //   }, 20000); // 20 seconds per section
+    const interval = setInterval(() => {
+      setCurrentSection((prev: number) => (prev + 1) % sections.length);
+    }, 20000); // 20 seconds per section
 
-  //   return () => clearInterval(interval);
-  // }, [reducedMotion, sections.length]);
+    return () => clearInterval(interval);
+  }, [reducedMotion, sections.length]);
+  */
 
   const nextSection = () => {
     setCurrentSection((prev: number) => (prev + 1) % sections.length);
@@ -180,14 +182,11 @@ export default function App() {
             {/* Logo */}
             <div className="flex items-center gap-4">
               <div className="w-8 h-8 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-full h-full text-cyan-400">
-                  <polygon
-                    points="12,2 20,6 20,18 12,22 4,18 4,6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                </svg>
+                <img 
+                  src="/DVLogo.png" 
+                  alt="DeusVaultOS Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
                 <h1 className="text-xl text-white font-bold" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>

@@ -27,102 +27,130 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Section rotation mapping (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
-  // Professional lighting setup for depth and atmosphere (ENHANCED)
+  // Professional lighting setup for depth and atmosphere
   const setupAdvancedLighting = (scene: THREE.Scene) => {
-    // Key light - primary illumination (MUCH brighter)
-    const keyLight = new THREE.DirectionalLight(0x00e1ff, 2.5);
-    keyLight.position.set(15, 15, 10);
+    // Key light - primary illumination (much brighter with extended range)
+    const keyLight = new THREE.DirectionalLight(0x00e1ff, 2.5); // Increased from 1.2
+    keyLight.position.set(10, 10, 5);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 4096;
+    keyLight.shadow.mapSize.width = 4096; // Increased resolution
     keyLight.shadow.mapSize.height = 4096;
     keyLight.shadow.camera.near = 0.1;
-    keyLight.shadow.camera.far = 100;
-    keyLight.shadow.camera.left = -25;
-    keyLight.shadow.camera.right = 25;
-    keyLight.shadow.camera.top = 25;
-    keyLight.shadow.camera.bottom = -25;
+    keyLight.shadow.camera.far = 100; // Extended range
+    keyLight.shadow.camera.left = -30;
+    keyLight.shadow.camera.right = 30;
+    keyLight.shadow.camera.top = 30;
+    keyLight.shadow.camera.bottom = -30;
     scene.add(keyLight);
 
-    // Fill light - soften shadows (MUCH brighter)
-    const fillLight = new THREE.DirectionalLight(0x39ff14, 1.5);
-    fillLight.position.set(-10, 8, 10);
+    // Fill light - soften shadows (enhanced)
+    const fillLight = new THREE.DirectionalLight(0x39ff14, 1.2); // Increased from 0.6
+    fillLight.position.set(-5, 5, 5);
     scene.add(fillLight);
 
-    // Rim light - edge definition (MUCH brighter)
-    const rimLight = new THREE.DirectionalLight(0xffd700, 1.8);
-    rimLight.position.set(0, -8, -15);
+    // Rim light - edge definition (enhanced)
+    const rimLight = new THREE.DirectionalLight(0xffd700, 1.5); // Increased from 0.8
+    rimLight.position.set(0, -5, -10);
     scene.add(rimLight);
 
-    // Strong ambient light for overall brightness
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
+    // Additional directional light from opposite side
+    const backLight = new THREE.DirectionalLight(0x00ffff, 1.0);
+    backLight.position.set(-10, -10, -8);
+    scene.add(backLight);
+
+    // Ambient light - global illumination (brighter)
+    const ambientLight = new THREE.AmbientLight(0x1a1d20, 0.8); // Increased from 0.2
     scene.add(ambientLight);
 
-    // Enhanced environment light for reflections
-    const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x1e3a8a, 0.6);
+    // Environment light for reflections (enhanced)
+    const hemisphereLight = new THREE.HemisphereLight(0x00e1ff, 0x131619, 0.7); // Increased from 0.3
     scene.add(hemisphereLight);
 
-    // Additional point lights for dynamic illumination
-    const pointLight1 = new THREE.PointLight(0x00e1ff, 2.0, 30);
-    pointLight1.position.set(8, 5, 8);
+    // Additional point lights for enhanced depth
+    const pointLight1 = new THREE.PointLight(0x00ffff, 1.5, 40); // Cyan with extended range
+    pointLight1.position.set(-12, 8, 3);
     scene.add(pointLight1);
 
-    const pointLight2 = new THREE.PointLight(0x39ff14, 1.8, 25);
-    pointLight2.position.set(-8, 5, -8);
+    const pointLight2 = new THREE.PointLight(0x39ff14, 1.2, 35); // Green accent
+    pointLight2.position.set(12, -5, 6);
     scene.add(pointLight2);
 
-    const pointLight3 = new THREE.PointLight(0xffd700, 1.5, 20);
-    pointLight3.position.set(0, 10, 0);
+    const pointLight3 = new THREE.PointLight(0xffff00, 1.0, 30); // Yellow accent
+    pointLight3.position.set(0, 12, -8);
     scene.add(pointLight3);
   };
 
   // Enhanced living blobs with organic movement and personality
   const createLivingBlobs = (group: THREE.Group) => {
-    const blobCount = 12; // More blobs for variety
+    const blobCount = 8; // Reduced count to prevent overcrowding
     const blobs: any[] = [];
+    const hexagonRadius = 6; // Define hexagon boundary for collision detection
 
     for (let i = 0; i < blobCount; i++) {
-      // Much more varied blob sizes and shapes
-      const baseSize = 0.2 + Math.random() * 0.6; // 0.2 to 0.8
-      const scaleX = 0.8 + Math.random() * 0.4; // 0.8 to 1.2
-      const scaleY = 0.8 + Math.random() * 0.4;
-      const scaleZ = 0.8 + Math.random() * 0.4;
+      // Smaller, more uniform blob sizes
+      const baseSize = 0.3 + Math.random() * 0.4; // 0.3 to 0.7 (smaller than before)
       
-      const blobGeometry = new THREE.SphereGeometry(baseSize, 16, 12);
+      // Perfect sphere geometry (no stretching)
+      const blobGeometry = new THREE.SphereGeometry(baseSize, 32, 24); // Higher quality sphere
       
-      // More varied materials and colors
-      const hue = Math.random(); // Full hue range
-      const saturation = 0.5 + Math.random() * 0.5; // 0.5 to 1.0
-      const lightness = 0.4 + Math.random() * 0.4; // 0.4 to 0.8
+      // Neon cyan/yellow color palette with green accents
+      const colorOptions = [
+        0x00ffff, // Neon cyan
+        0xffff00, // Neon yellow  
+        0x00ff88, // Light green accent
+        0x88ffff, // Light cyan
+        0xffff88, // Light yellow
+      ];
+      const selectedColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
       
       const blobMaterial = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color().setHSL(hue, saturation, lightness),
-        metalness: Math.random() * 0.3,
-        roughness: 0.6 + Math.random() * 0.4,
-        clearcoat: Math.random() * 0.5,
-        transmission: 0.0, // No transparency
-        thickness: 0.0,
-        transparent: false, // Completely opaque
-        opacity: 1.0, // Solid material
-        emissive: new THREE.Color().setHSL(hue, saturation * 0.3, lightness * 0.1),
-        emissiveIntensity: 0.05,
+        color: selectedColor,
+        metalness: 0.1,
+        roughness: 0.3,
+        clearcoat: 0.8,
+        transmission: 0, // Fully opaque
+        transparent: false, // No transparency
+        opacity: 1.0, // Fully opaque
+        emissive: selectedColor,
+        emissiveIntensity: 0.1 + Math.random() * 0.2, // Subtle pulsating emission
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       
-      // Position blobs within hexagon boundaries (radius 5.0)
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 1 + Math.random() * 3.5; // Keep within hexagon bounds: 1 to 4.5
-      const height = Math.max(-0.5, Math.min(1.5, (Math.random() - 0.5) * 3)); // Constrain height: -0.5 to 1.5
-      const depth = (Math.random() - 0.5) * 1.5; // Smaller depth variation
+      // Position within hexagon boundaries with collision detection
+      let positionValid = false;
+      let attempts = 0;
+      let x, y, z;
       
-      blobMesh.position.set(
-        Math.cos(angle) * radius + depth * 0.5,
-        height,
-        Math.sin(angle) * radius + depth * 0.5
-      );
+      while (!positionValid && attempts < 50) {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * (hexagonRadius - baseSize - 1); // Keep away from edges
+        x = Math.cos(angle) * radius;
+        z = Math.sin(angle) * radius;
+        y = (Math.random() - 0.5) * 3; // Limited height range
+        
+        // Check collision with existing blobs
+        let collides = false;
+        for (const existingBlob of blobs) {
+          const distance = Math.sqrt(
+            Math.pow(x - existingBlob.position.x, 2) +
+            Math.pow(y - existingBlob.position.y, 2) +
+            Math.pow(z - existingBlob.position.z, 2)
+          );
+          if (distance < (baseSize + existingBlob.userData.size + 0.5)) {
+            collides = true;
+            break;
+          }
+        }
+        
+        positionValid = !collides;
+        attempts++;
+      }
       
-      // Apply random scale to each blob
-      blobMesh.scale.set(scaleX, scaleY, scaleZ);
+      blobMesh.position.set(x || 0, y || 0, z || 0);
+      
+      // No scale distortion - keep perfect sphere shape
+      blobMesh.scale.set(1, 1, 1);
       
       // Random initial rotation
       blobMesh.rotation.set(
@@ -131,11 +159,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         Math.random() * Math.PI * 2
       );
 
-      // Create eyes with more variation
-      const eyeSize = baseSize * 0.15; // Scale eyes with blob size
-      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6);
+      // Create eyes with neon glow
+      const eyeSize = baseSize * 0.12;
+      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 16, 12);
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
-        color: Math.random() > 0.7 ? 0xff0000 : 0x000000 // Some red eyes!
+        color: 0xffffff,
+        emissive: 0x00ffff,
+        emissiveIntensity: 0.5
       });
       
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
@@ -149,31 +179,30 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Enhanced animation data with more personality
-      const blobData = {
-        mesh: blobMesh,
+      // Store blob data for animation
+      blobMesh.userData = {
+        size: baseSize,
+        originalPosition: blobMesh.position.clone(),
         leftEye,
         rightEye,
-        originalPosition: blobMesh.position.clone(),
         
-        // Swimming motion parameters
-        swimSpeed: 0.3 + Math.random() * 0.8, // Much more varied speeds
+        // Slower swimming motion parameters
+        swimSpeed: 0.1 + Math.random() * 0.3, // Much slower: 0.1 to 0.4
         swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 0.5 + Math.random() * 1.5, // Larger movement range
-        swimDirectionX: (Math.random() - 0.5) * 2,
-        swimDirectionY: (Math.random() - 0.5) * 2,
-        swimDirectionZ: (Math.random() - 0.5) * 2,
+        swimAmplitude: 0.3 + Math.random() * 0.5, // Smaller movement range
+        swimDirectionX: (Math.random() - 0.5) * 0.5,
+        swimDirectionY: (Math.random() - 0.5) * 0.3,
+        swimDirectionZ: (Math.random() - 0.5) * 0.5,
         
-        // Rotation animation
-        rotationSpeedX: (Math.random() - 0.5) * 0.02,
-        rotationSpeedY: (Math.random() - 0.5) * 0.02,
-        rotationSpeedZ: (Math.random() - 0.5) * 0.02,
+        // Slower rotation animation
+        rotationSpeedX: (Math.random() - 0.5) * 0.005,
+        rotationSpeedY: (Math.random() - 0.5) * 0.005,
+        rotationSpeedZ: (Math.random() - 0.5) * 0.005,
         
-        // Scale breathing animation
-        breathingSpeed: 0.5 + Math.random() * 1.0,
+        // Gentle breathing animation
+        breathingSpeed: 0.2 + Math.random() * 0.4,
         breathingOffset: Math.random() * Math.PI * 2,
-        breathingAmplitude: 0.1 + Math.random() * 0.2,
-        originalScale: { x: scaleX, y: scaleY, z: scaleZ },
+        breathingAmplitude: 0.05 + Math.random() * 0.1,
         
         // Eye animation
         blinkTimer: Math.random() * 5,
@@ -181,20 +210,25 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         isBlinking: false,
         lookDirection: new THREE.Vector3(),
         lookTimer: Math.random() * 3,
-        lookSpeed: 0.02 + Math.random() * 0.03,
+        lookSpeed: 0.01 + Math.random() * 0.02,
         
-        // Orbital motion around center
+        // Gentle orbital motion
         orbitalAngle: Math.random() * Math.PI * 2,
-        orbitalSpeed: (Math.random() - 0.5) * 0.005, // Some clockwise, some counter
-        orbitalRadius: radius,
+        orbitalSpeed: (Math.random() - 0.5) * 0.002, // Much slower orbital motion
+        orbitalRadius: Math.sqrt((x||0)*(x||0) + (z||0)*(z||0)),
         
         // Personality traits
-        isHyperactive: Math.random() > 0.7, // 30% chance of hyperactivity
+        isHyperactive: Math.random() > 0.8, // 20% chance of hyperactivity
         isShy: Math.random() > 0.8, // 20% chance of being shy
         energy: Math.random(), // Overall energy level
+        
+        // Emission pulsing
+        originalEmissiveIntensity: blobMaterial.emissiveIntensity,
+        pulseSpeed: 0.5 + Math.random() * 1.0,
+        pulseOffset: Math.random() * Math.PI * 2,
       };
 
-      blobs.push(blobData);
+      blobs.push(blobMesh);
       group.add(blobMesh);
     }
 
@@ -301,7 +335,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     return particles;
   };
 
-  // Apple-grade hexagon with premium materials and logo integration
+  // Apple-grade hexagon with premium materials and effects
   const createAppleGradeHexagon = (group: THREE.Group) => {
     // Create spaceship-style base platform
     const baseGeometry = new THREE.CylinderGeometry(6.5, 7.0, 0.3, 32);
@@ -329,66 +363,50 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     ringMesh.rotation.x = -Math.PI / 2;
     group.add(ringMesh);
 
-    // Create central logo display (replacing hexagon screens)
-    const logoGeometry = new THREE.BoxGeometry(6, 4, 0.5);
-    const logoMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x1a1d20,
-      metalness: 0.3,
-      roughness: 0.6,
-      clearcoat: 0.8,
-      clearcoatRoughness: 0.2,
-      emissive: 0x003344,
-      emissiveIntensity: 0.3,
-    });
+    // Create hexagon faces as monitor screens
+    const sections = 6;
+    const radius = 5.0;
 
-    const logoMesh = new THREE.Mesh(logoGeometry, logoMaterial);
-    logoMesh.position.set(0, 0.5, 0);
-    group.add(logoMesh);
-
-    // Create logo surface (where the actual logo would be displayed)
-    const logoSurfaceGeometry = new THREE.PlaneGeometry(5.5, 3.5);
-    const logoSurfaceMaterial = new THREE.MeshStandardMaterial({
-      color: 0x87ceeb, // Light blue for logo contrast
-      emissive: 0x001f33,
-      emissiveIntensity: 0.2,
-      transparent: true,
-      opacity: 0.9,
-    });
-    
-    const logoSurfaceMesh = new THREE.Mesh(logoSurfaceGeometry, logoSurfaceMaterial);
-    logoSurfaceMesh.position.set(0, 0.5, 0.26);
-    group.add(logoSurfaceMesh);
-
-    // Create shield-like frame around the logo (inspired by the logo shape)
-    const shieldGeometry = new THREE.RingGeometry(3.0, 3.5, 8);
-    const shieldMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x4a4a4a,
-      metalness: 0.8,
-      roughness: 0.3,
-      emissive: 0x002244,
-      emissiveIntensity: 0.1,
-    });
-    
-    const shieldMesh = new THREE.Mesh(shieldGeometry, shieldMaterial);
-    shieldMesh.position.set(0, 0.5, 0.3);
-    group.add(shieldMesh);
-
-    // Add decorative elements around the logo
-    for (let i = 0; i < 8; i++) {
-      const angle = (i * Math.PI * 2) / 8;
+    for (let i = 0; i < sections; i++) {
+      const angle = (i * Math.PI * 2) / sections;
       
-      // Small accent lights
-      const accentGeometry = new THREE.SphereGeometry(0.1, 8, 6);
-      const accentMaterial = new THREE.MeshBasicMaterial({
-        color: i % 2 === 0 ? 0x00e1ff : 0x39ff14,
+      // Screen frame with granite material
+      const frameGeometry = new THREE.BoxGeometry(3.5, 2.5, 0.3);
+      const frameMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0x4a4a4a,
+        metalness: 0.3,
+        roughness: 0.6,
+        clearcoat: 0.8,
+        clearcoatRoughness: 0.2,
+        reflectivity: 0.4,
+        normalScale: new THREE.Vector2(0.5, 0.5),
+      });
+
+      const frameMesh = new THREE.Mesh(frameGeometry, frameMaterial);
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      
+      frameMesh.position.set(x, 0, z);
+      frameMesh.lookAt(0, 0, 0);
+      
+      // Screen content (monitor display)
+      const screenGeometry = new THREE.PlaneGeometry(3.0, 2.0);
+      const screenMaterial = new THREE.MeshStandardMaterial({
+        color: i === 0 ? 0x00e1ff : 0x1a1d20,
+        emissive: i === 0 ? 0x003344 : 0x000000,
+        emissiveIntensity: i === 0 ? 0.5 : 0.1,
       });
       
-      const accentMesh = new THREE.Mesh(accentGeometry, accentMaterial);
-      const x = Math.cos(angle) * 4;
-      const z = Math.sin(angle) * 4;
+      const screenMesh = new THREE.Mesh(screenGeometry, screenMaterial);
+      screenMesh.position.set(x * 1.01, 0, z * 1.01);
+      screenMesh.lookAt(0, 0, 0);
       
-      accentMesh.position.set(x, 0.5, z);
-      group.add(accentMesh);
+      group.add(frameMesh);
+      group.add(screenMesh);
+      
+      // Store references for updates
+      (group as any)[`screen_${i}`] = screenMesh;
+      (group as any)[`frame_${i}`] = frameMesh;
     }
 
     // Add living blobs and enhanced particles
@@ -398,8 +416,6 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Store references for animation updates
     (group as any).blobs = blobs;
     (group as any).particles = particles;
-    (group as any).logoSurface = logoSurfaceMesh;
-    (group as any).shield = shieldMesh;
   };
 
   // Advanced material updates with living blob animation
@@ -408,182 +424,140 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
     // Animate glow ring
     const ring = hexagonRef.current.children.find((child: any) => 
-      child.geometry instanceof THREE.RingGeometry && child.position.y < 0
+      child.geometry instanceof THREE.RingGeometry
     ) as THREE.Mesh;
     
     if (ring && ring.material instanceof THREE.MeshBasicMaterial) {
       ring.material.opacity = 0.2 + Math.sin(elapsedTime * 0.3) * 0.1; // Slower pulsing
     }
 
-    // Animate logo surface based on current section
-    const logoSurface = (hexagonRef.current as any).logoSurface as THREE.Mesh;
-    if (logoSurface && logoSurface.material instanceof THREE.MeshStandardMaterial) {
-      // Pulse the logo with a gentle glow effect
-      const pulseIntensity = 0.2 + Math.sin(elapsedTime * 0.5) * 0.1;
-      logoSurface.material.emissiveIntensity = pulseIntensity;
+    // Update screen materials based on current section
+    for (let i = 0; i < 6; i++) {
+      const screen = (hexagonRef.current as any)[`screen_${i}`] as THREE.Mesh;
+      if (screen && screen.material instanceof THREE.MeshStandardMaterial) {
+        const isActive = i === currentSection;
+        screen.material.color.setHex(isActive ? 0x00e1ff : 0x1a1d20);
+        screen.material.emissive.setHex(isActive ? 0x003344 : 0x000000);
+        screen.material.emissiveIntensity = isActive ? 0.5 : 0.1;
+      }
     }
 
-    // Animate shield frame
-    const shield = (hexagonRef.current as any).shield as THREE.Mesh;
-    if (shield && shield.material instanceof THREE.MeshPhysicalMaterial) {
-      shield.rotation.z += 0.002; // Slow rotation
-      const shieldGlow = 0.1 + Math.sin(elapsedTime * 0.4) * 0.05;
-      shield.material.emissiveIntensity = shieldGlow;
-    }
-
-    // Animate enhanced living blobs with organic swimming motion
+    // Animate enhanced living blobs with organic swimming motion and boundary checking
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
-      blobs.forEach((blobData: any, index: number) => {
+      const hexagonRadius = 6; // Boundary radius
+      
+      blobs.forEach((blob: any, index: number) => {
+        const userData = blob.userData;
         const time = elapsedTime;
         
-        // Complex swimming motion - each blob has unique personality
-        const swimTimeX = time * blobData.swimSpeed + blobData.swimOffset;
-        const swimTimeY = time * blobData.swimSpeed * 0.7 + blobData.swimOffset * 1.3;
-        const swimTimeZ = time * blobData.swimSpeed * 1.1 + blobData.swimOffset * 0.8;
+        // Slower, more elegant swimming motion
+        const swimTimeX = time * userData.swimSpeed + userData.swimOffset;
+        const swimTimeY = time * userData.swimSpeed * 0.7 + userData.swimOffset * 1.3;
+        const swimTimeZ = time * userData.swimSpeed * 1.1 + userData.swimOffset * 0.8;
         
-        // Organic swimming patterns - different for each axis
-        const swimX = Math.sin(swimTimeX) * blobData.swimAmplitude * blobData.swimDirectionX;
-        const swimY = Math.sin(swimTimeY) * blobData.swimAmplitude * 0.5 * blobData.swimDirectionY;
-        const swimZ = Math.cos(swimTimeZ) * blobData.swimAmplitude * blobData.swimDirectionZ;
+        // Gentle organic swimming patterns
+        const swimX = Math.sin(swimTimeX) * userData.swimAmplitude * userData.swimDirectionX;
+        const swimY = Math.sin(swimTimeY) * userData.swimAmplitude * 0.5 * userData.swimDirectionY;
+        const swimZ = Math.cos(swimTimeZ) * userData.swimAmplitude * userData.swimDirectionZ;
         
-        // Add figure-8 motion for hyperactive blobs
-        if (blobData.isHyperactive) {
-          const figureEightX = Math.sin(time * 2) * 0.5;
-          const figureEightY = Math.sin(time * 4) * 0.3;
-        blobData.mesh.position.x = blobData.originalPosition.x + swimX + figureEightX;
-        blobData.mesh.position.y = blobData.originalPosition.y + swimY + figureEightY;
-      } else {
-        blobData.mesh.position.x = blobData.originalPosition.x + swimX;
-        blobData.mesh.position.y = blobData.originalPosition.y + swimY;
-      }
-      blobData.mesh.position.z = blobData.originalPosition.z + swimZ;
-      
-      // Orbital motion around center
-      blobData.orbitalAngle += blobData.orbitalSpeed * (blobData.energy + 0.5);
-      const orbitalX = Math.cos(blobData.orbitalAngle) * blobData.orbitalRadius;
-      const orbitalZ = Math.sin(blobData.orbitalAngle) * blobData.orbitalRadius;
-      blobData.mesh.position.x += orbitalX * 0.1; // Subtle orbital influence
-      blobData.mesh.position.z += orbitalZ * 0.1;
-      
-      // Boundary constraints - keep blobs within hexagon bounds
-      const hexagonRadius = 4.5; // Slightly smaller than actual hexagon
-      const currentDistance = Math.sqrt(
-        blobData.mesh.position.x * blobData.mesh.position.x + 
-        blobData.mesh.position.z * blobData.mesh.position.z
-      );
-      
-      if (currentDistance > hexagonRadius) {
-        const constraintFactor = hexagonRadius / currentDistance;
-        blobData.mesh.position.x *= constraintFactor;
-        blobData.mesh.position.z *= constraintFactor;
+        // Calculate new position
+        let newX = userData.originalPosition.x + swimX;
+        let newY = userData.originalPosition.y + swimY;
+        let newZ = userData.originalPosition.z + swimZ;
         
-        // Bounce back with reduced velocity
-        blobData.swimDirectionX *= -0.5;
-        blobData.swimDirectionZ *= -0.5;
-      }
-      
-      // Height constraints - keep above floor and below ceiling
-      if (blobData.mesh.position.y > 2.0) {
-        blobData.mesh.position.y = 2.0;
-        blobData.swimDirectionY *= -0.7;
-      } else if (blobData.mesh.position.y < -0.8) {
-        blobData.mesh.position.y = -0.8;
-        blobData.swimDirectionY *= -0.7;
-      }
-      
-      // Collision detection with other blobs (simple distance check)
-      blobs.forEach((otherBlob: any, otherIndex: number) => {
-        if (index !== otherIndex) {
-          const distance = blobData.mesh.position.distanceTo(otherBlob.mesh.position);
-          const minDistance = 0.8; // Minimum distance between blobs
+        // Add gentle orbital motion
+        userData.orbitalAngle += userData.orbitalSpeed * (userData.energy + 0.5);
+        const orbitalX = Math.cos(userData.orbitalAngle) * userData.orbitalRadius * 0.1;
+        const orbitalZ = Math.sin(userData.orbitalAngle) * userData.orbitalRadius * 0.1;
+        newX += orbitalX;
+        newZ += orbitalZ;
+        
+        // Boundary checking - keep within hexagon
+        const distanceFromCenter = Math.sqrt(newX * newX + newZ * newZ);
+        if (distanceFromCenter > hexagonRadius - userData.size) {
+          // Bounce off walls by reversing direction
+          const angle = Math.atan2(newZ, newX);
+          newX = Math.cos(angle) * (hexagonRadius - userData.size);
+          newZ = Math.sin(angle) * (hexagonRadius - userData.size);
           
-          if (distance < minDistance) {
-            // Push blobs apart
-            const pushDirection = blobData.mesh.position.clone().sub(otherBlob.mesh.position).normalize();
-            const pushStrength = (minDistance - distance) * 0.1;
+          // Reverse swimming direction to create bounce effect
+          userData.swimDirectionX *= -0.8;
+          userData.swimDirectionZ *= -0.8;
+        }
+        
+        // Keep vertical movement within bounds
+        if (newY > 3) {
+          newY = 3;
+          userData.swimDirectionY *= -0.8;
+        } else if (newY < -3) {
+          newY = -3;
+          userData.swimDirectionY *= -0.8;
+        }
+        
+        // Collision detection with other blobs
+        blobs.forEach((otherBlob: any, otherIndex: number) => {
+          if (index !== otherIndex) {
+            const otherUserData = otherBlob.userData;
+            const dx = newX - otherBlob.position.x;
+            const dy = newY - otherBlob.position.y;
+            const dz = newZ - otherBlob.position.z;
+            const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            const minDistance = userData.size + otherUserData.size + 0.2;
             
-            blobData.mesh.position.add(pushDirection.multiplyScalar(pushStrength));
-            
-            // Reverse swimming directions for bouncing effect
-            if (Math.abs(pushDirection.x) > 0.5) blobData.swimDirectionX *= -0.8;
-            if (Math.abs(pushDirection.y) > 0.5) blobData.swimDirectionY *= -0.8;
-            if (Math.abs(pushDirection.z) > 0.5) blobData.swimDirectionZ *= -0.8;
+            if (distance < minDistance) {
+              // Push blobs apart gently
+              const pushFactor = (minDistance - distance) * 0.5;
+              const pushX = (dx / distance) * pushFactor;
+              const pushY = (dy / distance) * pushFactor;
+              const pushZ = (dz / distance) * pushFactor;
+              
+              newX += pushX;
+              newY += pushY;
+              newZ += pushZ;
+            }
           }
-        }
-      });        // Continuous rotation with personality
-        blobData.mesh.rotation.x += blobData.rotationSpeedX * (blobData.isHyperactive ? 2 : 1);
-        blobData.mesh.rotation.y += blobData.rotationSpeedY * (blobData.isHyperactive ? 2 : 1);
-        blobData.mesh.rotation.z += blobData.rotationSpeedZ * (blobData.isHyperactive ? 2 : 1);
+        });
         
-        // Breathing/pulsing scale animation
-        const breathingTime = time * blobData.breathingSpeed + blobData.breathingOffset;
-        const breathingScale = 1 + Math.sin(breathingTime) * blobData.breathingAmplitude;
+        // Apply new position
+        blob.position.set(newX, newY, newZ);
         
-        // Apply breathing with original scale variations
-        blobData.mesh.scale.x = blobData.originalScale.x * breathingScale;
-        blobData.mesh.scale.y = blobData.originalScale.y * (1 + Math.cos(breathingTime * 1.3) * blobData.breathingAmplitude * 0.7);
-        blobData.mesh.scale.z = blobData.originalScale.z * breathingScale;
+        // Slower rotation animation
+        blob.rotation.x += userData.rotationSpeedX * (userData.isHyperactive ? 1.5 : 1);
+        blob.rotation.y += userData.rotationSpeedY * (userData.isHyperactive ? 1.5 : 1);
+        blob.rotation.z += userData.rotationSpeedZ * (userData.isHyperactive ? 1.5 : 1);
         
-        // Advanced eye blinking with personality
-        blobData.blinkTimer -= deltaTime;
-        if (blobData.blinkTimer <= 0) {
-          // Shy blobs blink more often
-          blobData.blinkTimer = blobData.isShy ? (1 + Math.random() * 2) : (2 + Math.random() * 4);
-          blobData.isBlinking = true;
+        // Gentle breathing/pulsing scale animation
+        const breathingTime = time * userData.breathingSpeed + userData.breathingOffset;
+        const breathingScale = 1 + Math.sin(breathingTime) * userData.breathingAmplitude;
+        blob.scale.setScalar(breathingScale); // Keep perfect sphere shape
+        
+        // Subtle emission pulsing for neon glow
+        const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
+        const pulseIntensity = userData.originalEmissiveIntensity * (1 + Math.sin(pulseTime) * 0.3);
+        blob.material.emissiveIntensity = pulseIntensity;
+        
+        // Eye blinking animation
+        userData.blinkTimer -= deltaTime;
+        if (userData.blinkTimer <= 0) {
+          userData.blinkTimer = userData.isShy ? (1 + Math.random() * 2) : (2 + Math.random() * 4);
+          userData.isBlinking = true;
           
-          // Blink animation with slight delay between eyes
-          const blinkDelay = Math.random() * 0.05;
-          blobData.leftEye.scale.y = 0.1;
+          // Synchronized eye blinking
+          userData.leftEye.scale.y = 0.1;
+          userData.rightEye.scale.y = 0.1;
           
           setTimeout(() => {
-            blobData.rightEye.scale.y = 0.1;
-          }, blinkDelay * 1000);
-          
-          setTimeout(() => {
-            blobData.leftEye.scale.y = 1;
-            blobData.rightEye.scale.y = 1;
-            blobData.isBlinking = false;
-          }, (blobData.blinkDuration + blinkDelay) * 1000);
+            userData.leftEye.scale.y = 1;
+            userData.rightEye.scale.y = 1;
+            userData.isBlinking = false;
+          }, userData.blinkDuration * 1000);
         }
         
-        // Advanced looking behavior
-        blobData.lookTimer -= deltaTime;
-        if (blobData.lookTimer <= 0) {
-          blobData.lookTimer = blobData.isShy ? (0.5 + Math.random() * 1) : (1 + Math.random() * 3);
-          
-          // Shy blobs look away more, hyperactive blobs look around more
-          const lookIntensity = blobData.isShy ? 0.5 : (blobData.isHyperactive ? 2 : 1);
-          blobData.lookDirection.set(
-            (Math.random() - 0.5) * 0.15 * lookIntensity,
-            (Math.random() - 0.5) * 0.1 * lookIntensity,
-            0
-          );
-        }
-        
-        // Smooth eye movement with momentum
-        const eyeBaseOffset = blobData.mesh.geometry.parameters.radius * 0.3;
-        const currentLookX = blobData.leftEye.position.x + eyeBaseOffset;
-        const currentLookY = blobData.leftEye.position.y - eyeBaseOffset * 0.5;
-        
-        const targetLookX = blobData.lookDirection.x;
-        const targetLookY = blobData.lookDirection.y;
-        
-        const lookLerpX = currentLookX + (targetLookX - currentLookX) * blobData.lookSpeed;
-        const lookLerpY = currentLookY + (targetLookY - currentLookY) * blobData.lookSpeed;
-        
-        blobData.leftEye.position.x = -eyeBaseOffset + lookLerpX;
-        blobData.leftEye.position.y = eyeBaseOffset * 0.5 + lookLerpY;
-        blobData.rightEye.position.x = eyeBaseOffset + lookLerpX;
-        blobData.rightEye.position.y = eyeBaseOffset * 0.5 + lookLerpY;
-        
-        // Random color shifts for extra life
-        if (Math.random() < 0.001) { // Very rare color shifts
-          const material = blobData.mesh.material as THREE.MeshPhysicalMaterial;
-          const currentHSL = { h: 0, s: 0, l: 0 };
-          material.color.getHSL(currentHSL);
-          const newHue = currentHSL.h + (Math.random() - 0.5) * 0.1;
-          material.color.setHSL(newHue, currentHSL.s, currentHSL.l);
+        // Gentle eye tracking
+        userData.lookTimer -= deltaTime;
+        if (userData.lookTimer <= 0) {
+          userData.lookTimer = 1 + Math.random() * 3;
         }
       });
     }
