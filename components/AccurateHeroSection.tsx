@@ -19,9 +19,9 @@ export function AccurateHeroSection() {
       {/* Minimal Background - Maximum transparency for 3D scene */}
       <div className="absolute inset-0 bg-black/5" />
       
-      {/* Hero Content */}
-      <div className="container mx-auto px-6 pt-32 pb-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-200px)]">
+      {/* Hero Content - Enhanced Responsive Design */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 lg:pt-32 pb-16 sm:pb-20 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center min-h-[calc(100vh-160px)] sm:min-h-[calc(100vh-200px)]">
           
           {/* Left: Content */}
           <motion.div
@@ -42,14 +42,14 @@ export function AccurateHeroSection() {
               </Badge>
             </motion.div>
 
-            {/* Main Headline */}
+            {/* Main Headline - Enhanced Responsive Typography */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="space-y-6"
+              className="space-y-4 sm:space-y-6"
             >
-              <h1 className="text-5xl md:text-7xl lg:text-8xl leading-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-tight font-bold">
                 <span className="bg-gradient-to-r from-white via-cyan-200 to-purple-200 bg-clip-text text-transparent" style={{ textShadow: '0 2px 30px rgba(0,0,0,0.9)' }}>
                   The AI Platform
                 </span>
@@ -59,30 +59,30 @@ export function AccurateHeroSection() {
                 </span>
               </h1>
 
-              <p className="text-xl md:text-2xl text-gray-100 max-w-2xl leading-relaxed" style={{ textShadow: '0 1px 15px rgba(0,0,0,0.8)' }}>
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-100 max-w-2xl leading-relaxed" style={{ textShadow: '0 1px 15px rgba(0,0,0,0.8)' }}>
                 Self-evolving development environment with marketplace economy, 
                 community governance, and AI that learns from every interaction.
               </p>
             </motion.div>
 
-            {/* Key Value Props */}
+            {/* Key Value Props - Enhanced Mobile Layout */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4"
             >
               {[
-                { icon: <Shield className="h-5 w-5" />, text: "Open Source\nNo Lock-in" },
-                { icon: <Infinity className="h-5 w-5" />, text: "Self-Evolving\nAI Platform" },
-                { icon: <Users className="h-5 w-5" />, text: "Community\nGovernance" }
+                { icon: <Shield className="h-4 w-4 sm:h-5 sm:w-5" />, text: "Open Source\nNo Lock-in" },
+                { icon: <Infinity className="h-4 w-4 sm:h-5 sm:w-5" />, text: "Self-Evolving\nAI Platform" },
+                { icon: <Users className="h-4 w-4 sm:h-5 sm:w-5" />, text: "Community\nGovernance" }
               ].map((item, index) => (
-                <div key={index} className="backdrop-blur-sm bg-black/10 rounded-xl p-4 border border-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="text-cyan-400 bg-cyan-400/10 p-2 rounded-lg">
+                <div key={index} className="backdrop-blur-sm bg-black/10 rounded-xl p-3 sm:p-4 border border-white/10">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="text-cyan-400 bg-cyan-400/10 p-1.5 sm:p-2 rounded-lg">
                       {item.icon}
                     </div>
-                    <span className="text-white text-sm font-medium whitespace-pre-line" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
+                    <span className="text-white text-xs sm:text-sm font-medium whitespace-pre-line" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
                       {item.text}
                     </span>
                   </div>

@@ -58,11 +58,12 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     scene.add(accentLight);
   };
 
-  // Enhanced living blobs with jelly physics, eyes, and comprehensive collision detection
+  // Enhanced living blobs with responsive count and positioning
   const createCuteBlobsWithJellyPhysics = (group: THREE.Group) => {
-    const blobCount = 12; // Optimized count
+    const isMobile = window.innerWidth < 768;
+    const blobCount = isMobile ? 8 : 12; // Fewer blobs on mobile for performance
     const blobs: any[] = [];
-    const hexagonRadius = 5.0; // Slightly smaller for better collision bounds
+    const hexagonInnerRadius = isMobile ? 3.2 : 3.8; // Smaller area on mobile
     const staticMeshes: THREE.Mesh[] = []; // Store static meshes for collision
 
     // Collect all static meshes in the scene for collision detection
@@ -116,17 +117,18 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       (blobMesh as any).isBlob = true; // Mark as blob for identification
       
-      // Strategic positioning to avoid initial overlap with hexagon structure
+      // Strategic positioning within hexagon interior (NOT perimeter)
       let validPosition = false;
       let attempts = 0;
       const maxAttempts = 50;
       
       while (!validPosition && attempts < maxAttempts) {
-        const angle = (i / blobCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-        const radius = 1.0 + Math.random() * 2.5; // Stay away from center structure
+        // Position INSIDE hexagon area, close to ground
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 0.8 + Math.random() * 2.8; // Inner area: 0.8 to 3.6 radius
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
-        const y = -1.5 + Math.random() * 2; // Avoid ground level initially
+        const y = -1.8 + Math.random() * 0.6; // Close to ground: -1.8 to -1.2
         
         const testPosition = new THREE.Vector3(x, y, z);
         
@@ -151,13 +153,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         attempts++;
       }
       
-      // Fallback position if no valid position found
+      // Fallback position within hexagon interior if no valid position found
       if (!validPosition) {
         const fallbackAngle = (i / blobCount) * Math.PI * 2;
         blobMesh.position.set(
-          Math.cos(fallbackAngle) * 3.5,
-          1.0 + Math.random() * 0.5,
-          Math.sin(fallbackAngle) * 3.5
+          Math.cos(fallbackAngle) * 2.5, // Inner hexagon area
+          -1.5, // Close to ground
+          Math.sin(fallbackAngle) * 2.5
         );
       }
 
@@ -199,10 +201,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         swimOffset: Math.random() * Math.PI * 2,
         swimAmplitude: 0.3 + Math.random() * 0.3,
         
-        // Individual direction per blob
+        // Individual direction per blob (prefer ground-level movement)
         targetDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 0.3,
+          (Math.random() - 0.5) * 0.1, // Much less vertical movement
           (Math.random() - 0.5) * 2
         ).normalize(),
         currentDirection: new THREE.Vector3(),
@@ -217,9 +219,9 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         jellySpeed: 0.4 + Math.random() * 0.3,
         jellyIntensity: 0.08 + Math.random() * 0.06,
         
-        // Simplified emergence system
-        isEmerging: blobMesh.position.y < -0.5,
-        emergenceTarget: blobMesh.position.y + 1.5,
+        // Simplified emergence system (keep near ground)
+        isEmerging: blobMesh.position.y < -1.5,
+        emergenceTarget: -1.4, // Stay close to ground level
         
         // Optimized animation timers
         blinkTimer: 2 + Math.random() * 4,
@@ -241,9 +243,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     return blobs;
   };
 
-  // Enhanced particle system with smaller, dynamic particles
+  // Enhanced particle system with responsive particle count
   const createEnhancedParticles = (group: THREE.Group) => {
-    const particleCount = 150; // Reduced for performance
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 75 : 150; // Reduce particles on mobile
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const sizes = new Float32Array(particleCount);
@@ -451,12 +454,12 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
     }
 
-    // Optimized blob physics with comprehensive collision detection and performance enhancement
+    // Optimized blob physics with hexagon interior containment
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
-      const hexagonRadius = 5.0; // Optimized boundary radius
-      const groundLevel = -2.3; // Optimized floor collision
-      const ceilingLevel = 2.3; // Optimized ceiling collision
+      const hexagonInnerRadius = 3.8; // Keep blobs INSIDE hexagon, not on perimeter
+      const groundLevel = -2.0; // Slightly above ground
+      const ceilingLevel = 0.5; // Lower ceiling to keep them near ground
       
       blobs.forEach((blob: any, index: number) => {
         const userData = blob.userData;
@@ -568,7 +571,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           userData.directionChangeTimer = 3 + Math.random() * 5; // Reset timer
           userData.targetDirection.set(
             (Math.random() - 0.5) * 1.5,
-            (Math.random() - 0.5) * 0.4,
+            (Math.random() - 0.5) * 0.1, // Minimal vertical movement
             (Math.random() - 0.5) * 1.5
           ).normalize();
         }
@@ -589,12 +592,12 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           );
         }
         
-        // Optimized boundary collision with proper physics
+        // Optimized boundary collision with hexagon interior containment
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
-        if (distanceFromCenter > hexagonRadius - userData.radius) {
+        if (distanceFromCenter > hexagonInnerRadius - userData.radius) {
           const angle = Math.atan2(blob.position.z, blob.position.x);
-          blob.position.x = Math.cos(angle) * (hexagonRadius - userData.radius);
-          blob.position.z = Math.sin(angle) * (hexagonRadius - userData.radius);
+          blob.position.x = Math.cos(angle) * (hexagonInnerRadius - userData.radius);
+          blob.position.z = Math.sin(angle) * (hexagonInnerRadius - userData.radius);
           
           // Physics-based wall bounce
           const wallNormal = new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle));
@@ -711,14 +714,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     scene.fog = new THREE.Fog(0x000000, 5, 25); // Depth perception
     sceneRef.current = scene;
 
-    // Professional camera setup with film-like characteristics
+    // Professional camera setup with responsive characteristics
     const camera = new THREE.PerspectiveCamera(
-      45, // Narrower FOV for more cinematic feel
+      window.innerWidth < 768 ? 55 : 45, // Wider FOV for mobile
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
-    camera.position.set(0, 2, 12); // Elevated perspective
+    camera.position.set(0, window.innerWidth < 768 ? 1.5 : 2, window.innerWidth < 768 ? 10 : 12); // Closer on mobile
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
@@ -778,11 +781,15 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Start the animation loop
     animate(0);
 
-    // Handle window resize
+    // Handle window resize with responsive camera adjustments
     const handleResize = () => {
       if (!cameraRef.current || !rendererRef.current) return;
       
+      const isMobile = window.innerWidth < 768;
+      
       cameraRef.current.aspect = window.innerWidth / window.innerHeight;
+      cameraRef.current.fov = isMobile ? 55 : 45; // Adjust FOV for mobile
+      cameraRef.current.position.set(0, isMobile ? 1.5 : 2, isMobile ? 10 : 12);
       cameraRef.current.updateProjectionMatrix();
       rendererRef.current.setSize(window.innerWidth, window.innerHeight);
     };
