@@ -49,24 +49,23 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     fillLight.position.set(-8, 10, -6);
     scene.add(fillLight);
 
-    // Rim light for edge definition
-    const rimLight = new THREE.DirectionalLight(0xFFE4E1, 0.8); // Warm rim
-    rimLight.position.set(0, 5, -15);
+    // Rim light for edge definition (strong cyan)
+    const rimLight = new THREE.DirectionalLight(0x00e1ff, 2.2); // Neon cyan
+    rimLight.position.set(0, 8, -15);
+    rimLight.castShadow = false;
     scene.add(rimLight);
 
     // Enhanced ambient for realistic base illumination
     const ambientLight = new THREE.AmbientLight(0x404040, 0.3); // Neutral gray
     scene.add(ambientLight);
 
-    // Multiple point lights for dynamic reflections
+    // Point lights for accent
     const pointLight1 = new THREE.PointLight(0x00ffff, 1.5, 30);
     pointLight1.position.set(8, 6, 8);
     scene.add(pointLight1);
-
-    const pointLight2 = new THREE.PointLight(0xff6b6b, 1.2, 25);
+    const pointLight2 = new THREE.PointLight(0xfff600, 1.2, 25); // Neon yellow
     pointLight2.position.set(-6, 8, -4);
     scene.add(pointLight2);
-
     const pointLight3 = new THREE.PointLight(0x4ecdc4, 1.0, 20);
     pointLight3.position.set(0, 12, 0);
     scene.add(pointLight3);
@@ -77,16 +76,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     const blobCount = 12; // Doubled from 6 to 12
     const blobs: any[] = [];
     const hexagonRadius = 5.5; // Slightly smaller boundary
-
+    const colorOptions = [0x00e1ff, 0xfff600]; // Cyan, neon yellow
     for (let i = 0; i < blobCount; i++) {
-      // Smaller, cuter blob sizes (halved from 0.6-1.0 to 0.3-0.5)
-      const baseSize = 0.3 + Math.random() * 0.2; // 0.3 to 0.5
-      
-      // Create jelly-like geometry with vertex displacement capability
-      const blobGeometry = new THREE.SphereGeometry(baseSize, 16, 12); // Lower poly for better performance
+      const baseSize = 0.3 + Math.random() * 0.2;
+      const blobGeometry = new THREE.SphereGeometry(baseSize, 16, 12);
       const positions = blobGeometry.attributes.position;
-      
-      // Store original vertices for jelly deformation
       const originalVertices = [];
       for (let j = 0; j < positions.count; j++) {
         originalVertices.push(
@@ -95,33 +89,22 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           positions.getZ(j)
         );
       }
-      
-      // Soft, cute colors (FULLY OPAQUE - NO TRANSPARENCY)
-      const colorOptions = [
-        0x4ECDC4, // Soft cyan
-        0xFFE66D, // Warm yellow
-        0x95E1D3, // Mint green
-        0xA8E6CF, // Light green
-        0xFFB6C1, // Light pink
-      ];
       const selectedColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
-      
-      // Modern reflective material with UE5-grade PBR workflow
+      // Only blobs get reflection maps
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
-        metalness: 0.2, // Subtle metallic reflection
-        roughness: 0.3, // Smooth but not mirror-like
-        clearcoat: 0.9, // High-quality clear coat for depth
-        clearcoatRoughness: 0.1, // Smooth clear coat
-        reflectivity: 0.8, // Strong environmental reflection
-        transmission: 0, // NO TRANSLUCENCY
-        transparent: false, // NO TRANSPARENCY
-        opacity: 1.0, // FULLY OPAQUE
+        metalness: 0.25,
+        roughness: 0.25,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.1,
+        reflectivity: 0.95,
+        transmission: 0,
+        transparent: false,
+        opacity: 1.0,
         emissive: selectedColor,
-        emissiveIntensity: 0.02, // Reduced emission for realistic look
-        envMapIntensity: 1.2, // Enhanced environment map reflection
+        emissiveIntensity: 0.08 + Math.random() * 0.08, // Pulsating emission
+        envMapIntensity: 1.5,
       });
-
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       
       // Position within safe zone with better distribution for more blobs
@@ -321,15 +304,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Modern platform base with realistic materials
     const baseGeometry = new THREE.CylinderGeometry(6.5, 7.0, 0.3, 32);
     const baseMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x1a1a2e,
-      metalness: 0.8, // High metallic reflection
-      roughness: 0.15, // Smooth polished surface
-      clearcoat: 1.0, // Perfect clear coat
-      clearcoatRoughness: 0.05, // Mirror-like clear coat
-      reflectivity: 0.9, // Maximum reflection
-      emissive: 0x000511,
-      emissiveIntensity: 0.02,
-      envMapIntensity: 1.5, // Enhanced environment reflections
+      color: 0x181a1b, // Matte dark, non-reflective
+      metalness: 0.0, // No reflection
+      roughness: 0.95, // Matte
+      clearcoat: 0.0,
+      reflectivity: 0.0,
+      emissive: 0x000000,
+      emissiveIntensity: 0.0,
     });
     const baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
     baseMesh.position.y = -1.0;
@@ -343,11 +324,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       color: 0x00e1ff,
       transparent: true,
       opacity: 0.4,
-      metalness: 0.3,
+      metalness: 0.0,
       roughness: 0.2,
-      clearcoat: 0.8,
+      clearcoat: 0.0,
       emissive: 0x00e1ff,
-      emissiveIntensity: 0.1,
+      emissiveIntensity: 0.3,
       side: THREE.DoubleSide,
     });
     const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
@@ -358,59 +339,48 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Create modern hexagon monitor panels
     const sections = 6;
     const radius = 5.0;
-
     for (let i = 0; i < sections; i++) {
       const angle = (i * Math.PI * 2) / sections;
-      
-      // Modern frame with brushed metal finish
+      // Neon box frame
       const frameGeometry = new THREE.BoxGeometry(3.5, 2.5, 0.3);
       const frameMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x2c2c54,
-        metalness: 0.9, // High metallic for modern look
-        roughness: 0.2, // Brushed metal finish
-        clearcoat: 0.8,
-        clearcoatRoughness: 0.1,
-        reflectivity: 0.8,
-        envMapIntensity: 1.3, // Strong environment reflections
+        color: 0xfff600, // Neon yellow
+        metalness: 0.0, // No reflection
+        roughness: 0.2,
+        clearcoat: 0.0,
+        reflectivity: 0.0,
+        emissive: 0xfff600,
+        emissiveIntensity: 0.25 + Math.random() * 0.15, // More emissive
       });
-
       const frameMesh = new THREE.Mesh(frameGeometry, frameMaterial);
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
-      
       frameMesh.position.set(x, 0, z);
       frameMesh.lookAt(0, 0, 0);
       frameMesh.castShadow = true;
       frameMesh.receiveShadow = true;
-      
-      // Modern screen with glass-like material
+      // Glassy screen, not reflective
       const screenGeometry = new THREE.PlaneGeometry(3.0, 2.0);
       const screenMaterial = new THREE.MeshPhysicalMaterial({
-        color: i === 0 ? 0x00e1ff : 0x0f0f23,
-        metalness: 0.1,
-        roughness: 0.05, // Glass-like smoothness
-        clearcoat: 1.0, // Perfect glass coating
+        color: i === 0 ? 0x00e1ff : 0x181a1b,
+        metalness: 0.0,
+        roughness: 0.05, // Glass-like
+        clearcoat: 1.0,
         clearcoatRoughness: 0.02,
-        reflectivity: 0.95, // Near-mirror reflection
-        transmission: 0.1, // Slight transparency for depth
+        reflectivity: 0.0,
+        transmission: 0.1, // Slight transparency
         thickness: 0.5,
-        emissive: i === 0 ? 0x001122 : 0x000000,
-        emissiveIntensity: i === 0 ? 0.3 : 0.05,
-        envMapIntensity: 1.8, // Maximum environment reflection
+        emissive: i === 0 ? 0x00e1ff : 0x000000,
+        emissiveIntensity: i === 0 ? 0.18 : 0.05,
       });
-      
       const screenMesh = new THREE.Mesh(screenGeometry, screenMaterial);
       screenMesh.position.set(x * 1.01, 0, z * 1.01);
       screenMesh.lookAt(0, 0, 0);
-      
       group.add(frameMesh);
       group.add(screenMesh);
-      
-      // Store references for updates
       (group as any)[`screen_${i}`] = screenMesh;
       (group as any)[`frame_${i}`] = frameMesh;
     }
-
     // Add cute jelly blobs with physics ONLY ONCE
     if (!(group as any).blobsCreated) {
       const blobs = createCuteBlobsWithJellyPhysics(group);
@@ -441,8 +411,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const screen = (hexagonRef.current as any)[`screen_${i}`] as THREE.Mesh;
       if (screen && screen.material instanceof THREE.MeshPhysicalMaterial) {
         const isActive = i === currentSection;
-        screen.material.color.setHex(isActive ? 0x00e1ff : 0x0f0f23);
-        screen.material.emissive.setHex(isActive ? 0x001122 : 0x000000);
+        screen.material.color.setHex(isActive ? 0x00e1ff : 0x181a1b);
+        screen.material.emissive.setHex(isActive ? 0x00e1ff : 0x000000);
         screen.material.emissiveIntensity = isActive ? 0.3 : 0.05;
         
         // Dynamic reflection intensity based on activity
@@ -454,17 +424,16 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     // Animate cute jelly blobs with physics collision and pulsating emission
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
-      const hexagonRadius = 5.5; // Boundary radius
-      const groundLevel = -2.5; // Floor collision
-      const ceilingLevel = 2.5; // Ceiling collision
-      
+      // Declare boundaries inside updateAdvancedMaterials scope
+      const hexagonRadius = 5.5;
+      const groundLevel = -2.5;
+      const ceilingLevel = 2.5;
       blobs.forEach((blob: any, index: number) => {
         const userData = blob.userData;
         const time = elapsedTime;
-        
-        // Pulsating emission animation (subtle for realism)
+        // Pulsating emission animation (cyan/yellow)
         const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
-        const pulseIntensity = 0.01 + Math.sin(pulseTime) * 0.015; // Very subtle pulsing
+        const pulseIntensity = 0.08 + Math.sin(pulseTime) * 0.08;
         userData.baseMaterial.emissiveIntensity = pulseIntensity;
         
         // Sphere collision detection with other blobs
