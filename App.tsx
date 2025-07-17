@@ -10,16 +10,16 @@ import {
     MessageCircle
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import LoadingScreen_Award from './components/LoadingScreen_Award';
+import LoadingScreen from './components/LoadingScreen';
 import ThreeJSScene from './components/ThreeJSScene';
 
-// Import accurate content components
-import { AccurateHeroSection } from "./components/AccurateHeroSection";
-import { AccuratePlatformFeatures } from "./components/AccuratePlatformFeatures";
-import { AccurateCTASection } from "./components/AccurateCTASection";
-import { WhoIsThisForSection } from "./components/WhoIsThisForSection";
-import { FeaturesRoadmapSection } from "./components/FeaturesRoadmapSection";
-import { ContactSection } from "./components/ContactSection";
+// Import main sections for final site
+import { HeroSection } from "./components/HeroSection";
+import { FeaturesSection } from "./components/FeaturesSection";
+import { CTASection } from "./components/CTASection";
+import { ComparisonSection } from "./components/ComparisonSection";
+import { TherionSection } from "./components/TherionSection";
+import { MarketplaceSection } from "./components/MarketplaceSection";
 import { Footer } from "./components/Footer";
 import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
 import { WebVitalsMonitor } from "./components/WebVitalsMonitor";
@@ -34,37 +34,37 @@ export default function App() {
       id: 'hero',
       title: 'DeusVault OS Platform',
       icon: <Home className="h-4 w-4" />,
-      component: <AccurateHeroSection />
+      component: <HeroSection />
     },
     {
-      id: 'who-is-this-for',
-      title: 'Who Is This For',
-      icon: <Target className="h-4 w-4" />,
-      component: <WhoIsThisForSection />
-    },
-    {
-      id: 'platform',
-      title: 'Platform Features',
+      id: 'features',
+      title: 'Core Features',
       icon: <Zap className="h-4 w-4" />,
-      component: <AccuratePlatformFeatures />
+      component: <FeaturesSection />
     },
     {
-      id: 'features-roadmap',
-      title: 'Features & Roadmap',
+      id: 'comparison',
+      title: 'Why DeusVaultOS',
+      icon: <Target className="h-4 w-4" />,
+      component: <ComparisonSection />
+    },
+    {
+      id: 'therion',
+      title: 'THERION AI',
+      icon: <Users className="h-4 w-4" />,
+      component: <TherionSection />
+    },
+    {
+      id: 'marketplace',
+      title: 'Marketplace',
       icon: <Map className="h-4 w-4" />,
-      component: <FeaturesRoadmapSection />
-    },
-    {
-      id: 'contact',
-      title: 'Contact Us',
-      icon: <MessageCircle className="h-4 w-4" />,
-      component: <ContactSection />
+      component: <MarketplaceSection />
     },
     {
       id: 'cta',
-      title: 'Join Community',
-      icon: <Users className="h-4 w-4" />,
-      component: <AccurateCTASection />
+      title: 'Get Started',
+      icon: <MessageCircle className="h-4 w-4" />,
+      component: <CTASection />
     }
   ];
 
@@ -154,7 +154,7 @@ export default function App() {
   };
 
   if (isLoading) {
-    return <LoadingScreen_Award onLoadingComplete={() => setIsLoading(false)} />;
+    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
   }
 
   return (

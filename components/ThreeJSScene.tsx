@@ -120,6 +120,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_3' }, // Bright yellow (variant)
       { color: 0x00FFFF, emission: 0x44FFFF, name: 'electric_cyan_4' },      // Electric cyan (variant)
       { color: 0xFFFF00, emission: 0xFFFF88, name: 'consciousness_yellow_4' }, // Bright yellow (variant)
+    ];
+    
     // 🌐 ADVANCED 3D VOLUMETRIC DISTRIBUTION SYSTEM
     // Based on Poisson disk sampling for natural organic spacing
     // Creates snowglobe-like 3D distribution with perfect collision avoidance
@@ -131,7 +133,6 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     
     // 🎯 ENHANCED BLOB ECOSYSTEM WITH SIZE VARIATIONS
     // More blobs with natural size distribution
-    const totalBlobs = 15; // Increased for better density
     const blobSizeDistribution = [
       { type: 'tiny', count: 4, sizeRange: [0.12, 0.18] },
       { type: 'small', count: 6, sizeRange: [0.18, 0.28] },
@@ -157,13 +158,6 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       [blobConfigs[i], blobConfigs[j]] = [blobConfigs[j], blobConfigs[i]];
     }
 
-    // 🎲 NATURAL DISTRIBUTION ALGORITHM
-    // Shuffle blob sizes for organic ecosystem diversity
-    for (let i = blobConfigs.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [blobConfigs[i], blobConfigs[j]] = [blobConfigs[j], blobConfigs[i]];
-    }
-    
     const totalBlobs = isMobile ? Math.min(blobConfigs.length, 8) : blobConfigs.length;
     
     // 🌟 3D VOLUMETRIC DISTRIBUTION SYSTEM
