@@ -261,16 +261,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           startY,
           Math.sin(spiralAngle) * spiralRadius
         );
-      } else {
-        // Check if spawned position is below ground - if so, enable emergence
-        const groundLevel = -2.0;
-        if (blobMesh.position.y < groundLevel) {
-          // Don't relocate - let it emerge naturally through animation
-          blobMesh.userData = blobMesh.userData || {};
-          (blobMesh.userData as any).isEmerging = true;
-          (blobMesh.userData as any).emergenceTarget = groundLevel + 0.5; // Target above ground
-        }
       }
+      
+      // Check if any blob spawned below ground level - enable emergence for smooth animation
+      const groundLevel = -2.0;
+      const willEmerge = blobMesh.position.y < groundLevel;
 
       // Enhanced polished eyes with proper vertex attachment
       const eyeSize = baseSize * 0.15; // Much larger eyes for better visibility
@@ -377,8 +372,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         jellyIntensity: 0.06 + Math.random() * 0.04,
         
         // Enhanced emergence system with smooth underground animation
-        isEmerging: blobMesh.position.y < -1.8,
-        emergenceTarget: -1.0 + Math.random() * 1.2, // Target above ground
+        isEmerging: willEmerge,
+        emergenceTarget: willEmerge ? (-1.0 + Math.random() * 1.2) : blobMesh.position.y, // Target above ground
         emergenceSpeed: 0.5 + Math.random() * 0.3, // Varied emergence speeds
         
         // Non-synchronous animation timers for natural randomness
@@ -737,16 +732,17 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         // Enhanced emergence animation for underground blobs
         if (userData.isEmerging) {
           const emergenceProgress = Math.min(1, (userData.emergenceTarget - blob.position.y) / (userData.emergenceTarget + 3.5));
-          const emergenceSpeed = userData.emergenceSpeed * deltaTime * (1 + emergenceProgress); // Accelerate as they emerge
+          const emergenceSpeed = userData.emergenceSpeed * deltaTime * (0.8 + emergenceProgress * 0.4); // Smooth acceleration
           
           blob.position.y += emergenceSpeed;
           
-          // Add some wobble during emergence for organic feel
-          const wobble = Math.sin(time * 4 + userData.pulseOffset) * 0.05 * (1 - emergenceProgress);
+          // Add organic wobble during emergence
+          const wobbleIntensity = (1 - emergenceProgress) * 0.03; // Reduces as blob emerges
+          const wobble = Math.sin(time * 3 + userData.pulseOffset) * wobbleIntensity;
           blob.position.x += wobble;
-          blob.position.z += wobble * 0.8;
+          blob.position.z += wobble * 0.7;
           
-          // Disable emergence when target reached
+          // Complete emergence when target reached
           if (blob.position.y >= userData.emergenceTarget) {
             userData.isEmerging = false;
             userData.baseDepth = blob.position.y; // Update base depth for normal swimming
@@ -758,7 +754,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           const targetY = userData.baseDepth + verticalMovement;
           
           // Smooth vertical transition with consciousness awareness
-          blob.position.y = THREE.MathUtils.lerp(blob.position.y, targetY, deltaTime * 2);
+          blob.position.y = THREE.MathUtils.lerp(blob.position.y, targetY, deltaTime * 1.8);
         }
         
         // Enhanced horizontal swimming with curiosity-driven exploration
