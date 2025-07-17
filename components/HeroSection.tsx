@@ -10,6 +10,7 @@ import {
     Sparkles,
     Zap
 } from 'lucide-react';
+import ReadableContainer from './ReadableContainer';
 
 export function HeroSection() {
   return (
@@ -54,14 +55,16 @@ export function HeroSection() {
             </span>
           </h1>
           
-          <p className="font-subtitle text-xl lg:text-2xl text-cyber-dark-200 max-w-4xl mx-auto leading-relaxed">
-            DeusVaultOS is a revolutionary creative platform that amplifies{" "}
-            <span className="text-cyber-mint-bright font-semibold">your vision</span>,{" "}
-            <span className="text-cyber-yellow font-semibold">your tools</span>, with{" "}
-            <span className="text-cyber-cyan font-semibold">infinite possibility</span>.
-            <br />
-            Built by creators, for minds that shape the future.
-          </p>
+          <ReadableContainer transparency="medium" className="max-w-4xl mx-auto">
+            <p className="font-subtitle text-xl lg:text-2xl text-white leading-relaxed">
+              DeusVaultOS is a revolutionary creative platform that amplifies{" "}
+              <span className="text-cyber-mint-bright font-semibold">your vision</span>,{" "}
+              <span className="text-cyber-yellow font-semibold">your tools</span>, with{" "}
+              <span className="text-cyber-cyan font-semibold">infinite possibility</span>.
+              <br />
+              Built by creators, for minds that shape the future.
+            </p>
+          </ReadableContainer>
         </motion.div>
 
       </motion.div>

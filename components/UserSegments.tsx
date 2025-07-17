@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShaderText } from './ShaderText';
+import { ReadableContainer } from './ReadableContainer';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { 
@@ -219,10 +220,12 @@ export function UserSegments() {
             delay={500}
           />
           
-          <p className="font-subtitle text-cyber-dark-300 max-w-4xl mx-auto">
-            Deus Vault adapts to your unique needs. Whether you're building the next unicorn startup 
-            or modding your favorite game, we've got you covered.
-          </p>
+          <ReadableContainer transparency="medium" className="max-w-4xl mx-auto">
+            <p className="font-subtitle text-white">
+              Deus Vault adapts to your unique needs. Whether you're building the next unicorn startup 
+              or modding your favorite game, we've got you covered.
+            </p>
+          </ReadableContainer>
         </motion.div>
 
         {/* Segment Selector */}
@@ -282,9 +285,11 @@ export function UserSegments() {
                   duration={1500}
                   delay={200}
                 />
-                <p className="font-subtitle text-cyber-dark-300">
-                  {currentSegment.subtitle}
-                </p>
+                <ReadableContainer transparency="light">
+                  <p className="font-subtitle text-white">
+                    {currentSegment.subtitle}
+                  </p>
+                </ReadableContainer>
               </div>
             </div>
 

@@ -137,18 +137,18 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         Math.random() * Math.PI * 2
       );
       
-      // --- Eyes ---
-      const eyeGeometry = new THREE.SphereGeometry(isUnique ? 0.15 : 0.12, 8, 6); // Bigger eyes
+      // Properly sized, prominent eyes - single pair only
+      const eyeGeometry = new THREE.SphereGeometry(0.18, 8, 6); // Larger, more visible eyes
       const eyeMaterial = new THREE.MeshPhongMaterial({
-        color: isUnique ? 0xffffff : 0x000000,
-        emissive: isUnique ? 0x00ffff : 0x001133,
-        emissiveIntensity: isUnique ? 0.6 : 0.3,
+        color: isRareBlackBlob ? 0xffffff : 0x000000,
+        emissive: isRareBlackBlob ? 0x00ffff : 0x001144,
+        emissiveIntensity: isRareBlackBlob ? 0.7 : 0.4,
         shininess: 100
       });
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-      leftEye.position.set(-0.28, 0.18, 0.85);
-      rightEye.position.set(0.28, 0.18, 0.85);
+      leftEye.position.set(-0.32, 0.22, 0.88);
+      rightEye.position.set(0.32, 0.22, 0.88);
       blob.add(leftEye);
       blob.add(rightEye);
       blob.userData.leftEye = leftEye;
@@ -222,55 +222,6 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         
         energy
       };
-      
-      // Add proper neon eyes that glow
-      if (!isRareBlackBlob) {
-        // Regular blob with glowing black eyes
-        const eyeGeometry = new THREE.SphereGeometry(0.09, 8, 6); // Slightly larger
-        const eyeMaterial = new THREE.MeshPhongMaterial({ 
-          color: 0x000000,
-          emissive: 0x001133,
-          emissiveIntensity: 0.2,
-          shininess: 100
-        });
-        
-        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        
-        // Position eyes on the front face, more prominent
-        leftEye.position.set(-0.25, 0.15, 0.85);
-        rightEye.position.set(0.25, 0.15, 0.85);
-        
-        blob.add(leftEye);
-        blob.add(rightEye);
-        
-        // Store eye references for animation
-        blob.userData.leftEye = leftEye;
-        blob.userData.rightEye = rightEye;
-        
-      } else {
-        // Rare black blob with bright glowing white/cyan eyes
-        const eyeGeometry = new THREE.SphereGeometry(0.09, 8, 6);
-        const eyeMaterial = new THREE.MeshPhongMaterial({ 
-          color: 0xffffff,
-          emissive: 0x00ffff,
-          emissiveIntensity: 0.6,
-          shininess: 100
-        });
-        
-        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        
-        leftEye.position.set(-0.25, 0.15, 0.85);
-        rightEye.position.set(0.25, 0.15, 0.85);
-        
-        blob.add(leftEye);
-        blob.add(rightEye);
-        
-        // Store eye references for animation
-        blob.userData.leftEye = leftEye;
-        blob.userData.rightEye = rightEye;
-      }
       
       group.add(blob);
       blobs.push(blob);
@@ -556,28 +507,37 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         const baseY = userData.homePosition.y + floatBob + slowDrift;
         
         if (!userData.isResting) {
-          // Swimming movement with personality + enhanced aquarium motion
+          // Smooth lerping movement with personality
           const personalitySpeed = userData.personalityType === 2 ? 1.3 : // playful
                                    userData.personalityType === 3 ? 0.5 : // lazy
                                    userData.personalityType === 1 ? 0.7 : // shy
                                    1.0; // curious
           
-          const swimmingWave = Math.sin(elapsedTime * userData.swimmingSpeed + userData.swimmingPhase);
-          const swimmingOffset = new THREE.Vector3()
-            .copy(userData.swimmingDirection)
-            .multiplyScalar(swimmingWave * 0.006 * personalitySpeed);
+          // Calculate target position for smooth swimming
+          const targetPos = new THREE.Vector3()
+            .copy(userData.homePosition)
+            .add(new THREE.Vector3(
+              Math.sin(elapsedTime * userData.swimmingSpeed * 0.5 + userData.swimmingPhase) * 0.8,
+              Math.sin(elapsedTime * userData.swimmingSpeed * 0.3 + userData.swimmingPhase * 2) * 0.4,
+              Math.cos(elapsedTime * userData.swimmingSpeed * 0.4 + userData.swimmingPhase) * 0.8
+            ).multiplyScalar(personalitySpeed));
           
-          // Apply collision avoidance
-          swimmingOffset.add(userData.separationForce);
+          // Apply collision avoidance to target
+          targetPos.add(userData.separationForce.multiplyScalar(2));
           
-          blob.position.add(swimmingOffset);
+          // Smooth lerp to target position
+          blob.position.lerp(targetPos, 0.02 * personalitySpeed);
           blob.position.y = baseY; // Maintain floating motion
           
-          // Smooth floaty rotation - no spastic movement
-          const gentleRotation = 0.002 + Math.sin(elapsedTime * 0.3 + userData.swimmingPhase) * 0.001;
-          blob.rotation.x += gentleRotation;
-          blob.rotation.y += gentleRotation * 0.7;
-          blob.rotation.z += gentleRotation * 0.5;
+          // Smooth rotation lerping
+          const targetRotation = new THREE.Euler(
+            userData.swimmingDirection.x * 0.3,
+            Math.atan2(userData.swimmingDirection.x, userData.swimmingDirection.z),
+            userData.swimmingDirection.z * 0.2
+          );
+          blob.rotation.x = THREE.MathUtils.lerp(blob.rotation.x, targetRotation.x, 0.05);
+          blob.rotation.y = THREE.MathUtils.lerp(blob.rotation.y, targetRotation.y, 0.03);
+          blob.rotation.z = THREE.MathUtils.lerp(blob.rotation.z, targetRotation.z, 0.04);
           
           // Organic wandering behavior
           if (!userData.currentTarget || userData.targetReachTime > 400) {
@@ -834,37 +794,43 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
 
     // Interactive camera controls
     const handleMouseDown = (event: MouseEvent) => {
+      event.preventDefault();
       setIsDragging(true);
       setFadeOut(true);
       lastMousePosition.current = { x: event.clientX, y: event.clientY };
+      console.log('Mouse down detected'); // Debug
     };
 
     const handleMouseMove = (event: MouseEvent) => {
       if (!isDragging) return;
+      event.preventDefault();
 
       const deltaX = event.clientX - lastMousePosition.current.x;
       const deltaY = event.clientY - lastMousePosition.current.y;
 
       // Update camera offset for exploration
-      cameraOffset.current.x += deltaX * 0.01;
-      cameraOffset.current.y -= deltaY * 0.01;
+      cameraOffset.current.x += deltaX * 0.02;
+      cameraOffset.current.y -= deltaY * 0.02;
 
       // Clamp camera movement
-      cameraOffset.current.x = Math.max(-3, Math.min(3, cameraOffset.current.x));
-      cameraOffset.current.y = Math.max(-2, Math.min(4, cameraOffset.current.y));
+      cameraOffset.current.x = Math.max(-5, Math.min(5, cameraOffset.current.x));
+      cameraOffset.current.y = Math.max(-3, Math.min(5, cameraOffset.current.y));
 
       lastMousePosition.current = { x: event.clientX, y: event.clientY };
+      console.log('Camera offset:', cameraOffset.current); // Debug
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (event: MouseEvent) => {
+      event.preventDefault();
       setIsDragging(false);
       setFadeOut(false);
+      console.log('Mouse up detected'); // Debug
       
       // Smoothly return camera to original position
       const resetCamera = () => {
-        cameraOffset.current.x *= 0.95;
-        cameraOffset.current.y *= 0.95;
-        cameraOffset.current.z *= 0.95;
+        cameraOffset.current.x *= 0.92;
+        cameraOffset.current.y *= 0.92;
+        cameraOffset.current.z *= 0.92;
         
         if (Math.abs(cameraOffset.current.x) > 0.01 || 
             Math.abs(cameraOffset.current.y) > 0.01 || 
@@ -877,8 +843,13 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       resetCamera();
     };
 
+    // Attach events to both the canvas and the mount div
+    const canvasElement = renderer.domElement;
+    canvasElement.style.cursor = 'grab';
+    
     window.addEventListener('resize', handleResize);
-    renderer.domElement.addEventListener('mousedown', handleMouseDown);
+    canvasElement.addEventListener('mousedown', handleMouseDown);
+    mountRef.current.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
 
@@ -889,6 +860,9 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       window.removeEventListener('mouseup', handleMouseUp);
       if (rendererRef.current?.domElement) {
         rendererRef.current.domElement.removeEventListener('mousedown', handleMouseDown);
+      }
+      if (mountRef.current) {
+        mountRef.current.removeEventListener('mousedown', handleMouseDown);
       }
       
       if (frameRef.current) {

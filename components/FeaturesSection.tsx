@@ -11,6 +11,7 @@ import {
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
+import { ReadableContainer } from "./ReadableContainer";
 
 export function FeaturesSection() {
   const coreFeatures = [
@@ -70,7 +71,7 @@ export function FeaturesSection() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-8 border border-white/10 inline-block">
+          <ReadableContainer transparency="medium" className="inline-block">
             <Badge className="bg-gradient-to-r from-cyan-600/80 to-purple-600/80 backdrop-blur-sm px-6 py-3 mb-8 border border-cyan-400/30 text-white">
               <Sparkles className="h-4 w-4 mr-3" />
               Core Capabilities
@@ -83,7 +84,7 @@ export function FeaturesSection() {
             <p className="text-xl text-white max-w-4xl mx-auto" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.7)' }}>
               A complete development environment that eliminates setup time and accelerates creation with AI.
             </p>
-          </div>
+          </ReadableContainer>
         </motion.div>
 
         {/* Features Grid - Mixed transparency */}

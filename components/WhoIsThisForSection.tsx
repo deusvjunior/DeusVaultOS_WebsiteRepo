@@ -107,15 +107,13 @@ export const WhoIsThisForSection = () => {
               AI Development
             </span>
           </h1>
-          <div className="mx-auto max-w-2xl p-6 rounded-xl bg-black/60 backdrop-blur-md shadow-xl border border-cyan-400">
-            <p 
-              className="text-xl text-gray-300 leading-relaxed"
-              style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}
-            >
-              Whether you're a solo developer, enterprise team, or research institution, 
-              DeusVaultOS provides the perfect environment for your AI journey.
-            </p>
-          </div>
+          <p 
+            className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
+            style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}
+          >
+            Whether you're a solo developer, enterprise team, or research institution, 
+            DeusVaultOS provides the perfect environment for your AI journey.
+          </p>
         </motion.div>
 
         {/* User Types Grid */}

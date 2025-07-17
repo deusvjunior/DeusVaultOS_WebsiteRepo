@@ -10,7 +10,7 @@ import {
     Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import LoadingScreen from './components/LoadingScreen';
+import LoadingScreenCyberpunk from './components/LoadingScreenCyberpunk';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import accurate content components
@@ -150,7 +150,7 @@ export default function App() {
   };
 
   if (isLoading) {
-    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
+    return <LoadingScreenCyberpunk onLoadingComplete={() => setIsLoading(false)} />;
   }
 
   return (
