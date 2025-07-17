@@ -58,13 +58,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     scene.add(accentLight);
   };
 
-  // Enhanced living blobs with responsive count and positioning
+  // Enhanced living blobs with dramatic size variation and personality
   const createCuteBlobsWithJellyPhysics = (group: THREE.Group) => {
     const isMobile = window.innerWidth < 768;
-    const blobCount = isMobile ? 8 : 12; // Fewer blobs on mobile for performance
+    const blobCount = isMobile ? 8 : 13; // 8 small + 4 medium + 1 large
     const blobs: any[] = [];
-    const hexagonInnerRadius = isMobile ? 3.2 : 3.8; // Smaller area on mobile
-    const staticMeshes: THREE.Mesh[] = []; // Store static meshes for collision
+    const hexagonInnerRadius = isMobile ? 3.2 : 3.8;
+    const staticMeshes: THREE.Mesh[] = [];
 
     // Collect all static meshes in the scene for collision detection
     group.traverse((child) => {
@@ -73,12 +73,23 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
     });
 
+    // Define size categories with personality traits
+    const sizeCategories = [
+      // 8 Small blobs - energetic and quick
+      ...Array(8).fill({ type: 'small', size: [0.2, 0.35], speed: [0.4, 0.8], energy: 'high' }),
+      // 4 Medium blobs - balanced behavior  
+      ...Array(4).fill({ type: 'medium', size: [0.4, 0.6], speed: [0.2, 0.5], energy: 'medium' }),
+      // 1 Large blob - slow and majestic
+      { type: 'large', size: [0.8, 1.2], speed: [0.1, 0.3], energy: 'low' }
+    ];
+
     for (let i = 0; i < blobCount; i++) {
-      // Optimized blob sizes for better performance
-      const baseSize = 0.25 + Math.random() * 0.15; // Slightly smaller for less overlap
+      const category = sizeCategories[i];
+      const baseSize = category.size[0] + Math.random() * (category.size[1] - category.size[0]);
       
-      // Optimized geometry with fewer vertices for better performance
-      const blobGeometry = new THREE.SphereGeometry(baseSize, 12, 8); // Reduced complexity
+      // Optimized geometry with size-based complexity
+      const complexity = category.type === 'large' ? [16, 12] : category.type === 'medium' ? [14, 10] : [12, 8];
+      const blobGeometry = new THREE.SphereGeometry(baseSize, complexity[0], complexity[1]);
       const positions = blobGeometry.attributes.position;
       
       // Store original vertices for jelly deformation
@@ -91,44 +102,70 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         );
       }
       
-      // Optimized color palette
-      const colorOptions = [
-        0x4ECDC4, // Soft cyan
-        0xFFE66D, // Warm yellow
-        0x95E1D3, // Mint green
-        0xA8E6CF, // Light green
-        0xFFB6C1, // Light pink
-      ];
-      const selectedColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+      // Enhanced vibrant colors with stronger personality
+      const colorsBySize = {
+        small: [
+          0xFF6B6B, // Vibrant coral red
+          0x4ECDC4, // Bright turquoise
+          0xFFE66D, // Golden yellow
+          0x95E1D3, // Mint green
+          0xFF8A80, // Light pink
+          0x81C784, // Fresh green
+          0x64B5F6, // Sky blue
+          0xFFB74D, // Orange
+        ],
+        medium: [
+          0x9C27B0, // Deep purple
+          0x2196F3, // Blue
+          0x00BCD4, // Cyan
+          0x8BC34A, // Light green
+        ],
+        large: [
+          0x6A1B9A, // Royal purple - the king blob
+        ]
+      };
       
-      // Optimized matte material with pulsating emission
+      const colorPalette = colorsBySize[category.type as keyof typeof colorsBySize];
+      const selectedColor = colorPalette[i % colorPalette.length];
+      
+      // Enhanced material with stronger pulsating emission
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
-        metalness: 0.0, // NO METALLIC SHINE
-        roughness: 0.9, // ULTRA MATTE
-        clearcoat: 0.0, // NO SHINY COATING
-        transmission: 0, // NO TRANSLUCENCY
-        transparent: false, // NO TRANSPARENCY
-        opacity: 1.0, // FULLY OPAQUE
+        metalness: 0.0,
+        roughness: 0.9,
+        clearcoat: 0.0,
+        transmission: 0,
+        transparent: false,
+        opacity: 1.0,
         emissive: selectedColor,
-        emissiveIntensity: 0.08, // Optimized base emission
+        emissiveIntensity: category.type === 'large' ? 0.15 : category.type === 'medium' ? 0.12 : 0.1,
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
-      (blobMesh as any).isBlob = true; // Mark as blob for identification
+      (blobMesh as any).isBlob = true;
       
-      // Strategic positioning within hexagon interior (NOT perimeter)
+      // Strategic positioning within hexagon interior with vertical personality layers
       let validPosition = false;
       let attempts = 0;
       const maxAttempts = 50;
       
       while (!validPosition && attempts < maxAttempts) {
-        // Position INSIDE hexagon area, close to ground
+        // Enhanced positioning INSIDE hexagon area with personality-based layers
         const angle = Math.random() * Math.PI * 2;
         const radius = 0.8 + Math.random() * 2.8; // Inner area: 0.8 to 3.6 radius
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
-        const y = -1.8 + Math.random() * 0.6; // Close to ground: -1.8 to -1.2
+        
+        // Enhanced size-based vertical layers with dramatic range
+        let y;
+        const verticalLayers = {
+          small: { min: -1.2, max: 0.2 }, // Energetic swimmers - upper waters
+          medium: { min: -2.0, max: -0.5 }, // Middle layer swimmers
+          large: { min: -2.8, max: -1.5 } // Deep, majestic swimmer - ocean depths
+        };
+        
+        const range = verticalLayers[category.type as keyof typeof verticalLayers];
+        y = range.min + Math.random() * (range.max - range.min);
         
         const testPosition = new THREE.Vector3(x, y, z);
         
@@ -153,19 +190,20 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         attempts++;
       }
       
-      // Fallback position within hexagon interior if no valid position found
+      // Enhanced fallback position with size-appropriate layers
       if (!validPosition) {
         const fallbackAngle = (i / blobCount) * Math.PI * 2;
+        const fallbackY = category.type === 'large' ? -2.2 : category.type === 'medium' ? -1.5 : -0.8;
         blobMesh.position.set(
           Math.cos(fallbackAngle) * 2.5, // Inner hexagon area
-          -1.5, // Close to ground
+          fallbackY, // Size-appropriate layer
           Math.sin(fallbackAngle) * 2.5
         );
       }
 
-      // Optimized eyes with better attachment
-      const eyeSize = baseSize * 0.1; // Slightly smaller for better performance
-      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 6, 4); // Ultra low poly
+      // Enhanced eyes with better attachment and personality
+      const eyeSize = baseSize * 0.15; // Larger, more expressive eyes
+      const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6); // Higher detail for better looks
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
         color: 0x000000, // Pure black dots
         transparent: false,
@@ -175,15 +213,28 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       
-      // Position eyes closer to surface for better skin attachment
-      const eyeOffset = baseSize * 0.3;
-      leftEye.position.set(-eyeOffset, eyeOffset * 0.2, baseSize * 0.7);
-      rightEye.position.set(eyeOffset, eyeOffset * 0.2, baseSize * 0.7);
+      // Enhanced eye positioning for better attachment
+      const eyeOffset = baseSize * 0.35;
+      const eyeHeight = baseSize * 0.25;
+      const eyeForward = baseSize * 0.8;
+      
+      leftEye.position.set(-eyeOffset, eyeHeight, eyeForward);
+      rightEye.position.set(eyeOffset, eyeHeight, eyeForward);
       
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Store comprehensive animation data with optimized physics
+      // Enhanced physics and personality data
+      const speedMultiplier = category.speed[0] + Math.random() * (category.speed[1] - category.speed[0]);
+      const movementIntensity = {
+        small: { x: 0.6, y: 0.4, z: 0.6 }, // Hyperactive movement
+        medium: { x: 0.4, y: 0.3, z: 0.4 }, // Moderate swimming
+        large: { x: 0.2, y: 0.15, z: 0.2 } // Slow, majestic movement
+      };
+      
+      const movement = movementIntensity[category.type as keyof typeof movementIntensity];
+
+      // Store comprehensive animation data with enhanced personality
       blobMesh.userData = {
         size: baseSize,
         originalVertices,
@@ -191,32 +242,45 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         rightEye,
         staticMeshes, // Reference to static meshes for collision
         
-        // Optimized physics collision properties
+        // Enhanced personality-based physics
+        sizeCategory: category.type,
+        speedMultiplier,
+        movementRange: movement,
+        energyLevel: category.energy,
+        
+        // Enhanced physics collision properties
         radius: baseSize * 1.1, // Slightly larger collision sphere
-        velocity: new THREE.Vector3(),
+        velocity: new THREE.Vector3(
+          (Math.random() - 0.5) * speedMultiplier,
+          (Math.random() - 0.5) * speedMultiplier * 0.4, // More vertical movement
+          (Math.random() - 0.5) * speedMultiplier
+        ),
         lastValidPosition: blobMesh.position.clone(),
         
-        // Optimized movement parameters
-        swimSpeed: 0.15 + Math.random() * 0.2, // Slightly faster for better responsiveness
+        // Enhanced personality-based movement parameters
+        swimSpeed: speedMultiplier * (0.15 + Math.random() * 0.25), // Speed based on size
         swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 0.3 + Math.random() * 0.3,
+        swimAmplitude: movement.x * (0.5 + Math.random() * 0.8), // Amplitude based on personality
         
-        // Individual direction per blob (prefer ground-level movement)
+        // Enhanced 3D movement with personality-based direction
         targetDirection: new THREE.Vector3(
           (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 0.1, // Much less vertical movement
+          (Math.random() - 0.5) * movement.y * 2, // Vertical movement based on personality
           (Math.random() - 0.5) * 2
         ).normalize(),
         currentDirection: new THREE.Vector3(),
         
-        // Optimized material pulsing
+        // Enhanced material pulsing with stronger emission
         baseMaterial: blobMaterial,
-        pulseSpeed: 0.6 + Math.random() * 0.4,
+        pulseSpeed: category.type === 'small' ? 1.2 + Math.random() * 0.8 : 
+                   category.type === 'medium' ? 0.8 + Math.random() * 0.6 : 
+                   0.4 + Math.random() * 0.4, // Size-based pulse speed
         pulseOffset: Math.random() * Math.PI * 2,
+        baseEmission: category.type === 'large' ? 0.15 : category.type === 'medium' ? 0.12 : 0.1,
         
-        // Optimized jelly physics
+        // Enhanced jelly physics with personality
         jellyVertices: new Float32Array(originalVertices),
-        jellySpeed: 0.4 + Math.random() * 0.3,
+        jellySpeed: speedMultiplier * (0.6 + Math.random() * 0.5),
         jellyIntensity: 0.08 + Math.random() * 0.06,
         
         // Simplified emergence system (keep near ground)
@@ -465,11 +529,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Optimized pulsating emission (reduced calculation frequency)
-        if (index % 3 === Math.floor(time * 10) % 3) { // Only update 1/3 of blobs per frame
+        // Enhanced pulsating emission with personality-based intensity
+        if (index % 3 === Math.floor(time * 10) % 3) { // Optimized update frequency
           const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
-          const pulseIntensity = 0.05 + Math.sin(pulseTime) * 0.03; // Gentler pulsing
-          userData.baseMaterial.emissiveIntensity = pulseIntensity;
+          const basePulse = userData.baseEmission;
+          const pulseAmplitude = userData.sizeCategory === 'large' ? 0.08 : 
+                               userData.sizeCategory === 'medium' ? 0.06 : 0.05;
+          const pulseIntensity = basePulse + Math.sin(pulseTime) * pulseAmplitude;
+          userData.baseMaterial.emissiveIntensity = Math.max(0.05, pulseIntensity);
         }
         
         // Advanced collision detection with static meshes (hexagon structure)
@@ -550,67 +617,120 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           }
           positions.needsUpdate = true;
           
-          // Optimized eyes follow skin deformation
-          const eyeOffset = userData.size * 0.3;
-          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.4;
+          // Enhanced eyes follow skin deformation with better attachment
+          const eyeOffset = userData.size * 0.35; // Proportional to blob size
+          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.6;
           
-          userData.leftEye.position.z = userData.size * 0.7 + skinDeformation;
-          userData.rightEye.position.z = userData.size * 0.7 + skinDeformation;
+          // Enhanced eye positioning with smooth movement
+          const eyeHeight = userData.size * 0.25;
+          const eyeForward = userData.size * 0.8 + skinDeformation;
           
-          userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.7) * userData.jellyIntensity * 0.2;
-          userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.7) * userData.jellyIntensity * 0.2;
+          userData.leftEye.position.set(
+            -eyeOffset + Math.sin(time * userData.jellySpeed * 0.8) * userData.jellyIntensity * 0.3,
+            eyeHeight + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.2,
+            eyeForward
+          );
+          userData.rightEye.position.set(
+            eyeOffset + Math.sin(time * userData.jellySpeed * 0.8) * userData.jellyIntensity * 0.3,
+            eyeHeight + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.2,
+            eyeForward
+          );
+          
+          // Enhanced blinking behavior with personality
+          userData.blinkTimer -= deltaTime;
+          if (userData.blinkTimer <= 0) {
+            // Personality-based blink frequency
+            const blinkRate = userData.energyLevel === 'high' ? 1.5 + Math.random() * 2 :
+                             userData.energyLevel === 'medium' ? 2 + Math.random() * 3 :
+                             2.5 + Math.random() * 4;
+            userData.blinkTimer = blinkRate;
+            
+            // Smooth blink animation
+            const blinkDuration = 0.15 + Math.random() * 0.1;
+            userData.leftEye.scale.y = 0.1;
+            userData.rightEye.scale.y = 0.1;
+            
+            // Reset eyes after blink
+            setTimeout(() => {
+              userData.leftEye.scale.y = 1;
+              userData.rightEye.scale.y = 1;
+            }, blinkDuration * 1000);
+          }
         }
         
-        // Optimized movement system with timer-based direction changes
+        // Enhanced movement system with personality-based behavior
         const moveTime = time * userData.swimSpeed;
-        userData.currentDirection.lerp(userData.targetDirection, 0.008); // Slower lerp for smoother movement
+        userData.currentDirection.lerp(userData.targetDirection, 0.012); // Faster response
         
-        // Optimized direction change with timer
+        // Enhanced direction change with personality-based timers
         userData.directionChangeTimer -= deltaTime;
         if (userData.directionChangeTimer <= 0) {
-          userData.directionChangeTimer = 3 + Math.random() * 5; // Reset timer
+          // Personality-based direction change frequency
+          const changeFrequency = userData.energyLevel === 'high' ? 2 + Math.random() * 3 :
+                                 userData.energyLevel === 'medium' ? 3 + Math.random() * 4 :
+                                 4 + Math.random() * 6;
+          userData.directionChangeTimer = changeFrequency;
+          
+          // Enhanced 3D movement with personality
           userData.targetDirection.set(
-            (Math.random() - 0.5) * 1.5,
-            (Math.random() - 0.5) * 0.1, // Minimal vertical movement
-            (Math.random() - 0.5) * 1.5
+            (Math.random() - 0.5) * 2,
+            (Math.random() - 0.5) * userData.movementRange.y * 2, // Personality-based vertical movement
+            (Math.random() - 0.5) * 2
           ).normalize();
         }
         
-        // Simplified emergence or normal swimming
+        // Enhanced emergence or personality-based swimming
         if (userData.isEmerging && blob.position.y < userData.emergenceTarget) {
-          blob.position.y += userData.swimSpeed * deltaTime * 0.5;
+          blob.position.y += userData.swimSpeed * deltaTime * 0.8; // Faster emergence
           if (blob.position.y >= userData.emergenceTarget) {
             userData.isEmerging = false;
           }
         } else {
-          // Normal swimming motion
-          const swimOffset = Math.sin(moveTime + userData.swimOffset) * 0.5;
-          const moveDistance = userData.swimAmplitude * deltaTime * 0.3; // Reduced speed
+          // Enhanced swimming motion with personality-based movement
+          const swimOffset = Math.sin(moveTime + userData.swimOffset) * 0.7;
+          const moveDistance = userData.swimAmplitude * deltaTime * userData.speedMultiplier * 0.5;
           
-          blob.position.add(
-            userData.currentDirection.clone().multiplyScalar(moveDistance * (1 + swimOffset))
-          );
+          // Smoother movement with velocity smoothing
+          const targetVelocity = userData.currentDirection.clone().multiplyScalar(moveDistance * (1 + swimOffset));
+          userData.velocity.lerp(targetVelocity, 0.1); // Smooth velocity transitions
+          
+          blob.position.add(userData.velocity);
         }
         
-        // Optimized boundary collision with hexagon interior containment
+        // Enhanced boundary collision with smooth containment
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
         if (distanceFromCenter > hexagonInnerRadius - userData.radius) {
           const angle = Math.atan2(blob.position.z, blob.position.x);
-          blob.position.x = Math.cos(angle) * (hexagonInnerRadius - userData.radius);
-          blob.position.z = Math.sin(angle) * (hexagonInnerRadius - userData.radius);
+          const targetX = Math.cos(angle) * (hexagonInnerRadius - userData.radius);
+          const targetZ = Math.sin(angle) * (hexagonInnerRadius - userData.radius);
           
-          // Physics-based wall bounce
+          // Smooth boundary correction instead of instant snap
+          blob.position.x = THREE.MathUtils.lerp(blob.position.x, targetX, 0.2);
+          blob.position.z = THREE.MathUtils.lerp(blob.position.z, targetZ, 0.2);
+          
+          // Smoother wall bounce
           const wallNormal = new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle));
-          userData.targetDirection.reflect(wallNormal).multiplyScalar(0.8);
+          userData.targetDirection.reflect(wallNormal).multiplyScalar(0.9);
+          userData.velocity.multiplyScalar(0.7); // Dampen velocity on collision
         }
         
-        // Optimized floor and ceiling collision
-        if (blob.position.y > ceilingLevel - userData.radius) {
-          blob.position.y = ceilingLevel - userData.radius;
-          userData.targetDirection.y = -Math.abs(userData.targetDirection.y) * 0.8;
-        } else if (blob.position.y < groundLevel + userData.radius && !userData.isEmerging) {
-          blob.position.y = groundLevel + userData.radius;
-          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * 0.8;
+        // Enhanced vertical boundaries with personality layers
+        const verticalLimits = {
+          small: { floor: -2.5, ceiling: 0.5 },
+          medium: { floor: -3.0, ceiling: -0.2 },
+          large: { floor: -3.5, ceiling: -1.0 }
+        };
+        
+        const limits = verticalLimits[userData.sizeCategory as keyof typeof verticalLimits];
+        
+        if (blob.position.y > limits.ceiling - userData.radius) {
+          blob.position.y = THREE.MathUtils.lerp(blob.position.y, limits.ceiling - userData.radius, 0.2);
+          userData.targetDirection.y = -Math.abs(userData.targetDirection.y) * 0.9;
+          userData.velocity.y *= 0.7;
+        } else if (blob.position.y < limits.floor + userData.radius && !userData.isEmerging) {
+          blob.position.y = THREE.MathUtils.lerp(blob.position.y, limits.floor + userData.radius, 0.2);
+          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * 0.9;
+          userData.velocity.y *= 0.7;
         }
         
         // Optimized squishy scale animation
@@ -685,20 +805,35 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     cameraRef.current.lookAt(0, 0, 0);
   };
 
-  // Apple-grade rotation with physics simulation (SLOWER & SMOOTHER)
+  // Ultra-smooth rotation with enhanced physics simulation
   const updateRotationWithPhysics = (_deltaTime: number) => {
     if (!isInteracting && !reducedMotion) {
       targetRotationY.current = faceAngles[currentSection];
     }
 
-    // Physics-based rotation with gentler spring damping
-    const springStrength = 0.025; // Half the original speed
-    const damping = 0.9; // Higher damping for smoother motion
+    // Enhanced physics-based rotation with ultra-smooth damping
+    const springStrength = 0.015; // Even gentler for ultra-smooth movement
+    const damping = 0.95; // Higher damping to prevent oscillation
     
-    const force = (targetRotationY.current - currentRotationY.current) * springStrength;
+    const angleDifference = targetRotationY.current - currentRotationY.current;
+    
+    // Normalize angle difference to prevent unnecessary full rotations
+    let normalizedDiff = angleDifference;
+    while (normalizedDiff > Math.PI) normalizedDiff -= 2 * Math.PI;
+    while (normalizedDiff < -Math.PI) normalizedDiff += 2 * Math.PI;
+    
+    const force = normalizedDiff * springStrength;
     velocityRef.current += force;
     velocityRef.current *= damping;
-    currentRotationY.current += velocityRef.current;
+    
+    // Apply velocity threshold to prevent micro-movements
+    if (Math.abs(velocityRef.current) > 0.001) {
+      currentRotationY.current += velocityRef.current;
+    } else if (Math.abs(normalizedDiff) < 0.01) {
+      // Snap to target when very close to prevent endless micro-adjustments
+      currentRotationY.current = targetRotationY.current;
+      velocityRef.current = 0;
+    }
     
     if (hexagonRef.current) {
       hexagonRef.current.rotation.y = currentRotationY.current;
