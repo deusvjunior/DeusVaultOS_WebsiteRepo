@@ -167,6 +167,7 @@ export default function App() {
       {/* 3D Background Scene - Enhanced visibility */}
       <div className="fixed inset-0 z-0">
         <ThreeJSScene
+          pageIndex={currentSection}
           currentSection={currentSection}
           reducedMotion={reducedMotion}
         />
@@ -274,8 +275,8 @@ export default function App() {
         </div>
       </motion.div>
 
-      {/* Content Area - Much more transparent */}
-      <div className="relative z-20">
+      {/* Content Area - Properly spaced for header */}
+      <div className="relative z-20 pt-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSection}
@@ -283,6 +284,7 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
+            className="min-h-screen"
           >
             {sections[currentSection].component}
           </motion.div>

@@ -88,8 +88,8 @@ export const WhoIsThisForSection = () => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen flex items-center justify-center p-6 pb-32">
+      <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Header */}
         <motion.div
