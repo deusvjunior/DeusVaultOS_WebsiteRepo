@@ -27,35 +27,49 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Section rotation mapping (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
-  // Optimized lighting setup for better performance and soft colors
+  // UE5-grade lighting setup with advanced PBR workflow
   const setupAdvancedLighting = (scene: THREE.Scene) => {
-    // Key light - primary illumination (optimized)
-    const keyLight = new THREE.DirectionalLight(0x4ECDC4, 1.8); // Softer cyan
-    keyLight.position.set(8, 12, 6);
+    // Key directional light (sun simulation)
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.5); // Bright white
+    keyLight.position.set(12, 15, 8);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 1024; // Reduced for performance
-    keyLight.shadow.mapSize.height = 1024;
+    keyLight.shadow.mapSize.width = 2048; // Higher quality shadows
+    keyLight.shadow.mapSize.height = 2048;
     keyLight.shadow.camera.near = 0.1;
     keyLight.shadow.camera.far = 50;
-    keyLight.shadow.camera.left = -15;
-    keyLight.shadow.camera.right = 15;
-    keyLight.shadow.camera.top = 15;
-    keyLight.shadow.camera.bottom = -15;
+    keyLight.shadow.camera.left = -20;
+    keyLight.shadow.camera.right = 20;
+    keyLight.shadow.camera.top = 20;
+    keyLight.shadow.camera.bottom = -20;
+    keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
 
-    // Warm fill light
-    const fillLight = new THREE.DirectionalLight(0xFFE66D, 0.8); // Warm yellow
-    fillLight.position.set(-6, 8, 4);
+    // Fill light for soft shadows
+    const fillLight = new THREE.DirectionalLight(0x87CEEB, 1.2); // Sky blue
+    fillLight.position.set(-8, 10, -6);
     scene.add(fillLight);
 
-    // Ambient light for soft base illumination
-    const ambientLight = new THREE.AmbientLight(0x95E1D3, 0.4); // Soft mint
+    // Rim light for edge definition
+    const rimLight = new THREE.DirectionalLight(0xFFE4E1, 0.8); // Warm rim
+    rimLight.position.set(0, 5, -15);
+    scene.add(rimLight);
+
+    // Enhanced ambient for realistic base illumination
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.3); // Neutral gray
     scene.add(ambientLight);
 
-    // Single accent point light (optimized)
-    const accentLight = new THREE.PointLight(0xA8E6CF, 1.2, 25);
-    accentLight.position.set(0, 8, 0);
-    scene.add(accentLight);
+    // Multiple point lights for dynamic reflections
+    const pointLight1 = new THREE.PointLight(0x00ffff, 1.5, 30);
+    pointLight1.position.set(8, 6, 8);
+    scene.add(pointLight1);
+
+    const pointLight2 = new THREE.PointLight(0xff6b6b, 1.2, 25);
+    pointLight2.position.set(-6, 8, -4);
+    scene.add(pointLight2);
+
+    const pointLight3 = new THREE.PointLight(0x4ecdc4, 1.0, 20);
+    pointLight3.position.set(0, 12, 0);
+    scene.add(pointLight3);
   };
 
   // Enhanced living blobs with jelly physics, eyes, and cute movement
@@ -92,17 +106,20 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       ];
       const selectedColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
       
-      // Soft matte material with pulsating emission (NO SHININESS)
+      // Modern reflective material with UE5-grade PBR workflow
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: selectedColor,
-        metalness: 0.0, // NO METALLIC SHINE
-        roughness: 0.8, // MATTE FINISH
-        clearcoat: 0.0, // NO SHINY COATING
+        metalness: 0.2, // Subtle metallic reflection
+        roughness: 0.3, // Smooth but not mirror-like
+        clearcoat: 0.9, // High-quality clear coat for depth
+        clearcoatRoughness: 0.1, // Smooth clear coat
+        reflectivity: 0.8, // Strong environmental reflection
         transmission: 0, // NO TRANSLUCENCY
         transparent: false, // NO TRANSPARENCY
         opacity: 1.0, // FULLY OPAQUE
         emissive: selectedColor,
-        emissiveIntensity: 0.1, // Base emission for pulsating
+        emissiveIntensity: 0.02, // Reduced emission for realistic look
+        envMapIntensity: 1.2, // Enhanced environment map reflection
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
@@ -299,27 +316,38 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     return particles;
   };
 
-  // Apple-grade hexagon with premium materials and effects
+  // UE5-grade hexagon with modern reflective materials
   const createAppleGradeHexagon = (group: THREE.Group) => {
-    // Create spaceship-style base platform
+    // Modern platform base with realistic materials
     const baseGeometry = new THREE.CylinderGeometry(6.5, 7.0, 0.3, 32);
     const baseMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x2a2a3a,
-      metalness: 0.8,
-      roughness: 0.2,
-      emissive: 0x001122,
-      emissiveIntensity: 0.1,
+      color: 0x1a1a2e,
+      metalness: 0.8, // High metallic reflection
+      roughness: 0.15, // Smooth polished surface
+      clearcoat: 1.0, // Perfect clear coat
+      clearcoatRoughness: 0.05, // Mirror-like clear coat
+      reflectivity: 0.9, // Maximum reflection
+      emissive: 0x000511,
+      emissiveIntensity: 0.02,
+      envMapIntensity: 1.5, // Enhanced environment reflections
     });
     const baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
     baseMesh.position.y = -1.0;
+    baseMesh.receiveShadow = true;
+    baseMesh.castShadow = true;
     group.add(baseMesh);
 
-    // Create glow ring around base
+    // Enhanced glow ring with modern effects
     const ringGeometry = new THREE.RingGeometry(6.0, 6.8, 64);
-    const ringMaterial = new THREE.MeshBasicMaterial({
+    const ringMaterial = new THREE.MeshPhysicalMaterial({
       color: 0x00e1ff,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.4,
+      metalness: 0.3,
+      roughness: 0.2,
+      clearcoat: 0.8,
+      emissive: 0x00e1ff,
+      emissiveIntensity: 0.1,
       side: THREE.DoubleSide,
     });
     const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
@@ -327,23 +355,23 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     ringMesh.rotation.x = -Math.PI / 2;
     group.add(ringMesh);
 
-    // Create hexagon faces as monitor screens
+    // Create modern hexagon monitor panels
     const sections = 6;
     const radius = 5.0;
 
     for (let i = 0; i < sections; i++) {
       const angle = (i * Math.PI * 2) / sections;
       
-      // Screen frame with granite material
+      // Modern frame with brushed metal finish
       const frameGeometry = new THREE.BoxGeometry(3.5, 2.5, 0.3);
       const frameMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x4a4a4a,
-        metalness: 0.3,
-        roughness: 0.6,
+        color: 0x2c2c54,
+        metalness: 0.9, // High metallic for modern look
+        roughness: 0.2, // Brushed metal finish
         clearcoat: 0.8,
-        clearcoatRoughness: 0.2,
-        reflectivity: 0.4,
-        normalScale: new THREE.Vector2(0.5, 0.5),
+        clearcoatRoughness: 0.1,
+        reflectivity: 0.8,
+        envMapIntensity: 1.3, // Strong environment reflections
       });
 
       const frameMesh = new THREE.Mesh(frameGeometry, frameMaterial);
@@ -352,13 +380,23 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       frameMesh.position.set(x, 0, z);
       frameMesh.lookAt(0, 0, 0);
+      frameMesh.castShadow = true;
+      frameMesh.receiveShadow = true;
       
-      // Screen content (monitor display)
+      // Modern screen with glass-like material
       const screenGeometry = new THREE.PlaneGeometry(3.0, 2.0);
-      const screenMaterial = new THREE.MeshStandardMaterial({
-        color: i === 0 ? 0x00e1ff : 0x1a1d20,
-        emissive: i === 0 ? 0x003344 : 0x000000,
-        emissiveIntensity: i === 0 ? 0.5 : 0.1,
+      const screenMaterial = new THREE.MeshPhysicalMaterial({
+        color: i === 0 ? 0x00e1ff : 0x0f0f23,
+        metalness: 0.1,
+        roughness: 0.05, // Glass-like smoothness
+        clearcoat: 1.0, // Perfect glass coating
+        clearcoatRoughness: 0.02,
+        reflectivity: 0.95, // Near-mirror reflection
+        transmission: 0.1, // Slight transparency for depth
+        thickness: 0.5,
+        emissive: i === 0 ? 0x001122 : 0x000000,
+        emissiveIntensity: i === 0 ? 0.3 : 0.05,
+        envMapIntensity: 1.8, // Maximum environment reflection
       });
       
       const screenMesh = new THREE.Mesh(screenGeometry, screenMaterial);
@@ -398,14 +436,18 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       ring.material.opacity = 0.2 + Math.sin(elapsedTime * 0.3) * 0.1; // Slower pulsing
     }
 
-    // Update screen materials based on current section
+    // Update screen materials based on current section with modern reflections
     for (let i = 0; i < 6; i++) {
       const screen = (hexagonRef.current as any)[`screen_${i}`] as THREE.Mesh;
-      if (screen && screen.material instanceof THREE.MeshStandardMaterial) {
+      if (screen && screen.material instanceof THREE.MeshPhysicalMaterial) {
         const isActive = i === currentSection;
-        screen.material.color.setHex(isActive ? 0x00e1ff : 0x1a1d20);
-        screen.material.emissive.setHex(isActive ? 0x003344 : 0x000000);
-        screen.material.emissiveIntensity = isActive ? 0.5 : 0.1;
+        screen.material.color.setHex(isActive ? 0x00e1ff : 0x0f0f23);
+        screen.material.emissive.setHex(isActive ? 0x001122 : 0x000000);
+        screen.material.emissiveIntensity = isActive ? 0.3 : 0.05;
+        
+        // Dynamic reflection intensity based on activity
+        screen.material.envMapIntensity = isActive ? 2.0 : 1.5;
+        screen.material.reflectivity = isActive ? 0.98 : 0.92;
       }
     }
 
@@ -420,9 +462,9 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Pulsating emission animation (breathing life effect)
+        // Pulsating emission animation (subtle for realism)
         const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
-        const pulseIntensity = 0.05 + Math.sin(pulseTime) * 0.04; // Gentle pulsing
+        const pulseIntensity = 0.01 + Math.sin(pulseTime) * 0.015; // Very subtle pulsing
         userData.baseMaterial.emissiveIntensity = pulseIntensity;
         
         // Sphere collision detection with other blobs
@@ -651,7 +693,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
-    // Advanced renderer with Apple-grade quality
+    // UE5-grade renderer with enhanced reflection capabilities
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -665,7 +707,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.0; // Reduced for realistic reflections
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     
     rendererRef.current = renderer;
