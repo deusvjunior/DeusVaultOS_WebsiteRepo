@@ -58,7 +58,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   };
 
   // Enhanced living blobs with organic movement and personality
-  const createPageSpecificBlobs = (pageIndex: number) => {
+  const createPageSpecificBlobs = (pageIndex: number, scene: THREE.Scene) => {
     const blobs: any[] = [];
     const blobCount = 15 + Math.floor(Math.random() * 10); // 15-25 blobs
     
@@ -300,7 +300,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   };
 
   // Apple-grade hexagon with premium materials and effects
-  const createAppleGradeHexagon = (group: THREE.Group) => {
+  const createAppleGradeHexagon = (group: THREE.Group, scene: THREE.Scene) => {
     // Create spaceship-style base platform
     const baseGeometry = new THREE.CylinderGeometry(6.5, 7.0, 0.3, 32);
     const baseMaterial = new THREE.MeshPhysicalMaterial({
@@ -375,7 +375,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
 
     // Add living blobs and enhanced particles
     // Create page-specific blobs instead of living blobs
-    const blobs = createPageSpecificBlobs(pageIndex);
+    const blobs = createPageSpecificBlobs(pageIndex, scene);
     const particles = createEnhancedParticles(group);
     
     // Store references for animation updates
@@ -562,7 +562,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
     setupAdvancedLighting(scene);
     
     // Create Apple-grade hexagon structure
-    createAppleGradeHexagon(hexagonGroup);
+    createAppleGradeHexagon(hexagonGroup, scene);
     
     // Advanced animation loop with proper frame timing
     let lastTime = 0;

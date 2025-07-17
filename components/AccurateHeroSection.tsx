@@ -150,9 +150,8 @@ export function AccurateHeroSection() {
               <VideoPlaceholder 
                 placeholder="DeusVault OS Platform Demo"
                 className="w-full"
-                autoplay={true}
+                autoplay={false}
                 loop={true}
-                muted={true}
                 overlay={true}
               />
               

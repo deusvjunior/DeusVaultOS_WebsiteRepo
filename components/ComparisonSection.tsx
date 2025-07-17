@@ -157,29 +157,13 @@ export function ComparisonSection() {
                         <X className="h-5 w-5" />
                       </div>
                       <div>
-                        <h4 className="text-body font-semibold text-white mb-3">
+                        <h4 className="text-lg font-semibold text-white mb-3">
                           {limitation.title}
                         </h4>
-                        <p className="text-caption text-brand-neutral-300 mb-3 leading-relaxed">
+                        <p className="text-gray-300 mb-3 leading-relaxed">
                           {limitation.description}
                         </p>
-                        <p className="text-caption text-red-400">
-                          <strong>Impact:</strong> {limitation.impact}
-                        </p>
-                      </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="p-2 bg-red-500/20 rounded-lg">
-                        <X className="h-5 w-5 text-red-400" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg text-white mb-2" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
-                          {limitation.title}
-                        </h4>
-                        <p className="text-gray-300 mb-3" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.7)' }}>
-                          {limitation.description}
-                        </p>
-                        <p className="text-sm text-red-300" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
+                        <p className="text-sm text-red-400">
                           <strong>Impact:</strong> {limitation.impact}
                         </p>
                       </div>
