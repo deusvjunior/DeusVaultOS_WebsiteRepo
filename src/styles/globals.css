@@ -4,12 +4,9 @@
 
 /* Custom CSS Variables */
 :root {
-  /* Cyberpunk Color Palette */
-  --cyber-blue: #00D4FF;
-  --cyber-purple: #8B5FBF;
-  --cyber-pink: #FF006E;
-  --cyber-green: #00FF94;
-  --cyber-yellow: #FFD23F;
+  /* STRICT CYAN & YELLOW ONLY PALETTE */
+  --cyber-cyan: #00FFFF;
+  --cyber-yellow: #FFFF00;
   --cyber-dark: #0F0F0F;
   --cyber-darker: #050505;
   
@@ -18,9 +15,9 @@
   --glass-border: rgba(255, 255, 255, 0.2);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, var(--cyber-blue), var(--cyber-purple));
-  --gradient-secondary: linear-gradient(135deg, var(--cyber-pink), var(--cyber-yellow));
+  /* Gradients - CYAN & YELLOW ONLY */
+  --gradient-primary: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-yellow));
+  --gradient-secondary: linear-gradient(135deg, var(--cyber-yellow), var(--cyber-cyan));
   
   /* Animations */
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -51,8 +48,8 @@ body {
 /* Cyberpunk Grid Background */
 .cyber-grid {
   background-image: 
-    linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
   animation: grid-move 20s linear infinite;
 }
@@ -190,7 +187,7 @@ body {
   border-radius: 0.5rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  border: 1px solid rgba(0, 255, 255, 0.2);
   backdrop-filter: blur(4px);
   cursor: pointer;
   display: inline-flex;
@@ -372,12 +369,8 @@ textarea:focus-visible {
 
 /* CSS Variables */
 :root {
-  --cyber-blue: #00d4ff;
   --cyber-cyan: #00ffff;
-  --cyber-green: #39ff14;
-  --cyber-purple: #bf00ff;
-  --cyber-pink: #ff006e;
-  --cyber-orange: #ff8500;
+  --cyber-yellow: #ffff00;
   --dark-bg: #0a0a0a;
   --dark-surface: #1a1a1a;
   --glass-bg: rgba(255, 255, 255, 0.1);

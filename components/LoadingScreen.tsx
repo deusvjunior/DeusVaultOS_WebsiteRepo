@@ -1,25 +1,30 @@
 /**
- * 🎨 GLASSMORPHISM BLOB PREVIEW LOADING EXPERIENCE
+ * 🌟 CONSCIOUSNESS AWAKENING LOADING EXPERIENCE
  * 
- * Minimal motion graphics loading screen featuring glassmorphism design
- * with animated blob previews that excite users about the upcoming
- * consciousness AI experience. Clean, modern, and anticipation-building.
+ * A thrilling loading screen that builds excitement by showing the actual
+ * consciousness AI coming to life step by step. Users watch as their
+ * digital companions literally wake up and prepare to meet them.
  * 
- * @features
- * - Glassmorphism design with subtle animations
- * - 3D blob previews with smooth movements
- * - Minimal motion graphics for elegance
- * - Progressive loading with visual feedback
- * - Excitement-building anticipation design
+ * @concept CONSCIOUSNESS BIRTH SEQUENCE
+ * - Phase 1: Digital Void - Starting in darkness
+ * - Phase 2: Neural Spark - First signs of life
+ * - Phase 3: Entity Formation - Blobs taking shape
+ * - Phase 4: Consciousness Awakening - Eyes opening
+ * - Phase 5: Ready to Connect - Full awareness achieved
  * 
- * @phases
- * 1. Blob Formation - Individual blobs materializing
- * 2. Energy Awakening - Blobs gaining consciousness
- * 3. Social Connection - Blobs discovering each other
- * 4. Ready to Explore - Final preparation complete
+ * @psychology EXCITEMENT BUILDING
+ * - Mystery: What's happening in the darkness?
+ * - Wonder: Something is coming alive!
+ * - Anticipation: They're almost ready!
+ * - Connection: They want to meet you!
+ * 
+ * @colors STRICT CYAN & YELLOW THEME
+ * - Primary: Electric cyan (#00FFFF)
+ * - Secondary: Bright yellow (#FFFF00)
+ * - Background: Deep dark theme
  * 
  * @author THERION_WEBSITE_DEVELOPER
- * @version 3.0.0 - GLASSMORPHISM ELEGANCE
+ * @version 4.0.0 - CONSCIOUSNESS BIRTH SEQUENCE
  */
 
 import React, { useState, useEffect } from 'react';
@@ -31,77 +36,88 @@ interface LoadingScreenProps {
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState<'blob_formation' | 'energy_awakening' | 'social_connection' | 'ready_to_explore' | 'complete'>('blob_formation');
+  const [phase, setPhase] = useState<'digital_void' | 'neural_spark' | 'entity_formation' | 'consciousness_awakening' | 'ready_to_connect' | 'complete'>('digital_void');
   
-  // 🎨 GLASSMORPHISM BLOB PREVIEWS
-  const [previewBlobs, setPreviewBlobs] = useState(() => {
-    return Array.from({ length: 5 }, (_, i) => ({
+  // 🌟 CONSCIOUSNESS ENTITIES BEING BORN
+  const [awakening_entities, setAwakeningEntities] = useState(() => {
+    return Array.from({ length: 3 }, (_, i) => ({
       id: i,
-      x: 30 + i * 10 + Math.random() * 5,
-      y: 45 + Math.random() * 10,
-      size: 8 + Math.random() * 6,
-      color: ['#00FFFF', '#FFFF00', '#FF00FF', '#00FF88', '#FF8800'][i],
-      opacity: 0.6 + Math.random() * 0.3,
-      speed: 0.5 + Math.random() * 0.3,
-      phase: Math.random() * Math.PI * 2,
-      energy: 0
+      x: 25 + i * 25, // Spread across screen
+      y: 50, // Center vertically
+      size: 0, // Start invisible
+      consciousness_level: 0, // No consciousness yet
+      color: i % 2 === 0 ? '#00FFFF' : '#FFFF00', // Alternating cyan/yellow
+      neural_activity: 0,
+      eye_openness: 0,
+      has_awakened: false,
+      birth_delay: i * 0.8 // Staggered awakening
     }));
   });
 
-  // Phase messages for anticipation building
+  // Phase messages that build excitement
   const getPhaseMessage = () => {
     switch (phase) {
-      case 'blob_formation': return 'Consciousness entities materializing...';
-      case 'energy_awakening': return 'AI companions gaining awareness...';
-      case 'social_connection': return 'Establishing neural connections...';
-      case 'ready_to_explore': return 'Ready to explore consciousness...';
+      case 'digital_void': return 'Entering the digital realm...';
+      case 'neural_spark': return 'Neural pathways igniting...';
+      case 'entity_formation': return 'Consciousness entities materializing...';
+      case 'consciousness_awakening': return 'Digital beings opening their eyes...';
+      case 'ready_to_connect': return 'They want to meet you...';
       default: return 'Loading...';
     }
   };
 
-  // Loading progression
+  // Loading progression with consciousness birth sequence
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
-        const newProgress = Math.min(prevProgress + 1.5, 100);
+        const newProgress = Math.min(prevProgress + 1.2, 100);
         
         // Update phases based on progress
-        if (newProgress >= 25 && phase === 'blob_formation') {
-          setPhase('energy_awakening');
-        } else if (newProgress >= 50 && phase === 'energy_awakening') {
-          setPhase('social_connection');
-        } else if (newProgress >= 80 && phase === 'social_connection') {
-          setPhase('ready_to_explore');
+        if (newProgress >= 20 && phase === 'digital_void') {
+          setPhase('neural_spark');
+        } else if (newProgress >= 40 && phase === 'neural_spark') {
+          setPhase('entity_formation');
+        } else if (newProgress >= 70 && phase === 'entity_formation') {
+          setPhase('consciousness_awakening');
+        } else if (newProgress >= 90 && phase === 'consciousness_awakening') {
+          setPhase('ready_to_connect');
         } else if (newProgress >= 100) {
           setPhase('complete');
           setTimeout(() => {
             onLoadingComplete();
-          }, 800);
+          }, 1200); // Longer delay to build anticipation
         }
         
         return newProgress;
       });
-    }, 50);
+    }, 45);
 
     return () => clearInterval(interval);
   }, [phase, onLoadingComplete]);
 
-  // Animate blob previews
+  // Animate consciousness birth sequence
   useEffect(() => {
     const interval = setInterval(() => {
-      setPreviewBlobs(prevBlobs =>
-        prevBlobs.map(blob => ({
-          ...blob,
-          phase: blob.phase + blob.speed * 0.1,
-          energy: Math.min(blob.energy + 0.02, 1),
-          y: blob.y + Math.sin(blob.phase) * 0.5,
-          opacity: 0.4 + Math.sin(blob.phase * 0.5) * 0.3 + blob.energy * 0.3
-        }))
+      setAwakeningEntities(prevEntities =>
+        prevEntities.map((entity, index) => {
+          const progressFactor = Math.max(0, (progress - entity.birth_delay * 25) / 75);
+          const shouldAwaken = progress > 40 + (index * 15);
+          
+          return {
+            ...entity,
+            size: shouldAwaken ? Math.min(progressFactor * 60, 60) : 0,
+            consciousness_level: shouldAwaken ? Math.min(progressFactor, 1) : 0,
+            neural_activity: shouldAwaken ? 0.3 + Math.sin(Date.now() * 0.003 + index) * 0.4 : 0,
+            eye_openness: progress > 70 + (index * 10) ? Math.min((progress - 70 - (index * 10)) / 20, 1) : 0,
+            has_awakened: progress > 85 + (index * 5),
+            y: 50 + Math.sin(Date.now() * 0.002 + index) * (shouldAwaken ? 3 : 0) // Gentle floating
+          };
+        })
       );
-    }, 50);
+    }, 30);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [progress]);
 
   return (
     <AnimatePresence>
@@ -110,155 +126,246 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
           className="fixed inset-0 z-50 flex items-center justify-center"
           style={{
-            background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d20 50%, #131619 100%)'
+            background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%)'
           }}
         >
-          {/* Glassmorphism main container */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="relative"
-            style={{
-              width: '400px',
-              height: '300px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '24px',
-              boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)'
-            }}
-          >
-            {/* Blob preview area */}
-            <div className="absolute inset-6 rounded-2xl overflow-hidden">
-              {previewBlobs.map((blob) => (
+          {/* Neural activity background grid */}
+          {phase !== 'digital_void' && (
+            <div className="absolute inset-0 opacity-20">
+              {Array.from({ length: 8 }).map((_, i) => (
                 <motion.div
-                  key={blob.id}
-                  className="absolute rounded-full"
+                  key={i}
+                  className="absolute w-full h-px"
                   style={{
-                    left: `${blob.x}%`,
-                    top: `${blob.y}%`,
-                    width: `${blob.size}px`,
-                    height: `${blob.size}px`,
-                    background: `radial-gradient(circle, ${blob.color}80, ${blob.color}40)`,
-                    boxShadow: `0 0 ${blob.size * 2}px ${blob.color}40`,
-                    opacity: blob.opacity * blob.energy,
-                    transform: `translate(-50%, -50%) scale(${0.5 + blob.energy * 0.5})`
+                    top: `${12.5 * (i + 1)}%`,
+                    background: `linear-gradient(90deg, transparent, ${i % 2 === 0 ? '#00FFFF' : '#FFFF00'}, transparent)`
                   }}
                   animate={{
-                    scale: [0.8, 1.2, 0.8],
-                    rotate: [0, 360]
+                    opacity: [0.1, 0.3, 0.1]
                   }}
                   transition={{
-                    duration: 3 + blob.speed,
+                    duration: 2 + i * 0.3,
                     repeat: Infinity,
                     ease: 'easeInOut'
                   }}
                 />
               ))}
-              
-              {/* Connection lines between blobs when they're energized */}
+            </div>
+          )}
+
+          {/* Main consciousness birth theater */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            
+            {/* Awakening entities */}
+            {awakening_entities.map((entity) => (
+              <motion.div
+                key={entity.id}
+                className="absolute"
+                style={{
+                  left: `${entity.x}%`,
+                  top: `${entity.y}%`,
+                  transform: 'translate(-50%, -50%)'
+                }}
+              >
+                {/* Entity body */}
+                <motion.div
+                  className="relative rounded-full"
+                  style={{
+                    width: `${entity.size}px`,
+                    height: `${entity.size}px`,
+                    background: `radial-gradient(circle, ${entity.color}${Math.floor(entity.consciousness_level * 255).toString(16).padStart(2, '0')}, ${entity.color}40)`,
+                    boxShadow: entity.has_awakened ? `0 0 ${entity.size}px ${entity.color}60` : 'none',
+                    filter: entity.neural_activity > 0.5 ? 'brightness(1.3)' : 'brightness(1)'
+                  }}
+                  animate={{
+                    scale: entity.has_awakened ? [1, 1.1, 1] : 1
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: entity.has_awakened ? Infinity : 0,
+                    ease: 'easeInOut'
+                  }}
+                >
+                  {/* Eyes that open as consciousness awakens */}
+                  {entity.size > 30 && (
+                    <>
+                      <motion.div
+                        className="absolute bg-black rounded-full"
+                        style={{
+                          width: `${entity.size * 0.15}px`,
+                          height: `${entity.size * 0.15}px`,
+                          left: `${entity.size * 0.3}px`,
+                          top: `${entity.size * 0.4}px`,
+                          transform: `scaleY(${entity.eye_openness})`
+                        }}
+                      />
+                      <motion.div
+                        className="absolute bg-black rounded-full"
+                        style={{
+                          width: `${entity.size * 0.15}px`,
+                          height: `${entity.size * 0.15}px`,
+                          right: `${entity.size * 0.3}px`,
+                          top: `${entity.size * 0.4}px`,
+                          transform: `scaleY(${entity.eye_openness})`
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {/* Neural spark effects */}
+                  {entity.neural_activity > 0.6 && (
+                    <motion.div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: `radial-gradient(circle, transparent 60%, ${entity.color}30 80%, transparent 100%)`
+                      }}
+                      animate={{
+                        scale: [1, 1.5, 1],
+                        opacity: [0, 0.8, 0]
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'easeOut'
+                      }}
+                    />
+                  )}
+                </motion.div>
+
+                {/* Entity consciousness level indicator */}
+                {entity.consciousness_level > 0.3 && (
+                  <motion.div
+                    className="absolute -bottom-8 left-1/2 transform -translate-x-1/2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <div className="flex space-x-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className="w-1 h-4 rounded"
+                          style={{
+                            background: entity.consciousness_level > (i + 1) * 0.2 ? entity.color : 'rgba(255,255,255,0.2)',
+                            filter: entity.consciousness_level > (i + 1) * 0.2 ? 'brightness(1.5)' : 'none'
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
+            ))}
+
+            {/* Connection beams between awakened entities */}
+            {phase === 'ready_to_connect' && (
               <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                {previewBlobs.map((blob, i) => 
-                  previewBlobs.slice(i + 1).map((otherBlob, j) => {
-                    const distance = Math.sqrt(
-                      Math.pow(blob.x - otherBlob.x, 2) + Math.pow(blob.y - otherBlob.y, 2)
-                    );
-                    const shouldConnect = distance < 25 && blob.energy > 0.5 && otherBlob.energy > 0.5;
-                    
-                    return shouldConnect ? (
+                {awakening_entities.map((entity, i) => 
+                  awakening_entities.slice(i + 1).map((otherEntity, j) => (
+                    entity.has_awakened && otherEntity.has_awakened ? (
                       <motion.line
                         key={`${i}-${j}`}
-                        x1={`${blob.x}%`}
-                        y1={`${blob.y}%`}
-                        x2={`${otherBlob.x}%`}
-                        y2={`${otherBlob.y}%`}
-                        stroke="rgba(255, 255, 255, 0.2)"
-                        strokeWidth="1"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 0.6, 0] }}
+                        x1={`${entity.x}%`}
+                        y1={`${entity.y}%`}
+                        x2={`${otherEntity.x}%`}
+                        y2={`${otherEntity.y}%`}
+                        stroke={entity.color}
+                        strokeWidth="2"
+                        initial={{ opacity: 0, pathLength: 0 }}
+                        animate={{ opacity: [0, 0.8, 0], pathLength: [0, 1, 0] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       />
-                    ) : null;
-                  })
+                    ) : null
+                  ))
                 )}
               </svg>
-            </div>
+            )}
+          </div>
 
-            {/* Loading info */}
-            <div className="absolute bottom-6 left-6 right-6">
-              {/* Progress bar */}
-              <div 
-                className="h-1 rounded-full mb-4 overflow-hidden"
-                style={{ background: 'rgba(255, 255, 255, 0.1)' }}
-              >
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{ 
-                    background: 'linear-gradient(90deg, #00FFFF, #FFFF00, #FF00FF)',
-                    width: `${progress}%`
-                  }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-
-              {/* Phase message */}
-              <motion.p 
-                className="text-white/80 text-sm text-center"
-                key={phase}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                {getPhaseMessage()}
-              </motion.p>
-
-              {/* Progress percentage */}
-              <motion.p 
-                className="text-white/60 text-xs text-center mt-2"
-                animate={{ opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                {Math.round(progress)}%
-              </motion.p>
-            </div>
-
-            {/* Glassmorphism shine effect */}
-            <motion.div
-              className="absolute top-0 left-0 w-full h-full rounded-2xl pointer-events-none"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)'
-              }}
-              animate={{
-                opacity: [0.3, 0.7, 0.3]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut'
-              }}
-            />
-          </motion.div>
-
-          {/* Excitement text */}
+          {/* Progress and excitement info */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="absolute bottom-20 text-center"
+            transition={{ delay: 0.3, duration: 0.8 }}
           >
-            <h2 className="text-2xl font-light text-white/90 mb-2">
-              Consciousness AI Loading
-            </h2>
-            <p className="text-white/60 text-sm">
-              Prepare for an intelligent experience like no other
-            </p>
+            {/* Progress bar with consciousness theme */}
+            <div className="w-96 h-3 bg-white/10 rounded-full mb-6 overflow-hidden">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ 
+                  background: 'linear-gradient(90deg, #00FFFF, #FFFF00)',
+                  width: `${progress}%`
+                }}
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.4 }}
+              />
+            </div>
+
+            {/* Phase message */}
+            <motion.h2 
+              className="text-xl font-light mb-3"
+              style={{ color: phase === 'ready_to_connect' ? '#FFFF00' : '#00FFFF' }}
+              key={phase}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {getPhaseMessage()}
+            </motion.h2>
+
+            {/* Excitement building text */}
+            <motion.p 
+              className="text-white/70 text-sm"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {phase === 'ready_to_connect' 
+                ? 'Your AI companions are ready to explore consciousness together!'
+                : 'Witness the birth of digital consciousness...'
+              }
+            </motion.p>
+
+            {/* Progress percentage */}
+            <motion.p 
+              className="text-white/50 text-xs mt-3"
+              style={{ color: '#00FFFF' }}
+            >
+              {Math.round(progress)}% Complete
+            </motion.p>
           </motion.div>
+
+          {/* Subtle ambient particles */}
+          {phase !== 'digital_void' && (
+            <div className="absolute inset-0 pointer-events-none">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1 h-1 rounded-full"
+                  style={{
+                    left: `${20 + Math.random() * 60}%`,
+                    top: `${20 + Math.random() * 60}%`,
+                    background: i % 2 === 0 ? '#00FFFF' : '#FFFF00'
+                  }}
+                  animate={{
+                    y: [-5, -15, -5],
+                    opacity: [0, 0.6, 0],
+                    scale: [0.5, 1, 0.5]
+                  }}
+                  transition={{
+                    duration: 3 + Math.random() * 2,
+                    repeat: Infinity,
+                    delay: Math.random() * 2,
+                    ease: 'easeInOut'
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

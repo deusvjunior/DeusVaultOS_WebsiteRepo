@@ -296,13 +296,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       const groundLevel = -0.5; // HIGHER ground level
       const willEmerge = blobMesh.position.y < groundLevel;
 
-      // Enhanced polished eyes with MUCH better proportions and placement
-      const eyeSize = baseSize * 0.08; // MUCH smaller eyes for better proportions
+      // Enhanced polished eyes with 2.5x BIGGER size and BLACK color
+      const eyeSize = baseSize * 0.2; // 2.5x bigger eyes (was 0.08, now 0.2)
       const eyeGeometry = new THREE.SphereGeometry(eyeSize, 16, 12); // Higher poly for smoothness
       
-      // BETTER eye material with more natural look
+      // BLACK eye material as requested
       const eyeMaterial = new THREE.MeshPhysicalMaterial({ 
-        color: 0xFFFFFF, // Pure white for realistic eyes
+        color: 0x000000, // BLACK eyes as requested
         metalness: 0.1, // Less metallic
         roughness: 0.3, // Slightly rough for realism
         emissive: 0x000000, // No glow
@@ -370,13 +370,13 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         velocity: new THREE.Vector3(),
         lastValidPosition: blobMesh.position.clone(),
         
-        // Enhanced consciousness-inspired movement with HIGH ENERGY vertical swimming
-        swimSpeed: 0.3 + Math.random() * 0.4, // MUCH faster swimming
+        // ULTRA HIGH ENERGY consciousness movement - completely alive!
+        swimSpeed: 0.8 + Math.random() * 0.6, // MUCH MUCH faster swimming (was 0.3-0.7, now 0.8-1.4)
         swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 0.8 + Math.random() * 0.6, // More amplitude
+        swimAmplitude: 1.2 + Math.random() * 0.8, // Much more amplitude for fluid movement
         
-        // Enhanced vertical swimming patterns with HIGH ENERGY
-        verticalSwimSpeed: 0.2 + Math.random() * 0.3, // MUCH faster vertical movement
+        // Enhanced vertical swimming patterns with MAXIMUM ENERGY
+        verticalSwimSpeed: 0.6 + Math.random() * 0.5, // MUCH faster vertical movement (was 0.2-0.5, now 0.6-1.1)
         verticalAmplitude: 1.0 + (blobData.type === 'large' ? 0.5 : blobData.type === 'medium' ? 0.4 : 0.3), // Higher amplitude
         verticalOffset: Math.random() * Math.PI * 2,
         baseDepth: blobMesh.position.y,
@@ -397,7 +397,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         
         // Enhanced jelly physics with HIGH ENERGY consciousness flow
         jellyVertices: new Float32Array(originalVertices),
-        jellySpeed: 0.6 + Math.random() * 0.4, // MUCH faster jelly movement
+        jellySpeed: 1.0 + Math.random() * 0.6, // ULTRA fast jelly movement (was 0.6-1.0, now 1.0-1.6)
         jellyIntensity: 0.12 + Math.random() * 0.08, // More intense wobble
         
         // Enhanced emergence system with smooth underground animation
@@ -416,7 +416,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         squishOffset: Math.random() * Math.PI * 2,
         
         // FASTER rotation with size-based variation
-        rotationSpeed: (Math.random() - 0.5) * (blobData.type === 'large' ? 0.012 : 0.018), // Much faster rotation
+        rotationSpeed: (Math.random() - 0.5) * (blobData.type === 'large' ? 0.025 : 0.035), // ULTRA fast rotation for alive feeling
         
         // Happiness and personality factors
         happiness: 0.7 + Math.random() * 0.3, // Base happiness level
