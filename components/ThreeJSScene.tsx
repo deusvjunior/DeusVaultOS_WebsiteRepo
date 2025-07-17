@@ -23,6 +23,14 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   const velocityRef = useRef(0);
   const [isInteracting, _setIsInteracting] = useState(false);
 
+  // Interactive camera exploration
+  const [isDragging, setIsDragging] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+  const mousePosition = useRef({ x: 0, y: 0 });
+  const lastMousePosition = useRef({ x: 0, y: 0 });
+  const cameraOffset = useRef({ x: 0, y: 0, z: 0 });
+  const originalCameraPosition = useRef({ x: 0, y: 2, z: 12 });
+
   // Section rotation mapping (60 degrees per section)
   const faceAngles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
 
@@ -60,12 +68,9 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   // Enhanced living blobs with organic movement and personality - INDEPENDENT OF PAGE
   const createOrganicBlobs = (group: THREE.Group) => {
     const blobs: any[] = [];
-    const blobCount = 18 + Math.floor(Math.random() * 7); // 18-25 blobs
-    
-    // Create blobs with better spacing to prevent overlap
+    const BLOB_COUNT = 28; // Slightly increased for fullness
     const positions: THREE.Vector3[] = [];
-    
-    for (let i = 0; i < blobCount; i++) {
+    for (let i = 0; i < BLOB_COUNT; i++) {
       // Generate position with collision avoidance
       let position: THREE.Vector3;
       let attempts = 0;
@@ -73,8 +78,8 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       
       do {
         const angle = Math.random() * Math.PI * 2;
-        const radius = 0.8 + Math.random() * 2.2; // 0.8 to 3.0 radius
-        const height = (Math.random() - 0.5) * 2.0; // -1.0 to 1.0 height
+        const radius = 2.2 + Math.random() * 3.5; // More spread out
+        const height = 1.2 + Math.random() * 2.5; // More elevated
         
         position = new THREE.Vector3(
           Math.cos(angle) * radius,
@@ -82,44 +87,23 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           Math.sin(angle) * radius
         );
         attempts++;
-      } while (attempts < maxAttempts && positions.some(pos => pos.distanceTo(position) < 0.4));
+      } while (attempts < maxAttempts && positions.some(pos => pos.distanceTo(position) < 0.7));
       
       positions.push(position);
       
-      // Much smaller blobs for better density
-      const baseScale = 0.06 + Math.random() * 0.12; // 0.06 to 0.18 (smaller)
-      const scale = new THREE.Vector3(
-        baseScale * (0.9 + Math.random() * 0.2),
-        baseScale * (0.9 + Math.random() * 0.2),
-        baseScale * (0.9 + Math.random() * 0.2)
-      );
+      // --- Blob geometry and material ---
+      const baseScale = 0.18 + Math.random() * 0.12; // Larger blobs
+      const scale = new THREE.Vector3(baseScale, baseScale, baseScale);
       
-      // Rare black blobs with white eyes (1/100 chance)
-      const isRareBlackBlob = Math.random() < 0.01;
-      
-      // Create blob geometry
-      const geometry = new THREE.SphereGeometry(1, 12, 10);
-      
-      // Strict neon palette: cyan, yellow, and in-between
-      const neonPalette = [
-        { color: 0x00ffff, emissive: 0x00eedd, type: 'cyan' },
-        { color: 0xffff00, emissive: 0xeedd00, type: 'yellow' },
-        { color: 0x88ffee, emissive: 0x44eecc, type: 'mix' },
-        { color: 0xffee88, emissive: 0xeedd44, type: 'mix' }
-      ];
-      const isUnique = Math.random() < 0.08;
-      let paletteChoice = neonPalette[Math.floor(Math.random() * neonPalette.length)];
-      if (isUnique) {
-        paletteChoice = { color: 0xffffff, emissive: 0x00ffff, type: 'unique' };
-      }
+      // Consistent neon appearance
       const material = new THREE.MeshPhongMaterial({
-        color: new THREE.Color(paletteChoice.color),
-        emissive: new THREE.Color(paletteChoice.emissive),
-        emissiveIntensity: isUnique ? 0.8 : 0.6,
+        color: 0x00ffff,
+        emissive: 0x00eedd,
+        emissiveIntensity: 0.6,
         transparent: false,
         shininess: 90
       });
-      const blob = new THREE.Mesh(geometry, material);
+      const blob = new THREE.Mesh(new THREE.SphereGeometry(1, 12, 10), material);
       blob.position.copy(position);
       blob.scale.copy(scale);
       // Random start rotation for organic look
@@ -130,17 +114,17 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       );
       
       // --- Eyes ---
-      const eyeGeometry = new THREE.SphereGeometry(isUnique ? 0.15 : 0.12, 8, 6); // Bigger eyes
+      const eyeGeometry = new THREE.SphereGeometry(0.16, 12, 10); // Larger eyes
       const eyeMaterial = new THREE.MeshPhongMaterial({
-        color: isUnique ? 0xffffff : 0x000000,
-        emissive: isUnique ? 0x00ffff : 0x001133,
-        emissiveIntensity: isUnique ? 0.6 : 0.3,
+        color: 0x000000,
+        emissive: 0x00eedd,
+        emissiveIntensity: 0.5,
         shininess: 100
       });
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-      leftEye.position.set(-0.28, 0.18, 0.85);
-      rightEye.position.set(0.28, 0.18, 0.85);
+      leftEye.position.set(-0.32, 0.22, 0.95);
+      rightEye.position.set(0.32, 0.22, 0.95);
       blob.add(leftEye);
       blob.add(rightEye);
       blob.userData.leftEye = leftEye;
@@ -149,13 +133,13 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       // --- Personality & Energy ---
       let energy = 1.0;
       let behaviorType = 'neutral';
-      if (paletteChoice.type === 'cyan') {
+      if (Math.random() < 0.5) {
         energy = 0.5 + Math.random() * 0.3;
         behaviorType = 'calm';
-      } else if (paletteChoice.type === 'yellow') {
+      } else if (Math.random() < 0.8) {
         energy = 1.2 + Math.random() * 0.4;
         behaviorType = 'energetic';
-      } else if (paletteChoice.type === 'unique') {
+      } else {
         energy = 1.5;
         behaviorType = 'unique';
       }
@@ -188,7 +172,6 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         bobbingSpeed: 0.8 + Math.random() * 0.6, // 0.8-1.4
         
         // Individual characteristics
-        isRareBlackBlob,
         personalityType: Math.floor(Math.random() * 4), // 0: curious, 1: shy, 2: playful, 3: lazy
         
         // Swimming territory
@@ -216,7 +199,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       };
       
       // Add proper neon eyes that glow
-      if (!isRareBlackBlob) {
+      if (Math.random() >= 0.01) {
         // Regular blob with glowing black eyes
         const eyeGeometry = new THREE.SphereGeometry(0.09, 8, 6); // Slightly larger
         const eyeMaterial = new THREE.MeshPhongMaterial({ 
@@ -253,7 +236,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
         const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
         
-        leftEye.position.set(-0.25, 0.15, 0.85);
+        leftEye.position.set(0.25, 0.15, 0.85);
         rightEye.position.set(0.25, 0.15, 0.85);
         
         blob.add(leftEye);
@@ -565,12 +548,11 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           blob.position.add(swimmingOffset);
           blob.position.y = baseY; // Maintain floating motion
           
-          // Enhanced natural rotation while swimming with aquarium-like motion
-          const rotationIntensity = 0.3 + swimmingWave * 0.7;
-          const aquariumSway = Math.sin(elapsedTime * 0.8 + userData.swimmingPhase) * 0.004;
-          blob.rotation.x += userData.rotationSpeed.x * rotationIntensity + aquariumSway;
-          blob.rotation.y += userData.rotationSpeed.y * rotationIntensity;
-          blob.rotation.z += userData.rotationSpeed.z * rotationIntensity + aquariumSway * 0.5;
+          // Smooth floaty rotation - no spastic movement
+          const gentleRotation = 0.002 + Math.sin(elapsedTime * 0.3 + userData.swimmingPhase) * 0.001;
+          blob.rotation.x += gentleRotation;
+          blob.rotation.y += gentleRotation * 0.7;
+          blob.rotation.z += gentleRotation * 0.5;
           
           // Organic wandering behavior
           if (!userData.currentTarget || userData.targetReachTime > 400) {
@@ -705,20 +687,19 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
     }
   };
 
-  // Subtle camera movement for depth perception (GENTLER)
+  // Enhanced camera movement with interactive exploration
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // Much gentler breathing motion
-    const breathingOffset = Math.sin(elapsedTime * 0.2) * 0.05; // Half the jiggle
-    cameraRef.current.position.y = breathingOffset;
+    // Base breathing motion
+    const breathingOffset = Math.sin(elapsedTime * 0.2) * 0.05;
     
-    // Minimal parallax for mouse interaction
-    const mouseInfluence = 0.01; // Half the movement
-    cameraRef.current.position.x = mouseInfluence;
-    cameraRef.current.position.z = 10 + mouseInfluence;
+    // Apply camera offset from mouse interaction
+    cameraRef.current.position.x = originalCameraPosition.current.x + cameraOffset.current.x;
+    cameraRef.current.position.y = originalCameraPosition.current.y + breathingOffset + cameraOffset.current.y;
+    cameraRef.current.position.z = originalCameraPosition.current.z + cameraOffset.current.z;
     
-    cameraRef.current.lookAt(0, 0, 0);
+    cameraRef.current.lookAt(0, 1.2, 0); // Look slightly upwards for aquarium
   };
 
   // Apple-grade rotation with physics simulation (SLOWER & SMOOTHER)
@@ -826,11 +807,64 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       rendererRef.current.setSize(window.innerWidth, window.innerHeight);
     };
 
+    // Interactive camera controls
+    const handleMouseDown = (event: MouseEvent) => {
+      setIsDragging(true);
+      setFadeOut(true);
+      lastMousePosition.current = { x: event.clientX, y: event.clientY };
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isDragging) return;
+
+      const deltaX = event.clientX - lastMousePosition.current.x;
+      const deltaY = event.clientY - lastMousePosition.current.y;
+
+      // Update camera offset for exploration
+      cameraOffset.current.x += deltaX * 0.01;
+      cameraOffset.current.y -= deltaY * 0.01;
+
+      // Clamp camera movement
+      cameraOffset.current.x = Math.max(-3, Math.min(3, cameraOffset.current.x));
+      cameraOffset.current.y = Math.max(-2, Math.min(4, cameraOffset.current.y));
+
+      lastMousePosition.current = { x: event.clientX, y: event.clientY };
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+      setFadeOut(false);
+      
+      // Smoothly return camera to original position
+      const resetCamera = () => {
+        cameraOffset.current.x *= 0.95;
+        cameraOffset.current.y *= 0.95;
+        cameraOffset.current.z *= 0.95;
+        
+        if (Math.abs(cameraOffset.current.x) > 0.01 || 
+            Math.abs(cameraOffset.current.y) > 0.01 || 
+            Math.abs(cameraOffset.current.z) > 0.01) {
+          requestAnimationFrame(resetCamera);
+        } else {
+          cameraOffset.current = { x: 0, y: 0, z: 0 };
+        }
+      };
+      resetCamera();
+    };
+
     window.addEventListener('resize', handleResize);
+    renderer.domElement.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
 
     // Cleanup function
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      if (rendererRef.current?.domElement) {
+        rendererRef.current.domElement.removeEventListener('mousedown', handleMouseDown);
+      }
       
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
@@ -844,13 +878,23 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   }, [currentSection, reducedMotion]);
 
   return (
-    <div 
-      ref={mountRef} 
-      className="fixed inset-0 pointer-events-none z-0"
-      style={{ 
-        background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d20 50%, #131619 100%)'
-      }}
-    />
+    <div className="fixed inset-0 z-0">
+      <div 
+        ref={mountRef} 
+        className="fixed inset-0 pointer-events-auto"
+        style={{ 
+          background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d20 50%, #131619 100%)',
+          cursor: isDragging ? 'grabbing' : 'grab'
+        }}
+      />
+      {/* Fade overlay when dragging to explore blobs */}
+      {fadeOut && (
+        <div 
+          className="fixed inset-0 bg-black transition-opacity duration-300 z-10 pointer-events-none"
+          style={{ opacity: 0.7 }}
+        />
+      )}
+    </div>
   );
 };
 
