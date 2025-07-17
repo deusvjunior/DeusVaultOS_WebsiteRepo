@@ -17,13 +17,12 @@ export default {
         'display': ['Orbitron', 'monospace']
       },
       colors: {
-        // Cyberpunk Color System
+        // STRICT CYAN & YELLOW ONLY COLOR SYSTEM
         'cyber': {
           'black': '#0a0a0a',
           'white': '#ffffff',
-          'cyan': '#00e1ff',
-          'mint-bright': '#39ff14',
-          'yellow': '#ffd700',
+          'cyan': '#00FFFF',      // Electric cyan only
+          'yellow': '#FFFF00',    // Bright yellow only
           'dark': {
             100: '#f8f9fa',
             200: '#e9ecef',
@@ -36,11 +35,11 @@ export default {
             900: '#131619',
           }
         },
-        // Brand Colors
+        // Brand Colors - CYAN & YELLOW ONLY
         'brand': {
-          'primary': '#00e1ff',
-          'secondary': '#39ff14',
-          'accent': '#ffd700',
+          'primary': '#00FFFF',   // Electric cyan
+          'secondary': '#FFFF00', // Bright yellow
+          'accent': '#00FFFF',    // Electric cyan
           'neutral': {
             50: '#f8fafc',
             100: '#f1f5f9', 

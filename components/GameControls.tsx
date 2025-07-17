@@ -3,109 +3,36 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronLeft, 
   ChevronRight, 
-  Eye,
-  EyeOff,
-  Settings,
-  Sliders,
-  RotateCcw,
-  Maximize,
-  Minimize,
+  Space, 
+  RotateCcw, 
+  Zap,
+  Navigation,
+  Gamepad2,
   Volume2,
   VolumeX,
-  Navigation,
-  Gamepad2
+  Maximize,
+  Minimize,
+  Settings
 } from 'lucide-react';
-
-// Real-time blob control parameters
-export interface BlobControls {
-  movementSpeed: number;
-  randomDirectionFactor: number;
-  randomSizeFactor: number;
-  eyeSizeMin: number;
-  eyeSizeMax: number;
-  blobSizeMin: number;
-  blobSizeMax: number;
-  verticalityFactor: number;
-  jiggleIntensity: number;
-  avoidanceDistance: number;
-  emergenceRate: number;
-  rotationSpeed: number;
-}
 
 interface GameControlsProps {
   currentSection: number;
   totalSections: number;
   onSectionChange: (section: number) => void;
   isTransitioning: boolean;
-  onObserverModeChange?: (enabled: boolean) => void;
-  onBlobControlsChange?: (controls: BlobControls) => void;
 }
 
 export function GameControls({ 
   currentSection, 
   totalSections, 
   onSectionChange, 
-  isTransitioning,
-  onObserverModeChange,
-  onBlobControlsChange
+  isTransitioning 
 }: GameControlsProps) {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showControls, setShowControls] = useState(true);
   const [isCompact, setIsCompact] = useState(false);
-  const [observerMode, setObserverMode] = useState(false);
-  const [showBlobControls, setShowBlobControls] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [pulseActive, setPulseActive] = useState(false);
-
-  // Real-time blob control state
-  const [blobControls, setBlobControls] = useState<BlobControls>({
-    movementSpeed: 1.0,
-    randomDirectionFactor: 0.5,
-    randomSizeFactor: 0.3,
-    eyeSizeMin: 0.15,
-    eyeSizeMax: 0.25,
-    blobSizeMin: 0.15,
-    blobSizeMax: 0.6,
-    verticalityFactor: 0.8,
-    jiggleIntensity: 0.3, // Reduced from default
-    avoidanceDistance: 1.5,
-    emergenceRate: 0.1,
-    rotationSpeed: 1.0
-  });
-
-  // Handle observer mode toggle
-  const toggleObserverMode = () => {
-    const newMode = !observerMode;
-    setObserverMode(newMode);
-    onObserverModeChange?.(newMode);
-  };
-
-  // Handle blob controls change
-  const updateBlobControl = (key: keyof BlobControls, value: number) => {
-    const newControls = { ...blobControls, [key]: value };
-    setBlobControls(newControls);
-    onBlobControlsChange?.(newControls);
-  };
-
-  // Reset to defaults
-  const resetBlobControls = () => {
-    const defaultControls: BlobControls = {
-      movementSpeed: 1.0,
-      randomDirectionFactor: 0.5,
-      randomSizeFactor: 0.3,
-      eyeSizeMin: 0.15,
-      eyeSizeMax: 0.25,
-      blobSizeMin: 0.15,
-      blobSizeMax: 0.6,
-      verticalityFactor: 0.8,
-      jiggleIntensity: 0.3,
-      avoidanceDistance: 1.5,
-      emergenceRate: 0.1,
-      rotationSpeed: 1.0
-    };
-    setBlobControls(defaultControls);
-    onBlobControlsChange?.(defaultControls);
-  };
+  const [isMobile, setIsMobile] = useState(false);
 
   // Check for mobile device
   useEffect(() => {
@@ -212,56 +139,27 @@ export function GameControls({
                 <div className="flex items-center justify-between mb-4 md:mb-6">
                   <div className="flex items-center gap-2 md:gap-3">
                     <motion.div
-                      animate={{ rotate: showBlobControls ? 180 : 0 }}
+                      animate={{ rotate: isTransitioning ? 360 : 0 }}
                       transition={{ duration: 0.6, ease: "easeInOut" }}
                     >
-                      <Settings className="h-5 w-5 md:h-6 md:w-6 text-cyan-400" />
+                      <Gamepad2 className="h-5 w-5 md:h-6 md:w-6 text-cyber-cyan" />
                     </motion.div>
-                    <span className="font-title text-white text-base md:text-lg">
-                      {isCompact ? 'Controls' : 'Consciousness Controls'}
+                    <span className="font-title text-cyber-white text-base md:text-lg">
+                      {isCompact ? 'Nav' : 'Navigation'}
                     </span>
                   </div>
                   
                   <div className="flex items-center gap-2">
-                    {/* Observer Mode Toggle */}
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={toggleObserverMode}
-                      className={`p-2 rounded-lg glass-refined transition-colors ${
-                        observerMode ? 'bg-cyan-400/20 text-cyan-400' : 'hover:bg-cyan-400/10 text-cyan-400'
-                      }`}
-                      title="Observer Mode - Hide all UI"
-                    >
-                      {observerMode ? 
-                        <EyeOff className="h-4 w-4 md:h-5 md:w-5" /> : 
-                        <Eye className="h-4 w-4 md:h-5 md:w-5" />
-                      }
-                    </motion.button>
-                    
-                    {/* Blob Controls Toggle */}
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setShowBlobControls(!showBlobControls)}
-                      className={`p-2 rounded-lg glass-refined transition-colors ${
-                        showBlobControls ? 'bg-yellow-400/20 text-yellow-400' : 'hover:bg-yellow-400/10 text-yellow-400'
-                      }`}
-                      title="Blob Parameter Controls"
-                    >
-                      <Sliders className="h-4 w-4 md:h-5 md:w-5" />
-                    </motion.button>
-                    
                     {/* Sound Toggle */}
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setSoundEnabled(!soundEnabled)}
-                      className="p-2 rounded-lg glass-refined hover:bg-cyan-400/10 transition-colors"
+                      className="p-2 rounded-lg glass-refined hover:bg-cyber-cyan/10 transition-colors"
                     >
                       {soundEnabled ? 
-                        <Volume2 className="h-4 w-4 md:h-5 md:w-5 text-cyan-400" /> : 
-                        <VolumeX className="h-4 w-4 md:h-5 md:w-5 text-gray-500" />
+                        <Volume2 className="h-4 w-4 md:h-5 md:w-5 text-cyber-mint-bright" /> : 
+                        <VolumeX className="h-4 w-4 md:h-5 md:w-5 text-cyber-dark-400" />
                       }
                     </motion.button>
                     
@@ -271,222 +169,86 @@ export function GameControls({
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setIsCompact(!isCompact)}
-                        className="p-2 rounded-lg glass-refined hover:bg-yellow-400/10 transition-colors"
+                        className="p-2 rounded-lg glass-refined hover:bg-cyber-yellow/10 transition-colors"
                       >
                         {isCompact ? 
-                          <Maximize className="h-4 w-4 md:h-5 md:w-5 text-yellow-400" /> : 
-                          <Minimize className="h-4 w-4 md:h-5 md:w-5 text-yellow-400" />
+                          <Maximize className="h-4 w-4 md:h-5 md:w-5 text-cyber-yellow" /> : 
+                          <Minimize className="h-4 w-4 md:h-5 md:w-5 text-cyber-yellow" />
                         }
                       </motion.button>
                     )}
                   </div>
                 </div>
 
-                {/* Navigation Buttons */}
-                {!showBlobControls && (
-                  <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-                    
-                    {/* Previous Button */}
-                    <motion.button
-                      whileHover={{ scale: 1.03, x: -2 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => onSectionChange((currentSection - 1 + totalSections) % totalSections)}
-                      disabled={isTransitioning}
-                      className="flex-1 flex items-center justify-center gap-2 md:gap-3 
-                                 p-3 md:p-4 glass-refined rounded-xl md:rounded-2xl 
-                                 hover:bg-cyan-400/10 transition-all duration-300
-                                 disabled:opacity-50 disabled:cursor-not-allowed
-                                 border border-cyan-400/20 hover:border-cyan-400/30
-                                 group relative overflow-hidden"
-                    >
-                      <ChevronLeft className="h-5 w-5 md:h-6 md:w-6 text-cyan-400 relative z-10" />
-                      {!isCompact && (
-                        <span className="font-subtitle text-white text-sm md:text-base relative z-10">
-                          Previous
-                        </span>
-                      )}
-                    </motion.button>
+                {/* Enhanced Navigation Buttons */}
+                <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+                  
+                  {/* Previous Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.03, x: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => navigateToSection('prev')}
+                    disabled={isTransitioning}
+                    className="flex-1 flex items-center justify-center gap-2 md:gap-3 
+                               p-3 md:p-4 glass-refined rounded-xl md:rounded-2xl 
+                               hover:bg-cyber-dark-700/50 transition-all duration-300
+                               disabled:opacity-50 disabled:cursor-not-allowed
+                               border border-cyber-dark-600 hover:border-cyber-cyan/30
+                               group relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyber-cyan/5 to-transparent 
+                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <ChevronLeft className="h-5 w-5 md:h-6 md:w-6 text-cyber-cyan relative z-10" />
+                    {!isCompact && (
+                      <span className="font-subtitle text-cyber-white text-sm md:text-base relative z-10">
+                        Previous
+                      </span>
+                    )}
+                  </motion.button>
 
-                    {/* Next Button */}
-                    <motion.button
-                      whileHover={{ scale: 1.03, x: 2 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => onSectionChange((currentSection + 1) % totalSections)}
-                      disabled={isTransitioning}
-                      className="flex-1 flex items-center justify-center gap-2 md:gap-3 
-                                 p-3 md:p-4 bg-gradient-to-r from-cyan-400 to-yellow-400 
-                                 rounded-xl md:rounded-2xl hover:shadow-lg hover:shadow-cyan-400/30 
-                                 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed 
-                                 text-black font-semibold relative overflow-hidden group"
-                    >
-                      <ChevronRight className="h-5 w-5 md:h-6 md:w-6 relative z-10" />
-                      {!isCompact && (
-                        <span className="font-subtitle text-sm md:text-base relative z-10">
-                          Next
-                        </span>
-                      )}
-                    </motion.button>
+                  {/* Next/Space Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.03, x: 2 }}
+                    whileTap={{ scale: 0.97 }}
+                    animate={{ 
+                      scale: pulseActive ? 1.1 : 1,
+                      boxShadow: pulseActive ? 
+                        '0 0 30px rgba(0, 225, 255, 0.6), 0 0 60px rgba(0, 225, 255, 0.3)' : 
+                        '0 0 20px rgba(0, 225, 255, 0.2)'
+                    }}
+                    onClick={() => navigateToSection('next')}
+                    disabled={isTransitioning}
+                    className="flex-1 flex items-center justify-center gap-2 md:gap-3 
+                               p-3 md:p-4 bg-gradient-to-r from-cyber-cyan to-cyber-mint-bright 
+                               rounded-xl md:rounded-2xl hover:shadow-lg hover:shadow-cyber-cyan/30 
+                               transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed 
+                               text-cyber-black font-semibold relative overflow-hidden group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent 
+                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <Space className="h-5 w-5 md:h-6 md:w-6 relative z-10" />
+                    {!isCompact && (
+                      <span className="font-subtitle text-sm md:text-base relative z-10">
+                        Next
+                      </span>
+                    )}
+                  </motion.button>
 
+                </div>
+
+                {/* Enhanced Progress Indicator */}
+                <div className="mb-4 md:mb-6">
+                  <div className="flex items-center justify-between mb-2 md:mb-3">
+                    <span className="font-caption text-cyber-dark-400 text-xs">
+                      {isCompact ? 'PROG' : 'PROGRESS'}
+                    </span>
+                    <span className="font-caption text-cyber-cyan text-xs md:text-sm">
+                      {currentSection + 1} / {totalSections}
+                    </span>
                   </div>
-                )}
-
-                {/* Real-time Blob Controls */}
-                <AnimatePresence>
-                  {showBlobControls && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="mb-4 md:mb-6 space-y-3"
-                    >
-                      {/* Reset Button */}
-                      <div className="flex justify-between items-center">
-                        <h3 className="text-cyan-400 font-semibold text-sm">Live Blob Controls</h3>
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={resetBlobControls}
-                          className="p-2 rounded-lg glass-refined hover:bg-yellow-400/10 transition-colors"
-                        >
-                          <RotateCcw className="h-4 w-4 text-yellow-400" />
-                        </motion.button>
-                      </div>
-
-                      {/* Control Sliders */}
-                      <div className="grid grid-cols-1 gap-3 text-xs">
-                        {/* Movement Speed */}
-                        <div>
-                          <label className="text-white/80 block mb-1">Movement Speed</label>
-                          <input
-                            type="range"
-                            min="0.1"
-                            max="3.0"
-                            step="0.1"
-                            value={blobControls.movementSpeed}
-                            onChange={(e) => updateBlobControl('movementSpeed', parseFloat(e.target.value))}
-                            className="w-full accent-cyan-400"
-                          />
-                          <span className="text-cyan-400">{blobControls.movementSpeed.toFixed(1)}</span>
-                        </div>
-
-                        {/* Random Direction */}
-                        <div>
-                          <label className="text-white/80 block mb-1">Direction Chaos</label>
-                          <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.1"
-                            value={blobControls.randomDirectionFactor}
-                            onChange={(e) => updateBlobControl('randomDirectionFactor', parseFloat(e.target.value))}
-                            className="w-full accent-yellow-400"
-                          />
-                          <span className="text-yellow-400">{blobControls.randomDirectionFactor.toFixed(1)}</span>
-                        </div>
-
-                        {/* Eye Size */}
-                        <div>
-                          <label className="text-white/80 block mb-1">Eye Size</label>
-                          <div className="flex gap-2">
-                            <input
-                              type="range"
-                              min="0.05"
-                              max="0.5"
-                              step="0.05"
-                              value={blobControls.eyeSizeMin}
-                              onChange={(e) => updateBlobControl('eyeSizeMin', parseFloat(e.target.value))}
-                              className="flex-1 accent-cyan-400"
-                            />
-                            <input
-                              type="range"
-                              min="0.1"
-                              max="0.8"
-                              step="0.05"
-                              value={blobControls.eyeSizeMax}
-                              onChange={(e) => updateBlobControl('eyeSizeMax', parseFloat(e.target.value))}
-                              className="flex-1 accent-yellow-400"
-                            />
-                          </div>
-                          <div className="flex justify-between text-xs">
-                            <span className="text-cyan-400">{blobControls.eyeSizeMin.toFixed(2)}</span>
-                            <span className="text-yellow-400">{blobControls.eyeSizeMax.toFixed(2)}</span>
-                          </div>
-                        </div>
-
-                        {/* Blob Size */}
-                        <div>
-                          <label className="text-white/80 block mb-1">Blob Size</label>
-                          <div className="flex gap-2">
-                            <input
-                              type="range"
-                              min="0.1"
-                              max="0.5"
-                              step="0.05"
-                              value={blobControls.blobSizeMin}
-                              onChange={(e) => updateBlobControl('blobSizeMin', parseFloat(e.target.value))}
-                              className="flex-1 accent-cyan-400"
-                            />
-                            <input
-                              type="range"
-                              min="0.3"
-                              max="1.2"
-                              step="0.05"
-                              value={blobControls.blobSizeMax}
-                              onChange={(e) => updateBlobControl('blobSizeMax', parseFloat(e.target.value))}
-                              className="flex-1 accent-yellow-400"
-                            />
-                          </div>
-                        </div>
-
-                        {/* Jiggle Intensity */}
-                        <div>
-                          <label className="text-white/80 block mb-1">Jiggle Intensity</label>
-                          <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.1"
-                            value={blobControls.jiggleIntensity}
-                            onChange={(e) => updateBlobControl('jiggleIntensity', parseFloat(e.target.value))}
-                            className="w-full accent-cyan-400"
-                          />
-                          <span className="text-cyan-400">{blobControls.jiggleIntensity.toFixed(1)}</span>
-                        </div>
-
-                        {/* Avoidance Distance */}
-                        <div>
-                          <label className="text-white/80 block mb-1">Blob Avoidance</label>
-                          <input
-                            type="range"
-                            min="0.5"
-                            max="3.0"
-                            step="0.1"
-                            value={blobControls.avoidanceDistance}
-                            onChange={(e) => updateBlobControl('avoidanceDistance', parseFloat(e.target.value))}
-                            className="w-full accent-yellow-400"
-                          />
-                          <span className="text-yellow-400">{blobControls.avoidanceDistance.toFixed(1)}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Progress Indicator */}
-                {!showBlobControls && (
-                  <div className="mb-4 md:mb-6">
-                    <div className="flex items-center justify-between mb-2 md:mb-3">
-                      <span className="font-caption text-gray-400 text-xs">
-                        {isCompact ? 'PROG' : 'PROGRESS'}
-                      </span>
-                      <span className="font-caption text-cyan-400 text-xs md:text-sm">
-                        {currentSection + 1} / {totalSections}
-                      </span>
-                    </div>
-                    
-                    <div className="relative h-2 md:h-3 glass-refined rounded-full overflow-hidden 
-                                    border border-cyan-400/20">
+                  
+                  <div className="relative h-2 md:h-3 glass-refined rounded-full overflow-hidden 
+                                  border border-cyber-cyan/20">
                     <motion.div
                       className="h-full bg-gradient-to-r from-cyber-cyan via-cyber-mint-bright to-cyber-yellow 
                                  relative"
@@ -504,50 +266,47 @@ export function GameControls({
                     </motion.div>
                   </div>
                 </div>
-                )}
 
                 {/* Section Quick Jump */}
-                {!showBlobControls && (
-                  <div className={`grid gap-1.5 md:gap-2 ${
-                    isCompact ? 'grid-cols-6' : 'grid-cols-6'
-                  }`}>
-                    {Array.from({ length: totalSections }, (_, index) => (
-                      <motion.button
-                        key={index}
-                        whileHover={{ scale: 1.15 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => !isTransitioning && onSectionChange(index)}
-                        disabled={isTransitioning}
-                        className={`aspect-square rounded-lg md:rounded-xl transition-all duration-300 
-                                    relative overflow-hidden group text-xs md:text-sm
-                          ${index === currentSection 
-                            ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50 text-black' 
-                            : 'glass-refined hover:bg-gray-600 border border-gray-600 text-gray-300'
-                          }`}
-                      >
-                        <span className="font-mono font-bold relative z-10">
-                          {index + 1}
-                        </span>
-                        
-                        {index === currentSection && (
-                          <>
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="absolute inset-0 border-2 border-white/30 rounded-lg md:rounded-xl"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
-                          </>
-                        )}
-                        
-                        {index !== currentSection && (
-                          <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent 
-                                          opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        )}
-                      </motion.button>
-                    ))}
-                  </div>
-                )}
+                <div className={`grid gap-1.5 md:gap-2 ${
+                  isCompact ? 'grid-cols-6' : 'grid-cols-6'
+                }`}>
+                  {Array.from({ length: totalSections }, (_, index) => (
+                    <motion.button
+                      key={index}
+                      whileHover={{ scale: 1.15 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => !isTransitioning && onSectionChange(index)}
+                      disabled={isTransitioning}
+                      className={`aspect-square rounded-lg md:rounded-xl transition-all duration-300 
+                                  relative overflow-hidden group text-xs md:text-sm
+                        ${index === currentSection 
+                          ? 'bg-cyber-cyan shadow-lg shadow-cyber-cyan/50 text-cyber-black' 
+                          : 'glass-refined hover:bg-cyber-dark-600 border border-cyber-dark-600 text-cyber-dark-300'
+                        }`}
+                    >
+                      <span className="font-mono font-bold relative z-10">
+                        {index + 1}
+                      </span>
+                      
+                      {index === currentSection && (
+                        <>
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute inset-0 border-2 border-cyber-white/30 rounded-lg md:rounded-xl"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+                        </>
+                      )}
+                      
+                      {index !== currentSection && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-cyber-cyan/5 to-transparent 
+                                        opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
 
               </div>
 

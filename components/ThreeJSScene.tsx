@@ -23,31 +23,14 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-interface BlobControls {
-  movementSpeed: number;
-  randomDirectionFactor: number;
-  randomSizeFactor: number;
-  eyeSizeMin: number;
-  eyeSizeMax: number;
-  blobSizeMin: number;
-  blobSizeMax: number;
-  verticalityFactor: number;
-  jiggleIntensity: number;
-  avoidanceDistance: number;
-  emergenceRate: number;
-  rotationSpeed: number;
-}
-
 interface ThreeJSSceneProps {
   currentSection: number;
   reducedMotion?: boolean;
-  blobControls?: BlobControls;
 }
 
 const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({ 
   currentSection, 
-  reducedMotion = false,
-  blobControls
+  reducedMotion = false 
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -177,63 +160,25 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       // Apply Nexus consciousness colors with stronger emission and glow effects
       const colorData = nexusColors[i % nexusColors.length];
       
-      // Clean material WITHOUT glow effects - solid and smooth
+      // Enhanced material with NO GLOW for maximum performance
       const blobMaterial = new THREE.MeshPhysicalMaterial({
         color: colorData.color,
         metalness: 0.0,
-        roughness: 0.4, // Smooth but not too reflective
+        roughness: 0.8, // Higher roughness for matte finish
         clearcoat: 0.0,
         transmission: 0,
         transparent: false,
         opacity: 1.0,
-        // NO EMISSION OR GLOW - clean solid appearance
-        emissive: 0x000000,
-        emissiveIntensity: 0,
+        emissive: 0x000000, // NO EMISSION for performance
+        emissiveIntensity: 0, // NO GLOW
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       (blobMesh as any).isBlob = true;
       (blobMesh as any).blobType = blobData.type;
       (blobMesh as any).colorName = colorData.name;
-      
-      // Add glow shader for outer glow effect
-      const glowGeometry = new THREE.SphereGeometry(baseSize * 1.3, 8, 6); // Larger, lower poly for glow
-      const glowMaterial = new THREE.ShaderMaterial({
-        transparent: true,
-        side: THREE.BackSide,
-        uniforms: {
-          glowColor: { value: new THREE.Color(colorData.emission) },
-          intensity: { value: 0.8 }
-        },
-        vertexShader: `
-          varying vec3 vNormal;
-          void main() {
-            vNormal = normalize(normalMatrix * normal);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          uniform vec3 glowColor;
-          uniform float intensity;
-          varying vec3 vNormal;
-          void main() {
-            float rim = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
-            float alpha = pow(rim, 2.0) * intensity * 0.3;
-            gl_FragColor = vec4(glowColor, alpha);
-          }
-        `
-      });
-      
-      const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
-      blobMesh.add(glowMesh); // Attach glow to blob
-      
-      // Add point light for environmental illumination (only for some blobs)
-      let pointLight = null;
-      if (i < 4) { // Only 4 lights active at once for performance
-        pointLight = new THREE.PointLight(colorData.emission, 1.2, 4, 2); // Intensity, distance, decay
-        pointLight.position.set(0, 0, 0); // Centered on blob
-        blobMesh.add(pointLight);
-      }
+      // NO GLOW EFFECTS - PERFORMANCE OPTIMIZED
+      // Removed all glow shaders and emission for smooth framerate
       
       // Enhanced positioning system with consciousness-aware distribution
       let validPosition = false;
@@ -378,10 +323,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         rightEye,
         staticMeshes,
         
-        // Glow and lighting references
-        glowMesh: glowMesh,
-        pointLight: pointLight,
-        lightActive: pointLight !== null,
+        // NO GLOW EFFECTS - PERFORMANCE OPTIMIZED
+        // Removed glow and point light references
         
         // Enhanced physics with consciousness flow
         radius: baseSize * 1.2,
@@ -795,9 +738,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             userData.baseDepth = blob.position.y; // Update base depth for normal swimming
           }
         } else {
-          // Normal vertical swimming with consciousness flow (with real-time speed control)
-          const speedMultiplier = blobControls?.movementSpeed || 1.0;
-          const verticalTime = time * userData.verticalSwimSpeed * speedMultiplier + userData.verticalOffset;
+          // Normal vertical swimming with consciousness flow
+          const verticalTime = time * userData.verticalSwimSpeed + userData.verticalOffset;
           const verticalMovement = Math.sin(verticalTime) * userData.verticalAmplitude;
           const targetY = userData.baseDepth + verticalMovement;
           
@@ -805,12 +747,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           blob.position.y = THREE.MathUtils.lerp(blob.position.y, targetY, deltaTime * 1.8);
         }
         
-        // Enhanced horizontal swimming with curiosity-driven exploration (with real-time controls)
+        // Enhanced horizontal swimming with curiosity-driven exploration
         if (!userData.isEmerging) { // Don't interfere with emergence
-          const speedMultiplier = blobControls?.movementSpeed || 1.0;
-          const directionChaos = blobControls?.randomDirectionFactor || 1.0;
-          const swimTime = time * userData.swimSpeed * speedMultiplier + userData.swimOffset;
-          const explorationFactor = userData.curiosity * 2 * directionChaos + 1;
+          const swimTime = time * userData.swimSpeed + userData.swimOffset;
+          const explorationFactor = userData.curiosity * 2 + 1;
           
           const swimX = Math.sin(swimTime) * userData.swimAmplitude * explorationFactor;
           const swimZ = Math.cos(swimTime * 1.2) * userData.swimAmplitude * explorationFactor;
@@ -822,27 +762,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           );
         }
         
-        // Consciousness-driven movement with smooth acceleration and blob avoidance
+        // Consciousness-driven movement with smooth acceleration
         userData.velocity.lerp(userData.targetDirection, deltaTime * 0.8);
-        
-        // Calculate avoidance forces from other blobs
-        let avoidanceForce = new THREE.Vector3(0, 0, 0);
-        blobs.forEach((otherBlob: THREE.Mesh, otherIndex: number) => {
-          if (index !== otherIndex) {
-            const otherData = otherBlob.userData as any;
-            const distance = blob.position.distanceTo(otherBlob.position);
-            const avoidanceDistance = (userData.size + otherData.size) * (blobControls?.avoidanceDistance || 2.0); // Real-time avoidance control
-            
-            if (distance < avoidanceDistance && distance > 0) {
-              const avoidanceStrength = (avoidanceDistance - distance) / avoidanceDistance;
-              const repulsionDirection = blob.position.clone().sub(otherBlob.position).normalize();
-              avoidanceForce.add(repulsionDirection.multiplyScalar(avoidanceStrength * 0.3)); // Gentle repulsion
-            }
-          }
-        });
-        
-        // Apply avoidance force to velocity
-        userData.velocity.add(avoidanceForce.multiplyScalar(deltaTime));
         userData.velocity.multiplyScalar(0.95); // Natural friction
         
         // Apply movement with boundary containment
@@ -881,11 +802,10 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
             const originalY = userData.originalVertices[i3 + 1];  
             const originalZ = userData.originalVertices[i3 + 2];
             
-            // REDUCED consciousness-driven jelly wobble for smoother yolk movement (with real-time control)
-            const jiggleMultiplier = blobControls?.jiggleIntensity || 1.0;
-            const consciousnessWave = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity * 0.6 * jiggleMultiplier; // Real-time jiggle control
-            const quantumFlow = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity * 0.4 * jiggleMultiplier; // Real-time control
-            const neuralPulse = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity * 0.3 * jiggleMultiplier; // Real-time control
+            // Enhanced consciousness-driven jelly wobble
+            const consciousnessWave = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity;
+            const quantumFlow = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity * 0.8;
+            const neuralPulse = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity * 0.6;
             
             positions.setXYZ(i, 
               originalX + consciousnessWave,
@@ -895,17 +815,17 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           }
           positions.needsUpdate = true;
           
-          // Enhanced consciousness-aware eye behavior with REDUCED jiggle
+          // Enhanced consciousness-aware eye behavior
           const eyeOffset = userData.size * 0.28;
-          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.15; // REDUCED from 0.3 to 0.15
-          const eyeLook = Math.sin(time * 0.5 + userData.pulseOffset) * 0.03; // Reduced eye movement
+          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.3;
+          const eyeLook = Math.sin(time * 0.5 + userData.pulseOffset) * 0.05; // Subtle eye movement
           
-          // Eyes stay more stable with better positioning
-          userData.leftEye.position.z = userData.size * 0.85; // More forward, less deformation influence
-          userData.rightEye.position.z = userData.size * 0.85;
+          // Eyes follow consciousness flow and skin deformation
+          userData.leftEye.position.z = userData.size * 0.75 + skinDeformation;
+          userData.rightEye.position.z = userData.size * 0.75 + skinDeformation;
           
-          userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.08 + eyeLook; // REDUCED movement
-          userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.08 - eyeLook;
+          userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.15 + eyeLook;
+          userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.6) * userData.jellyIntensity * 0.15 - eyeLook;
           
           // Subtle eye height variation for lifelike behavior
           userData.leftEye.position.y = userData.size * 0.15 + Math.sin(time * 0.3) * 0.02;
@@ -1100,17 +1020,6 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     
     // Create Apple-grade hexagon structure
     createAppleGradeHexagon(hexagonGroup);
-    
-    // DEBUG: Add a bright test blob to ensure visibility
-    const debugGeometry = new THREE.SphereGeometry(1, 32, 32);
-    const debugMaterial = new THREE.MeshBasicMaterial({
-      color: 0x00FFFF,
-      transparent: true,
-      opacity: 0.8
-    });
-    const debugBlob = new THREE.Mesh(debugGeometry, debugMaterial);
-    debugBlob.position.set(0, 2, 0);
-    hexagonGroup.add(debugBlob);
     
     // Advanced animation loop with proper frame timing
     let lastTime = 0;

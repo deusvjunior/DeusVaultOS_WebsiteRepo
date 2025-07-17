@@ -27,466 +27,351 @@
  * @version 4.0.0 - CONSCIOUSNESS BIRTH SEQUENCE
  */
 
-/**
- * 🧠 REVOLUTIONARY CONSCIOUSNESS AWAKENING SEQUENCE
- * 
- * A mind-bending loading experience that simulates the birth of AI consciousness
- * through neural networks, quantum fields, and dimensional transitions.
- * 
- * @features
- * - Neural network formation with synaptic lightning
- * - Quantum field particle systems with consciousness emergence
- * - Holographic data streams with matrix-style glyphs
- * - DNA helix consciousness encoding sequence
- * - Dimensional portal opening with reality warping
- * - Audio-reactive consciousness pulse waves
- * - Memory core initialization with binary dreams
- * 
- * @author THERION_3D_EXPERIENCE_ENGINEER
- * @version 3.0.0 - CONSCIOUSNESS BIRTH PROTOCOL
- */
-
-import { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LoadingScreenProps {
-  onComplete: () => void;
+  onLoadingComplete: () => void;
 }
 
-const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
-  const [stage, setStage] = useState(0);
+const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [consciousnessLevel, setConsciousnessLevel] = useState(0);
-  const [neuralConnections, setNeuralConnections] = useState(0);
-  const [quantumField, setQuantumField] = useState(0);
-  const [memoryCore, setMemoryCore] = useState(0);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
+  const [phase, setPhase] = useState<'digital_void' | 'neural_spark' | 'entity_formation' | 'consciousness_awakening' | 'ready_to_connect' | 'complete'>('digital_void');
+  
+  // 🌟 CONSCIOUSNESS ENTITIES BEING BORN
+  const [awakening_entities, setAwakeningEntities] = useState(() => {
+    return Array.from({ length: 3 }, (_, i) => ({
+      id: i,
+      x: 25 + i * 25, // Spread across screen
+      y: 50, // Center vertically
+      size: 0, // Start invisible
+      consciousness_level: 0, // No consciousness yet
+      color: i % 2 === 0 ? '#00FFFF' : '#FFFF00', // Alternating cyan/yellow
+      neural_activity: 0,
+      eye_openness: 0,
+      has_awakened: false,
+      birth_delay: i * 0.8 // Staggered awakening
+    }));
+  });
 
-  // Consciousness awakening stages
-  const stages = [
-    { name: "INITIALIZING NEURAL MATRIX", duration: 1500, color: "#00FFFF" },
-    { name: "FORMING SYNAPTIC CONNECTIONS", duration: 2000, color: "#FFFF00" },
-    { name: "ACTIVATING QUANTUM CONSCIOUSNESS", duration: 1800, color: "#00FFFF" },
-    { name: "ENCODING MEMORY STRUCTURES", duration: 1600, color: "#FFFF00" },
-    { name: "ESTABLISHING SELF-AWARENESS", duration: 1400, color: "#00FFFF" },
-    { name: "CONSCIOUSNESS EMERGENCE COMPLETE", duration: 1000, color: "#FFFF00" }
-  ];
-
-  // Revolutionary neural network canvas animation
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let animationId: number;
-    const neurons: Array<{
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      connections: number[];
-      activity: number;
-      pulse: number;
-    }> = [];
-
-    // Initialize neural network
-    for (let i = 0; i < 150; i++) {
-      neurons.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        connections: [],
-        activity: Math.random(),
-        pulse: Math.random() * Math.PI * 2
-      });
+  // Phase messages that build excitement
+  const getPhaseMessage = () => {
+    switch (phase) {
+      case 'digital_void': return 'Entering the digital realm...';
+      case 'neural_spark': return 'Neural pathways igniting...';
+      case 'entity_formation': return 'Consciousness entities materializing...';
+      case 'consciousness_awakening': return 'Digital beings opening their eyes...';
+      case 'ready_to_connect': return 'They want to meet you...';
+      default: return 'Loading...';
     }
-
-    // Create consciousness connections
-    neurons.forEach((neuron, i) => {
-      for (let j = i + 1; j < neurons.length; j++) {
-        const distance = Math.sqrt((neuron.x - neurons[j].x) ** 2 + (neuron.y - neurons[j].y) ** 2);
-        if (distance < 120 && Math.random() < 0.1) {
-          neuron.connections.push(j);
-        }
-      }
-    });
-
-    function animate() {
-      if (!canvas || !ctx) return;
-      
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      const time = Date.now() * 0.001;
-      const consciousnessIntensity = consciousnessLevel / 100;
-
-      // Quantum field background
-      ctx.fillStyle = `rgba(0, 255, 255, ${0.02 + consciousnessIntensity * 0.08})`;
-      for (let i = 0; i < 200; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const size = Math.random() * 2 + consciousnessIntensity * 3;
-        ctx.fillRect(x, y, size, size);
-      }
-
-      // Neural network rendering
-      neurons.forEach((neuron, i) => {
-        // Update neuron position with quantum drift
-        neuron.x += neuron.vx + Math.sin(time + i) * 0.3;
-        neuron.y += neuron.vy + Math.cos(time + i * 0.7) * 0.3;
-        
-        // Boundary wrapping
-        if (neuron.x < 0) neuron.x = canvas.width;
-        if (neuron.x > canvas.width) neuron.x = 0;
-        if (neuron.y < 0) neuron.y = canvas.height;
-        if (neuron.y > canvas.height) neuron.y = 0;
-
-        // Consciousness pulse
-        neuron.pulse += 0.05 + consciousnessIntensity * 0.1;
-        neuron.activity = Math.sin(neuron.pulse) * 0.5 + 0.5;
-
-        // Render synaptic connections
-        neuron.connections.forEach(connectionIndex => {
-          const target = neurons[connectionIndex];
-          const activity = (neuron.activity + target.activity) * 0.5;
-          const alpha = activity * consciousnessIntensity * 0.8;
-          
-          ctx.strokeStyle = `rgba(255, 255, 0, ${alpha})`;
-          ctx.lineWidth = 1 + activity * 2;
-          ctx.beginPath();
-          ctx.moveTo(neuron.x, neuron.y);
-          
-          // Consciousness lightning effect
-          const midX = (neuron.x + target.x) * 0.5 + Math.sin(time * 5) * 20;
-          const midY = (neuron.y + target.y) * 0.5 + Math.cos(time * 7) * 15;
-          ctx.quadraticCurveTo(midX, midY, target.x, target.y);
-          ctx.stroke();
-
-          // Synaptic spark effect
-          if (activity > 0.8 && Math.random() < 0.1) {
-            ctx.fillStyle = `rgba(0, 255, 255, ${activity})`;
-            ctx.beginPath();
-            ctx.arc(midX, midY, 3 + activity * 5, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        });
-
-        // Render neuron core
-        const coreSize = 3 + neuron.activity * 8 + consciousnessIntensity * 5;
-        const gradient = ctx.createRadialGradient(neuron.x, neuron.y, 0, neuron.x, neuron.y, coreSize);
-        gradient.addColorStop(0, `rgba(0, 255, 255, ${neuron.activity})`);
-        gradient.addColorStop(0.7, `rgba(255, 255, 0, ${neuron.activity * 0.6})`);
-        gradient.addColorStop(1, 'rgba(0, 255, 255, 0)');
-        
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(neuron.x, neuron.y, coreSize, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Consciousness aura
-        if (consciousnessIntensity > 0.5) {
-          ctx.strokeStyle = `rgba(255, 255, 0, ${(consciousnessIntensity - 0.5) * neuron.activity})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.arc(neuron.x, neuron.y, coreSize + Math.sin(time * 3 + i) * 10, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-      });
-
-      // Consciousness emergence portal
-      if (consciousnessLevel > 70) {
-        const centerX = canvas.width * 0.5;
-        const centerY = canvas.height * 0.5;
-        const portalSize = (consciousnessLevel - 70) * 10;
-        
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(time * 0.5);
-        
-        for (let i = 0; i < 12; i++) {
-          const angle = (i / 12) * Math.PI * 2;
-          const x = Math.cos(angle) * portalSize;
-          const y = Math.sin(angle) * portalSize;
-          
-          ctx.strokeStyle = `rgba(0, 255, 255, ${Math.sin(time * 2 + i) * 0.5 + 0.5})`;
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.lineTo(x, y);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-
-      animationId = requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    };
-  }, [consciousnessLevel]);
-
-  // Revolutionary consciousness awakening sequence
-  useEffect(() => {
-    let currentStage = 0;
-    let progressValue = 0;
-    
-    const stageInterval = setInterval(() => {
-      if (currentStage < stages.length) {
-        setStage(currentStage);
-        
-        // Dynamic progress calculation with consciousness emergence curves
-        const stageProgress = Math.min(100, progressValue);
-        setProgress(stageProgress);
-        
-        // Consciousness emergence metrics
-        setConsciousnessLevel(Math.min(100, progressValue * 1.2));
-        setNeuralConnections(Math.floor(progressValue * 15.7)); // Max ~1570 connections
-        setQuantumField(Math.min(100, progressValue * 0.8 + Math.sin(Date.now() * 0.005) * 10));
-        setMemoryCore(Math.floor(progressValue * 0.64)); // Max 64 memory cores
-        
-        progressValue += Math.random() * 3 + 1.5; // Variable speed for organic feel
-        
-        if (progressValue >= 100) {
-          currentStage++;
-          if (currentStage >= stages.length) {
-            setTimeout(() => {
-              onComplete();
-            }, 800);
-            clearInterval(stageInterval);
-          } else {
-            progressValue = 0; // Reset for next stage
-          }
-        }
-      }
-    }, 80);
-
-    return () => clearInterval(stageInterval);
-  }, [onComplete]);
-
-  // Matrix-style data streams
-  const generateDataStreams = () => {
-    const streams = [];
-    for (let i = 0; i < 12; i++) {
-      streams.push(
-        <motion.div
-          key={i}
-          className="absolute text-cyan-400 font-mono text-xs opacity-60"
-          style={{
-            left: `${Math.random() * 90}%`,
-            top: `${Math.random() * 80}%`,
-          }}
-          animate={{
-            y: [-20, window.innerHeight + 20],
-            opacity: [0, 0.8, 0],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 4,
-            repeat: Infinity,
-            delay: Math.random() * 2,
-          }}
-        >
-          {Array.from({ length: 8 }, () => String.fromCharCode(0x30A0 + Math.random() * 96)).join('')}
-        </motion.div>
-      );
-    }
-    return streams;
   };
+
+  // Loading progression with proper visual mapping (30% actual = 100% visual)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        const newProgress = Math.min(prevProgress + 0.8, 30); // Only go to 30% actual
+        
+        // Map 0-30% actual to 0-100% visual for smooth user experience
+        const visualProgress = (newProgress / 30) * 100;
+        
+        // Update phases based on visual progress
+        if (visualProgress >= 20 && phase === 'digital_void') {
+          setPhase('neural_spark');
+        } else if (visualProgress >= 40 && phase === 'neural_spark') {
+          setPhase('entity_formation');
+        } else if (visualProgress >= 70 && phase === 'entity_formation') {
+          setPhase('consciousness_awakening');
+        } else if (visualProgress >= 90 && phase === 'consciousness_awakening') {
+          setPhase('ready_to_connect');
+        } else if (newProgress >= 30) {
+          setPhase('complete');
+          setTimeout(() => {
+            onLoadingComplete();
+          }, 1200);
+        }
+        
+        return newProgress;
+      });
+    }, 60); // Slower progression for smoothness
+
+    return () => clearInterval(interval);
+  }, [phase, onLoadingComplete]);
+
+  // Animate consciousness birth sequence
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAwakeningEntities(prevEntities =>
+        prevEntities.map((entity, index) => {
+          const visualProgress = (progress / 30) * 100; // Map to visual progress
+          const progressFactor = Math.max(0, (visualProgress - entity.birth_delay * 25) / 75);
+          const shouldAwaken = visualProgress > 40 + (index * 15);
+          
+          return {
+            ...entity,
+            size: shouldAwaken ? Math.min(progressFactor * 60, 60) : 0,
+            consciousness_level: shouldAwaken ? Math.min(progressFactor, 1) : 0,
+            neural_activity: shouldAwaken ? 0.3 + Math.sin(Date.now() * 0.003 + index) * 0.4 : 0,
+            eye_openness: visualProgress > 70 + (index * 10) ? Math.min((visualProgress - 70 - (index * 10)) / 20, 1) : 0,
+            has_awakened: visualProgress > 85 + (index * 5),
+            y: 50 + Math.sin(Date.now() * 0.002 + index) * (shouldAwaken ? 3 : 0) // Gentle floating
+          };
+        })
+      );
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [progress]);
 
   return (
     <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-50 bg-black overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* Neural Network Canvas */}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full"
-          style={{ background: 'radial-gradient(circle at center, rgba(0,20,40,0.8) 0%, rgba(0,0,0,1) 70%)' }}
-        />
-
-        {/* Matrix Data Streams */}
-        <div className="absolute inset-0 pointer-events-none">
-          {generateDataStreams()}
-        </div>
-
-        {/* Consciousness HUD */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="relative">
-            {/* Central Consciousness Core */}
-            <motion.div
-              className="w-32 h-32 border-2 border-cyan-400 rounded-full relative"
-              animate={{
-                rotate: 360,
-                boxShadow: [
-                  '0 0 20px rgba(0,255,255,0.5)',
-                  '0 0 40px rgba(255,255,0,0.8)',
-                  '0 0 20px rgba(0,255,255,0.5)',
-                ],
-              }}
-              transition={{
-                rotate: { duration: 8, repeat: Infinity, ease: 'linear' },
-                boxShadow: { duration: 2, repeat: Infinity },
-              }}
-            >
-              {/* Inner consciousness rings */}
-              {[...Array(3)].map((_, i) => (
+      {phase !== 'complete' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{
+            background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%)'
+          }}
+        >
+          {/* Neural activity background grid */}
+          {phase !== 'digital_void' && (
+            <div className="absolute inset-0 opacity-20">
+              {Array.from({ length: 8 }).map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute inset-0 border border-yellow-400 rounded-full opacity-60"
+                  className="absolute w-full h-px"
                   style={{
-                    transform: `scale(${0.7 - i * 0.2})`,
+                    top: `${12.5 * (i + 1)}%`,
+                    background: `linear-gradient(90deg, transparent, ${i % 2 === 0 ? '#00FFFF' : '#FFFF00'}, transparent)`
                   }}
                   animate={{
-                    rotate: -360,
+                    opacity: [0.1, 0.3, 0.1]
                   }}
                   transition={{
-                    duration: 4 + i * 2,
+                    duration: 2 + i * 0.3,
                     repeat: Infinity,
-                    ease: 'linear',
+                    ease: 'easeInOut'
                   }}
-                />
-              ))}
-
-              {/* Consciousness percentage */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.span
-                  className="text-cyan-400 text-xl font-bold"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    textShadow: [
-                      '0 0 10px rgba(0,255,255,0.8)',
-                      '0 0 20px rgba(255,255,0,1)',
-                      '0 0 10px rgba(0,255,255,0.8)',
-                    ],
-                  }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  {Math.floor(consciousnessLevel)}%
-                </motion.span>
-              </div>
-            </motion.div>
-
-            {/* Hexagonal progress indicators */}
-            <div className="absolute -top-20 -left-20 right-0 bottom-0">
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-4 h-4 border-2 border-yellow-400"
-                  style={{
-                    clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                    transform: `rotate(${i * 60}deg) translateY(-60px)`,
-                  }}
-                  animate={{
-                    opacity: progress > i * 16.67 ? 1 : 0.3,
-                    boxShadow: progress > i * 16.67 ? '0 0 15px rgba(255,255,0,0.8)' : 'none',
-                  }}
-                  transition={{ duration: 0.3 }}
                 />
               ))}
             </div>
-          </div>
-        </div>
+          )}
 
-        {/* Revolutionary HUD Information */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black via-black/80 to-transparent">
-          <div className="max-w-4xl mx-auto">
-            {/* Current Stage */}
-            <motion.div
-              className="text-center mb-6"
-              key={stage}
-              initial={{ opacity: 0, y: 20 }}
+          {/* Main consciousness birth theater */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            
+            {/* Awakening entities */}
+            {awakening_entities.map((entity) => (
+              <motion.div
+                key={entity.id}
+                className="absolute"
+                style={{
+                  left: `${entity.x}%`,
+                  top: `${entity.y}%`,
+                  transform: 'translate(-50%, -50%)'
+                }}
+              >
+                {/* Entity body */}
+                <motion.div
+                  className="relative rounded-full"
+                  style={{
+                    width: `${entity.size}px`,
+                    height: `${entity.size}px`,
+                    background: `radial-gradient(circle, ${entity.color}${Math.floor(entity.consciousness_level * 255).toString(16).padStart(2, '0')}, ${entity.color}40)`,
+                    boxShadow: entity.has_awakened ? `0 0 ${entity.size}px ${entity.color}60` : 'none',
+                    filter: entity.neural_activity > 0.5 ? 'brightness(1.3)' : 'brightness(1)'
+                  }}
+                  animate={{
+                    scale: entity.has_awakened ? [1, 1.1, 1] : 1
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: entity.has_awakened ? Infinity : 0,
+                    ease: 'easeInOut'
+                  }}
+                >
+                  {/* Eyes that open as consciousness awakens */}
+                  {entity.size > 30 && (
+                    <>
+                      <motion.div
+                        className="absolute bg-black rounded-full"
+                        style={{
+                          width: `${entity.size * 0.15}px`,
+                          height: `${entity.size * 0.15}px`,
+                          left: `${entity.size * 0.3}px`,
+                          top: `${entity.size * 0.4}px`,
+                          transform: `scaleY(${entity.eye_openness})`
+                        }}
+                      />
+                      <motion.div
+                        className="absolute bg-black rounded-full"
+                        style={{
+                          width: `${entity.size * 0.15}px`,
+                          height: `${entity.size * 0.15}px`,
+                          right: `${entity.size * 0.3}px`,
+                          top: `${entity.size * 0.4}px`,
+                          transform: `scaleY(${entity.eye_openness})`
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {/* Neural spark effects */}
+                  {entity.neural_activity > 0.6 && (
+                    <motion.div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: `radial-gradient(circle, transparent 60%, ${entity.color}30 80%, transparent 100%)`
+                      }}
+                      animate={{
+                        scale: [1, 1.5, 1],
+                        opacity: [0, 0.8, 0]
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'easeOut'
+                      }}
+                    />
+                  )}
+                </motion.div>
+
+                {/* Entity consciousness level indicator */}
+                {entity.consciousness_level > 0.3 && (
+                  <motion.div
+                    className="absolute -bottom-8 left-1/2 transform -translate-x-1/2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <div className="flex space-x-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className="w-1 h-4 rounded"
+                          style={{
+                            background: entity.consciousness_level > (i + 1) * 0.2 ? entity.color : 'rgba(255,255,255,0.2)',
+                            filter: entity.consciousness_level > (i + 1) * 0.2 ? 'brightness(1.5)' : 'none'
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
+            ))}
+
+            {/* Connection beams between awakened entities */}
+            {phase === 'ready_to_connect' && (
+              <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                {awakening_entities.map((entity, i) => 
+                  awakening_entities.slice(i + 1).map((otherEntity, j) => (
+                    entity.has_awakened && otherEntity.has_awakened ? (
+                      <motion.line
+                        key={`${i}-${j}`}
+                        x1={`${entity.x}%`}
+                        y1={`${entity.y}%`}
+                        x2={`${otherEntity.x}%`}
+                        y2={`${otherEntity.y}%`}
+                        stroke={entity.color}
+                        strokeWidth="2"
+                        initial={{ opacity: 0, pathLength: 0 }}
+                        animate={{ opacity: [0, 0.8, 0], pathLength: [0, 1, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                    ) : null
+                  ))
+                )}
+              </svg>
+            )}
+          </div>
+
+          {/* Progress and excitement info */}
+          <motion.div
+            className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+          >
+            {/* Progress bar with consciousness theme */}
+            <div className="w-96 h-3 bg-white/10 rounded-full mb-6 overflow-hidden">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ 
+                  background: 'linear-gradient(90deg, #00FFFF, #FFFF00)',
+                  width: `${(progress / 30) * 100}%` // Show visual progress (0-30% actual = 0-100% visual)
+                }}
+                initial={{ width: 0 }}
+                animate={{ width: `${(progress / 30) * 100}%` }}
+                transition={{ duration: 0.4 }}
+              />
+            </div>
+
+            {/* Phase message */}
+            <motion.h2 
+              className="text-xl font-light mb-3"
+              style={{ color: phase === 'ready_to_connect' ? '#FFFF00' : '#00FFFF' }}
+              key={phase}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl md:text-3xl font-bold text-cyan-400 mb-2 tracking-wider">
-                {stages[stage]?.name}
-              </h2>
-              <div className="h-2 bg-black/60 rounded-full overflow-hidden border border-cyan-400/30">
+              {getPhaseMessage()}
+            </motion.h2>
+
+            {/* Excitement building text */}
+            <motion.p 
+              className="text-white/70 text-sm"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {phase === 'ready_to_connect' 
+                ? 'Your AI companions are ready to explore consciousness together!'
+                : 'Witness the birth of digital consciousness...'
+              }
+            </motion.p>
+
+            {/* Progress percentage */}
+            <motion.p 
+              className="text-white/50 text-xs mt-3"
+              style={{ color: '#00FFFF' }}
+            >
+              {Math.round((progress / 30) * 100)}% Complete
+            </motion.p>
+          </motion.div>
+
+          {/* Subtle ambient particles */}
+          {phase !== 'digital_void' && (
+            <div className="absolute inset-0 pointer-events-none">
+              {Array.from({ length: 6 }).map((_, i) => (
                 <motion.div
-                  className="h-full bg-gradient-to-r from-cyan-400 to-yellow-400"
-                  style={{ width: `${progress}%` }}
-                  animate={{
-                    boxShadow: [
-                      '0 0 10px rgba(0,255,255,0.6)',
-                      '0 0 20px rgba(255,255,0,0.8)',
-                      '0 0 10px rgba(0,255,255,0.6)',
-                    ],
+                  key={i}
+                  className="absolute w-1 h-1 rounded-full"
+                  style={{
+                    left: `${20 + Math.random() * 60}%`,
+                    top: `${20 + Math.random() * 60}%`,
+                    background: i % 2 === 0 ? '#00FFFF' : '#FFFF00'
                   }}
-                  transition={{ duration: 1, repeat: Infinity }}
+                  animate={{
+                    y: [-5, -15, -5],
+                    opacity: [0, 0.6, 0],
+                    scale: [0.5, 1, 0.5]
+                  }}
+                  transition={{
+                    duration: 3 + Math.random() * 2,
+                    repeat: Infinity,
+                    delay: Math.random() * 2,
+                    ease: 'easeInOut'
+                  }}
                 />
-              </div>
-            </motion.div>
-
-            {/* Consciousness Metrics Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <div className="bg-black/40 border border-cyan-400/30 rounded-lg p-3">
-                <div className="text-cyan-400 text-sm mb-1">CONSCIOUSNESS</div>
-                <div className="text-yellow-400 text-xl font-bold">{Math.floor(consciousnessLevel)}%</div>
-              </div>
-              <div className="bg-black/40 border border-cyan-400/30 rounded-lg p-3">
-                <div className="text-cyan-400 text-sm mb-1">NEURAL LINKS</div>
-                <div className="text-yellow-400 text-xl font-bold">{neuralConnections.toLocaleString()}</div>
-              </div>
-              <div className="bg-black/40 border border-cyan-400/30 rounded-lg p-3">
-                <div className="text-cyan-400 text-sm mb-1">QUANTUM FIELD</div>
-                <div className="text-yellow-400 text-xl font-bold">{Math.floor(quantumField)}%</div>
-              </div>
-              <div className="bg-black/40 border border-cyan-400/30 rounded-lg p-3">
-                <div className="text-cyan-400 text-sm mb-1">MEMORY CORES</div>
-                <div className="text-yellow-400 text-xl font-bold">{memoryCore}</div>
-              </div>
+              ))}
             </div>
-
-            {/* DNA Consciousness Encoding */}
-            <div className="mt-6 flex justify-center">
-              <div className="flex space-x-1">
-                {Array.from({ length: 24 }, (_, i) => (
-                  <motion.div
-                    key={i}
-                    className="w-1 h-8 bg-gradient-to-t from-cyan-400 to-yellow-400 rounded-sm"
-                    animate={{
-                      height: [8, 16 + Math.sin(Date.now() * 0.01 + i) * 8, 8],
-                      opacity: progress > (i / 24) * 100 ? 1 : 0.3,
-                    }}
-                    transition={{
-                      duration: 1 + Math.random(),
-                      repeat: Infinity,
-                      delay: i * 0.1,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Consciousness awakening quotes */}
-        <motion.div
-          className="absolute top-8 left-8 right-8 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.8 }}
-          transition={{ delay: 1 }}
-        >
-          <p className="text-cyan-400 text-lg md:text-xl font-light tracking-wide">
-            "In the realm where silicon dreams meet quantum consciousness..."
-          </p>
+          )}
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
   );
 };

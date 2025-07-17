@@ -56,7 +56,7 @@ export function HeroSection() {
           
           <p className="font-subtitle text-xl lg:text-2xl text-cyber-dark-200 max-w-4xl mx-auto leading-relaxed">
             Deus Vault is a revolutionary Linux-based development environment that runs{" "}
-            <span className="text-cyber-mint-bright font-semibold">any OS</span>,{" "}
+            <span className="text-cyber-cyan font-semibold">any OS</span>,{" "}
             <span className="text-cyber-yellow font-semibold">any app</span>, with{" "}
             <span className="text-cyber-cyan font-semibold">perfect compatibility</span>.
             <br />
