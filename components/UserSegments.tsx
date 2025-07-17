@@ -1,374 +1,359 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShaderText } from './ShaderText';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
+import { useState } from 'react';
 import { 
-  Code2, 
   Gamepad2, 
-  Building, 
-  Palette, 
-  Zap, 
-  Shield, 
-  Rocket, 
-  Brain,
-  ChevronRight,
-  Download,
-  Play
+  Code, 
+  Users, 
+  GraduationCap, 
+  Heart, 
+  Cpu, 
+  Globe, 
+  Sparkles,
+  CheckCircle,
+  ArrowRight,
+  Zap
 } from 'lucide-react';
 
-interface UserSegment {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: React.ReactNode;
-  color: string;
-  gradient: string;
-  benefits: string[];
-  features: {
-    title: string;
-    description: string;
-    metric: string;
-  }[];
-  cta: {
-    primary: string;
-    secondary: string;
-  };
-}
-
 export function UserSegments() {
-  const [selectedSegment, setSelectedSegment] = useState<string>('developers');
-  
-  const segments: UserSegment[] = [
-    {
-      id: 'developers',
-      title: 'DEVELOPERS',
-      subtitle: 'Code at the Speed of Thought',
-      icon: <Code2 className="h-16 w-16" />,
-      color: 'text-cyber-cyan',
-      gradient: 'from-cyber-cyan to-cyber-mint-bright',
-      benefits: [
-        'THERION AI writes code alongside you',
-        'Zero setup time - productive in seconds',
-        'Unlimited parallel development environments',
-        'Deploy to any platform instantly',
-        'Built-in performance optimization',
-        'Collaborative coding with global devs'
-      ],
-      features: [
-        {
-          title: 'AI Pair Programming',
-          description: 'Neural AI that understands your codebase and writes contextually perfect code',
-          metric: '10x faster development'
-        },
-        {
-          title: 'Universal Deployment',
-          description: 'One codebase deploys to web, mobile, desktop, and cloud simultaneously',
-          metric: '90% less deployment time'
-        },
-        {
-          title: 'Environment Management',
-          description: 'Infinite isolated environments that share resources intelligently',
-          metric: 'Zero conflicts guaranteed'
-        }
-      ],
-      cta: {
-        primary: 'START CODING NOW',
-        secondary: 'See Code Demo'
-      }
-    },
-    {
-      id: 'gamers',
-      title: 'GAMERS',
-      subtitle: 'Professional Gaming Arsenal',
-      icon: <Gamepad2 className="h-16 w-16" />,
-      color: 'text-cyber-mint-bright',
-      gradient: 'from-cyber-mint-bright to-cyber-yellow',
-      benefits: [
-        'Unity, Unreal, and custom engines ready',
-        'Professional game modding toolkit',
-        'Performance profiling and optimization',
-        'Asset pipeline automation',
-        'Cross-platform game deployment',
-        'Community marketplace for mods'
-      ],
-      features: [
-        {
-          title: 'Game Development Suite',
-          description: 'Complete game dev environment with all major engines pre-configured',
-          metric: 'Studio-grade performance'
-        },
-        {
-          title: 'Modding Platform',
-          description: 'Advanced tools for creating, testing, and distributing game modifications',
-          metric: 'Any game supported'
-        },
-        {
-          title: 'Performance Engine',
-          description: 'Real-time profiling and optimization for maximum FPS and efficiency',
-          metric: 'Up to 300% FPS boost'
-        }
-      ],
-      cta: {
-        primary: 'DOWNLOAD GAME BUILD',
-        secondary: 'Watch Gaming Demo'
-      }
-    },
-    {
-      id: 'enterprise',
-      title: 'ENTERPRISE',
-      subtitle: 'Enterprise-Grade Innovation',
-      icon: <Building className="h-16 w-16" />,
-      color: 'text-cyber-yellow',
-      gradient: 'from-cyber-yellow to-cyber-cyan',
-      benefits: [
-        'Enterprise security and compliance',
-        'Team collaboration and code review',
-        'Scalable infrastructure management',
-        'Custom integrations and APIs',
-        'Advanced analytics and reporting',
-        'Dedicated support and training'
-      ],
-      features: [
-        {
-          title: 'Security & Compliance',
-          description: 'Enterprise-grade security with SOC2, GDPR, and HIPAA compliance',
-          metric: '99.99% uptime SLA'
-        },
-        {
-          title: 'Team Management',
-          description: 'Advanced team collaboration tools with role-based access control',
-          metric: 'Unlimited team members'
-        },
-        {
-          title: 'Custom Solutions',
-          description: 'Tailored integrations and custom development environments',
-          metric: 'White-label available'
-        }
-      ],
-      cta: {
-        primary: 'CONTACT SALES',
-        secondary: 'Enterprise Demo'
-      }
-    },
-    {
-      id: 'creators',
-      title: 'CREATORS',
-      subtitle: 'Create & Monetize',
-      icon: <Palette className="h-16 w-16" />,
-      color: 'text-cyber-white',
-      gradient: 'from-cyber-white to-cyber-mint-bright',
-      benefits: [
-        'Multi-media content creation tools',
-        'Blockchain-based monetization',
-        'NFT and digital asset creation',
-        'Community building platform',
-        'Revenue sharing ecosystem',
-        'Creator-focused marketplace'
-      ],
-      features: [
-        {
-          title: 'Content Creation',
-          description: 'Integrated tools for creating digital content, apps, and experiences',
-          metric: 'All media types supported'
-        },
-        {
-          title: 'Monetization Engine',
-          description: 'Built-in Hedera blockchain integration for earning cryptocurrency',
-          metric: 'Instant HBAR payouts'
-        },
-        {
-          title: 'Community Platform',
-          description: 'Build and manage your creator community with advanced engagement tools',
-          metric: 'Global reach available'
-        }
-      ],
-      cta: {
-        primary: 'START CREATING',
-        secondary: 'Creator Showcase'
-      }
-    }
-  ];
+  const [activeTab, setActiveTab] = useState('developers');
 
-  const currentSegment = segments.find(s => s.id === selectedSegment) || segments[0];
+  const userTypes = {
+    developers: {
+      icon: Code,
+      title: 'Developers',
+      color: 'cyan',
+      benefits: [
+        'Run any development environment natively',
+        'AI-powered code generation and debugging',
+        'Perfect compatibility with all frameworks',
+        'Zero configuration development setup',
+        'Built-in containerization and deployment tools'
+      ],
+      description: 'The ultimate development environment that adapts to your workflow, not the other way around.',
+      stats: { metric: 'Productivity Boost', value: '347%' }
+    },
+    gamedevs: {
+      icon: Gamepad2,
+      title: 'Game Developers',
+      color: 'yellow',
+      benefits: [
+        'Native Unity, Unreal, and Godot optimization',
+        'Real-time performance monitoring and optimization',
+        'Cross-platform build automation',
+        'Integrated asset pipeline management',
+        'AI-assisted shader and script optimization'
+      ],
+      description: 'Create games faster with an OS designed for game development excellence.',
+      stats: { metric: 'Build Time Reduction', value: '85%' }
+    },
+    gamers: {
+      icon: Zap,
+      title: 'Gamers',
+      color: 'cyan',
+      benefits: [
+        'Run Windows games with better performance than Windows',
+        'No compatibility layers - true native execution',
+        'AI-optimized graphics settings per game',
+        'Zero latency input handling',
+        'Built-in streaming and recording tools'
+      ],
+      description: 'Gaming performance that surpasses native Windows while maintaining perfect compatibility.',
+      stats: { metric: 'FPS Improvement', value: '67%' }
+    },
+    entrepreneurs: {
+      icon: Users,
+      title: 'Entrepreneurs',
+      color: 'yellow',
+      benefits: [
+        'Rapid prototyping and MVP development',
+        'Built-in business analytics and automation',
+        'Seamless integration with all business tools',
+        'AI-powered market analysis and insights',
+        'Zero infrastructure overhead'
+      ],
+      description: 'Focus on building your business, not managing your development environment.',
+      stats: { metric: 'Time to Market', value: '73%' }
+    },
+    educators: {
+      icon: GraduationCap,
+      title: 'Educators',
+      color: 'cyan',
+      benefits: [
+        'Instant classroom environment setup',
+        'Universal software compatibility for all subjects',
+        'AI-assisted curriculum development',
+        'Student progress tracking and analytics',
+        'Zero maintenance overhead'
+      ],
+      description: 'Teach any technology stack without setup time or compatibility issues.',
+      stats: { metric: 'Setup Time Saved', value: '94%' }
+    },
+    hobbyists: {
+      icon: Heart,
+      title: 'Hobbyists',
+      color: 'yellow',
+      benefits: [
+        'Explore any technology without barriers',
+        'AI mentor for learning new skills',
+        'Perfect for 3D printing, IoT, and maker projects',
+        'Community-driven project sharing',
+        'Free access to professional-grade tools'
+      ],
+      description: 'Turn your creative ideas into reality with unlimited possibilities.',
+      stats: { metric: 'Projects Completed', value: '234%' }
+    },
+    miners: {
+      icon: Cpu,
+      title: 'Crypto Miners',
+      color: 'cyan',
+      benefits: [
+        'Optimized mining performance across all algorithms',
+        'AI-powered profitability optimization',
+        'Built-in Hedera layer 2 integration',
+        'Zero-fee token economy participation',
+        'Automated hardware tuning and monitoring'
+      ],
+      description: 'Mine more efficiently while contributing to a decentralized AI ecosystem.',
+      stats: { metric: 'Mining Efficiency', value: '156%' }
+    }
+  };
+
+  const currentUser = userTypes[activeTab as keyof typeof userTypes];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyber-black via-cyber-dark-950 to-cyber-dark-900 relative overflow-hidden">
+    <div className="space-y-16 container-responsive">
       
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-grid-subtle opacity-10" />
-      
-      <div className="container-refined min-h-screen flex flex-col justify-center relative z-10">
-        
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <Badge className="glass-refined px-6 py-3 font-caption mb-8 border-cyber-cyan/30">
-            <Brain className="h-4 w-4 mr-3 text-cyber-cyan" />
-            Built for Every Creator
-          </Badge>
-          
-          <ShaderText
-            text="BUILT FOR YOUR WORKFLOW"
-            className="font-display mb-6"
-            duration={2000}
-            delay={500}
-          />
-          
-          <p className="font-subtitle text-cyber-dark-300 max-w-4xl mx-auto">
-            Deus Vault adapts to your unique needs. Whether you're building the next unicorn startup 
-            or modding your favorite game, we've got you covered.
-          </p>
-        </motion.div>
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="text-center space-y-6"
+      >
+        <h2 className="text-4xl md:text-6xl bg-gradient-to-r from-white via-cyan-200 to-yellow-200 bg-clip-text text-transparent">
+          Who Is <span className="text-cyan-400">DeusVaultOS</span> For?
+        </h2>
+        <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          Whether you're building the next breakthrough or exploring new possibilities, 
+          DeusVaultOS adapts to <span className="text-cyan-400">your world</span>.
+        </p>
+      </motion.div>
 
-        {/* Segment Selector */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mb-16"
-        >
-          <div className="flex justify-center">
-            <div className="glass-refined rounded-xl p-2">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {segments.map((segment) => (
-                  <motion.button
-                    key={segment.id}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedSegment(segment.id)}
-                    className={`relative p-6 rounded-lg transition-all duration-300 ${
-                      selectedSegment === segment.id
-                        ? 'bg-cyber-cyan/20 border border-cyber-cyan/30'
-                        : 'hover:bg-cyber-dark-800/50'
-                    }`}
-                  >
-                    <div className={`${segment.color} mb-3 flex justify-center`}>
-                      {segment.icon}
-                    </div>
-                    <div className="font-caption text-cyber-white">
-                      {segment.title}
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.div>
+      {/* User Type Tabs */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="flex flex-wrap justify-center gap-3 mb-12"
+      >
+        {Object.entries(userTypes).map(([key, user]) => {
+          const IconComponent = user.icon;
+          const isActive = activeTab === key;
+          return (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`
+                flex items-center gap-3 px-6 py-3 rounded-lg font-subtitle transition-all duration-300
+                ${isActive 
+                  ? user.color === 'cyan'
+                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 shadow-lg'
+                    : 'bg-yellow-500/20 border-yellow-400 text-yellow-400 shadow-lg'
+                  : 'bg-gray-800/50 border-gray-600 text-gray-400 hover:border-gray-500'
+                }
+                border backdrop-blur-sm
+              `}
+            >
+              <IconComponent className="h-5 w-5" />
+              <span>{user.title}</span>
+            </button>
+          );
+        })}
+      </motion.div>
 
-        {/* Selected Segment Content */}
-        <motion.div
-          key={selectedSegment}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="grid lg:grid-cols-2 gap-16 items-center"
-        >
+      {/* Active User Content */}
+      <motion.div
+        key={activeTab}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        className="glass-refined rounded-xl p-8 md:p-12 border border-cyan-400/30"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
-          {/* Left Column - Benefits */}
-          <div>
-            <div className="flex items-center gap-6 mb-8">
-              <div className={`${currentSegment.color}`}>
-                {currentSegment.icon}
+          {/* Content */}
+          <div className="space-y-8">
+            <div className="flex items-center gap-4">
+              <div className={`w-16 h-16 ${
+                currentUser.color === 'cyan' ? 'bg-cyan-500/20' : 'bg-yellow-500/20'
+              } rounded-xl flex items-center justify-center`}>
+                <currentUser.icon className={`h-8 w-8 ${
+                  currentUser.color === 'cyan' ? 'text-cyan-400' : 'text-yellow-400'
+                }`} />
               </div>
               <div>
-                <ShaderText
-                  text={currentSegment.title}
-                  className="font-hero mb-2"
-                  duration={1500}
-                  delay={200}
-                />
-                <p className="font-subtitle text-cyber-dark-300">
-                  {currentSegment.subtitle}
-                </p>
+                <h3 className="text-3xl font-bold text-white mb-2">
+                  For {currentUser.title}
+                </h3>
+                <div className={`${
+                  currentUser.color === 'cyan' ? 'text-cyan-400' : 'text-yellow-400'
+                } font-mono text-lg`}>
+                  {currentUser.stats.metric}: +{currentUser.stats.value}
+                </div>
               </div>
             </div>
+            
+            <p className="text-xl text-gray-300 leading-relaxed">
+              {currentUser.description}
+            </p>
 
-            <div className="space-y-4 mb-12">
-              {currentSegment.benefits.map((benefit, index) => (
+            <div className="space-y-4">
+              <h4 className="text-xl font-semibold text-white mb-4">Key Benefits:</h4>
+              {currentUser.benefits.map((benefit, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="flex items-center gap-4"
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-start gap-3"
                 >
-                  <div className="w-2 h-2 bg-gradient-to-r from-cyber-cyan to-cyber-mint-bright rounded-full" />
-                  <span className="font-body text-cyber-dark-200">{benefit}</span>
+                  <CheckCircle className={`h-6 w-6 ${
+                    currentUser.color === 'cyan' ? 'text-cyan-400' : 'text-yellow-400'
+                  } mt-0.5 flex-shrink-0`} />
+                  <span className="text-gray-300">{benefit}</span>
                 </motion.div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button className={`button-primary px-8 py-6 font-subtitle bg-gradient-to-r ${currentSegment.gradient}`}>
-                <Download className="mr-3 h-5 w-5" />
-                {currentSegment.cta.primary}
-                <ChevronRight className="ml-3 h-5 w-5" />
-              </Button>
-              
-              <Button variant="outline" className="button-refined px-8 py-6 font-subtitle">
-                <Play className="mr-3 h-5 w-5" />
-                {currentSegment.cta.secondary}
-              </Button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`
+                inline-flex items-center gap-3 px-8 py-4 rounded-lg font-subtitle text-lg
+                ${currentUser.color === 'cyan' 
+                  ? 'bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400'
+                  : 'bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400'
+                }
+                text-white transition-all duration-300 shadow-lg
+              `}
+            >
+              <span>Get Started Today</span>
+              <ArrowRight className="h-5 w-5" />
+            </motion.button>
+          </div>
+
+          {/* Stats Visualization */}
+          <div className="glass-refined rounded-xl p-8 border border-gray-600/30">
+            <h4 className="text-2xl font-bold text-white mb-8 text-center">
+              Real Impact Metrics
+            </h4>
+            
+            <div className="space-y-6">
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-gray-300">{currentUser.stats.metric}</span>
+                  <span className={`text-2xl font-bold ${
+                    currentUser.color === 'cyan' ? 'text-cyan-400' : 'text-yellow-400'
+                  }`}>
+                    +{currentUser.stats.value}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
+                  <motion.div 
+                    className={`h-4 rounded-full ${
+                      currentUser.color === 'cyan' 
+                        ? 'bg-gradient-to-r from-cyan-600 to-cyan-400'
+                        : 'bg-gradient-to-r from-yellow-600 to-yellow-400'
+                    }`}
+                    initial={{ width: 0 }}
+                    animate={{ width: "85%" }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-gray-300">User Satisfaction</span>
+                  <span className="text-2xl font-bold text-cyan-400">98%</span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
+                  <motion.div 
+                    className="h-4 rounded-full bg-gradient-to-r from-cyan-600 to-cyan-400"
+                    initial={{ width: 0 }}
+                    animate={{ width: "98%" }}
+                    transition={{ duration: 1.5, delay: 0.3, ease: "easeOut" }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-gray-300">Setup Time Reduction</span>
+                  <span className="text-2xl font-bold text-yellow-400">92%</span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
+                  <motion.div 
+                    className="h-4 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400"
+                    initial={{ width: 0 }}
+                    animate={{ width: "92%" }}
+                    transition={{ duration: 1.5, delay: 0.6, ease: "easeOut" }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Right Column - Features */}
-          <div className="space-y-6">
-            {currentSegment.features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="card-refined p-8"
-              >
-                <div className="flex items-start gap-6">
-                  <div className="flex-1">
-                    <h3 className="font-title text-cyber-white mb-3">
-                      {feature.title}
-                    </h3>
-                    <p className="font-body text-cyber-dark-300 mb-4">
-                      {feature.description}
-                    </p>
-                    <div className={`font-subtitle ${currentSegment.color}`}>
-                      {feature.metric}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+        </div>
+      </motion.div>
 
-        </motion.div>
-
-        {/* Comparison CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-center mt-16"
-        >
-          <div className="glass-refined rounded-xl p-8 max-w-4xl mx-auto">
-            <h3 className="font-title text-cyber-white mb-4">
-              Why Choose Deus Vault Over <span className="text-gradient">Traditional Solutions</span>?
+      {/* General Purpose Statement */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+        className="glass-refined rounded-xl p-8 md:p-12 border border-yellow-400/30 relative overflow-hidden"
+      >
+        <div className="text-center space-y-6 relative z-10">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <Globe className="h-8 w-8 text-yellow-400" />
+            <h3 className="text-3xl font-bold text-white">
+              Built for <span className="text-yellow-400">Everyone</span>
             </h3>
-            <p className="font-body text-cyber-dark-300 mb-6">
-              See how Deus Vault compares to Windows, macOS, and other Linux distributions 
-              for your specific workflow.
-            </p>
-            <Button className="button-refined px-8 py-4 font-subtitle">
-              Compare Solutions
-              <ChevronRight className="ml-3 h-5 w-5" />
-            </Button>
           </div>
-        </motion.div>
+          
+          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+            DeusVaultOS is fundamentally <span className="text-yellow-400 font-semibold">general-purpose</span>. 
+            Whatever your creative vision, whatever your technical needs — this OS adapts and evolves with you.
+          </p>
+          
+          <div className="glass-refined rounded-lg p-6 bg-yellow-400/10 border border-yellow-400/30 max-w-3xl mx-auto">
+            <div className="flex items-start gap-4">
+              <Sparkles className="h-6 w-6 text-yellow-400 mt-1 flex-shrink-0" />
+              <div className="text-left">
+                <h4 className="text-lg font-semibold text-yellow-400 mb-2">
+                  Real-World Example
+                </h4>
+                <p className="text-gray-300 leading-relaxed">
+                  This entire website was built in <span className="text-yellow-400 font-semibold">less than a day</span> using 
+                  DeusVaultOS itself. The same environment that runs complex simulations also creates beautiful, 
+                  responsive web experiences. <span className="text-cyan-400">One OS. Infinite possibilities.</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Background decoration */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-4 right-4 w-32 h-32 bg-yellow-400 rounded-full blur-3xl" />
+          <div className="absolute bottom-4 left-4 w-40 h-40 bg-cyan-400 rounded-full blur-3xl" />
+        </div>
+      </motion.div>
 
-      </div>
     </div>
   );
 }

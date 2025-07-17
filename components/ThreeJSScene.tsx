@@ -173,7 +173,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       
       // CIRCULAR SWIMMING PARAMETERS - Each blob gets unique circular path
       const heightLane = i % 6; // Assign each blob to one of 6 height lanes
-      const laneHeight = (heightLane - 1.5) * 2.0; // NEW Lanes at: -3, -1, 1, 3, 5, 7 (NO FLOOR CLIPPING)
+      const laneHeight = (heightLane - 1.5) * 2.0 + 4.0; // RAISED 2 SWIMLANES UP: +4.0 height offset (NO FLOOR CLIPPING)
       const orbitRadius = 1.5 + Math.random() * 2; // Varied orbit sizes
       const orbitSpeed = (Math.random() > 0.5 ? 1 : -1) * (0.1 + Math.random() * 0.2); // Random clockwise/counterclockwise
       const orbitPhase = Math.random() * Math.PI * 2; // Random starting position on circle
@@ -918,7 +918,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
           
           // Smooth lane transitions
           if (userData.currentLane !== userData.targetLane) {
-            const targetLaneHeight = (userData.targetLane - 1.5) * 2.0; // Updated to match new lane spacing
+            const targetLaneHeight = (userData.targetLane - 1.5) * 2.0 + 4.0; // RAISED 2 SWIMLANES UP: Match spawn height
             userData.laneHeight = THREE.MathUtils.lerp(userData.laneHeight, targetLaneHeight, deltaTime * 0.5);
             
             // Complete lane switch when close enough
@@ -1130,11 +1130,11 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     }
   };
 
-  // 🎬 REDESIGNED HEXAGONAL CAMERA SYSTEM - Perfect Hexagon Positioning
+  // 🎬 OPTIMIZED HEXAGONAL CAMERA SYSTEM - PERFECT PAGE TRANSITIONS
   const updateCameraMovement = (elapsedTime: number) => {
     if (!cameraRef.current) return;
     
-    // PERFECT HEXAGONAL PROGRESSION - Each camera angle represents one side of the hexagon
+    // **REFINED HEXAGONAL PROGRESSION** - Balanced positioning for smooth transitions
     const cameraConfigs = [
       // Page 0: Front face of hexagon (0°) - Hero Introduction
       { radius: 15, height: 4, angle: 0, tilt: -0.05, label: "Front Face" },
@@ -1142,12 +1142,14 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       { radius: 15, height: 4, angle: Math.PI / 3, tilt: -0.05, label: "Right-Front Face" },
       // Page 2: Right-back face (120°) - Comparison view
       { radius: 15, height: 4, angle: (2 * Math.PI) / 3, tilt: -0.05, label: "Right-Back Face" },
-      // Page 3: Back face (180°) - THERION AI showcase
+      // Page 3: Back face (180°) - User Segments showcase
       { radius: 15, height: 4, angle: Math.PI, tilt: -0.05, label: "Back Face" },
-      // Page 4: Left-back face (240°) - Marketplace view
+      // Page 4: Left-back face (240°) - THERION AI showcase  
       { radius: 15, height: 4, angle: (4 * Math.PI) / 3, tilt: -0.05, label: "Left-Back Face" },
-      // Page 5: Left-front face (300°) - Call to Action
-      { radius: 15, height: 4, angle: (5 * Math.PI) / 3, tilt: -0.05, label: "Left-Front Face" }
+      // Page 5: Left-front face (300°) - Marketplace view **CORRECTED POSITION**
+      { radius: 15, height: 4, angle: (5 * Math.PI) / 3, tilt: -0.05, label: "Left-Front Face" },
+      // Page 6: Near-front face (330°) - Call to Action **PROPER FINAL POSITION**
+      { radius: 15, height: 4, angle: (11 * Math.PI) / 6, tilt: -0.05, label: "Near-Front Face" }
     ];
     
     const currentConfig = cameraConfigs[currentSection] || cameraConfigs[0];
