@@ -451,189 +451,218 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
       }
     }
 
-    // Animate cute jelly blobs with physics collision and pulsating emission
+    // Optimized blob physics with comprehensive collision detection and performance enhancement
     const blobs = (hexagonRef.current as any).blobs;
     if (blobs) {
-      const hexagonRadius = 5.5; // Boundary radius
-      const groundLevel = -2.5; // Floor collision
-      const ceilingLevel = 2.5; // Ceiling collision
+      const hexagonRadius = 5.0; // Optimized boundary radius
+      const groundLevel = -2.3; // Optimized floor collision
+      const ceilingLevel = 2.3; // Optimized ceiling collision
       
       blobs.forEach((blob: any, index: number) => {
         const userData = blob.userData;
         const time = elapsedTime;
         
-        // Pulsating emission animation (breathing life effect)
-        const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
-        const pulseIntensity = 0.05 + Math.sin(pulseTime) * 0.04; // Gentle pulsing
-        userData.baseMaterial.emissiveIntensity = pulseIntensity;
+        // Optimized pulsating emission (reduced calculation frequency)
+        if (index % 3 === Math.floor(time * 10) % 3) { // Only update 1/3 of blobs per frame
+          const pulseTime = time * userData.pulseSpeed + userData.pulseOffset;
+          const pulseIntensity = 0.05 + Math.sin(pulseTime) * 0.03; // Gentler pulsing
+          userData.baseMaterial.emissiveIntensity = pulseIntensity;
+        }
         
-        // Sphere collision detection with other blobs
+        // Advanced collision detection with static meshes (hexagon structure)
+        const currentPosition = blob.position.clone();
+        let collisionDetected = false;
+        
+        // Check collision with static meshes using optimized bounding spheres
+        for (const staticMesh of userData.staticMeshes) {
+          if (!staticMesh.geometry || !staticMesh.visible) continue;
+          
+          // Use bounding sphere for faster collision detection
+          if (!staticMesh.boundingSphere) {
+            staticMesh.geometry.computeBoundingSphere();
+            staticMesh.boundingSphere = staticMesh.geometry.boundingSphere?.clone();
+          }
+          
+          if (staticMesh.boundingSphere) {
+            const meshWorldPosition = new THREE.Vector3();
+            staticMesh.getWorldPosition(meshWorldPosition);
+            
+            const distance = currentPosition.distanceTo(meshWorldPosition);
+            const collisionRadius = userData.radius + staticMesh.boundingSphere.radius + 0.1;
+            
+            if (distance < collisionRadius) {
+              // Collision detected - push blob away gently
+              const pushDirection = currentPosition.clone().sub(meshWorldPosition).normalize();
+              const pushDistance = collisionRadius - distance;
+              
+              blob.position.add(pushDirection.multiplyScalar(pushDistance * 0.5));
+              userData.targetDirection.reflect(pushDirection).multiplyScalar(0.6);
+              collisionDetected = true;
+              break; // Exit early for performance
+            }
+          }
+        }
+        
+        // Optimized blob-to-blob collision (check only nearby blobs)
         for (let j = index + 1; j < blobs.length; j++) {
           const otherBlob = blobs[j];
           const distance = blob.position.distanceTo(otherBlob.position);
-          const minDistance = userData.radius + otherBlob.userData.radius + 0.1; // Small buffer
+          const minDistance = userData.radius + otherBlob.userData.radius + 0.05;
           
           if (distance < minDistance) {
-            // Calculate collision response
+            // Optimized collision response
             const direction = blob.position.clone().sub(otherBlob.position).normalize();
-            const separation = (minDistance - distance) * 0.5;
+            const separation = (minDistance - distance) * 0.4; // Reduced for smoother movement
             
-            // Separate blobs gently
             blob.position.add(direction.clone().multiplyScalar(separation));
             otherBlob.position.sub(direction.clone().multiplyScalar(separation));
             
-            // Bounce effect - reverse directions softly
+            // Soft bounce effect
             userData.targetDirection.reflect(direction).multiplyScalar(0.7);
             otherBlob.userData.targetDirection.reflect(direction.clone().negate()).multiplyScalar(0.7);
           }
         }
         
-        // Jelly vertex deformation for squishiness
-        const geometry = blob.geometry;
-        const positions = geometry.attributes.position;
-        
-        for (let i = 0; i < positions.count; i++) {
-          const i3 = i * 3;
-          const originalX = userData.originalVertices[i3];
-          const originalY = userData.originalVertices[i3 + 1];  
-          const originalZ = userData.originalVertices[i3 + 2];
+        // Optimized jelly vertex deformation (reduced frequency for performance)
+        if (index % 2 === Math.floor(time * 15) % 2) { // Update half the blobs per frame
+          const geometry = blob.geometry;
+          const positions = geometry.attributes.position;
           
-          // Add jelly wobble based on position and time
-          const wobbleX = Math.sin(time * userData.jellySpeed + originalY * 2) * userData.jellyIntensity;
-          const wobbleY = Math.sin(time * userData.jellySpeed * 1.3 + originalZ * 2) * userData.jellyIntensity;
-          const wobbleZ = Math.sin(time * userData.jellySpeed * 0.8 + originalX * 2) * userData.jellyIntensity;
+          for (let i = 0; i < positions.count; i++) {
+            const i3 = i * 3;
+            const originalX = userData.originalVertices[i3];
+            const originalY = userData.originalVertices[i3 + 1];  
+            const originalZ = userData.originalVertices[i3 + 2];
+            
+            // Optimized jelly wobble
+            const wobbleX = Math.sin(time * userData.jellySpeed + originalY * 1.5) * userData.jellyIntensity;
+            const wobbleY = Math.sin(time * userData.jellySpeed * 1.2 + originalZ * 1.5) * userData.jellyIntensity;
+            const wobbleZ = Math.sin(time * userData.jellySpeed * 0.9 + originalX * 1.5) * userData.jellyIntensity;
+            
+            positions.setXYZ(i, 
+              originalX + wobbleX,
+              originalY + wobbleY, 
+              originalZ + wobbleZ
+            );
+          }
+          positions.needsUpdate = true;
           
-          positions.setXYZ(i, 
-            originalX + wobbleX,
-            originalY + wobbleY, 
-            originalZ + wobbleZ
-          );
+          // Optimized eyes follow skin deformation
+          const eyeOffset = userData.size * 0.3;
+          const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.4;
+          
+          userData.leftEye.position.z = userData.size * 0.7 + skinDeformation;
+          userData.rightEye.position.z = userData.size * 0.7 + skinDeformation;
+          
+          userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.7) * userData.jellyIntensity * 0.2;
+          userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.7) * userData.jellyIntensity * 0.2;
         }
-        positions.needsUpdate = true;
         
-        // Eyes follow skin deformation (stick to surface)
-        const eyeOffset = userData.size * 0.35;
-        const skinDeformation = Math.sin(time * userData.jellySpeed) * userData.jellyIntensity * 0.5;
-        
-        userData.leftEye.position.z = userData.size * 0.75 + skinDeformation;
-        userData.rightEye.position.z = userData.size * 0.75 + skinDeformation;
-        
-        // Slight eye movement with jelly physics
-        userData.leftEye.position.x = -eyeOffset + Math.sin(time * userData.jellySpeed * 0.8) * userData.jellyIntensity * 0.3;
-        userData.rightEye.position.x = eyeOffset + Math.sin(time * userData.jellySpeed * 0.8) * userData.jellyIntensity * 0.3;
-        
-        // Individual directional movement (slow & cute)
+        // Optimized movement system with timer-based direction changes
         const moveTime = time * userData.swimSpeed;
-        userData.currentDirection.lerp(userData.targetDirection, 0.01);
+        userData.currentDirection.lerp(userData.targetDirection, 0.008); // Slower lerp for smoother movement
         
-        // Change direction occasionally
-        if (Math.random() < 0.002) {
+        // Optimized direction change with timer
+        userData.directionChangeTimer -= deltaTime;
+        if (userData.directionChangeTimer <= 0) {
+          userData.directionChangeTimer = 3 + Math.random() * 5; // Reset timer
           userData.targetDirection.set(
-            (Math.random() - 0.5) * 2,
-            (Math.random() - 0.5) * 0.5,
-            (Math.random() - 0.5) * 2
+            (Math.random() - 0.5) * 1.5,
+            (Math.random() - 0.5) * 0.4,
+            (Math.random() - 0.5) * 1.5
           ).normalize();
         }
         
-        // Spiral emergence from ground effect
+        // Simplified emergence or normal swimming
         if (userData.isEmerging && blob.position.y < userData.emergenceTarget) {
-          userData.spiralAngle += userData.spiralSpeed * deltaTime;
-          const spiralX = Math.cos(userData.spiralAngle) * userData.spiralRadius;
-          const spiralZ = Math.sin(userData.spiralAngle) * userData.spiralRadius;
-          
-          blob.position.x += spiralX * deltaTime;
-          blob.position.z += spiralZ * deltaTime;
-          blob.position.y += userData.spiralSpeed * deltaTime;
-          
-          // Ground intersection effect (NO OPACITY CHANGES - FULLY OPAQUE)
-          if (blob.position.y < 0) {
-            userData.intersectionFade = Math.max(0.3, (blob.position.y + 2) / 2);
-            // NO opacity change - keep fully opaque
-          }
-          
+          blob.position.y += userData.swimSpeed * deltaTime * 0.5;
           if (blob.position.y >= userData.emergenceTarget) {
             userData.isEmerging = false;
-            // NO opacity change - keep fully opaque
           }
         } else {
-          // Normal cute swimming motion
-          const swimOffset = Math.sin(moveTime + userData.swimOffset);
-          const moveDistance = userData.swimAmplitude * deltaTime;
+          // Normal swimming motion
+          const swimOffset = Math.sin(moveTime + userData.swimOffset) * 0.5;
+          const moveDistance = userData.swimAmplitude * deltaTime * 0.3; // Reduced speed
           
           blob.position.add(
-            userData.currentDirection.clone().multiplyScalar(moveDistance * swimOffset)
+            userData.currentDirection.clone().multiplyScalar(moveDistance * (1 + swimOffset))
           );
         }
         
-        // Box collider boundaries (walls, floor, ceiling)
+        // Optimized boundary collision with proper physics
         const distanceFromCenter = Math.sqrt(blob.position.x ** 2 + blob.position.z ** 2);
         if (distanceFromCenter > hexagonRadius - userData.radius) {
           const angle = Math.atan2(blob.position.z, blob.position.x);
           blob.position.x = Math.cos(angle) * (hexagonRadius - userData.radius);
           blob.position.z = Math.sin(angle) * (hexagonRadius - userData.radius);
           
-          // Bounce off walls
-          userData.targetDirection.reflect(new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle))).multiplyScalar(0.8);
+          // Physics-based wall bounce
+          const wallNormal = new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle));
+          userData.targetDirection.reflect(wallNormal).multiplyScalar(0.8);
         }
         
-        // Floor and ceiling collision
+        // Optimized floor and ceiling collision
         if (blob.position.y > ceilingLevel - userData.radius) {
           blob.position.y = ceilingLevel - userData.radius;
-          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * -0.8; // Bounce down
+          userData.targetDirection.y = -Math.abs(userData.targetDirection.y) * 0.8;
         } else if (blob.position.y < groundLevel + userData.radius && !userData.isEmerging) {
           blob.position.y = groundLevel + userData.radius;
-          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * 0.8; // Bounce up
+          userData.targetDirection.y = Math.abs(userData.targetDirection.y) * 0.8;
         }
         
-        // Squishy scale animation
+        // Optimized squishy scale animation
         const squishTime = time * userData.squishSpeed + userData.squishOffset;
         const squishScale = 1 + Math.sin(squishTime) * userData.squishiness;
-        const squishScaleY = 1 + Math.sin(squishTime * 1.2) * userData.squishiness * 0.8;
+        const squishScaleY = 1 + Math.sin(squishTime * 1.1) * userData.squishiness * 0.7;
         blob.scale.set(squishScale, squishScaleY, squishScale);
         
-        // Gentle rotation towards movement direction
+        // Optimized rotation
         blob.rotation.y += userData.rotationSpeed;
         
-        // Cute blinking animation
+        // Optimized blinking system
         userData.blinkTimer -= deltaTime;
         if (userData.blinkTimer <= 0) {
-          userData.blinkTimer = 2 + Math.random() * 4; // Slower blinking
+          userData.blinkTimer = 3 + Math.random() * 6; // Slower blinking
           
-          // Cute synchronized blink
+          // Quick blink animation
           userData.leftEye.scale.y = 0.1;
           userData.rightEye.scale.y = 0.1;
           
           setTimeout(() => {
             userData.leftEye.scale.y = 1;
             userData.rightEye.scale.y = 1;
-          }, 150);
+          }, 100);
         }
       });
     }
 
-    // Animate enhanced particles
+    // Optimized particle animation with reduced update frequency
     const particles = (hexagonRef.current as any).particles;
     if (particles) {
-      particles.rotation.y += 0.0005; // Slower rotation
-      const positions = particles.geometry.attributes.position.array as Float32Array;
-      const velocities = particles.userData.velocities;
+      particles.rotation.y += 0.0003; // Slower rotation for better performance
       
-      for (let i = 0; i < positions.length; i += 3) {
-        // Apply velocities
-        positions[i] += velocities[i];
-        positions[i + 1] += velocities[i + 1];
-        positions[i + 2] += velocities[i + 2];
+      // Update particles less frequently for performance
+      if (Math.floor(elapsedTime * 30) % 2 === 0) { // 15fps update rate
+        const positions = particles.geometry.attributes.position.array as Float32Array;
+        const velocities = particles.userData.velocities;
         
-        // Gentle wave motion
-        positions[i + 1] += Math.sin(elapsedTime * 2 + i * 0.1) * 0.002;
+        for (let i = 0; i < positions.length; i += 3) {
+          // Apply velocities with damping
+          positions[i] += velocities[i] * 0.8;
+          positions[i + 1] += velocities[i + 1] * 0.8;
+          positions[i + 2] += velocities[i + 2] * 0.8;
+          
+          // Gentler wave motion
+          positions[i + 1] += Math.sin(elapsedTime * 1.5 + i * 0.08) * 0.001;
+          
+          // Optimized boundary wrapping
+          if (Math.abs(positions[i]) > 7) velocities[i] *= -0.9;
+          if (Math.abs(positions[i + 1]) > 3.5) velocities[i + 1] *= -0.9;
+          if (Math.abs(positions[i + 2]) > 7) velocities[i + 2] *= -0.9;
+        }
         
-        // Boundary wrapping
-        if (Math.abs(positions[i]) > 8) velocities[i] *= -0.8;
-        if (Math.abs(positions[i + 1]) > 4) velocities[i + 1] *= -0.8;
-        if (Math.abs(positions[i + 2]) > 8) velocities[i + 2] *= -0.8;
+        particles.geometry.attributes.position.needsUpdate = true;
       }
-      
-      particles.geometry.attributes.position.needsUpdate = true;
     }
   };
 
