@@ -48,8 +48,7 @@ export function MarketplaceSection() {
   ];
 
   const handleExploreMarketplace = () => {
-    // Show marketplace info
-    alert('Marketplace coming soon! This will be an integrated plugin and template store.');
+    window.open('https://marketplace.deusvault.com', '_blank');
   };
 
   const handleStartSelling = () => {
