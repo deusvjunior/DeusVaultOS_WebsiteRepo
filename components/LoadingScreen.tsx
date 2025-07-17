@@ -5,81 +5,71 @@ interface LoadingScreenProps {
   onLoadingComplete: () => void;
 }
 
-interface DataStream {
+interface Bubble {
   id: number;
   x: number;
-  characters: string;
+  y: number;
+  size: number;
   speed: number;
   opacity: number;
+  color: string;
+  delay: number;
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [dataStreams, setDataStreams] = useState<DataStream[]>([]);
-  const [loadingPhase, setLoadingPhase] = useState<'boot' | 'systems' | 'complete'>('boot');
-  const [currentText, setCurrentText] = useState('INITIALIZING DEUSVAULTOS...');
+  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [phase, setPhase] = useState<'spawning' | 'filling' | 'revealing' | 'complete'>('spawning');
 
-  // Matrix-style data streams
+  // Generate dynamic bubbles
   useEffect(() => {
-    const generateDataStreams = () => {
-      const newStreams: DataStream[] = [];
-      const chars = '01デウスヴォルトABCDEF0123456789アイウエオカキクケコ';
+    const generateBubbles = () => {
+      const newBubbles: Bubble[] = [];
+      const colors = ['#00ffff', '#ff6600', '#9933ff', '#00ff66', '#ff0099', '#66d9ff'];
       
-      for (let i = 0; i < 25; i++) {
-        newStreams.push({
+      for (let i = 0; i < 120; i++) {
+        newBubbles.push({
           id: i,
-          x: (i * 4) + Math.random() * 2,
-          characters: Array.from({ length: 20 }, () => 
-            chars[Math.floor(Math.random() * chars.length)]
-          ).join(''),
-          speed: 0.5 + Math.random() * 1.5,
-          opacity: 0.3 + Math.random() * 0.7
+          x: Math.random() * 100,
+          y: 100 + Math.random() * 20, // Start below screen
+          size: 8 + Math.random() * 24,
+          speed: 0.5 + Math.random() * 2,
+          opacity: 0.4 + Math.random() * 0.6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          delay: i * 50 // Stagger bubble appearance
         });
       }
-      setDataStreams(newStreams);
+      setBubbles(newBubbles);
     };
 
-    generateDataStreams();
+    generateBubbles();
   }, []);
 
-  // Fast loading progression with realistic system messages
+  // Progress simulation with bubble-like progression
   useEffect(() => {
-    const messages = [
-      'INITIALIZING DEUSVAULTOS...',
-      'LOADING QUANTUM CORE...',
-      'ESTABLISHING AI BRIDGE...',
-      'MOUNTING FILESYSTEM...',
-      'ACTIVATING NEURAL NETWORKS...',
-      'SYNCHRONIZING BLOCKCHAIN...',
-      'READY - DEUS VULT!'
-    ];
-
     const interval = setInterval(() => {
       setProgress(prev => {
-        const increment = 8 + Math.random() * 12; // Much faster loading
-        const newProgress = Math.min(prev + increment, 100);
+        const newProgress = prev + (0.8 + Math.random() * 1.2);
         
-        // Update loading messages based on progress
-        const messageIndex = Math.floor((newProgress / 100) * (messages.length - 1));
-        setCurrentText(messages[messageIndex]);
-        
-        if (newProgress >= 50 && loadingPhase === 'boot') {
-          setLoadingPhase('systems');
+        if (newProgress >= 30 && phase === 'spawning') {
+          setPhase('filling');
         }
-        
+        if (newProgress >= 80 && phase === 'filling') {
+          setPhase('revealing');
+        }
         if (newProgress >= 100) {
           clearInterval(interval);
-          setLoadingPhase('complete');
-          setTimeout(onLoadingComplete, 800); // Faster completion
+          setPhase('complete');
+          setTimeout(onLoadingComplete, 1500);
           return 100;
         }
         
-        return newProgress;
+        return Math.min(newProgress, 100);
       });
-    }, 80); // Faster updates
+    }, 60);
 
     return () => clearInterval(interval);
-  }, [loadingPhase, onLoadingComplete]);
+  }, [phase, onLoadingComplete]);
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">

@@ -10,7 +10,7 @@ import {
     MessageCircle
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import LoadingScreen from './components/LoadingScreen_Spectacular';
+import LoadingScreen from './components/LoadingScreen';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import accurate content components
@@ -274,8 +274,8 @@ export default function App() {
         </div>
       </motion.div>
 
-      {/* Content Area - Proper header spacing and margins */}
-      <div className="relative z-20 pt-20"> {/* Add top padding for header */}
+      {/* Content Area - Much more transparent */}
+      <div className="relative z-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSection}
@@ -283,7 +283,6 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="min-h-screen flex items-center justify-center px-4 py-8"
           >
             {sections[currentSection].component}
           </motion.div>

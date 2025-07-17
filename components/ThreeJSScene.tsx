@@ -30,7 +30,7 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
   // Professional lighting setup for depth and atmosphere
   const setupAdvancedLighting = (scene: THREE.Scene) => {
     // Key light - primary illumination (brighter)
-    const keyLight = new THREE.DirectionalLight(0x00e1ff, 2.0); // Increased intensity
+    const keyLight = new THREE.DirectionalLight(0x00e1ff, 1.2);
     keyLight.position.set(10, 10, 5);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
@@ -40,73 +40,69 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
     scene.add(keyLight);
 
     // Fill light - soften shadows (brighter)
-    const fillLight = new THREE.DirectionalLight(0x39ff14, 1.2); // Increased intensity
+    const fillLight = new THREE.DirectionalLight(0x39ff14, 0.6);
     fillLight.position.set(-5, 5, 5);
     scene.add(fillLight);
 
     // Rim light - edge definition (brighter)
-    const rimLight = new THREE.DirectionalLight(0xffd700, 1.2); // Increased intensity
+    const rimLight = new THREE.DirectionalLight(0xffd700, 0.8);
     rimLight.position.set(0, -5, -10);
     scene.add(rimLight);
 
     // Ambient light - global illumination
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); // Brighter ambient
+    const ambientLight = new THREE.AmbientLight(0x1a1d20, 0.2);
     scene.add(ambientLight);
 
     // Environment light for reflections
-    const hemisphereLight = new THREE.HemisphereLight(0x00e1ff, 0x131619, 0.5); // Brighter hemisphere
+    const hemisphereLight = new THREE.HemisphereLight(0x00e1ff, 0x131619, 0.3);
     scene.add(hemisphereLight);
   };
 
-  // Enhanced living blobs with silicone material and compact clustering
+  // Enhanced living blobs with organic movement and personality
   const createLivingBlobs = (group: THREE.Group) => {
-    const blobCount = 18;
+    const blobCount = 12; // More blobs for variety
     const blobs: any[] = [];
+
     for (let i = 0; i < blobCount; i++) {
-      // Slightly larger blobs for visibility
-      const baseSize = 0.18 + Math.random() * 0.12; // 0.18 to 0.3
-      const scaleX = 0.9 + Math.random() * 0.2; // 0.9 to 1.1
-      const scaleY = 0.9 + Math.random() * 0.2;
-      const scaleZ = 0.9 + Math.random() * 0.2;
+      // Much more varied blob sizes and shapes
+      const baseSize = 0.2 + Math.random() * 0.6; // 0.2 to 0.8
+      const scaleX = 0.8 + Math.random() * 0.4; // 0.8 to 1.2
+      const scaleY = 0.8 + Math.random() * 0.4;
+      const scaleZ = 0.8 + Math.random() * 0.4;
       
-      const blobGeometry = new THREE.SphereGeometry(baseSize, 20, 16);
+      const blobGeometry = new THREE.SphereGeometry(baseSize, 16, 12);
       
-      // Silicone material with subsurface scattering and slight emission
-      const siliconeHue = 0.15 + Math.random() * 0.7; // Varied hues but more natural
-      const siliconeSat = 0.3 + Math.random() * 0.4; // 0.3 to 0.7 saturation
-      const siliconeLightness = 0.6 + Math.random() * 0.3; // 0.6 to 0.9 lightness
-      
-      const siliconeColor = new THREE.Color().setHSL(siliconeHue, siliconeSat, siliconeLightness);
-      const emissiveColor = siliconeColor.clone().multiplyScalar(0.15); // Subtle emission
+      // More varied materials and colors
+      const hue = Math.random(); // Full hue range
+      const saturation = 0.5 + Math.random() * 0.5; // 0.5 to 1.0
+      const lightness = 0.4 + Math.random() * 0.4; // 0.4 to 0.8
       
       const blobMaterial = new THREE.MeshPhysicalMaterial({
-        color: siliconeColor,
-        metalness: 0.1,
-        roughness: 0.3,
-        clearcoat: 0.8,
-        clearcoatRoughness: 0.1,
-        transmission: 0.0, // Fully opaque
-        thickness: 0.0, // No subsurface
-        ior: 1.4,
-        emissive: emissiveColor,
-        transparent: false,
-        opacity: 1.0,
+        color: new THREE.Color().setHSL(hue, saturation, lightness),
+        metalness: Math.random() * 0.3,
+        roughness: 0.6 + Math.random() * 0.4,
+        clearcoat: Math.random() * 0.5,
+        transmission: Math.random() * 0.2,
+        thickness: 0.3 + Math.random() * 0.4,
+        transparent: true,
+        opacity: 0.7 + Math.random() * 0.3,
       });
 
       const blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
       
-      // Tight clustering around center
-      const clusterAngle = (i / blobCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.8;
-      const clusterRadius = 0.3 + Math.random() * 0.8; // 0.3 to 1.1 units from center
-      const clusterHeight = (Math.random() - 0.5) * 0.6; // -0.3 to 0.3 height variation
+      // Much more random positioning in 3D space
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 2 + Math.random() * 4; // Wider spread: 2 to 6
+      const height = (Math.random() - 0.5) * 6; // Much wider height range
+      const depth = (Math.random() - 0.5) * 3; // Add depth variation
       
       blobMesh.position.set(
-        Math.cos(clusterAngle) * clusterRadius,
-        clusterHeight,
-        Math.sin(clusterAngle) * clusterRadius
+        Math.cos(angle) * radius + depth,
+        height,
+        Math.sin(angle) * radius + depth
       );
       
-      // Subtle scale variation
+      // Apply random scale to each blob
       blobMesh.scale.set(scaleX, scaleY, scaleZ);
       
       // Random initial rotation
@@ -116,67 +112,67 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
         Math.random() * Math.PI * 2
       );
 
-      // Smaller, more subtle eyes
-      const eyeSize = baseSize * 0.12;
+      // Create eyes with more variation
+      const eyeSize = baseSize * 0.15; // Scale eyes with blob size
       const eyeGeometry = new THREE.SphereGeometry(eyeSize, 8, 6);
       const eyeMaterial = new THREE.MeshBasicMaterial({ 
-        color: Math.random() > 0.8 ? 0x330066 : 0x111111 // Dark eyes with occasional purple
+        color: Math.random() > 0.7 ? 0xff0000 : 0x000000 // Some red eyes!
       });
       
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       
-      // Position eyes closer to blob surface
-      const eyeOffset = baseSize * 0.25;
-      leftEye.position.set(-eyeOffset, eyeOffset * 0.3, baseSize * 0.85);
-      rightEye.position.set(eyeOffset, eyeOffset * 0.3, baseSize * 0.85);
+      // Position eyes based on blob size
+      const eyeOffset = baseSize * 0.3;
+      leftEye.position.set(-eyeOffset, eyeOffset * 0.5, baseSize * 0.8);
+      rightEye.position.set(eyeOffset, eyeOffset * 0.5, baseSize * 0.8);
       
       blobMesh.add(leftEye);
       blobMesh.add(rightEye);
 
-      // Refined animation data with more controlled movement
+      // Enhanced animation data with more personality
       const blobData = {
         mesh: blobMesh,
         leftEye,
         rightEye,
         originalPosition: blobMesh.position.clone(),
         
-        // Gentle swimming motion parameters
-        swimSpeed: 0.4 + Math.random() * 0.4, // 0.4 to 0.8 (more controlled)
+        // Swimming motion parameters
+        swimSpeed: 0.3 + Math.random() * 0.8, // Much more varied speeds
         swimOffset: Math.random() * Math.PI * 2,
-        swimAmplitude: 0.15 + Math.random() * 0.25, // 0.15 to 0.4 (smaller movements)
-        swimDirectionX: (Math.random() - 0.5) * 1.2,
-        swimDirectionY: (Math.random() - 0.5) * 0.8, // Less vertical movement
-        swimDirectionZ: (Math.random() - 0.5) * 1.2,
+        swimAmplitude: 0.5 + Math.random() * 1.5, // Larger movement range
+        swimDirectionX: (Math.random() - 0.5) * 2,
+        swimDirectionY: (Math.random() - 0.5) * 2,
+        swimDirectionZ: (Math.random() - 0.5) * 2,
         
-        // Smoother rotation animation
-        rotationSpeedX: (Math.random() - 0.5) * 0.015,
-        rotationSpeedY: (Math.random() - 0.5) * 0.015,
-        rotationSpeedZ: (Math.random() - 0.5) * 0.015,
+        // Rotation animation
+        rotationSpeedX: (Math.random() - 0.5) * 0.02,
+        rotationSpeedY: (Math.random() - 0.5) * 0.02,
+        rotationSpeedZ: (Math.random() - 0.5) * 0.02,
         
-        // Gentle breathing animation
-        breathingSpeed: 0.8 + Math.random() * 0.6, // 0.8 to 1.4 (more consistent)
+        // Scale breathing animation
+        breathingSpeed: 0.5 + Math.random() * 1.0,
         breathingOffset: Math.random() * Math.PI * 2,
-        breathingAmplitude: 0.05 + Math.random() * 0.1, // 0.05 to 0.15 (subtle)
+        breathingAmplitude: 0.1 + Math.random() * 0.2,
         originalScale: { x: scaleX, y: scaleY, z: scaleZ },
         
-        // Refined eye animation
-        blinkTimer: Math.random() * 4 + 2, // 2-6 seconds between blinks
-        blinkDuration: 0.15 + Math.random() * 0.1, // 0.15-0.25 seconds
+        // Eye animation
+        blinkTimer: Math.random() * 5,
+        blinkDuration: 0.1 + Math.random() * 0.1,
         isBlinking: false,
         lookDirection: new THREE.Vector3(),
-        lookTimer: Math.random() * 2 + 1, // 1-3 seconds look changes
-        lookSpeed: 0.015 + Math.random() * 0.02, // 0.015-0.035 (smoother)
+        lookTimer: Math.random() * 3,
+        lookSpeed: 0.02 + Math.random() * 0.03,
         
-        // Gentle orbital motion around cluster center
-        orbitalAngle: clusterAngle + Math.random() * 0.3,
-        orbitalSpeed: (Math.random() - 0.5) * 0.003, // Very slow orbital drift
-        orbitalRadius: clusterRadius,
+        // Orbital motion around center
+        orbitalAngle: Math.random() * Math.PI * 2,
+        orbitalSpeed: (Math.random() - 0.5) * 0.005, // Some clockwise, some counter
+        orbitalRadius: radius,
         
-        // Subtle personality traits
-        isHyperactive: Math.random() > 0.85, // 15% chance (less chaotic)
-        isShy: Math.random() > 0.75, // 25% chance
-        energy: 0.7 + Math.random() * 0.3, // 0.7-1.0 (more consistent)
+        // Personality traits
+        isHyperactive: Math.random() > 0.7, // 30% chance of hyperactivity
+        isShy: Math.random() > 0.8, // 20% chance of being shy
+        energy: Math.random(), // Overall energy level
       };
 
       blobs.push(blobData);
@@ -572,8 +568,8 @@ const ThreeJSScene: React.FC<ThreeJSSceneProps> = ({
 
     // Advanced scene setup with Apple-grade rendering
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x131619); // Set to visible dark color
-    scene.fog = new THREE.Fog(0x000000, 5, 25);
+    scene.background = null; // Transparent for layering
+    scene.fog = new THREE.Fog(0x000000, 5, 25); // Depth perception
     sceneRef.current = scene;
 
     // Professional camera setup with film-like characteristics
