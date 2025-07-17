@@ -173,6 +173,31 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               className="text-center"
             >
+              {/* DVLogo with neon glow effect */}
+              <motion.div 
+                className="mb-4 relative flex justify-center"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ 
+                  duration: 1.5, 
+                  type: "spring", 
+                  stiffness: 100,
+                  delay: 0.5 
+                }}
+              >
+                <div className="relative">
+                  <img 
+                    src="/DVLogo.png" 
+                    alt="DeusVault OS" 
+                    className="w-16 h-16 relative z-10 filter drop-shadow-lg"
+                  />
+                  {/* Neon glow rings */}
+                  <div className="absolute inset-0 w-16 h-16 rounded-full bg-cyan-400/30 blur-xl animate-pulse"></div>
+                  <div className="absolute inset-1 w-14 h-14 rounded-full bg-yellow-400/20 blur-lg animate-pulse animation-delay-300"></div>
+                  <div className="absolute inset-2 w-12 h-12 rounded-full bg-purple-400/20 blur-md animate-pulse animation-delay-600"></div>
+                </div>
+              </motion.div>
+              
               <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-emerald-400 to-yellow-400 bg-clip-text text-transparent mb-2">
                 DEUS VAULT OS
               </h1>

@@ -190,15 +190,14 @@ export default function App() {
               
               {/* Logo */}
               <div className="flex items-center gap-4">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" className="w-full h-full text-cyan-400">
-                    <polygon
-                      points="12,2 20,6 20,18 12,22 4,18 4,6"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                  </svg>
+                <div className="w-8 h-8 flex items-center justify-center relative">
+                  <img 
+                    src="/DVLogo.png" 
+                    alt="DeusVault OS" 
+                    className="w-full h-full object-contain"
+                  />
+                  {/* Subtle glow effect */}
+                  <div className="absolute inset-0 w-full h-full rounded-full bg-cyan-400/20 blur-sm animate-pulse"></div>
                 </div>
                 <div>
                   <h1 className="text-xl text-white font-bold" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
