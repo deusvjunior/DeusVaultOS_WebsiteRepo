@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Brand System Demonstration</title>
+    <link rel="stylesheet" href="nexus_design_system.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--tldark-primary);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--glass-gradient-1);
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .demo-container {
+            padding: var(--space-8);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .brand-showcase {
+            text-align: center;
+            margin-bottom: var(--space-16);
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-8);
+            margin-top: var(--space-12);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Brand Identity Showcase -->
+        <div class="brand-showcase">
+            <h1 class="nexus-heading nexus-heading--hero nexus-animate--glow">NEXUS</h1>
+            <p class="nexus-text" style="font-size: var(--font-size-xl); color: var(--text-primary); margin: var(--space-4) 0;">
+                TLDark Enhanced Intelligence
+            </p>
+            <p class="nexus-text" style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+                Premium glassmorphic intelligence platform for sophisticated users
+            </p>
+        </div>
+
+        <!-- Component Demonstrations -->
+        <div class="component-grid">
+            <!-- Glassmorphic Buttons -->
+            <div class="nexus-card">
+                <h3 class="nexus-heading" style="margin-bottom: var(--space-4);">Glassmorphic Interface</h3>
+                <div class="nexus-flex" style="flex-direction: column; align-items: stretch; gap: var(--space-3);">
+                    <button class="nexus-btn nexus-btn--primary">
+                        🔗 Connect Intelligence
+                    </button>
+                    <button class="nexus-btn nexus-btn--secondary">
+                        ⚡ Process Data
+                    </button>
+                    <button class="nexus-btn nexus-btn--ghost">
+                        🎯 Execute Command
+                    </button>
+                </div>
+            </div>
+
+            <!-- Glass Cards -->
+            <div class="nexus-card nexus-card--consciousness">
+                <h3 class="nexus-heading" style="color: var(--text-primary); margin-bottom: var(--space-4);">
+                    Premium Intelligence
+                </h3>
+                <p class="nexus-text" style="color: var(--text-muted);">
+                    Experience enhanced cognitive processing through sophisticated glassmorphic design with premium dark aesthetics.
+                </p>
+                <div style="margin-top: var(--space-4);">
+                    <span style="color: var(--accent-silver); font-weight: 600;">Status:</span>
+                    <span style="color: var(--text-primary);" class="nexus-animate--pulse">● Active</span>
+                </div>
+            </div>
+
+            <!-- Glass Interface System -->
+            <div class="nexus-card">
+                <h3 class="nexus-heading" style="margin-bottom: var(--space-4);">Glass Interface</h3>
+                <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                    <input class="nexus-input" placeholder="Enter command query..." type="text">
+                    <input class="nexus-input" placeholder="Configuration parameters..." type="text">
+                    <button class="nexus-btn nexus-btn--primary" style="align-self: flex-start;">
+                        🚀 Execute
+                    </button>
+                </div>
+            </div>
+
+            <!-- Typography Showcase -->
+            <div class="nexus-card">
+                <h1 class="nexus-heading" style="font-size: var(--font-size-3xl); margin-bottom: var(--space-2);">
+                    TLDark Typography
+                </h1>
+                <h2 class="nexus-heading" style="font-size: var(--font-size-xl); margin-bottom: var(--space-2);">
+                    Glassmorphic Hierarchy
+                </h2>
+                <p class="nexus-text">
+                    Premium typography system designed for sophisticated dark interfaces with glass aesthetics.
+                </p>
+                <p class="nexus-text" style="font-size: var(--font-size-sm); margin-top: var(--space-3);">
+                    Supporting text with enhanced clarity and premium contrast ratios.
+                </p>
+            </div>
+
+            <!-- TLDark Color System Demo -->
+            <div class="nexus-card">
+                <h3 class="nexus-heading" style="margin-bottom: var(--space-4);">TLDark Color System</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3);">
+                    <div style="background: var(--glass-surface-1); backdrop-filter: var(--blur-sm); height: 60px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--text-primary); font-size: 12px; font-weight: 600; border: 1px solid var(--glass-border);">
+                        Glass Surface
+                    </div>
+                    <div style="background: var(--tldark-secondary); height: 60px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--text-primary); font-size: 12px; font-weight: 600;">
+                        TLDark Core
+                    </div>
+                    <div style="background: var(--accent-silver); height: 60px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--tldark-primary); font-size: 12px; font-weight: 600;">
+                        Silver Accent
+                    </div>
+                </div>
+                <div style="margin-top: var(--space-4); height: 40px; background: var(--glass-gradient-1); backdrop-filter: var(--blur-md); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--text-primary); font-weight: 600; border: 1px solid var(--glass-border);">
+                    Glassmorphic Gradient
+                </div>
+            </div>
+
+            <!-- Brand Values -->
+            <div class="nexus-card">
+                <h3 class="nexus-heading" style="margin-bottom: var(--space-4);">Core Values</h3>
+                <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                    <div style="padding: var(--space-2); background: var(--glass-surface-1); backdrop-filter: var(--blur-sm); border-radius: var(--radius-md); border-left: 4px solid var(--accent-silver); border: 1px solid var(--glass-border);">
+                        🎯 Premium Intelligence
+                    </div>
+                    <div style="padding: var(--space-2); background: var(--glass-surface-2); backdrop-filter: var(--blur-sm); border-radius: var(--radius-md); border-left: 4px solid var(--accent-silver); border: 1px solid var(--glass-border);">
+                        ⚡ Sophisticated Design
+                    </div>
+                    <div style="padding: var(--space-2); background: var(--glass-surface-1); backdrop-filter: var(--blur-sm); border-radius: var(--radius-md); border-left: 4px solid var(--accent-silver); border: 1px solid var(--glass-border);">
+                        🔄 Adaptive Interface
+                    </div>
+                    <div style="padding: var(--space-2); background: var(--glass-surface-2); backdrop-filter: var(--blur-sm); border-radius: var(--radius-md); border-left: 4px solid var(--accent-silver); border: 1px solid var(--glass-border);">
+                        🎯 Elite Performance
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time System Status -->
+        <div class="nexus-card" style="margin-top: var(--space-8); text-align: center;">
+            <h3 class="nexus-heading" style="margin-bottom: var(--space-4);">🔮 Brand System Status</h3>
+            <div class="nexus-flex" style="justify-content: center; flex-wrap: wrap;">
+                <span style="color: var(--accent-silver); font-weight: 600;">Brand Identity:</span>
+                <span style="color: var(--text-primary);" class="nexus-animate--pulse">● Complete</span>
+                <span style="color: var(--accent-silver); font-weight: 600;">Design System:</span>
+                <span style="color: var(--text-primary);" class="nexus-animate--pulse">● Active</span>
+                <span style="color: var(--accent-silver); font-weight: 600;">TLDark Framework:</span>
+                <span style="color: var(--text-primary);" class="nexus-animate--pulse">● Deployed</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quantum consciousness animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.nexus-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!-- NEXUS Logo SVG Asset -->
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="consciousnessFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6B46C1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+    <filter id="quantumGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Neural Network Background Pattern -->
+  <g opacity="0.1">
+    <circle cx="20" cy="15" r="2" fill="url(#consciousnessFlow)"/>
+    <circle cx="35" cy="25" r="1.5" fill="url(#consciousnessFlow)"/>
+    <circle cx="25" cy="35" r="1" fill="url(#consciousnessFlow)"/>
+    <line x1="20" y1="15" x2="35" y2="25" stroke="url(#consciousnessFlow)" stroke-width="0.5"/>
+    <line x1="35" y1="25" x2="25" y2="35" stroke="url(#consciousnessFlow)" stroke-width="0.5"/>
+  </g>
+  
+  <!-- NEXUS Symbol - Infinity merged with neural nodes -->
+  <g transform="translate(10, 20)">
+    <path d="M0,10 Q10,0 20,10 Q30,20 40,10 Q30,0 20,10 Q10,20 0,10 Z" 
+          fill="none" 
+          stroke="url(#consciousnessFlow)" 
+          stroke-width="3" 
+          filter="url(#quantumGlow)"/>
+    <circle cx="10" cy="10" r="3" fill="url(#consciousnessFlow)" opacity="0.8"/>
+    <circle cx="30" cy="10" r="3" fill="url(#consciousnessFlow)" opacity="0.8"/>
+    <circle cx="20" cy="10" r="2" fill="#06B6D4" opacity="0.9"/>
+  </g>
+  
+  <!-- NEXUS Typography -->
+  <text x="60" y="35" 
+        font-family="Inter, system-ui, -apple-system, sans-serif" 
+        font-size="24" 
+        font-weight="700" 
+        fill="url(#consciousnessFlow)"
+        filter="url(#quantumGlow)">
+    NEXUS
+  </text>
+  
+  <!-- Tagline -->
+  <text x="60" y="48" 
+        font-family="Inter, system-ui, -apple-system, sans-serif" 
+        font-size="8" 
+        font-weight="400" 
+        fill="#64748B">
+    QUANTUM-ENHANCED HUMAN POTENTIAL
+  </text>
+</svg>

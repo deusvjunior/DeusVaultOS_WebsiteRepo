@@ -1,0 +1,111 @@
+{
+  "name": "nexus-tldark-brand-system",
+  "version": "1.0.0",
+  "description": "Complete TLDark glassmorphic brand system with premium dark aesthetics and sophisticated design components",
+  "main": "nexus_design_system.css",
+  "scripts": {
+    "dev": "python3 server.py",
+    "start": "python3 server.py",
+    "build": "echo 'Building brand system...' && npm run optimize",
+    "optimize": "npm run optimize:css && npm run optimize:images",
+    "optimize:css": "cleancss -o dist/nexus_design_system.min.css nexus_design_system.css",
+    "optimize:images": "imagemin assets/images/* --out-dir=dist/images",
+    "serve": "http-server . -p 8080 -c-1",
+    "package": "tar -czf nexus_tldark_brand_system.tar.gz *.html *.css *.jsx *.json *.md *.py assets/ --exclude='node_modules' --exclude='.git'",
+    "deploy:netlify": "netlify deploy --prod --dir=.",
+    "deploy:vercel": "vercel --prod",
+    "test": "echo 'Testing brand system components...' && npm run validate",
+    "validate": "html-validate *.html && stylelint *.css"
+  },
+  "keywords": [
+    "brand-system",
+    "design-system",
+    "glassmorphic",
+    "tldark",
+    "premium-ui",
+    "dark-theme",
+    "css-framework",
+    "react-components",
+    "landing-page",
+    "enterprise-ui",
+    "modern-design",
+    "sophisticated-interface"
+  ],
+  "author": "THERION Brand Systems",
+  "license": "MIT",
+  "homepage": "http://localhost:8080",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/therion-systems/nexus-tldark-brand-system"
+  },
+  "bugs": {
+    "url": "https://github.com/therion-systems/nexus-tldark-brand-system/issues"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.2",
+    "html-validate": "^8.7.4",
+    "http-server": "^14.1.1",
+    "imagemin": "^8.0.1",
+    "imagemin-cli": "^7.0.0",
+    "netlify-cli": "^17.10.1",
+    "stylelint": "^15.11.0",
+    "vercel": "^32.7.0"
+  },
+  "files": [
+    "*.html",
+    "*.css", 
+    "*.jsx",
+    "*.json",
+    "*.md",
+    "*.py",
+    "assets/**/*"
+  ],
+  "engines": {
+    "node": ">=16.0.0",
+    "python": ">=3.8.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "supports backdrop-filter"
+  ],
+  "brandSystem": {
+    "name": "NEXUS TLDark",
+    "version": "1.0.0",
+    "theme": "glassmorphic-dark",
+    "colorPalette": {
+      "primary": "#0a0a0a",
+      "secondary": "#1a1a1a", 
+      "accent": "#c0c0c0",
+      "glassSurfaces": ["rgba(255,255,255,0.05)", "rgba(255,255,255,0.1)", "rgba(255,255,255,0.15)"]
+    },
+    "components": [
+      "landing-page",
+      "brand-showcase", 
+      "banner-campaigns",
+      "logo-system",
+      "interactive-components",
+      "pricing-calculator"
+    ],
+    "features": [
+      "backdrop-filter-effects",
+      "premium-typography",
+      "responsive-design",
+      "react-components", 
+      "enterprise-ready",
+      "commercial-license"
+    ]
+  },
+  "downloadInstructions": {
+    "quickStart": "npm install && npm run dev",
+    "serverAccess": "http://localhost:8080",
+    "documentation": "DOWNLOAD_PACKAGE_GUIDE.md",
+    "customization": "Edit nexus_design_system.css variables",
+    "deployment": "npm run package for distribution"
+  }
+}

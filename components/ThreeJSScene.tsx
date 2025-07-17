@@ -68,21 +68,21 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
   // Enhanced living blobs with organic movement and personality - INDEPENDENT OF PAGE
   const createOrganicBlobs = (group: THREE.Group) => {
     const blobs: any[] = [];
-    const blobCount = 28 + Math.floor(Math.random() * 12); // 28-40 blobs for better density
+    const blobCount = 45 + Math.floor(Math.random() * 20); // 45-65 blobs for much better density
     
-    // Create blobs with better spacing and wider distribution
+    // Create blobs with better spacing and much wider distribution
     const positions: THREE.Vector3[] = [];
     
     for (let i = 0; i < blobCount; i++) {
-      // Generate position with better distribution
+      // Generate position with much wider and more vertical distribution
       let position: THREE.Vector3;
       let attempts = 0;
       const maxAttempts = 50;
       
       do {
         const angle = Math.random() * Math.PI * 2;
-        const radius = 0.5 + Math.random() * 4.5; // Wider spread: 0.5 to 5.0 radius
-        const height = 0.5 + Math.random() * 3.5; // Higher spread: 0.5 to 4.0 height
+        const radius = 0.8 + Math.random() * 6.2; // Much wider spread: 0.8 to 7.0 radius
+        const height = -2.0 + Math.random() * 8.0; // Much more vertical: -2.0 to 6.0 height
         
         position = new THREE.Vector3(
           Math.cos(angle) * radius,
@@ -90,12 +90,12 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           Math.sin(angle) * radius
         );
         attempts++;
-      } while (attempts < maxAttempts && positions.some(pos => pos.distanceTo(position) < 0.4));
+      } while (attempts < maxAttempts && positions.some(pos => pos.distanceTo(position) < 0.3));
       
       positions.push(position);
       
-      // Better sized blobs for improved visibility and presence
-      const baseScale = 0.12 + Math.random() * 0.16; // 0.12 to 0.28 (larger and more visible)
+      // Half the current max and min sizes for more subtle presence
+      const baseScale = 0.06 + Math.random() * 0.08; // 0.06 to 0.14 (half of previous 0.12-0.28)
       const scale = new THREE.Vector3(
         baseScale * (0.8 + Math.random() * 0.4),
         baseScale * (0.8 + Math.random() * 0.4),
@@ -138,7 +138,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       );
       
       // Properly sized, prominent eyes - single pair only
-      const eyeGeometry = new THREE.SphereGeometry(0.18, 8, 6); // Larger, more visible eyes
+      const eyeGeometry = new THREE.SphereGeometry(0.09, 8, 6); // Smaller eyes proportional to smaller blobs
       const eyeMaterial = new THREE.MeshPhongMaterial({
         color: isRareBlackBlob ? 0xffffff : 0x000000,
         emissive: isRareBlackBlob ? 0x00ffff : 0x001144,
@@ -147,8 +147,8 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       });
       const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
       const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-      leftEye.position.set(-0.32, 0.22, 0.88);
-      rightEye.position.set(0.32, 0.22, 0.88);
+      leftEye.position.set(-0.16, 0.11, 0.44);
+      rightEye.position.set(0.16, 0.11, 0.44);
       blob.add(leftEye);
       blob.add(rightEye);
       blob.userData.leftEye = leftEye;
@@ -201,10 +201,10 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         
         // Swimming territory
         homePosition: position.clone(),
-        wanderRadius: 1.2 + Math.random() * 1.8, // 1.2-3.0 wander distance
+        wanderRadius: 2.0 + Math.random() * 2.5, // 2.0-4.5 wander distance (larger for wider area)
         currentTarget: null,
         targetReachTime: 0,
-        avoidanceRadius: 0.25, // Closer for more interaction
+        avoidanceRadius: 0.15, // Smaller for smaller blobs
         
         // Activity cycles
         restCycle: Math.random() * 400 + 200, // Rest every 3-10 seconds
@@ -567,18 +567,18 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           }
         }
         
-        // Soft boundary keeping - gentle containment
+        // Soft boundary keeping - gentle containment for wider area
         const distanceFromCenter = blob.position.length();
-        if (distanceFromCenter > 3.0) {
+        if (distanceFromCenter > 4.5) { // Larger boundary for wider distribution
           const returnForce = new THREE.Vector3()
             .copy(blob.position)
             .normalize()
-            .multiplyScalar(-0.008 * (distanceFromCenter - 3.0));
+            .multiplyScalar(-0.008 * (distanceFromCenter - 4.5));
           
           blob.position.add(returnForce);
           
           // Gradually adjust home position to prevent edge clustering
-          if (distanceFromCenter > 2.5) {
+          if (distanceFromCenter > 4.0) {
             userData.homePosition.lerp(new THREE.Vector3(0, 0, 0), 0.01);
           }
         }
@@ -594,13 +594,11 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
             0
           );
           
-          // Apply eye movement
-          userData.leftEye.position.x = -0.25 + lookDirection.x;
-          userData.leftEye.position.y = 0.15 + lookDirection.y;
-          userData.rightEye.position.x = 0.25 + lookDirection.x;
-          userData.rightEye.position.y = 0.15 + lookDirection.y;
-          
-          // Natural blinking with enhanced glow effects
+            // Apply eye movement
+            userData.leftEye.position.x = -0.125 + lookDirection.x;
+            userData.leftEye.position.y = 0.075 + lookDirection.y;
+            userData.rightEye.position.x = 0.125 + lookDirection.x;
+            userData.rightEye.position.y = 0.075 + lookDirection.y;          // Natural blinking with enhanced glow effects
           if (userData.eyeBlinkTimer > 180 + Math.random() * 360) {
             const blinkProgress = (userData.eyeBlinkTimer - 180) / 40;
             const blinkScale = Math.max(0.1, 1.0 - Math.sin(blinkProgress * Math.PI) * 0.9);
@@ -792,13 +790,16 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
       rendererRef.current.setSize(window.innerWidth, window.innerHeight);
     };
 
-    // Interactive camera controls
+    // Interactive camera controls - ONLY FOR ORBIT (NO OTHER DRAGGING)
     const handleMouseDown = (event: MouseEvent) => {
-      event.preventDefault();
-      setIsDragging(true);
-      setFadeOut(true);
-      lastMousePosition.current = { x: event.clientX, y: event.clientY };
-      console.log('Mouse down detected'); // Debug
+      // Only enable orbit if user is specifically trying to orbit (middle mouse or ctrl+drag)
+      if (event.button === 1 || event.ctrlKey) { // Middle mouse or Ctrl+Left mouse for orbit only
+        event.preventDefault();
+        setIsDragging(true);
+        setFadeOut(true);
+        lastMousePosition.current = { x: event.clientX, y: event.clientY };
+        console.log('Orbit mode activated'); // Debug
+      }
     };
 
     const handleMouseMove = (event: MouseEvent) => {
@@ -821,10 +822,11 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
     };
 
     const handleMouseUp = (event: MouseEvent) => {
+      if (!isDragging) return;
       event.preventDefault();
       setIsDragging(false);
       setFadeOut(false);
-      console.log('Mouse up detected'); // Debug
+      console.log('Orbit mode deactivated'); // Debug
       
       // Smoothly return camera to original position
       const resetCamera = () => {
@@ -845,7 +847,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
 
     // Attach events to both the canvas and the mount div
     const canvasElement = renderer.domElement;
-    canvasElement.style.cursor = 'grab';
+    canvasElement.style.cursor = 'default'; // Default cursor, no grab indication
     
     window.addEventListener('resize', handleResize);
     canvasElement.addEventListener('mousedown', handleMouseDown);
@@ -883,7 +885,7 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
         className="fixed inset-0 pointer-events-auto"
         style={{ 
           background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d20 50%, #131619 100%)',
-          cursor: isDragging ? 'grabbing' : 'grab'
+          cursor: isDragging ? 'grabbing' : 'default' // Only show grabbing when actively orbiting
         }}
       />
       {/* Fade overlay when dragging to explore blobs */}
@@ -893,6 +895,11 @@ function ThreeJSScene({ className = '', pageIndex = 0, currentSection = 0, reduc
           style={{ opacity: 0.7 }}
         />
       )}
+      
+      {/* Orbit Instructions */}
+      <div className="fixed bottom-4 right-4 z-20 text-white text-sm opacity-60 font-mono">
+        Hold Ctrl+Drag or Middle Mouse to orbit
+      </div>
     </div>
   );
 };

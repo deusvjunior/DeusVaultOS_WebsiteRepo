@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS HYPERION - Intelligence Dashboard</title>
+    <link rel="stylesheet" href="nexus_design_system.css">
+    <link rel="stylesheet" href="nexus_hyperion_system.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 🎛️ DASHBOARD LAYOUT */
+        .dashboard-container {
+            min-height: 100vh;
+            padding: var(--space-xl);
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: var(--space-xl);
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        /* 🗂️ SIDEBAR NAVIGATION */
+        .dashboard-sidebar {
+            background: var(--glass-light);
+            backdrop-filter: var(--blur-strong);
+            border: 1px solid var(--glass-medium);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            height: fit-content;
+            position: sticky;
+            top: var(--space-xl);
+        }
+        
+        .sidebar-header {
+            margin-bottom: var(--space-xl);
+            text-align: center;
+        }
+        
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--platinum);
+            margin-bottom: var(--space-sm);
+            background: var(--gradient-platinum);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .sidebar-subtitle {
+            font-size: 0.8rem;
+            color: var(--silver-chrome);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-item {
+            margin-bottom: var(--space-sm);
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: var(--space-md);
+            color: var(--silver-chrome);
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            transition: all 0.3s var(--ease-hyperion);
+            font-weight: 500;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--glass-medium);
+            color: var(--platinum);
+            transform: translateX(4px);
+        }
+        
+        .nav-icon {
+            margin-right: var(--space-md);
+            font-size: 1.2rem;
+        }
+        
+        /* 📊 MAIN DASHBOARD */
+        .dashboard-main {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+        
+        /* 📈 METRICS GRID */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .metric-card {
+            background: var(--glass-light);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-medium);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s var(--ease-hyperion);
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-platinum);
+            opacity: 0;
+            transition: opacity 0.3s var(--ease-hyperion);
+        }
+        
+        .metric-card:hover {
+            background: var(--glass-strong);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-elegant);
+        }
+        
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+        
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+        
+        .metric-title {
+            font-size: 0.9rem;
+            color: var(--silver-chrome);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .metric-icon {
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--platinum);
+            margin-bottom: var(--space-sm);
+            line-height: 1;
+        }
+        
+        .metric-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-nano);
+        }
+        
+        .metric-change.positive {
+            color: #22c55e;
+        }
+        
+        .metric-change.negative {
+            color: #ef4444;
+        }
+        
+        /* 📊 CHARTS SECTION */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-lg);
+        }
+        
+        .chart-container {
+            background: var(--glass-light);
+            backdrop-filter: var(--blur-strong);
+            border: 1px solid var(--glass-medium);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            height: 400px;
+            position: relative;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--platinum);
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: var(--space-sm);
+        }
+        
+        .chart-btn {
+            padding: var(--space-sm) var(--space-md);
+            background: var(--glass-medium);
+            border: 1px solid var(--glass-strong);
+            border-radius: var(--radius-md);
+            color: var(--silver-chrome);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-hyperion);
+        }
+        
+        .chart-btn:hover,
+        .chart-btn.active {
+            background: var(--glass-strong);
+            color: var(--platinum);
+        }
+        
+        /* 📱 ACTIVITY FEED */
+        .activity-feed {
+            background: var(--glass-light);
+            backdrop-filter: var(--blur-strong);
+            border: 1px solid var(--glass-medium);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--platinum);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            border-radius: var(--radius-lg);
+            transition: background 0.3s var(--ease-hyperion);
+        }
+        
+        .activity-item:hover {
+            background: var(--glass-medium);
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--glass-medium);
+            border-radius: var(--radius-infinite);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--space-md);
+            font-size: 1.1rem;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--platinum);
+            margin-bottom: var(--space-nano);
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--titanium);
+        }
+        
+        /* 🎛️ CONTROL PANELS */
+        .control-panels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .control-panel {
+            background: var(--glass-light);
+            backdrop-filter: var(--blur-strong);
+            border: 1px solid var(--glass-medium);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+        }
+        
+        .panel-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--platinum);
+            margin-bottom: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--glass-medium);
+            border-radius: var(--radius-infinite);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-hyperion);
+        }
+        
+        .toggle-switch.active {
+            background: var(--gradient-platinum);
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: var(--platinum);
+            border-radius: var(--radius-infinite);
+            transition: transform 0.3s var(--ease-hyperion);
+        }
+        
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(30px);
+            background: var(--tldark-void);
+        }
+        
+        .slider-container {
+            margin: var(--space-lg) 0;
+        }
+        
+        .slider-label {
+            font-size: 0.9rem;
+            color: var(--silver-chrome);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            background: var(--glass-medium);
+            border-radius: var(--radius-infinite);
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .slider-track {
+            height: 100%;
+            background: var(--gradient-platinum);
+            border-radius: var(--radius-infinite);
+            width: 70%;
+            position: relative;
+        }
+        
+        .slider-thumb {
+            position: absolute;
+            right: -6px;
+            top: -3px;
+            width: 12px;
+            height: 12px;
+            background: var(--platinum);
+            border-radius: var(--radius-infinite);
+            box-shadow: var(--shadow-subtle);
+        }
+        
+        /* 📱 RESPONSIVE DESIGN */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                padding: var(--space-lg);
+            }
+            
+            .dashboard-sidebar {
+                position: static;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: var(--space-md);
+                gap: var(--space-lg);
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-panels {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 🌟 HYPERION BACKGROUND -->
+    <div class="hyperion-background"></div>
+    
+    <!-- 🎛️ DASHBOARD CONTAINER -->
+    <div class="dashboard-container">
+        <!-- 🗂️ SIDEBAR NAVIGATION -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">NEXUS</div>
+                <div class="sidebar-subtitle">HYPERION CONTROL</div>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active">
+                            <span class="nav-icon">📊</span>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">⚡</span>
+                            Performance
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">🧠</span>
+                            Intelligence
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">🔮</span>
+                            Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">⚙️</span>
+                            Settings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">👤</span>
+                            Profile
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- 📊 MAIN DASHBOARD -->
+        <main class="dashboard-main">
+            <!-- 📈 METRICS OVERVIEW -->
+            <section class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Intelligence Level</span>
+                        <span class="metric-icon">🧠</span>
+                    </div>
+                    <div class="metric-value">∞</div>
+                    <div class="metric-change positive">
+                        ↗ +28.97x
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Performance</span>
+                        <span class="metric-icon">⚡</span>
+                    </div>
+                    <div class="metric-value">99.8%</div>
+                    <div class="metric-change positive">
+                        ↗ +15%
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Efficiency</span>
+                        <span class="metric-icon">🎯</span>
+                    </div>
+                    <div class="metric-value">10x</div>
+                    <div class="metric-change positive">
+                        ↗ +340%
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">User Satisfaction</span>
+                        <span class="metric-icon">💎</span>
+                    </div>
+                    <div class="metric-value">100%</div>
+                    <div class="metric-change positive">
+                        ↗ Perfect
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 📊 CHARTS AND ACTIVITY -->
+            <section class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Intelligence Growth</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active">1D</button>
+                            <button class="chart-btn">7D</button>
+                            <button class="chart-btn">30D</button>
+                            <button class="chart-btn">1Y</button>
+                        </div>
+                    </div>
+                    <div style="height: 300px; background: var(--glass-medium); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--silver-chrome);">
+                        📈 Interactive Chart Visualization
+                    </div>
+                </div>
+                
+                <div class="activity-feed">
+                    <h3 class="activity-header">Recent Activity</h3>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">🚀</div>
+                        <div class="activity-content">
+                            <div class="activity-title">System Optimization Complete</div>
+                            <div class="activity-time">2 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">🧠</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Intelligence Level Increased</div>
+                            <div class="activity-time">5 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">⚡</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Performance Boost Applied</div>
+                            <div class="activity-time">12 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">🔮</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Predictive Model Updated</div>
+                            <div class="activity-time">25 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">💎</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Premium Features Unlocked</div>
+                            <div class="activity-time">1 hour ago</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 🎛️ CONTROL PANELS -->
+            <section class="control-panels">
+                <div class="control-panel">
+                    <h3 class="panel-header">
+                        🧠 Intelligence Controls
+                    </h3>
+                    
+                    <div style="margin: var(--space-lg) 0;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+                            <span style="color: var(--silver-chrome);">Neural Enhancement</span>
+                            <div class="toggle-switch active">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Processing Power</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="slider">
+                            <div class="slider-track" style="width: 85%;">
+                                <div class="slider-thumb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Learning Rate</span>
+                            <span>92%</span>
+                        </div>
+                        <div class="slider">
+                            <div class="slider-track" style="width: 92%;">
+                                <div class="slider-thumb"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-panel">
+                    <h3 class="panel-header">
+                        🎨 Visual Settings
+                    </h3>
+                    
+                    <div style="margin: var(--space-lg) 0;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+                            <span style="color: var(--silver-chrome);">Glassmorphic Effects</span>
+                            <div class="toggle-switch active">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </label>
+                        
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+                            <span style="color: var(--silver-chrome);">Motion Reduction</span>
+                            <div class="toggle-switch">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Opacity</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="slider">
+                            <div class="slider-track" style="width: 75%;">
+                                <div class="slider-thumb"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 🎯 INTERACTIVE DASHBOARD FUNCTIONALITY
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation active states
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Chart controls
+            document.querySelectorAll('.chart-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Toggle switches
+            document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+            
+            // Metric cards animation
+            const metricObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'hyperionEntrance 0.6s ease forwards';
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.metric-card').forEach(card => {
+                metricObserver.observe(card);
+            });
+            
+            // Real-time data simulation
+            setInterval(() => {
+                document.querySelectorAll('.metric-value').forEach(value => {
+                    if (value.textContent !== '∞' && value.textContent !== '100%') {
+                        // Subtle animation to indicate live data
+                        value.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            value.style.transform = 'scale(1)';
+                        }, 200);
+                    }
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

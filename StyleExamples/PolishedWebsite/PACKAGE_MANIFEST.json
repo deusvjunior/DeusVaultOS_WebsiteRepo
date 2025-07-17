@@ -1,0 +1,44 @@
+{
+  "package": "nexus_tldark_brand_system",
+  "version": "1.0.0",
+  "created": "2025-07-16T20:52:20-05:00",
+  "description": "Complete NEXUS TLDark glassmorphic brand system with premium dark aesthetics",
+  "contents": {
+    "designSystem": "nexus_design_system.css",
+    "components": [
+      "nexus_landing_page.html",
+      "nexus_brand_showcase.html", 
+      "nexus_banner_campaigns.html",
+      "nexus_logo_system.html"
+    ],
+    "interactive": "nexus_interactive_components.jsx",
+    "server": "server.py",
+    "documentation": [
+      "README.md",
+      "DOWNLOAD_PACKAGE_GUIDE.md"
+    ],
+    "assets": "assets/"
+  },
+  "features": [
+    "TLDark premium aesthetics",
+    "Glassmorphic effects",
+    "Backdrop-filter support",
+    "Responsive design",
+    "Commercial license",
+    "React components"
+  ],
+  "requirements": {
+    "python": ">=3.8",
+    "browser": "supports backdrop-filter",
+    "optional": {
+      "node": ">=16.0.0",
+      "npm": ">=8.0.0"
+    }
+  },
+  "deployment": {
+    "quickStart": "./deploy.sh",
+    "manual": "python3 server.py",
+    "port": 8080,
+    "url": "http://localhost:8080"
+  }
+}

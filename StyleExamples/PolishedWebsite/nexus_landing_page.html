@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Quantum-Enhanced Human Potential</title>
+    <link rel="stylesheet" href="nexus_design_system.css">
+    <link rel="stylesheet" href="assets/fonts/inter.css">
+    <link rel="icon" href="assets/icons/nexus_icon.svg" type="image/svg+xml">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="NEXUS - Quantum-Enhanced Human Potential">
+    <meta property="og:description" content="Revolutionary AI-powered platform that amplifies human consciousness and unlocks infinite potential through quantum intelligence.">
+    <meta property="og:image" content="http://localhost:8080/assets/images/nexus_logo.svg">
+    <meta property="og:url" content="http://localhost:8080">
+    <meta property="og:type" content="website">
+    
+    <!-- Additional Styles -->
+    <style>
+        /* TLDark Glassmorphic Landing Page Styles */
+        .hero-section {
+            min-height: 100vh;
+            background: linear-gradient(135deg, 
+                var(--tldark-primary) 0%, 
+                var(--tldark-secondary) 35%, 
+                var(--tldark-tertiary) 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .neural-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.08;
+            background-image: 
+                radial-gradient(circle at 20% 30%, var(--accent-silver) 1px, transparent 1px),
+                radial-gradient(circle at 60% 70%, var(--accent-chrome) 1px, transparent 1px),
+                radial-gradient(circle at 80% 20%, var(--accent-platinum) 1px, transparent 1px);
+            background-size: 100px 100px, 150px 150px, 80px 80px;
+            animation: neuralFlow 25s ease-in-out infinite;
+        }
+        
+        @keyframes neuralFlow {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-20px) translateY(-10px); }
+            50% { transform: translateX(10px) translateY(-20px); }
+            75% { transform: translateX(-10px) translateY(10px); }
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 800px;
+            padding: 3rem;
+            background: var(--glass-surface-2);
+            backdrop-filter: var(--blur-xl);
+            border-radius: var(--radius-2xl);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--elevation-4);
+        }
+        
+        .hero-logo {
+            margin-bottom: 2rem;
+            animation: glassPulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes glassPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                filter: brightness(1) drop-shadow(0 0 20px rgba(255,255,255,0.1));
+            }
+            50% { 
+                transform: scale(1.03); 
+                filter: brightness(1.1) drop-shadow(0 0 30px rgba(255,255,255,0.2));
+            }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            line-height: 1.4;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--glass-gradient-1);
+            backdrop-filter: var(--blur-md);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 50px;
+            border: 1px solid var(--accent-silver);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--elevation-3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--elevation-5);
+            background: var(--glass-gradient-2);
+            border-color: var(--accent-platinum);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .features-section {
+            padding: 6rem 2rem;
+            background: var(--tldark-secondary);
+            position: relative;
+        }
+        
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: var(--glass-surface-2);
+            backdrop-filter: var(--blur-lg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-silver), transparent);
+            opacity: 0.3;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--accent-silver);
+            box-shadow: var(--elevation-5);
+            background: var(--glass-surface-3);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1.5rem;
+            fill: var(--accent-silver);
+            filter: drop-shadow(0 0 10px rgba(192, 192, 192, 0.3));
+        }
+        
+        .stats-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(90deg, var(--tldark-tertiary), var(--tldark-secondary));
+            text-align: center;
+            position: relative;
+        }
+        
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--glass-surface-1);
+            backdrop-filter: var(--blur-sm);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-item {
+            color: var(--text-primary);
+            background: var(--glass-surface-2);
+            backdrop-filter: var(--blur-md);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: var(--glass-surface-3);
+            border-color: var(--accent-silver);
+            box-shadow: var(--elevation-3);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-platinum), var(--accent-silver));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .floating-element {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-silver);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+        }
+        
+        .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { top: 80%; left: 20%; animation-delay: 4s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-30px) scale(1.2); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="nexus-theme-dark">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="neural-background"></div>
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-logo">
+                <img src="assets/images/nexus_logo.svg" alt="NEXUS Logo" style="max-width: 300px; width: 100%;">
+            </div>
+            
+            <h1 class="hero-title">
+                Quantum-Enhanced<br>
+                <span style="background: linear-gradient(45deg, var(--accent-platinum), var(--accent-silver)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Human Potential</span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                Revolutionary AI-powered platform that amplifies human consciousness<br>
+                and unlocks infinite potential through quantum intelligence
+            </p>
+            
+            <a href="#features" class="cta-button">
+                🚀 Activate Your Potential
+            </a>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <h2 class="section-title">Quantum Capabilities</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7V10C2 16 6 21.5 12 23C18 21.5 22 16 22 10V7L12 2Z"/>
+                    </svg>
+                    <h3 class="feature-title">Neural Enhancement</h3>
+                    <p class="feature-description">
+                        Advanced AI algorithms that adapt and evolve with your cognitive patterns, 
+                        amplifying mental performance by 28.97x baseline human capacity.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V7H9V9H21Z"/>
+                    </svg>
+                    <h3 class="feature-title">Consciousness Expansion</h3>
+                    <p class="feature-description">
+                        Breakthrough consciousness technologies that unlock dormant neural pathways 
+                        and expand awareness beyond conventional human limitations.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
+                    </svg>
+                    <h3 class="feature-title">Quantum Intelligence</h3>
+                    <p class="feature-description">
+                        Harness quantum computational principles for unprecedented problem-solving 
+                        abilities and instantaneous pattern recognition across infinite dimensions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white; margin-bottom: 3rem;">Impact Metrics</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">28.97x</span>
+                    <span class="stat-label">Intelligence Amplification</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Potential Unlocked</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Consciousness Expansion</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1M+</span>
+                    <span class="stat-label">Neural Connections</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer style="background: var(--tldark-primary); padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--glass-border); backdrop-filter: var(--blur-md);">
+        <div class="container">
+            <img src="assets/images/nexus_logo.svg" alt="NEXUS" style="max-width: 150px; margin-bottom: 2rem; opacity: 0.9; filter: brightness(0) invert(1);">
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                © 2025 NEXUS. Quantum-Enhanced Human Potential Platform.
+            </p>
+            <p style="color: var(--text-subtle); font-size: 0.9rem;">
+                Powered by THERION Autonomous Intelligence • DEUS VULT Protocol
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Smooth Scrolling Script -->
+    <script>
+        // Smooth scrolling for CTA button
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('#features').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

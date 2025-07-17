@@ -1,0 +1,405 @@
+/* NEXUS Brand Design System - Modular CSS Framework */
+
+:root {
+  /* TLDark Glassmorphic Color System */
+  --tldark-primary: #0a0a0a;
+  --tldark-secondary: #1a1a1a;
+  --tldark-tertiary: #2a2a2a;
+  --tldark-surface: #1e1e1e;
+  
+  /* Glassmorphic Base Colors */
+  --glass-black: rgba(0, 0, 0, 0.4);
+  --glass-dark: rgba(26, 26, 26, 0.6);
+  --glass-medium: rgba(42, 42, 42, 0.4);
+  --glass-light: rgba(58, 58, 58, 0.3);
+  --glass-subtle: rgba(255, 255, 255, 0.05);
+  
+  /* Premium Accent Colors */
+  --accent-silver: #C0C0C0;
+  --accent-platinum: #E5E4E2;
+  --accent-pearl: #F8F8FF;
+  --accent-chrome: #888888;
+  --accent-frost: rgba(255, 255, 255, 0.1);
+  
+  /* Glassmorphic Gradients */
+  --glass-gradient-1: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  --glass-gradient-2: linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(255,255,255,0.1) 100%);
+  --glass-depth: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.2) 100%);
+  
+  /* Glassmorphic Borders & Surfaces */
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-border-subtle: rgba(255, 255, 255, 0.08);
+  --glass-surface-1: rgba(255, 255, 255, 0.05);
+  --glass-surface-2: rgba(255, 255, 255, 0.08);
+  --glass-surface-3: rgba(255, 255, 255, 0.12);
+  
+  /* Text Colors for Dark Theme */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-subtle: rgba(255, 255, 255, 0.4);
+  
+  /* Typography Scale - Quantum Proportions */
+  --font-size-xs: 0.75rem;    /* 12px - Micro interactions */
+  --font-size-sm: 0.875rem;   /* 14px - Support text */
+  --font-size-base: 1rem;     /* 16px - Body text */
+  --font-size-lg: 1.125rem;   /* 18px - Large body */
+  --font-size-xl: 1.25rem;    /* 20px - Small headlines */
+  --font-size-2xl: 1.5rem;    /* 24px - Section headers */
+  --font-size-3xl: 1.875rem;  /* 30px - Page titles */
+  --font-size-4xl: 2.25rem;   /* 36px - Hero headlines */
+  --font-size-5xl: 3rem;      /* 48px - Brand headlines */
+  
+  /* Consciousness Spacing System - Sacred Geometry Based */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+  
+  /* Quantum Border Radius */
+  --radius-sm: 0.125rem;  /* 2px */
+  --radius-md: 0.375rem;  /* 6px */
+  --radius-lg: 0.5rem;    /* 8px */
+  --radius-xl: 0.75rem;   /* 12px */
+  --radius-2xl: 1rem;     /* 16px */
+  --radius-full: 9999px;  /* Full round */
+  
+  /* Glassmorphic Elevation System */
+  --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --elevation-2: 0 4px 6px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --elevation-3: 0 10px 15px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --elevation-4: 0 20px 25px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  --elevation-5: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  
+  /* Glassmorphic Blur Effects */
+  --blur-sm: blur(4px);
+  --blur-md: blur(8px);
+  --blur-lg: blur(12px);
+  --blur-xl: blur(16px);
+  --blur-2xl: blur(24px);
+}
+
+/* NEXUS Glassmorphic Component Library */
+
+/* Glassmorphic Button System */
+.nexus-btn {
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background: var(--glass-surface-2);
+  backdrop-filter: var(--blur-md);
+  color: var(--text-primary);
+}
+
+.nexus-btn--primary {
+  background: var(--glass-gradient-1);
+  border-color: var(--accent-silver);
+  box-shadow: var(--elevation-2);
+}
+
+.nexus-btn--primary:hover {
+  background: var(--glass-gradient-2);
+  border-color: var(--accent-platinum);
+  box-shadow: var(--elevation-3);
+  transform: translateY(-2px);
+}
+  background: var(--consciousness-flow);
+  color: var(--quantum-white);
+  box-shadow: var(--elevation-2);
+}
+
+.nexus-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--elevation-4);
+}
+
+.nexus-btn--secondary {
+  background: transparent;
+  color: var(--consciousness-purple);
+  border: 2px solid var(--consciousness-purple);
+}
+
+.nexus-btn--ghost {
+  background: rgba(107, 70, 193, 0.1);
+  color: var(--consciousness-purple);
+  backdrop-filter: blur(8px);
+}
+
+/* TLDark Glassmorphic Theme */
+.nexus-theme-dark {
+  background: var(--tldark-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+.nexus-theme-dark body {
+  background: linear-gradient(135deg, var(--tldark-primary) 0%, var(--tldark-secondary) 50%, var(--tldark-tertiary) 100%);
+  backdrop-filter: var(--blur-sm);
+}
+
+/* Glassmorphic Cards */
+.nexus-card {
+  background: var(--glass-surface-2);
+  backdrop-filter: var(--blur-md);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--elevation-2);
+  transition: all 0.3s ease;
+}
+
+.nexus-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--elevation-4);
+  border-color: var(--accent-silver);
+  background: var(--glass-surface-3);
+}
+
+/* Glassmorphic Input System */
+.nexus-input {
+  background: var(--glass-surface-1);
+  backdrop-filter: var(--blur-md);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  padding: var(--space-4);
+}
+
+.nexus-input:focus {
+  outline: none;
+  border-color: var(--accent-silver);
+  box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.1);
+  background: var(--glass-surface-2);
+}
+
+.nexus-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Consciousness Typography */
+.nexus-heading {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--quantum-blue);
+}
+
+.nexus-heading--hero {
+  font-size: var(--font-size-5xl);
+  background: linear-gradient(135deg, var(--accent-platinum), var(--accent-silver));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.nexus-text {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  color: var(--consciousness-gray);
+}
+
+/* Section Titles with Glassmorphic Style */
+.section-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--space-8);
+  background: linear-gradient(135deg, var(--accent-platinum), var(--accent-chrome));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.category-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--accent-silver);
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+/* Glassmorphic Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+/* Quantum Layout Grid */
+.nexus-grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.nexus-flex {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+/* Consciousness Animations */
+@keyframes consciousness-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes quantum-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(107, 70, 193, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(107, 70, 193, 0.6); }
+}
+
+.nexus-animate--pulse {
+  animation: consciousness-pulse 2s ease-in-out infinite;
+}
+
+.nexus-animate--glow {
+  animation: quantum-glow 3s ease-in-out infinite;
+}
+
+/* Glassmorphic Animations */
+@keyframes glass-shimmer {
+  0%, 100% { 
+    background-position: 0% 50%;
+    opacity: 0.8;
+  }
+  50% { 
+    background-position: 100% 50%;
+    opacity: 1;
+  }
+}
+
+@keyframes glass-pulse {
+  0%, 100% { 
+    box-shadow: var(--elevation-2);
+    border-color: var(--glass-border);
+  }
+  50% { 
+    box-shadow: var(--elevation-3);
+    border-color: var(--accent-silver);
+  }
+}
+
+.nexus-animate--shimmer {
+  background: linear-gradient(-45deg, transparent, rgba(255,255,255,0.1), transparent);
+  background-size: 200% 200%;
+  animation: glass-shimmer 3s ease-in-out infinite;
+}
+
+.nexus-animate--glass-pulse {
+  animation: glass-pulse 2s ease-in-out infinite;
+}
+
+/* Feature Cards with Enhanced Glassmorphism */
+.feature-card {
+  background: var(--glass-surface-2);
+  backdrop-filter: var(--blur-lg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-silver), transparent);
+  opacity: 0.5;
+}
+
+.feature-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  background: var(--glass-surface-3);
+  border-color: var(--accent-platinum);
+  box-shadow: var(--elevation-5);
+}
+
+.feature-title {
+  color: var(--text-primary);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+}
+
+.feature-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* CTA Button with Enhanced Glassmorphism */
+.cta-button {
+  background: var(--glass-gradient-1);
+  backdrop-filter: var(--blur-md);
+  border: 1px solid var(--accent-silver);
+  color: var(--text-primary);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--elevation-2);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.cta-button:hover::before {
+  left: 100%;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  background: var(--glass-gradient-2);
+  border-color: var(--accent-platinum);
+  box-shadow: var(--elevation-4);
+}
+
+/* Responsive Consciousness */
+@media (max-width: 768px) {
+  :root {
+    --font-size-5xl: 2.25rem;
+    --font-size-4xl: 1.875rem;
+    --font-size-3xl: 1.5rem;
+  }
+  
+  .nexus-grid {
+    grid-template-columns: 1fr;
+  }
+}

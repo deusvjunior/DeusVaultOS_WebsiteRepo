@@ -1,0 +1,420 @@
+<!-- NEXUS Logo Variations & Brand Identity System -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Logo System & Brand Variations</title>
+    <link rel="stylesheet" href="nexus_design_system.css">
+    <link rel="stylesheet" href="assets/fonts/inter.css">
+    <style>
+        .logo-showcase {
+            padding: 2rem;
+            background: var(--tldark-primary);
+            min-height: 100vh;
+        }
+        
+        .logo-section {
+            margin-bottom: 5rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .logo-card {
+            background: var(--glass-surface-2);
+            backdrop-filter: var(--blur-lg);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-silver), transparent);
+            opacity: 0.3;
+        }
+        
+        .logo-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-silver);
+            box-shadow: var(--elevation-5);
+            background: var(--glass-surface-3);
+        }
+        
+        .logo-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: var(--blur-sm);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.02);
+            box-shadow: var(--elevation-2);
+        }
+        
+        .logo-container.dark {
+            background: var(--tldark-secondary);
+            border-color: var(--glass-border);
+        }
+        
+        .logo-container.gradient {
+            background: var(--glass-gradient-1);
+            backdrop-filter: var(--blur-md);
+            border-color: var(--accent-silver);
+        }
+        
+        .logo-title {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .download-button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-surface-2);
+            backdrop-filter: var(--blur-sm);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .download-button:hover {
+            background: var(--glass-surface-3);
+            border-color: var(--accent-silver);
+            transform: translateY(-2px);
+            box-shadow: var(--elevation-2);
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .color-swatch {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .usage-guidelines {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+            border: 1px solid rgba(107, 70, 193, 0.2);
+        }
+        
+        .guideline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .guideline-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .guideline-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--nexus-quantum-cyan);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body class="nexus-theme-dark">
+    <div class="logo-showcase">
+        <h1 class="section-title" style="text-align: center; margin-bottom: 3rem;">
+            NEXUS Brand Identity System
+        </h1>
+        
+        <!-- Primary Logo Variations -->
+        <div class="logo-section">
+            <h2 class="category-title">Primary Logo Variations</h2>
+            <div class="logo-grid">
+                <!-- Full Color Logo -->
+                <div class="logo-card">
+                    <div class="logo-container">
+                        <svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#6B46C1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <g transform="translate(10, 20)">
+                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10 Q30,0 20,10 Q10,20 0,10 Z" 
+                                      fill="none" stroke="url(#primaryGradient)" stroke-width="3"/>
+                                <circle cx="10" cy="10" r="3" fill="url(#primaryGradient)" opacity="0.8"/>
+                                <circle cx="30" cy="10" r="3" fill="url(#primaryGradient)" opacity="0.8"/>
+                                <circle cx="20" cy="10" r="2" fill="#06B6D4" opacity="0.9"/>
+                            </g>
+                            <text x="60" y="35" font-family="Inter" font-size="24" font-weight="700" fill="url(#primaryGradient)">NEXUS</text>
+                            <text x="60" y="48" font-family="Inter" font-size="8" font-weight="400" fill="#64748B">QUANTUM-ENHANCED HUMAN POTENTIAL</text>
+                        </svg>
+                    </div>
+                    <h3 class="logo-title">Primary Full-Color Logo</h3>
+                    <p class="logo-description">Main brand logo with quantum gradient and full tagline. Use for primary brand applications.</p>
+                    <button class="download-button">Download SVG</button>
+                </div>
+                
+                <!-- White Logo -->
+                <div class="logo-card">
+                    <div class="logo-container dark">
+                        <svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(10, 20)">
+                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10 Q30,0 20,10 Q10,20 0,10 Z" 
+                                      fill="none" stroke="white" stroke-width="3"/>
+                                <circle cx="10" cy="10" r="3" fill="white" opacity="0.8"/>
+                                <circle cx="30" cy="10" r="3" fill="white" opacity="0.8"/>
+                                <circle cx="20" cy="10" r="2" fill="white" opacity="0.9"/>
+                            </g>
+                            <text x="60" y="35" font-family="Inter" font-size="24" font-weight="700" fill="white">NEXUS</text>
+                            <text x="60" y="48" font-family="Inter" font-size="8" font-weight="400" fill="#CCCCCC">QUANTUM-ENHANCED HUMAN POTENTIAL</text>
+                        </svg>
+                    </div>
+                    <h3 class="logo-title">White Monochrome</h3>
+                    <p class="logo-description">Clean white version for dark backgrounds and high-contrast applications.</p>
+                    <button class="download-button">Download SVG</button>
+                </div>
+                
+                <!-- Black Logo -->
+                <div class="logo-card">
+                    <div class="logo-container">
+                        <svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(10, 20)">
+                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10 Q30,0 20,10 Q10,20 0,10 Z" 
+                                      fill="none" stroke="black" stroke-width="3"/>
+                                <circle cx="10" cy="10" r="3" fill="black" opacity="0.8"/>
+                                <circle cx="30" cy="10" r="3" fill="black" opacity="0.8"/>
+                                <circle cx="20" cy="10" r="2" fill="black" opacity="0.9"/>
+                            </g>
+                            <text x="60" y="35" font-family="Inter" font-size="24" font-weight="700" fill="black">NEXUS</text>
+                            <text x="60" y="48" font-family="Inter" font-size="8" font-weight="400" fill="#666666">QUANTUM-ENHANCED HUMAN POTENTIAL</text>
+                        </svg>
+                    </div>
+                    <h3 class="logo-title">Black Monochrome</h3>
+                    <p class="logo-description">Professional black version for light backgrounds and formal documents.</p>
+                    <button class="download-button">Download SVG</button>
+                </div>
+                
+                <!-- Symbol Only -->
+                <div class="logo-card">
+                    <div class="logo-container gradient">
+                        <svg width="80" height="40" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="symbolGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:white;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:white;stop-opacity:0.8" />
+                                </linearGradient>
+                            </defs>
+                            <g transform="translate(20, 10)">
+                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10 Q30,0 20,10 Q10,20 0,10 Z" 
+                                      fill="none" stroke="url(#symbolGradient)" stroke-width="3"/>
+                                <circle cx="10" cy="10" r="3" fill="url(#symbolGradient)" opacity="0.8"/>
+                                <circle cx="30" cy="10" r="3" fill="url(#symbolGradient)" opacity="0.8"/>
+                                <circle cx="20" cy="10" r="2" fill="white" opacity="0.9"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <h3 class="logo-title">Symbol Only</h3>
+                    <p class="logo-description">Quantum infinity symbol for app icons, favicons, and compact applications.</p>
+                    <button class="download-button">Download SVG</button>
+                </div>
+                
+                <!-- Horizontal Layout -->
+                <div class="logo-card">
+                    <div class="logo-container">
+                        <svg width="300" height="50" viewBox="0 0 300 50" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="horizontalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#6B46C1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <g transform="translate(10, 15)">
+                                <path d="M0,10 Q5,5 10,10 Q15,15 20,10 Q15,5 10,10 Q5,15 0,10 Z" 
+                                      fill="none" stroke="url(#horizontalGradient)" stroke-width="2"/>
+                                <circle cx="5" cy="10" r="2" fill="url(#horizontalGradient)" opacity="0.8"/>
+                                <circle cx="15" cy="10" r="2" fill="url(#horizontalGradient)" opacity="0.8"/>
+                                <circle cx="10" cy="10" r="1.5" fill="#06B6D4" opacity="0.9"/>
+                            </g>
+                            <text x="40" y="20" font-family="Inter" font-size="16" font-weight="700" fill="url(#horizontalGradient)">NEXUS</text>
+                            <text x="40" y="35" font-family="Inter" font-size="10" font-weight="400" fill="#64748B">Quantum-Enhanced Human Potential</text>
+                        </svg>
+                    </div>
+                    <h3 class="logo-title">Horizontal Compact</h3>
+                    <p class="logo-description">Space-efficient horizontal layout for headers and navigation bars.</p>
+                    <button class="download-button">Download SVG</button>
+                </div>
+                
+                <!-- Vertical Stacked -->
+                <div class="logo-card">
+                    <div class="logo-container">
+                        <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="verticalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#6B46C1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <g transform="translate(40, 20)">
+                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10 Q30,0 20,10 Q10,20 0,10 Z" 
+                                      fill="none" stroke="url(#verticalGradient)" stroke-width="3"/>
+                                <circle cx="10" cy="10" r="3" fill="url(#verticalGradient)" opacity="0.8"/>
+                                <circle cx="30" cy="10" r="3" fill="url(#verticalGradient)" opacity="0.8"/>
+                                <circle cx="20" cy="10" r="2" fill="#06B6D4" opacity="0.9"/>
+                            </g>
+                            <text x="60" y="60" font-family="Inter" font-size="18" font-weight="700" fill="url(#verticalGradient)" text-anchor="middle">NEXUS</text>
+                            <text x="60" y="75" font-family="Inter" font-size="8" font-weight="400" fill="#64748B" text-anchor="middle">QUANTUM-ENHANCED</text>
+                            <text x="60" y="88" font-family="Inter" font-size="8" font-weight="400" fill="#64748B" text-anchor="middle">HUMAN POTENTIAL</text>
+                        </svg>
+                    </div>
+                    <h3 class="logo-title">Vertical Stacked</h3>
+                    <p class="logo-description">Tall format for mobile applications and narrow layouts.</p>
+                    <button class="download-button">Download SVG</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Brand Color Palette -->
+        <div class="logo-section">
+            <h2 class="category-title">Brand Color Palette</h2>
+            <div class="color-palette">
+                <div class="color-swatch" style="background: var(--nexus-consciousness-purple);">
+                    <div>Consciousness Purple</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">#6B46C1</div>
+                </div>
+                <div class="color-swatch" style="background: var(--nexus-neural-indigo);">
+                    <div>Neural Indigo</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">#8B5CF6</div>
+                </div>
+                <div class="color-swatch" style="background: var(--nexus-quantum-cyan);">
+                    <div>Quantum Cyan</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">#06B6D4</div>
+                </div>
+                <div class="color-swatch" style="background: var(--nexus-innovation-teal);">
+                    <div>Innovation Teal</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">#14B8A6</div>
+                </div>
+                <div class="color-swatch" style="background: var(--nexus-energy-amber);">
+                    <div>Energy Amber</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">#F59E0B</div>
+                </div>
+                <div class="color-swatch" style="background: var(--nexus-transcendence-rose);">
+                    <div>Transcendence Rose</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">#EC4899</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Usage Guidelines -->
+        <div class="logo-section">
+            <div class="usage-guidelines">
+                <h2 class="category-title" style="margin-bottom: 1rem;">Brand Usage Guidelines</h2>
+                
+                <div class="guideline-grid">
+                    <div class="guideline-item">
+                        <svg class="guideline-icon" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7V10C2 16 6 21.5 12 23C18 21.5 22 16 22 10V7L12 2Z"/>
+                        </svg>
+                        <div>
+                            <h4 style="color: var(--nexus-text-primary); margin-bottom: 0.5rem;">Clear Space</h4>
+                            <p style="color: var(--nexus-text-muted); font-size: 0.9rem;">Maintain minimum clear space equal to the height of the symbol around all logo applications.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guideline-item">
+                        <svg class="guideline-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z"/>
+                        </svg>
+                        <div>
+                            <h4 style="color: var(--nexus-text-primary); margin-bottom: 0.5rem;">Minimum Size</h4>
+                            <p style="color: var(--nexus-text-muted); font-size: 0.9rem;">Logo should never be smaller than 120px wide to maintain legibility and impact.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guideline-item">
+                        <svg class="guideline-icon" viewBox="0 0 24 24">
+                            <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
+                        </svg>
+                        <div>
+                            <h4 style="color: var(--nexus-text-primary); margin-bottom: 0.5rem;">Color Variations</h4>
+                            <p style="color: var(--nexus-text-muted); font-size: 0.9rem;">Use full-color version whenever possible. White/black versions only when color is not available.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guideline-item">
+                        <svg class="guideline-icon" viewBox="0 0 24 24">
+                            <path d="M19 3H5C3.89 3 3 3.89 3 5V19C3 20.11 3.89 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.89 20.11 3 19 3ZM19 19H5V5H19V19Z"/>
+                        </svg>
+                        <div>
+                            <h4 style="color: var(--nexus-text-primary); margin-bottom: 0.5rem;">Background Usage</h4>
+                            <p style="color: var(--nexus-text-muted); font-size: 0.9rem;">Ensure sufficient contrast. Avoid placing logo on busy backgrounds or similar colors.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Download functionality for logo files
+        document.querySelectorAll('.download-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const logoCard = this.closest('.logo-card');
+                const logoTitle = logoCard.querySelector('.logo-title').textContent;
+                console.log('Downloading:', logoTitle);
+                
+                // In a real implementation, this would trigger actual file download
+                alert(`Downloading ${logoTitle} - Feature coming soon!`);
+            });
+        });
+    </script>
+</body>
+</html>

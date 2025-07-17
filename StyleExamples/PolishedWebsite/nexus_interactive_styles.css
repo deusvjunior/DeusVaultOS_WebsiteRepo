@@ -1,0 +1,559 @@
+/* NEXUS Interactive Components CSS - React/Next.js Ready */
+
+/* Pricing Section Styles */
+.nexus-pricing-section {
+  padding: 4rem 2rem;
+  background: var(--nexus-consciousness-deep);
+  text-align: center;
+}
+
+.pricing-header {
+  margin-bottom: 4rem;
+}
+
+.billing-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  font-size: 1rem;
+  color: var(--nexus-text-muted);
+}
+
+.billing-toggle span.active {
+  color: var(--nexus-quantum-cyan);
+  font-weight: 600;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  background: var(--nexus-quantum-cyan);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(6, 182, 212, 0.4);
+}
+
+.toggle-slider.annual {
+  transform: translateX(30px);
+  background: var(--nexus-consciousness-purple);
+  box-shadow: 0 2px 6px rgba(107, 70, 193, 0.4);
+}
+
+.discount {
+  background: var(--nexus-energy-amber);
+  color: var(--nexus-consciousness-deep);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pricing-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(107, 70, 193, 0.2);
+  border-radius: 20px;
+  padding: 2.5rem;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.pricing-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--nexus-quantum-cyan);
+  box-shadow: 0 20px 60px rgba(6, 182, 212, 0.2);
+}
+
+.pricing-card.popular {
+  border-color: var(--nexus-quantum-cyan);
+  transform: scale(1.05);
+}
+
+.pricing-card.selected {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: var(--nexus-quantum-cyan);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+}
+
+.popular-badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(45deg, var(--nexus-quantum-cyan), var(--nexus-consciousness-purple));
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+}
+
+.plan-header {
+  margin-bottom: 2rem;
+}
+
+.plan-name {
+  color: var(--nexus-text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.price-currency {
+  color: var(--nexus-quantum-cyan);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.price-amount {
+  color: var(--nexus-text-primary);
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.price-period {
+  color: var(--nexus-text-muted);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  color: var(--nexus-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.feature-check {
+  width: 20px;
+  height: 20px;
+  fill: var(--nexus-quantum-cyan);
+  flex-shrink: 0;
+}
+
+.pricing-cta {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+/* Consciousness Indicator Styles */
+.consciousness-indicator {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid rgba(107, 70, 193, 0.2);
+}
+
+.indicator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.indicator-header h4 {
+  color: var(--nexus-text-primary);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.level-display {
+  color: var(--nexus-quantum-cyan);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.progress-container {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--nexus-consciousness-purple), var(--nexus-quantum-cyan));
+  border-radius: 6px;
+  position: relative;
+  transition: width 1s ease-out;
+}
+
+.progress-glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6));
+  border-radius: 6px;
+  animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.level-markers {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.marker {
+  position: absolute;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.marker span {
+  color: var(--nexus-text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.marker.active span {
+  color: var(--nexus-quantum-cyan);
+  font-weight: 700;
+}
+
+.indicator-description {
+  color: var(--nexus-text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 0;
+}
+
+/* Neural Network Visualization */
+.neural-network-viz {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid rgba(107, 70, 193, 0.2);
+  text-align: center;
+}
+
+.neural-network-viz h4 {
+  color: var(--nexus-text-primary);
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.network-canvas {
+  width: 100%;
+  height: auto;
+  background: radial-gradient(circle at center, rgba(107, 70, 193, 0.1), transparent);
+  border-radius: 10px;
+}
+
+.connection-line {
+  animation: connectionPulse 3s ease-in-out infinite;
+}
+
+.neural-node {
+  animation: nodePulse 2s ease-in-out infinite;
+}
+
+@keyframes connectionPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes nodePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Quantum Stats Counter */
+.quantum-stat {
+  text-align: center;
+  padding: 2rem;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--nexus-quantum-cyan);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+  animation: statGlow 3s ease-in-out infinite;
+}
+
+.stat-label {
+  color: var(--nexus-text-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@keyframes statGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
+  50% { text-shadow: 0 0 30px rgba(6, 182, 212, 0.8); }
+}
+
+/* Quantum Demo Button */
+.quantum-demo-button {
+  position: relative;
+  padding: 1.5rem 3rem;
+  background: transparent;
+  border: 2px solid var(--nexus-quantum-cyan);
+  border-radius: 50px;
+  color: var(--nexus-quantum-cyan);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  min-width: 250px;
+}
+
+.quantum-demo-button:hover:not(.charging) {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(6, 182, 212, 0.3);
+}
+
+.quantum-demo-button.charging {
+  border-color: var(--nexus-consciousness-purple);
+  color: var(--nexus-consciousness-purple);
+}
+
+.button-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(6, 182, 212, 0.1);
+  z-index: 1;
+}
+
+.charge-indicator {
+  height: 100%;
+  background: linear-gradient(90deg, var(--nexus-consciousness-purple), var(--nexus-quantum-cyan));
+  transition: width 0.1s ease;
+  opacity: 0.3;
+}
+
+.button-text {
+  position: relative;
+  z-index: 2;
+}
+
+.button-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--nexus-quantum-cyan);
+  border-radius: 50%;
+  animation: particleFloat 2s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.3s; }
+.particle:nth-child(3) { top: 80%; left: 20%; animation-delay: 0.6s; }
+.particle:nth-child(4) { top: 30%; left: 70%; animation-delay: 0.9s; }
+.particle:nth-child(5) { top: 70%; left: 40%; animation-delay: 1.2s; }
+.particle:nth-child(6) { top: 10%; left: 60%; animation-delay: 1.5s; }
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-10px) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Newsletter Signup */
+.quantum-newsletter {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 3rem;
+  border: 1px solid rgba(107, 70, 193, 0.2);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.quantum-newsletter h3 {
+  color: var(--nexus-text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.quantum-newsletter p {
+  color: var(--nexus-text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.input-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.quantum-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(107, 70, 193, 0.3);
+  border-radius: 50px;
+  color: var(--nexus-text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.quantum-input:focus {
+  outline: none;
+  border-color: var(--nexus-quantum-cyan);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.quantum-input::placeholder {
+  color: var(--nexus-text-muted);
+}
+
+.submit-button {
+  padding: 1rem 2rem;
+  background: linear-gradient(45deg, var(--nexus-consciousness-purple), var(--nexus-quantum-cyan));
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(107, 70, 193, 0.3);
+}
+
+.newsletter-benefits {
+  color: var(--nexus-text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.newsletter-success {
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 20px;
+  padding: 3rem;
+  border: 1px solid var(--nexus-quantum-cyan);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.newsletter-success h3 {
+  color: var(--nexus-quantum-cyan);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.newsletter-success p {
+  color: var(--nexus-text-primary);
+  margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .pricing-card.popular {
+    transform: none;
+  }
+  
+  .input-group {
+    flex-direction: column;
+  }
+  
+  .quantum-demo-button {
+    min-width: auto;
+    padding: 1rem 2rem;
+  }
+  
+  .consciousness-indicator,
+  .neural-network-viz,
+  .quantum-newsletter {
+    padding: 1.5rem;
+  }
+}

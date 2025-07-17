@@ -1,0 +1,66 @@
+{
+  "color_system": {
+    "primary_palette": {
+      "quantum_blue": {
+        "hex": "#0A1B3D",
+        "rgb": "10, 27, 61",
+        "hsl": "220, 72%, 14%",
+        "meaning": "Deep consciousness, quantum depth",
+        "usage": "Primary brand color, headers, key elements"
+      },
+      "consciousness_purple": {
+        "hex": "#6B46C1", 
+        "rgb": "107, 70, 193",
+        "hsl": "258, 48%, 52%",
+        "meaning": "Elevated awareness, transformation",
+        "usage": "Secondary brand color, highlights, CTAs"
+      },
+      "neural_cyan": {
+        "hex": "#06B6D4",
+        "rgb": "6, 182, 212", 
+        "hsl": "189, 94%, 43%",
+        "meaning": "Intelligence flow, connectivity",
+        "usage": "Accent color, data visualization, interactions"
+      }
+    },
+    "neutral_palette": {
+      "quantum_white": {
+        "hex": "#FAFBFC",
+        "meaning": "Infinite possibility, clarity"
+      },
+      "consciousness_gray": {
+        "hex": "#64748B", 
+        "meaning": "Balanced awareness, sophistication"
+      },
+      "void_black": {
+        "hex": "#0F172A",
+        "meaning": "Deep space, infinite potential"
+      }
+    },
+    "gradient_systems": {
+      "consciousness_flow": "linear-gradient(135deg, #6B46C1 0%, #06B6D4 100%)",
+      "quantum_depth": "linear-gradient(180deg, #0A1B3D 0%, #6B46C1 100%)",
+      "neural_energy": "radial-gradient(circle, #06B6D4 0%, #0A1B3D 100%)"
+    }
+  },
+  "typography_hierarchy": {
+    "primary_font": {
+      "name": "Inter Quantum",
+      "style": "Modern geometric sans-serif with consciousness-enhanced spacing",
+      "usage": "Headlines, primary text, brand name",
+      "characteristics": "Clean, futuristic, highly readable, quantum-proportioned"
+    },
+    "secondary_font": {
+      "name": "JetBrains Mono Neural",
+      "style": "Monospace with neural network inspiration",
+      "usage": "Code, technical content, data display",
+      "characteristics": "Technical precision, AI-friendly, consciousness-aligned"
+    },
+    "accent_font": {
+      "name": "Playfair Consciousness", 
+      "style": "Serif with elevated elegance",
+      "usage": "Quotes, emphasis, consciousness-related content",
+      "characteristics": "Sophisticated, transcendent, human-warmth"
+    }
+  }
+}

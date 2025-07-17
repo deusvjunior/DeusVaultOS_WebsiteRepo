@@ -30,8 +30,8 @@ const LoadingScreenCyberpunk: React.FC<LoadingScreenProps> = ({ onLoadingComplet
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Cyberpunk neon colors
-      const colors = ['#00ffff', '#ff0080', '#00ff00', '#ffff00', '#ff8000'];
+      // Professional monochrome colors - elegant and refined
+      const colors = ['#ffffff', '#f0f0f0', '#e0e0e0', '#d0d0d0', '#c0c0c0'];
       
       ctx.font = '15px monospace';
 
@@ -111,7 +111,7 @@ const LoadingScreenCyberpunk: React.FC<LoadingScreenProps> = ({ onLoadingComplet
         className="fixed inset-0 z-50 bg-black overflow-hidden"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
       >
         {/* Matrix Background */}
         <canvas
@@ -122,9 +122,9 @@ const LoadingScreenCyberpunk: React.FC<LoadingScreenProps> = ({ onLoadingComplet
 
         {/* Scan Lines */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="h-full w-full opacity-10 bg-gradient-to-b from-transparent via-cyan-400 to-transparent animate-pulse" 
+          <div className="h-full w-full opacity-10 bg-gradient-to-b from-transparent via-white to-transparent animate-pulse" 
                style={{ 
-                 backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #00ffff 2px, #00ffff 4px)',
+                 backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #ffffff 2px, #ffffff 4px)',
                  animation: 'scan 2s linear infinite'
                }} 
           />
@@ -140,10 +140,10 @@ const LoadingScreenCyberpunk: React.FC<LoadingScreenProps> = ({ onLoadingComplet
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1, ease: "easeOut" }}
             >
-              <div className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+              <div className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-white via-gray-300 to-gray-400 bg-clip-text text-transparent">
                 DEUS VAULT
               </div>
-              <div className="text-xl md:text-2xl text-cyan-300 mt-2 font-mono tracking-wider">
+              <div className="text-xl md:text-2xl text-white mt-2 font-mono tracking-wider">
                 OPERATING SYSTEM
               </div>
             </motion.div>
