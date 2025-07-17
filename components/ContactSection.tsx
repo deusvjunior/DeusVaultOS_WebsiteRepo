@@ -97,8 +97,8 @@ export const ContactSection = () => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <div className="w-full max-w-7xl mx-auto px-6 py-12">
+      <div className="space-y-16">
         
         {/* Header */}
         <motion.div

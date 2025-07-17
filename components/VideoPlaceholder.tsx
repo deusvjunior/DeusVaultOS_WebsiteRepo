@@ -14,7 +14,7 @@ interface VideoPlaceholderProps {
 export function VideoPlaceholder({ 
   className = "", 
   aspectRatio = "16:9", 
-  autoplay = true,
+  autoplay = false, // Default to false - no autoplay
   loop = true,
   muted = true,
   placeholder = "Demo Video Placeholder",
