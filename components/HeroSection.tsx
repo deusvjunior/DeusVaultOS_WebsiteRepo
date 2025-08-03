@@ -12,8 +12,20 @@ import {
     Sparkles,
     Zap
 } from 'lucide-react';
+import { UserContext } from './AdaptiveEngine';
 
-export function HeroSection({ onNavigateToSubpage }: { onNavigateToSubpage?: (subpage: string) => void }) {
+interface HeroSectionProps {
+  onNavigateToSubpage?: (subpage: string) => void;
+  adaptedContent?: {
+    heroMessage: string;
+    primaryCTA: string;
+    featuredContent: string[];
+    navigationStyle: string;
+  };
+  userContext?: UserContext;
+}
+
+export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }: HeroSectionProps) {
   return (
     <div className="relative overflow-hidden min-h-screen flex items-center px-4 sm:px-6 lg:px-8">
       
@@ -81,7 +93,9 @@ export function HeroSection({ onNavigateToSubpage }: { onNavigateToSubpage?: (su
           >
             <div className="inline-flex items-center gap-2 sm:gap-3 glass-refined rounded-lg px-4 sm:px-6 py-2 sm:py-3 border border-cyan-400/50 shadow-xl shadow-cyan-500/20">
               <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-cyan-400" />
-              <span className="text-cyan-400 font-medium text-sm sm:text-base">🚀 Revolutionary Development Environment</span>
+              <span className="text-cyan-400 font-medium text-sm sm:text-base">
+                🚀 {adaptedContent?.heroMessage || 'Revolutionary Development Environment'}
+              </span>
             </div>
           </motion.div>
 
@@ -98,14 +112,14 @@ export function HeroSection({ onNavigateToSubpage }: { onNavigateToSubpage?: (su
             </h1>
             
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-semibold text-gray-300 leading-relaxed">
-              The Ultimate Development Environment
+              {adaptedContent?.heroMessage || 'Create AI that actually helps you'}
               <br />
-              <span className="text-cyan-400 font-bold">Zero Configuration. Infinite Possibilities.</span>
+              <span className="text-cyan-400 font-bold">No coding required. Ready in minutes.</span>
             </h2>
             
             <p className="text-base sm:text-lg md:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Professional-grade development environment that evolves with you. 
-              Build anything, deploy everywhere, with AI-powered assistance that learns your style.
+              The accessible AI platform that bridges the gap to tomorrow's technology. 
+              Build AI assistants, automate your work, and join 50,000+ creators who are shaping the future.
             </p>
           </motion.div>
 
@@ -117,16 +131,16 @@ export function HeroSection({ onNavigateToSubpage }: { onNavigateToSubpage?: (su
             className="grid grid-cols-3 gap-4 sm:gap-6 max-w-sm sm:max-w-md mx-auto lg:mx-0"
           >
             <div className="text-center lg:text-left">
-              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">Multiple</div>
-              <div className="text-xs sm:text-sm text-gray-400 font-medium">Environments</div>
+              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">50k+</div>
+              <div className="text-xs sm:text-sm text-gray-400 font-medium">Creators</div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">Minutes</div>
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">3 min</div>
               <div className="text-xs sm:text-sm text-gray-400 font-medium">Setup Time</div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">100%</div>
-              <div className="text-xs sm:text-sm text-gray-400 font-medium">Compatible</div>
+              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">Free</div>
+              <div className="text-xs sm:text-sm text-gray-400 font-medium">To Start</div>
             </div>
           </motion.div>
 
@@ -142,7 +156,7 @@ export function HeroSection({ onNavigateToSubpage }: { onNavigateToSubpage?: (su
               className="flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-cyan-500 to-yellow-500 text-black font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-lg hover:from-cyan-400 hover:to-yellow-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25"
             >
               <Download className="h-4 w-4 sm:h-5 sm:w-5" />
-              Download Free
+              {adaptedContent?.primaryCTA || 'Download Free'}
               <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
             
@@ -209,8 +223,8 @@ export function HeroSection({ onNavigateToSubpage }: { onNavigateToSubpage?: (su
               <div className="w-12 h-12 bg-cyan-400/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-cyan-400/30 transition-colors">
                 <Code className="h-6 w-6 text-cyan-400" />
               </div>
-              <h3 className="font-semibold text-white mb-1">AI Coding</h3>
-              <p className="text-sm text-gray-400">THERION AI writes code with you</p>
+              <h3 className="font-semibold text-white mb-1">AI Assistant</h3>
+              <p className="text-sm text-gray-400">AI that understands what you need</p>
             </motion.div>
 
             <motion.div
@@ -222,8 +236,8 @@ export function HeroSection({ onNavigateToSubpage }: { onNavigateToSubpage?: (su
               <div className="w-12 h-12 bg-yellow-400/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-yellow-400/30 transition-colors">
                 <Zap className="h-6 w-6 text-yellow-400" />
               </div>
-              <h3 className="font-semibold text-white mb-1">Instant Deploy</h3>
-              <p className="text-sm text-gray-400">One-click to any platform</p>
+              <h3 className="font-semibold text-white mb-1">Easy Setup</h3>
+              <p className="text-sm text-gray-400">Working in 3 minutes or less</p>
             </motion.div>
 
             <motion.div
@@ -235,8 +249,8 @@ export function HeroSection({ onNavigateToSubpage }: { onNavigateToSubpage?: (su
               <div className="w-12 h-12 bg-cyan-400/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-cyan-400/30 transition-colors">
                 <Shield className="h-6 w-6 text-cyan-400" />
               </div>
-              <h3 className="font-semibold text-white mb-1">Secure</h3>
-              <p className="text-sm text-gray-400">Enterprise-grade security</p>
+              <h3 className="font-semibold text-white mb-1">Community</h3>
+              <p className="text-sm text-gray-400">Learn together with 50k+ creators</p>
             </motion.div>
 
             <motion.div

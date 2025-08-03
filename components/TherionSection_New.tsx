@@ -15,7 +15,12 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 
-export function TherionSection() {
+interface TherionSectionProps {
+  onNavigateToSubpage?: (subpage: string) => void;
+  onBack?: () => void;
+}
+
+export function TherionSection({ onNavigateToSubpage, onBack }: TherionSectionProps) {
   const therionAbilities = [
     {
       icon: Brain,

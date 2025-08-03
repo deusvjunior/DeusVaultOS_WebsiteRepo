@@ -22,9 +22,10 @@ import { Card, CardContent } from './ui/card';
 
 interface MarketplaceSectionProps {
   onNavigateToSubpage?: (subpage: string) => void;
+  onBack?: () => void;
 }
 
-export function MarketplaceSection({ onNavigateToSubpage }: MarketplaceSectionProps) {
+export function MarketplaceSection({ onNavigateToSubpage, onBack }: MarketplaceSectionProps) {
   const featuredApps = [
     {
       name: "THERION AI Studio",

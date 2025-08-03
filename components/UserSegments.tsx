@@ -14,7 +14,11 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-export function UserSegments() {
+interface UserSegmentsProps {
+  onNavigateToSubpage?: (subpage: string) => void;
+}
+
+export function UserSegments({ onNavigateToSubpage }: UserSegmentsProps) {
   const [activeTab, setActiveTab] = useState('developers');
 
   const userTypes = {

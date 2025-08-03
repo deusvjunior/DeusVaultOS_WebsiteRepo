@@ -28,33 +28,53 @@ import { DocumentationPage } from "./components/DocumentationPage";
 import { DownloadPage } from "./components/DownloadPage";
 import { EnterprisePage } from "./components/EnterprisePage";
 
+// Import adaptive engine
+import { useAdaptiveEngine } from "./components/AdaptiveEngine";
+import AdaptiveMobileNav from "./components/AdaptiveMobileNav";
+import PersonalizationBanner from "./components/PersonalizationBanner";
+
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [currentSubpage, setCurrentSubpage] = useState<string | null>(null);
 
-  // Navigation functions
+  // Adaptive Intelligence System
+  const { userContext, adaptedContent, trackInteraction, getRecommendedSections } = useAdaptiveEngine();
+
+  // Navigation functions with tracking
   const handleNavigateToSubpage = (subpage: string) => {
     setCurrentSubpage(subpage);
+    trackInteraction(`navigate_to_${subpage}`);
   };
 
   const handleBackToMainSections = () => {
     setCurrentSubpage(null);
+    trackInteraction('back_to_main');
   };
 
+  // Adaptive section ordering
+  const recommendedSectionOrder = getRecommendedSections();
+  
   const sections = [
     {
       id: 'hero',
       title: 'DeusVault OS Platform',
       icon: <Home className="h-4 w-4" />,
-      component: <HeroSection onNavigateToSubpage={handleNavigateToSubpage} />
+      component: <HeroSection 
+        onNavigateToSubpage={handleNavigateToSubpage} 
+        adaptedContent={adaptedContent}
+        userContext={userContext}
+      />
     },
     {
       id: 'features',
       title: 'Core Features',
       icon: <Zap className="h-4 w-4" />,
-      component: <FeaturesSection onNavigateToSubpage={handleNavigateToSubpage} />
+      component: <FeaturesSection 
+        onNavigateToSubpage={handleNavigateToSubpage}
+        userContext={userContext}
+      />
     },
     {
       id: 'user-segments',
@@ -180,7 +200,13 @@ export default function App() {
   };
 
   if (isLoading) {
-    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
+    return (
+      <LoadingScreen 
+        onLoadingComplete={() => setIsLoading(false)} 
+        userContext={userContext}
+        adaptedContent={adaptedContent}
+      />
+    );
   }
 
   return (
@@ -366,9 +392,23 @@ export default function App() {
         keywords={[]}
       />
 
-      {/* Single Navigation - Compact Floating Island */}
+      {/* Adaptive Mobile Navigation */}
+      <AdaptiveMobileNav
+        currentSection={currentSection}
+        sections={sections}
+        onNavigateToSection={navigateToSection}
+        userContext={userContext}
+      />
+
+      {/* Personalization Banner */}
+      <PersonalizationBanner 
+        userContext={userContext}
+        adaptedContent={adaptedContent}
+      />
+
+      {/* Single Navigation - Compact Floating Island - Hidden on Mobile */}
       <motion.div
-        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30"
+        className="hidden lg:flex fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1 }}

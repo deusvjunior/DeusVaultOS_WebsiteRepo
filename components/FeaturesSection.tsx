@@ -17,12 +17,15 @@ import {
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
+import { UserContext } from './AdaptiveEngine';
 
 interface FeaturesSectionProps {
   onNavigateToSubpage?: (subpage: string) => void;
+  userContext?: UserContext;
+  onBack?: () => void;
 }
 
-export function FeaturesSection({ onNavigateToSubpage }: FeaturesSectionProps) {
+export function FeaturesSection({ onNavigateToSubpage, userContext, onBack }: FeaturesSectionProps) {
   const heroFeatures = [
     {
       icon: <Brain className="h-8 w-8" />,

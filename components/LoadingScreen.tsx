@@ -19,12 +19,24 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
+import { UserContext } from './AdaptiveEngine';
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
+  userContext?: UserContext;
+  adaptedContent?: {
+    heroMessage: string;
+    primaryCTA: string;
+    featuredContent: string[];
+    navigationStyle: string;
+  };
 }
 
-const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
+const LoadingScreen: React.FC<LoadingScreenProps> = ({ 
+  onLoadingComplete, 
+  userContext, 
+  adaptedContent 
+}) => {
   const [progress, setProgress] = useState(0);
   const [loadingText, setLoadingText] = useState('Initializing DeusVaultOS...');
   
@@ -41,14 +53,83 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
     }));
   });
 
-  // 📝 LOADING MESSAGES
-  const loadingMessages = [
-    'Initializing DeusVaultOS...',
-    'Loading AI Components...',
-    'Preparing Development Environment...',
-    'Activating Quantum Processors...',
-    'Ready to Transform Your Workflow!'
-  ];
+  // 📝 ADAPTIVE LOADING MESSAGES - ACCESSIBLE FOR EVERYONE
+  const getLoadingMessages = () => {
+    const baseMessages = [
+      'Initializing DeusVaultOS...',
+      'Loading AI Components...',
+      'Preparing Development Environment...',
+    ];
+
+    if (userContext?.userType === 'developer') {
+      return [
+        'Initializing Developer Environment...',
+        'Loading Code Intelligence...',
+        'Preparing AI Pair Programming...',
+        'Setting up GitHub Integration...',
+        'Optimizing for Development Speed...',
+      ];
+    } else if (userContext?.userType === 'enterprise') {
+      return [
+        'Initializing Enterprise Platform...',
+        'Loading Security Modules...',
+        'Preparing Team Collaboration...',
+        'Setting up Compliance Tools...',
+        'Optimizing for Scale...',
+      ];
+    } else if (userContext?.userType === 'student') {
+      return [
+        'Initializing Learning Environment...',
+        'Loading Educational Resources...',
+        'Preparing Project Templates...',
+        'Setting up Career Tools...',
+        'Optimizing for Learning...',
+      ];
+    } else if (userContext?.userType === 'hobbyist') {
+      return [
+        'Initializing Creative Workspace...',
+        'Loading AI Building Blocks...',
+        'Preparing Easy-to-Use Tools...',
+        'Setting up Community Features...',
+        'Ready to Create Magic...',
+      ];
+    } else if (userContext?.userType === 'creator') {
+      return [
+        'Initializing Creator Studio...',
+        'Loading Content AI Tools...',
+        'Preparing Automation Suite...',
+        'Setting up Publishing Tools...',
+        'Ready to Amplify Content...',
+      ];
+    } else if (userContext?.userType === 'gamer') {
+      return [
+        'Initializing Gaming AI Lab...',
+        'Loading Game Development Tools...',
+        'Preparing AI Characters...',
+        'Setting up Streaming Bots...',
+        'Ready to Level Up...',
+      ];
+    } else if (userContext?.userType === 'small-business') {
+      return [
+        'Initializing Business AI Suite...',
+        'Loading Automation Tools...',
+        'Preparing Customer Service AI...',
+        'Setting up Growth Analytics...',
+        'Ready to Scale Your Business...',
+      ];
+      return [
+        'Initializing Learning Environment...',
+        'Loading Educational Resources...',
+        'Preparing Project Templates...',
+        'Setting up Career Tools...',
+        'Optimizing for Learning...',
+      ];
+    }
+
+    return baseMessages;
+  };
+
+  const loadingMessages = getLoadingMessages();
 
   // 🚀 PERFECT LOADING ANIMATION - SHOW 100% COMPLETION PROPERLY
   useEffect(() => {
