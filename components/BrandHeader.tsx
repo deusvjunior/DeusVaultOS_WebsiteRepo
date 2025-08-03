@@ -14,7 +14,7 @@ export function BrandHeader({ onReturnHome, currentSection, isSubpage }: BrandHe
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-6 left-6 z-50"
+      className="fixed top-4 left-4 z-50 md:top-6 md:left-6"
     >
       <motion.button
         onClick={onReturnHome}

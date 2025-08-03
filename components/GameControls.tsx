@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useHapticFeedback } from '../utils/hapticFeedback';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -33,6 +34,7 @@ export function GameControls({
   const [isCompact, setIsCompact] = useState(false);
   const [pulseActive, setPulseActive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { navigation, click, light } = useHapticFeedback();
 
   // Check for mobile device
   useEffect(() => {
@@ -127,7 +129,7 @@ export function GameControls({
               stiffness: 200,
               duration: 0.6 
             }}
-            className="fixed bottom-4 left-4 md:bottom-8 md:left-8 z-50"
+            className="fixed bottom-32 left-4 md:bottom-8 md:left-8 z-50"
           >
             <div className="relative">
               {/* Main Control Panel with responsive sizing */}
@@ -187,7 +189,10 @@ export function GameControls({
                   <motion.button
                     whileHover={{ scale: 1.03, x: -2 }}
                     whileTap={{ scale: 0.97 }}
-                    onClick={() => navigateToSection('prev')}
+                    onClick={() => {
+                      navigation();
+                      navigateToSection('prev');
+                    }}
                     disabled={isTransitioning}
                     className="flex-1 flex items-center justify-center gap-2 md:gap-3 
                                p-3 md:p-4 glass-refined rounded-xl md:rounded-2xl 
@@ -216,7 +221,10 @@ export function GameControls({
                         '0 0 30px rgba(0, 225, 255, 0.6), 0 0 60px rgba(0, 225, 255, 0.3)' : 
                         '0 0 20px rgba(0, 225, 255, 0.2)'
                     }}
-                    onClick={() => navigateToSection('next')}
+                    onClick={() => {
+                      navigation();
+                      navigateToSection('next');
+                    }}
                     disabled={isTransitioning}
                     className="flex-1 flex items-center justify-center gap-2 md:gap-3 
                                p-3 md:p-4 bg-gradient-to-r from-cyber-cyan to-cyber-mint-bright 
@@ -352,7 +360,7 @@ export function GameControls({
 
       {/* Enhanced Keyboard Shortcuts Display */}
       <motion.div
-        className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-40"
+        className="fixed bottom-32 right-4 md:bottom-8 md:right-8 z-40"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 4 }}

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useHapticFeedback } from '../utils/hapticFeedback';
 import {
     ArrowRight,
     CheckCircle,
@@ -20,6 +21,8 @@ import { Card, CardContent } from "./ui/card";
 import { openSecureLink } from '../utils/safeExternalLink';
 
 export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (subpage: string) => void }) {
+  const { click, success } = useHapticFeedback();
+  
   const trustIndicators = [
     { icon: <Users className="h-5 w-5" />, text: "Developer Community", highlight: "Growing Daily", stat: "5k+" },
     { icon: <Code className="h-5 w-5" />, text: "AI Agents", highlight: "In Development", stat: "15" },
@@ -183,7 +186,10 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
           {/* Primary CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button 
-              onClick={() => onNavigateToSubpage?.('download')}
+              onClick={() => {
+                success();
+                onNavigateToSubpage?.('download');
+              }}
               className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-12 py-6 text-xl transform hover:scale-105 shadow-2xl shadow-cyan-500/25"
             >
               <Download className="mr-3 h-6 w-6" />
@@ -192,7 +198,10 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
             </Button>
             
             <Button 
-              onClick={() => onNavigateToSubpage?.('demo')}
+              onClick={() => {
+                click();
+                onNavigateToSubpage?.('demo');
+              }}
               variant="outline" 
               className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-12 py-6 text-xl"
             >

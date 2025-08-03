@@ -56,7 +56,7 @@ export function PersonalizationBanner({ userContext, adaptedContent }: Personali
 
   return (
     <motion.div
-      className="fixed top-20 right-4 z-40 max-w-sm"
+      className="fixed top-16 right-4 left-4 z-40 max-w-sm mx-auto md:top-20 md:left-auto md:mx-0"
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 100 }}

@@ -14,6 +14,7 @@ import {
   Scroll,
   Hexagon
 } from 'lucide-react';
+import { useHapticFeedback } from '../utils/hapticFeedback';
 
 interface ThreeDNavigationProps {
   currentSection: number;
@@ -24,6 +25,7 @@ interface ThreeDNavigationProps {
 export function ThreeDNavigation({ currentSection, onSectionChange, sectionTitles }: ThreeDNavigationProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
+  const { navigation, click, light } = useHapticFeedback();
 
   const sectionIcons = [
     <Home className="h-6 w-6" />,
@@ -65,14 +67,17 @@ export function ThreeDNavigation({ currentSection, onSectionChange, sectionTitle
         case 'ArrowLeft':
         case 'a':
         case 'A':
+          navigation();
           onSectionChange((currentSection - 1 + 6) % 6);
           break;
         case 'ArrowRight':
         case 'd':
         case 'D':
+          navigation();
           onSectionChange((currentSection + 1) % 6);
           break;
         case 'Escape':
+          light();
           setShowMenu(false);
           break;
         case ' ':
@@ -93,7 +98,10 @@ export function ThreeDNavigation({ currentSection, onSectionChange, sectionTitle
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          onClick={() => setShowMenu(!showMenu)}
+          onClick={() => {
+            click();
+            setShowMenu(!showMenu);
+          }}
           className="w-18 h-18 glass-refined rounded-2xl flex items-center justify-center text-cyber-cyan hover:text-cyber-white transition-all duration-300 group relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-cyber-cyan/10 to-cyber-mint-bright/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -135,6 +143,7 @@ export function ThreeDNavigation({ currentSection, onSectionChange, sectionTitle
                     whileHover={{ scale: 1.02, x: 12 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => {
+                      navigation();
                       onSectionChange(index);
                       setShowMenu(false);
                     }}
@@ -238,7 +247,10 @@ export function ThreeDNavigation({ currentSection, onSectionChange, sectionTitle
                       fill={i === currentSection ? '#00e1ff' : '#475569'}
                       className="transition-all duration-300 cursor-pointer"
                       whileHover={{ scale: 1.5 }}
-                      onClick={() => onSectionChange(i)}
+                      onClick={() => {
+                        navigation();
+                        onSectionChange(i);
+                      }}
                     />
                   );
                 })}
@@ -248,9 +260,9 @@ export function ThreeDNavigation({ currentSection, onSectionChange, sectionTitle
         </div>
       </div>
 
-      {/* Enhanced Progress Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        <div className="h-3 bg-cyber-dark-800 relative overflow-hidden">
+      {/* Enhanced Progress Bar - Mobile Responsive */}
+      <div className="fixed bottom-20 left-0 right-0 z-50 md:bottom-0">
+        <div className="h-2 md:h-3 bg-cyber-dark-800 relative overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-cyber-cyan via-cyber-mint-bright to-cyber-yellow relative"
             initial={{ width: 0 }}
@@ -326,7 +338,10 @@ export function ThreeDNavigation({ currentSection, onSectionChange, sectionTitle
               key={index}
               whileHover={{ scale: 1.3 }}
               whileTap={{ scale: 0.9 }}
-              onClick={() => onSectionChange(index)}
+              onClick={() => {
+                navigation();
+                onSectionChange(index);
+              }}
               className={`w-5 h-5 rounded-full transition-all duration-500 relative ${
                 index === currentSection
                   ? `bg-cyber-cyan shadow-lg shadow-cyber-cyan/50 ${sectionColors[index]}`

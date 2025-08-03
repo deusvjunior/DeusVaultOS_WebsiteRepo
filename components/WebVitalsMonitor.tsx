@@ -123,7 +123,7 @@ export function WebVitalsMonitor({ onMetricsUpdate, enableReporting = false }: W
   // Development mode debug panel
   if (window.location.hostname === 'localhost') {
     return (
-      <div className="fixed bottom-4 right-4 bg-black/80 text-white p-4 rounded-lg text-xs font-mono z-50 max-w-xs">
+      <div className="fixed bottom-32 right-4 bg-black/80 text-white p-4 rounded-lg text-xs font-mono z-50 max-w-xs">
         <div className="font-bold mb-2">Core Web Vitals</div>
         <div className="space-y-1">
           <div className="flex justify-between">
