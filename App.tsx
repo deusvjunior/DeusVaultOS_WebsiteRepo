@@ -1,226 +1,76 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import {
-    ArrowLeft,
-    ArrowRight,
-    Home,
-    Map,
-    MessageCircle,
-    Target,
-    Users,
-    Zap
+import { useState, useEffect } from 'react';
+import { ThreeJSScene_Cinematic } from './components/ThreeJSScene_Cinematic';
+import { PageTransition, LoadingTransition } from './components/PageTransition';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Home, 
+  Users, 
+  Zap, 
+  ShoppingCart, 
+  BarChart3, 
+  Mail,
+  ArrowLeft,
+  ArrowRight,
+  Play,
+  Pause,
+  Settings
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import LoadingScreen from './components/LoadingScreen';
-import ThreeJSScene from './components/ThreeJSScene';
 
-// Import main sections for final site
-import { CTASection } from "./components/CTASection";
-import { FeaturesSection } from "./components/FeaturesSection";
-import { Footer } from "./components/Footer";
+// Import content components
 import { HeroSection } from "./components/HeroSection";
-import { MarketplaceSection } from "./components/MarketplaceSection";
-import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
-import { TherionSection } from "./components/TherionSection_New";
 import { UserSegments } from "./components/UserSegments";
-
-// Import subpage components
-import { DocumentationPage } from "./components/DocumentationPage";
-import { DownloadPage } from "./components/DownloadPage";
-import { EnterprisePage } from "./components/EnterprisePage";
-
-// Import adaptive engine and components
-import { useAdaptiveEngine } from "./components/AdaptiveEngine";
-import AdaptiveMobileNav from "./components/AdaptiveMobileNav";
-import PersonalizationBanner from "./components/PersonalizationBanner";
-import { BrandHeader } from "./components/BrandHeader";
+import { FeaturesSection } from "./components/FeaturesSection";
+import { MarketplaceSection } from "./components/MarketplaceSection";
+import { MicrosoftComparisonSection } from "./components/MicrosoftComparisonSection";
+import { Footer } from "./components/Footer";
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [currentSubpage, setCurrentSubpage] = useState<string | null>(null);
+  const [isAutoplay, setIsAutoplay] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
-  // Adaptive Intelligence System
-  const { userContext, adaptedContent, trackInteraction, getRecommendedSections } = useAdaptiveEngine();
-
-  // Navigation functions with tracking
-  const handleNavigateToSubpage = (subpage: string) => {
-    setCurrentSubpage(subpage);
-    trackInteraction(`navigate_to_${subpage}`);
-  };
-
-  const handleBackToMainSections = () => {
-    setCurrentSubpage(null);
-    trackInteraction('back_to_main');
-  };
-
-  // Adaptive section ordering
-  const recommendedSectionOrder = getRecommendedSections();
-  
   const sections = [
     {
       id: 'hero',
-      title: 'DeusVault OS Platform',
+      title: 'Welcome to Deus Vault',
       icon: <Home className="h-4 w-4" />,
-      component: <HeroSection 
-        onNavigateToSubpage={handleNavigateToSubpage} 
-        adaptedContent={adaptedContent}
-        userContext={userContext}
-      />
+      component: <HeroSection />
+    },
+    {
+      id: 'segments',
+      title: 'User Segments',
+      icon: <Users className="h-4 w-4" />,
+      component: <UserSegments />
     },
     {
       id: 'features',
       title: 'Core Features',
       icon: <Zap className="h-4 w-4" />,
-      component: <FeaturesSection 
-        onNavigateToSubpage={handleNavigateToSubpage}
-        userContext={userContext}
-      />
-    },
-    {
-      id: 'user-segments',
-      title: 'Who Uses DeusVaultOS',
-      icon: <Users className="h-4 w-4" />,
-      component: <UserSegments />
-    },
-    {
-      id: 'therion',
-      title: 'THERION AI',
-      icon: <Target className="h-4 w-4" />,
-      component: <TherionSection />
+      component: <FeaturesSection />
     },
     {
       id: 'marketplace',
       title: 'Marketplace',
-      icon: <Map className="h-4 w-4" />,
-      component: <MarketplaceSection onNavigateToSubpage={handleNavigateToSubpage} />
+      icon: <ShoppingCart className="h-4 w-4" />,
+      component: <MarketplaceSection />
     },
     {
-      id: 'cta',
+      id: 'comparison',
+      title: 'Platform Comparison',
+      icon: <BarChart3 className="h-4 w-4" />,
+      component: <MicrosoftComparisonSection />
+    },
+    {
+      id: 'contact',
       title: 'Get Started',
-      icon: <MessageCircle className="h-4 w-4" />,
-      component: <CTASection onNavigateToSubpage={handleNavigateToSubpage} />
+      icon: <Mail className="h-4 w-4" />,
+      component: <Footer />
     }
   ];
-
-  // Detect reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReducedMotion(mediaQuery.matches);
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setReducedMotion(e.matches);
-    };
-    
-    mediaQuery.addEventListener('change', handleChange);
-    
-    // Enhanced keyboard navigation
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (currentSubpage) return; // Don't interfere with subpage navigation
-      
-      switch (e.key) {
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-          prevSection();
-          break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-          nextSection();
-          break;
-        case 'Home':
-          navigateToSection(0);
-          break;
-        case 'End':
-          navigateToSection(sections.length - 1);
-          break;
-        case 'Escape':
-          if (currentSubpage) handleBackToMainSections();
-          break;
-      }
-    };
-
-    // Enhanced mobile touch gesture handling
-    let touchStartY: number | null = null;
-    let touchStartX: number | null = null;
-    
-    const handleTouchStart = (e: TouchEvent) => {
-      if (currentSubpage) return; // Don't interfere with subpage touch
-      
-      const touch = e.touches[0];
-      touchStartY = touch.clientY;
-      touchStartX = touch.clientX;
-    };
-    
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (currentSubpage || !touchStartY || !touchStartX) return;
-      
-      const touch = e.changedTouches[0];
-      const deltaY = touch.clientY - touchStartY;
-      const deltaX = touch.clientX - touchStartX;
-      
-      const threshold = 50;
-      const isVerticalSwipe = Math.abs(deltaY) > Math.abs(deltaX);
-      
-      if (isVerticalSwipe) {
-        if (deltaY > threshold && currentSection > 0) {
-          prevSection();
-        } else if (deltaY < -threshold && currentSection < sections.length - 1) {
-          nextSection();
-        }
-      } else {
-        if (deltaX > threshold && currentSection > 0) {
-          prevSection();
-        } else if (deltaX < -threshold && currentSection < sections.length - 1) {
-          nextSection();
-        }
-      }
-      
-      touchStartY = null;
-      touchStartX = null;
-    };
-
-    // Enhanced scroll handling with mobile optimization
-    const handleScroll = (e: WheelEvent) => {
-      if (currentSubpage) return; // Don't interfere with subpage scrolling
-      
-      e.preventDefault();
-      
-      const threshold = 50;
-      
-      if (e.deltaY > threshold && currentSection < sections.length - 1) {
-        nextSection();
-      } else if (e.deltaY < -threshold && currentSection > 0) {
-        prevSection();
-      }
-    };
-
-    // Loading timer
-    const loadingTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
-    // Event listeners
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('wheel', handleScroll, { passive: false });
-    document.addEventListener('touchstart', handleTouchStart, { passive: true });
-    document.addEventListener('touchend', handleTouchEnd, { passive: true });
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleChange);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('wheel', handleScroll);
-      document.removeEventListener('touchstart', handleTouchStart);
-      document.removeEventListener('touchend', handleTouchEnd);
-      clearTimeout(loadingTimer);
-    };
-  }, [currentSection, sections.length, currentSubpage]);
-
-  // Auto-scroll to top when section changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentSection]);
 
   // Loading timer
   useEffect(() => {
@@ -230,7 +80,49 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Enhanced keyboard navigation
+  // Enhanced navigation functions with cinematic transitions
+  const navigateToSection = (index: number) => {
+    if (index === currentSection) return;
+    
+    setIsTransitioning(true);
+    
+    // Delay section change to allow transition to start
+    setTimeout(() => {
+      setCurrentSection(index);
+      setTimeout(() => setIsTransitioning(false), 600);
+    }, 200);
+  };
+
+  const nextSection = () => {
+    const nextIndex = (currentSection + 1) % 6;
+    navigateToSection(nextIndex);
+  };
+
+  const prevSection = () => {
+    const prevIndex = (currentSection - 1 + 6) % 6;
+    navigateToSection(prevIndex);
+  };
+
+  const resetToHome = () => {
+    navigateToSection(0);
+  };
+
+  const toggleAutoplay = () => {
+    setIsAutoplay(!isAutoplay);
+  };
+
+  // Autoplay effect with smooth transitions
+  useEffect(() => {
+    if (isAutoplay && !isTransitioning) {
+      const timer = setInterval(() => {
+        nextSection();
+      }, 5000); // Change section every 5 seconds
+      
+      return () => clearInterval(timer);
+    }
+  }, [isAutoplay, isTransitioning, nextSection]);
+
+  // Enhanced keyboard navigation with more controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
@@ -242,142 +134,241 @@ export default function App() {
         case 'a':
         case 'A':
           e.preventDefault();
-          setCurrentSection((prev: number) => (prev - 1 + sections.length) % sections.length);
+          prevSection();
           break;
         case 'ArrowRight':
         case 'd':
         case 'D':
           e.preventDefault();
-          setCurrentSection((prev: number) => (prev + 1) % sections.length);
+          nextSection();
           break;
         case ' ':
           e.preventDefault();
-          setCurrentSection((prev: number) => (prev + 1) % sections.length);
+          nextSection();
           break;
-        case 'Home':
+        case 'p':
+        case 'P':
           e.preventDefault();
-          setCurrentSection(0);
+          setIsAutoplay(!isAutoplay);
           break;
-        case 'End':
+        case 'f':
+        case 'F':
           e.preventDefault();
-          setCurrentSection(sections.length - 1);
+          setIsFullscreen(!isFullscreen);
           break;
-        case 'o':
-        case 'O':
-          // Removed observer mode functionality
+        case 'h':
+        case 'H':
+          e.preventDefault();
+          setShowControls(!showControls);
+          break;
+        case 'r':
+        case 'R':
+          e.preventDefault();
+          resetToHome();
           break;
         case 'Escape':
-          // Removed observer mode functionality
+          e.preventDefault();
+          setIsFullscreen(false);
           break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [sections.length]);
+  }, [isAutoplay, isFullscreen, showControls]);
 
-  // Auto-advance sections disabled per user request
-  /*
+  // Simulated loading with progress
   useEffect(() => {
-    if (reducedMotion) return;
+    if (isLoading) {
+      let progress = 0;
+      const loadingInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress >= 100) {
+          progress = 100;
+          setLoadingProgress(progress);
+          setTimeout(() => setIsLoading(false), 500);
+          clearInterval(loadingInterval);
+        } else {
+          setLoadingProgress(progress);
+        }
+      }, 100);
+      
+      return () => clearInterval(loadingInterval);
+    }
+  }, [isLoading]);
 
-    const interval = setInterval(() => {
-      setCurrentSection((prev: number) => (prev + 1) % sections.length);
-    }, 20000); // 20 seconds per section
-
-    return () => clearInterval(interval);
-  }, [reducedMotion, sections.length]);
-  */
-
-  const nextSection = () => {
-    setCurrentSection((prev: number) => (prev + 1) % sections.length);
-  };
-
-  const prevSection = () => {
-    setCurrentSection((prev: number) => (prev - 1 + sections.length) % sections.length);
-  };
-
-  const navigateToSection = (index: number) => {
-    setCurrentSection(index);
-  };
-
+  // Simple loading screen
   if (isLoading) {
     return (
-      <LoadingScreen 
-        onLoadingComplete={() => setIsLoading(false)} 
-        userContext={userContext}
-        adaptedContent={adaptedContent}
-      />
+      <div className="fixed inset-0 bg-cyber-black flex items-center justify-center z-50">
+        <div className="text-center">
+          <motion.div
+            className="w-24 h-24 mx-auto mb-8"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          >
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <polygon
+                points="50,8 82,25 82,75 50,92 18,75 18,25"
+                fill="none"
+                stroke="#00e1ff"
+                strokeWidth="2"
+              />
+            </svg>
+          </motion.div>
+          
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="font-display text-4xl lg:text-6xl text-cyber-white mb-4"
+          >
+            DEUS VAULT
+          </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="font-subtitle text-cyber-dark-300"
+          >
+            Loading 3D Interface...
+          </motion.p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative">
+    <div className="min-h-screen bg-cyber-black text-cyber-white antialiased relative">
       
-      {/* SEO Optimization */}
-      <SEOOptimizer {...seoConfigs.home} />
+      {/* Enhanced Loading Screen */}
+      <LoadingTransition 
+        isLoading={isLoading}
+        progress={loadingProgress / 100}
+        style="hexagon"
+      />
       
-      {/* 3D Background Scene - Enhanced visibility */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <ThreeJSScene
-          currentSection={currentSection}
-          reducedMotion={reducedMotion}
-        />
-      </div>
-
-      {/* **BRAND HEADER WITH HOMEPAGE NAVIGATION** */}
-      <BrandHeader 
+      {/* Page Transition Effects */}
+      <PageTransition 
+        isTransitioning={isTransitioning}
+        transitionType="ripple"
+        duration={800}
+        onComplete={() => setIsTransitioning(false)}
+      />
+      
+      {/* 3D Cinematic Background Scene */}
+      <ThreeJSScene_Cinematic
         currentSection={currentSection}
-        isSubpage={currentSubpage !== null}
-        onReturnHome={() => {
-          setCurrentSubpage(null);
-          setCurrentSection(0);
-        }}
+        onSectionChange={navigateToSection}
       />
 
-          {/* Navigation - Floating Island Design */}
-          <motion.div
-            className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30"
-            initial={{ opacity: 0, y: 50 }}
+      {/* Clean Title Ribbon */}
+      <div className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-r from-cyber-dark-900/95 via-cyber-dark-800/95 to-cyber-dark-900/95 backdrop-blur-md border-b border-cyber-cyan/20">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            
+            {/* Logo */}
+            <div className="flex items-center gap-4">
+              <div className="w-8 h-8 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" className="w-full h-full text-cyber-cyan">
+                  <polygon
+                    points="12,2 20,6 20,18 12,22 4,18 4,6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h1 className="font-title text-xl text-cyber-white">DEUS VAULT</h1>
+                <p className="font-caption text-xs text-cyber-dark-400">Linux Development Environment</p>
+              </div>
+            </div>
+
+            {/* Current Section Info */}
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-3">
+                <div className="text-cyber-cyan">
+                  {sections[currentSection].icon}
+                </div>
+                <div>
+                  <div className="font-subtitle text-sm text-cyber-white">
+                    {sections[currentSection].title}
+                  </div>
+                  <div className="font-caption text-xs text-cyber-dark-400">
+                    Section {currentSection + 1} of {sections.length}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Mobile indicator */}
+              <div className="md:hidden">
+                <div className="font-mono text-sm text-cyber-cyan">
+                  {currentSection + 1}/{sections.length}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Enhanced Navigation Controls */}
+      <AnimatePresence>
+        {showControls && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-30"
           >
-            <div className="bg-black/30 backdrop-blur-xl rounded-full px-6 py-3 border border-white/20 shadow-2xl">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
+              
+              {/* Control Panel */}
+              <div className="flex items-center gap-2 glass-refined rounded-2xl px-6 py-4">
                 
-                {/* Previous */}
+                {/* Reset to Home */}
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  onClick={prevSection}
-                  className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
-                  title="Previous Section (A/←)"
+                  onClick={resetToHome}
+                  className="w-10 h-10 glass-refined rounded-lg flex items-center justify-center text-cyber-cyan hover:text-cyber-white transition-colors group"
+                  title="Reset to Home (R)"
                 >
-                  <ArrowLeft className="h-4 w-4" />
+                  <Home className="h-4 w-4" />
                 </motion.button>
 
-                {/* Section dots */}
-                <div className="flex items-center gap-2 px-3">
+                {/* Previous */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={prevSection}
+                  className="w-12 h-12 glass-refined rounded-xl flex items-center justify-center text-cyber-cyan hover:text-cyber-white transition-colors"
+                  title="Previous Section (A/←)"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </motion.button>
+
+                {/* Section dots with enhanced interactivity */}
+                <div className="flex items-center gap-3 px-4">
                   {sections.map((section, index) => (
                     <motion.button
                       key={index}
-                      whileHover={{ scale: 1.2 }}
+                      whileHover={{ scale: 1.3 }}
                       whileTap={{ scale: 0.8 }}
                       onClick={() => navigateToSection(index)}
-                      className={`relative w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                      className={`relative w-3 h-3 rounded-full transition-all duration-300 ${
                         index === currentSection
-                          ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                          : 'bg-white/30 hover:bg-white/50'
+                          ? 'bg-cyber-cyan shadow-lg shadow-cyber-cyan/50'
+                          : 'bg-cyber-dark-600 hover:bg-cyber-dark-400'
                       }`}
-                      title={section.title}
+                      title={`${section.title} (${index + 1})`}
                     >
-                      {/* Progress ring for current section */}
                       {index === currentSection && (
                         <motion.div
-                          className="absolute inset-0 rounded-full border border-cyan-400"
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 2.5, opacity: 0 }}
-                          transition={{ duration: 2, repeat: Infinity }}
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute inset-0 border-2 border-cyber-cyan rounded-full animate-ping"
                         />
                       )}
                     </motion.button>
@@ -386,191 +377,108 @@ export default function App() {
 
                 {/* Next */}
                 <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={nextSection}
-                  className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
+                  className="w-12 h-12 glass-refined rounded-xl flex items-center justify-center text-cyber-cyan hover:text-cyber-white transition-colors"
                   title="Next Section (D/→)"
                 >
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-5 w-5" />
+                </motion.button>
+
+                {/* Autoplay Toggle */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={toggleAutoplay}
+                  className={`w-10 h-10 glass-refined rounded-lg flex items-center justify-center transition-colors ${
+                    isAutoplay 
+                      ? 'text-cyber-white bg-cyber-cyan/20 border border-cyber-cyan/40' 
+                      : 'text-cyber-cyan hover:text-cyber-white'
+                  }`}
+                  title="Toggle Autoplay (P)"
+                >
+                  {isAutoplay ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                </motion.button>
+
+                {/* Settings */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setShowControls(!showControls)}
+                  className="w-10 h-10 glass-refined rounded-lg flex items-center justify-center text-cyber-cyan hover:text-cyber-white transition-colors"
+                  title="Settings (H)"
+                >
+                  <Settings className="h-4 w-4" />
                 </motion.button>
 
               </div>
+              
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Content Area - Proper Layout with Margins */}
-          <div className="relative z-20">
+      {/* Content Area */}
+      <div className="fixed inset-0 z-20 pointer-events-none pt-20">
+        <div className="h-full flex items-center justify-center p-4 lg:p-8">
+          <div className="w-full max-w-5xl mx-auto pointer-events-auto">
+            
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSection}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="page-section"
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="relative"
               >
-                {currentSubpage ? (
-                  // Render subpages
-                  currentSubpage === 'documentation' ? (
-                    <DocumentationPage onBack={handleBackToMainSections} />
-                  ) : currentSubpage === 'download' ? (
-                    <DownloadPage onBack={handleBackToMainSections} />
-                  ) : currentSubpage === 'enterprise' ? (
-                    <EnterprisePage onBack={handleBackToMainSections} />
-                  ) : (
-                    sections[currentSection].component
-                  )
-                ) : (
-                  sections[currentSection].component
-                )}
+                
+                {/* Content Background */}
+                <div className="glass-refined rounded-3xl p-8 lg:p-12 max-h-[calc(100vh-200px)] overflow-y-auto">
+                  
+                  {/* Section header */}
+                  <div className="text-center mb-8">
+                    <div className="flex items-center justify-center gap-4 mb-4">
+                      <div className="w-12 h-px bg-gradient-to-r from-transparent to-cyber-cyan" />
+                      <div className="text-cyber-cyan text-xl">
+                        {sections[currentSection].icon}
+                      </div>
+                      <div className="w-12 h-px bg-gradient-to-l from-transparent to-cyber-cyan" />
+                    </div>
+                    
+                    <h2 className="font-title text-2xl lg:text-3xl text-cyber-white mb-2">
+                      {sections[currentSection].title}
+                    </h2>
+                  </div>
+
+                  {/* Content */}
+                  <div className="min-h-[400px]">
+                    {sections[currentSection].component}
+                  </div>
+                  
+                </div>
+                
               </motion.div>
             </AnimatePresence>
-          </div>
-
-          {/* Side Navigation Indicator - Hidden on Mobile/Tablet */}
-          <div className="hidden lg:block fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
-            <div className="flex flex-col gap-3">
-              {sections.map((section, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.2 }}
-                  onClick={() => navigateToSection(index)}
-                  className={`w-3 h-8 rounded-full transition-all duration-300 ${
-                    index === currentSection
-                      ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                      : 'bg-white/20 hover:bg-white/40'
-                  }`}
-                  title={section.title}
-                  aria-label={`Navigate to ${section.title}`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="relative z-20">
-            <Footer />
-          </div>
-        </div>
-      </div>
-
-      {/* 3D Scene Background */}
-      <ThreeJSScene currentSection={currentSection} reducedMotion={reducedMotion} />
-      
-      {/* SEO */}
-      <SEOOptimizer
-        title="DeusVaultOS - Ultimate Development Environment"
-        description="Professional development environment with AI assistance"
-        keywords={[]}
-      />
-
-      {/* Adaptive Mobile Navigation */}
-      <AdaptiveMobileNav
-        currentSection={currentSection}
-        sections={sections}
-        onNavigateToSection={navigateToSection}
-        userContext={userContext}
-      />
-
-      {/* Personalization Banner */}
-      <PersonalizationBanner 
-        userContext={userContext}
-        adaptedContent={adaptedContent}
-      />
-
-      {/* Single Navigation - Compact Floating Island - Hidden on Mobile */}
-      <motion.div
-        className="hidden lg:flex fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1 }}
-      >
-        <div className="bg-black/40 backdrop-blur-xl rounded-full border border-cyan-400/30 shadow-2xl shadow-cyan-500/20">
-          <div className="flex items-center gap-1 py-3 px-6">
             
-            {/* Previous */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={prevSection}
-              className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
-              title="Previous Section (A/←)"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </motion.button>
-
-            {/* Section dots */}
-            <div className="flex items-center gap-2 px-3">
-              {sections.map((section, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.8 }}
-                  onClick={() => navigateToSection(index)}
-                  className={`relative w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                    index === currentSection
-                      ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                      : 'bg-white/30 hover:bg-white/50'
-                  }`}
-                  title={section.title}
-                >
-                  {/* Progress ring for current section */}
-                  {index === currentSection && (
-                    <motion.div
-                      className="absolute inset-0 rounded-full border border-cyan-400"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 2.5, opacity: 0 }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                  )}
-                </motion.button>
-              ))}
-            </div>
-
-            {/* Next */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={nextSection}
-              className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
-              title="Next Section (D/→)"
-            >
-              <ArrowRight className="h-4 w-4" />
-            </motion.button>
-
           </div>
         </div>
-      </motion.div>
-
-      {/* Content Area with Mobile-Optimized Margins */}
-      <div className="relative z-20 px-4 sm:px-6 lg:px-8">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSection}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            className="page-section"
-          >
-            {sections[currentSection].component}
-          </motion.div>
-        </AnimatePresence>
       </div>
 
-      {/* Side Navigation Indicator - Hidden on Mobile */}
-      <div className="hidden lg:block fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
+      {/* Side Navigation Indicator */}
+      <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
         <div className="flex flex-col gap-3">
           {sections.map((section, index) => (
             <motion.button
               key={index}
               whileHover={{ scale: 1.2 }}
-              onClick={() => navigateToSection(index)}
-              className={`w-3 h-8 rounded-full transition-all duration-300 ${
+              whileTap={{ scale: 0.8 }}
+              onClick={() => setCurrentSection(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === currentSection
-                  ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                  : 'bg-white/20 hover:bg-white/40'
+                  ? 'bg-cyber-cyan shadow-md shadow-cyber-cyan/50'
+                  : 'bg-cyber-dark-600 hover:bg-cyber-dark-400'
               }`}
               title={section.title}
             />
@@ -578,6 +486,38 @@ export default function App() {
         </div>
       </div>
 
+      {/* Controls Help */}
+      <div className="fixed bottom-6 right-6 z-30">
+        <div className="glass-refined rounded-xl p-3 text-xs">
+          <div className="space-y-1 font-mono text-cyber-dark-300">
+            <div className="flex items-center gap-2">
+              <kbd className="px-2 py-1 bg-cyber-dark-700 rounded">A/D</kbd>
+              <span>Navigate</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className="px-2 py-1 bg-cyber-dark-700 rounded">DRAG</kbd>
+              <span>Rotate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Subtle ambient effects */}
+      <div className="fixed inset-0 pointer-events-none z-10">
+        <motion.div
+          className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyber-cyan/20 to-transparent"
+          animate={{ 
+            x: ['-100%', '100%'],
+            opacity: [0, 0.5, 0]
+          }}
+          transition={{ 
+            duration: 10, 
+            repeat: Infinity, 
+            ease: "easeInOut"
+          }}
+        />
+      </div>
+
     </div>
   );
-};
+}
