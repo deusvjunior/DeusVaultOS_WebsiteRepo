@@ -18,7 +18,11 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 
-export function FeaturesSection() {
+interface FeaturesSectionProps {
+  onNavigateToSubpage?: (subpage: string) => void;
+}
+
+export function FeaturesSection({ onNavigateToSubpage }: FeaturesSectionProps) {
   const heroFeatures = [
     {
       icon: <Brain className="h-8 w-8" />,
@@ -279,11 +283,18 @@ export function FeaturesSection() {
           Download now and experience the future of development.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-semibold px-8 py-3 transform hover:scale-105">
+          <Button 
+            onClick={() => onNavigateToSubpage?.('download')}
+            className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-semibold px-8 py-3 transform hover:scale-105"
+          >
             <Download className="mr-2 h-5 w-5" />
             Download Free
           </Button>
-          <Button variant="outline" className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-8 py-3">
+          <Button 
+            onClick={() => onNavigateToSubpage?.('documentation')}
+            variant="outline" 
+            className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-8 py-3"
+          >
             View Documentation
           </Button>
         </div>

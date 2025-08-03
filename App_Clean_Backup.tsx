@@ -23,38 +23,23 @@ import { SEOOptimizer, seoConfigs } from "./components/SEOOptimizer";
 import { TherionSection } from "./components/TherionSection_New";
 import { UserSegments } from "./components/UserSegments";
 
-// Import subpage components
-import { DocumentationPage } from "./components/DocumentationPage";
-import { DownloadPage } from "./components/DownloadPage";
-import { EnterprisePage } from "./components/EnterprisePage";
-
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [currentSubpage, setCurrentSubpage] = useState<string | null>(null);
-
-  // Navigation functions
-  const handleNavigateToSubpage = (subpage: string) => {
-    setCurrentSubpage(subpage);
-  };
-
-  const handleBackToMainSections = () => {
-    setCurrentSubpage(null);
-  };
 
   const sections = [
     {
       id: 'hero',
       title: 'DeusVault OS Platform',
       icon: <Home className="h-4 w-4" />,
-      component: <HeroSection onNavigateToSubpage={handleNavigateToSubpage} />
+      component: <HeroSection />
     },
     {
       id: 'features',
       title: 'Core Features',
       icon: <Zap className="h-4 w-4" />,
-      component: <FeaturesSection onNavigateToSubpage={handleNavigateToSubpage} />
+      component: <FeaturesSection />
     },
     {
       id: 'user-segments',
@@ -72,13 +57,13 @@ export default function App() {
       id: 'marketplace',
       title: 'Marketplace',
       icon: <Map className="h-4 w-4" />,
-      component: <MarketplaceSection onNavigateToSubpage={handleNavigateToSubpage} />
+      component: <MarketplaceSection />
     },
     {
       id: 'cta',
       title: 'Get Started',
       icon: <MessageCircle className="h-4 w-4" />,
-      component: <CTASection onNavigateToSubpage={handleNavigateToSubpage} />
+      component: <CTASection />
     }
   ];
 
@@ -313,20 +298,7 @@ export default function App() {
                 transition={{ duration: 0.5 }}
                 className="page-section"
               >
-                {currentSubpage ? (
-                  // Render subpages
-                  currentSubpage === 'documentation' ? (
-                    <DocumentationPage onBack={handleBackToMainSections} />
-                  ) : currentSubpage === 'download' ? (
-                    <DownloadPage onBack={handleBackToMainSections} />
-                  ) : currentSubpage === 'enterprise' ? (
-                    <EnterprisePage onBack={handleBackToMainSections} />
-                  ) : (
-                    sections[currentSection].component
-                  )
-                ) : (
-                  sections[currentSection].component
-                )}
+                {sections[currentSection].component}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -355,6 +327,7 @@ export default function App() {
             <Footer />
           </div>
         </>
+      )}
 
       {/* 3D Scene Background */}
       <ThreeJSScene currentSection={currentSection} reducedMotion={reducedMotion} />

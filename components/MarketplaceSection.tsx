@@ -20,7 +20,11 @@ import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 
-export function MarketplaceSection() {
+interface MarketplaceSectionProps {
+  onNavigateToSubpage?: (subpage: string) => void;
+}
+
+export function MarketplaceSection({ onNavigateToSubpage }: MarketplaceSectionProps) {
   const featuredApps = [
     {
       name: "THERION AI Studio",
@@ -196,7 +200,10 @@ export function MarketplaceSection() {
             ))}
           </div>
 
-          <Button className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-8 py-4 text-lg transform hover:scale-105">
+          <Button 
+            onClick={() => onNavigateToSubpage?.('download')}
+            className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-8 py-4 text-lg transform hover:scale-105"
+          >
             <Store className="mr-2 h-5 w-5" />
             Browse Marketplace
           </Button>
@@ -305,6 +312,7 @@ export function MarketplaceSection() {
 
                     {/* CTA */}
                     <Button 
+                      onClick={() => onNavigateToSubpage?.('download')}
                       className={`w-full bg-gradient-to-r from-${app.color}-500 to-yellow-500 hover:from-${app.color}-400 hover:to-yellow-400 text-black font-semibold transition-all transform hover:scale-[1.02]`}
                     >
                       <Download className="mr-2 h-4 w-4" />
@@ -388,11 +396,18 @@ export function MarketplaceSection() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-8 py-4 text-lg transform hover:scale-105">
+            <Button 
+              onClick={() => onNavigateToSubpage?.('documentation')}
+              className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-8 py-4 text-lg transform hover:scale-105"
+            >
               <Code className="mr-2 h-5 w-5" />
               Developer Portal
             </Button>
-            <Button variant="outline" className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-8 py-4 text-lg">
+            <Button 
+              onClick={() => onNavigateToSubpage?.('documentation')}
+              variant="outline" 
+              className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-8 py-4 text-lg"
+            >
               View Guidelines
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>

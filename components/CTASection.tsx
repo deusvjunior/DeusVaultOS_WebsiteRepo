@@ -19,7 +19,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 
-export function CTASection() {
+export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (subpage: string) => void }) {
   const trustIndicators = [
     { icon: <Users className="h-5 w-5" />, text: "50k+ Developers", highlight: "Growing Community", stat: "50,000+" },
     { icon: <Star className="h-5 w-5" />, text: "4.9/5 Rating", highlight: "Highly Rated", stat: "4.9★" },
@@ -182,15 +182,22 @@ export function CTASection() {
 
           {/* Primary CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-12 py-6 text-xl transform hover:scale-105 shadow-2xl shadow-cyan-500/25">
+            <Button 
+              onClick={() => onNavigateToSubpage?.('download')}
+              className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-12 py-6 text-xl transform hover:scale-105 shadow-2xl shadow-cyan-500/25"
+            >
               <Download className="mr-3 h-6 w-6" />
               Download Free
               <ArrowRight className="ml-3 h-6 w-6" />
             </Button>
             
-            <Button variant="outline" className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-12 py-6 text-xl">
-              <Play className="mr-3 h-6 w-6" />
-              Watch Demo
+            <Button 
+              onClick={() => onNavigateToSubpage?.('enterprise')}
+              variant="outline" 
+              className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-12 py-6 text-xl"
+            >
+              <Crown className="mr-3 h-6 w-6" />
+              Enterprise
             </Button>
           </div>
         </motion.div>
@@ -262,6 +269,15 @@ export function CTASection() {
 
                     {/* CTA Button */}
                     <Button 
+                      onClick={() => {
+                        if (option.buttonText === "Download Free") {
+                          onNavigateToSubpage?.('download');
+                        } else if (option.buttonText === "Contact Sales") {
+                          onNavigateToSubpage?.('enterprise');
+                        } else if (option.buttonText === "Start Free Trial") {
+                          onNavigateToSubpage?.('download');
+                        }
+                      }}
                       className={`w-full ${option.popular 
                         ? 'bg-gradient-to-r from-yellow-500 to-cyan-500 hover:from-yellow-400 hover:to-cyan-400 text-black' 
                         : `bg-gradient-to-r from-${option.color}-500 to-yellow-500 hover:from-${option.color}-400 hover:to-yellow-400 text-black`
@@ -349,11 +365,18 @@ export function CTASection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-12 py-4 text-lg transform hover:scale-105">
+              <Button 
+                onClick={() => onNavigateToSubpage?.('download')}
+                className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-12 py-4 text-lg transform hover:scale-105"
+              >
                 <Download className="mr-3 h-5 w-5" />
                 Download Now - Free
               </Button>
-              <Button variant="outline" className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-12 py-4 text-lg">
+              <Button 
+                variant="outline" 
+                className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-12 py-4 text-lg"
+                onClick={() => window.open('https://github.com/DeusVault', '_blank')}
+              >
                 <Github className="mr-3 h-5 w-5" />
                 View on GitHub
               </Button>
