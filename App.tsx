@@ -6,6 +6,8 @@ import ThreeJSScene from './components/ThreeJSScene';
 // Import sections
 import { BrandHeader } from './components/BrandHeader';
 import { CTASection } from './components/CTASection';
+import { DemoPage } from './components/DemoPage';
+import { DownloadPage } from './components/DownloadPage';
 import { FeaturesSection } from './components/FeaturesSection';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
@@ -17,13 +19,22 @@ export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [currentSubpage, setCurrentSubpage] = useState<string | null>(null);
+
+  const handleNavigateToSubpage = (subpage: string) => {
+    setCurrentSubpage(subpage);
+  };
+
+  const handleReturnHome = () => {
+    setCurrentSubpage(null);
+  };
 
   const sections = [
     {
       id: 'hero',
       title: 'DeusVaultOS',
       icon: <Home className="h-4 w-4" />,
-      component: <HeroSection />
+      component: <HeroSection onNavigateToSubpage={handleNavigateToSubpage} />
     },
     {
       id: 'features',
@@ -47,7 +58,7 @@ export default function App() {
       id: 'cta',
       title: 'Get Started',
       icon: <Users className="h-4 w-4" />,
-      component: <CTASection />
+      component: <CTASection onNavigateToSubpage={handleNavigateToSubpage} />
     }
   ];
 
@@ -190,12 +201,24 @@ export default function App() {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <h2 className="text-2xl font-bold text-yellow-400 mb-2">DeusVaultOS</h2>
-          <p className="text-gray-400">Safe AI Agents Coming Soon...</p>
+          <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <h2 className="text-2xl font-bold text-cyan-400 mb-2">DeusVaultOS</h2>
+          <p className="text-gray-400">Initializing AI Agent Platform...</p>
         </div>
       </div>
     );
+  }
+
+  // Handle subpage navigation
+  if (currentSubpage) {
+    switch (currentSubpage) {
+      case 'demo':
+        return <DemoPage onReturnHome={handleReturnHome} />;
+      case 'download':
+        return <DownloadPage onBack={handleReturnHome} />;
+      default:
+        return <DemoPage onReturnHome={handleReturnHome} />;
+    }
   }
 
   return (

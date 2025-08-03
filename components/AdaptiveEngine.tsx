@@ -161,8 +161,8 @@ export function useAdaptiveEngine() {
   // Content Adaptation Logic
   useEffect(() => {
     const adaptContent = () => {
-      let heroMessage = 'Revolutionary Development Environment';
-      let primaryCTA = 'Download Free';
+      let heroMessage = 'AI-Powered Development Environment';
+      let primaryCTA = 'Get Beta Access';
       let featuredContent: string[] = [];
       let navigationStyle = 'standard';
 

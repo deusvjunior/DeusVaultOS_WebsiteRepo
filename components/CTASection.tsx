@@ -20,68 +20,68 @@ import { Card, CardContent } from "./ui/card";
 
 export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (subpage: string) => void }) {
   const trustIndicators = [
-    { icon: <Shield className="h-5 w-5" />, text: "Safety First", highlight: "Ethical AI", stat: "100%" },
-    { icon: <Users className="h-5 w-5" />, text: "Transparency", highlight: "Open Process", stat: "Q2" },
-    { icon: <Star className="h-5 w-5" />, text: "Responsible", highlight: "Human-Centered", stat: "2025" },
-    { icon: <Code className="h-5 w-5" />, text: "Innovation", highlight: "Safe Agents", stat: "Soon" }
+    { icon: <Users className="h-5 w-5" />, text: "Developer Community", highlight: "Growing Daily", stat: "5k+" },
+    { icon: <Code className="h-5 w-5" />, text: "AI Agents", highlight: "In Development", stat: "15" },
+    { icon: <Star className="h-5 w-5" />, text: "Launch Date", highlight: "Q4 2025", stat: "Soon" },
+    { icon: <Zap className="h-5 w-5" />, text: "Performance", highlight: "Optimized", stat: "Fast" }
   ];
 
   const downloadOptions = [
     {
-      title: "Early Access",
-      description: "Be among the first to try our safe AI agents",
+      title: "Beta Access",
+      description: "Get exclusive early access to our AI agent platform",
       price: "Free",
-      priceNote: "Beta Access",
+      priceNote: "Limited Spots",
       features: [
-        "First access to safe AI agents", 
-        "Safety-focused AI assistant", 
-        "Ethical AI guidelines", 
-        "Community safety discussions",
-        "Transparent development updates",
-        "Feedback and input opportunities"
+        "15 specialized AI agents", 
+        "Complete development platform", 
+        "Advanced automation tools", 
+        "Community access",
+        "Priority support",
+        "Early feature previews"
       ],
-      buttonText: "Join Waitlist",
+      buttonText: "Get Beta Access",
       buttonIcon: <Download className="h-5 w-5" />,
       popular: true,
-      color: "yellow"
-    },
-    {
-      title: "Safety Report",
-      description: "Understand why we paused the OS release",
-      price: "Free",
-      priceNote: "Full Report",
-      features: [
-        "Detailed safety analysis", 
-        "AI risk assessment", 
-        "Ethical considerations", 
-        "Future roadmap", 
-        "Transparency commitment",
-        "Research methodology",
-        "Expert consultations",
-        "Community feedback"
-      ],
-      buttonText: "Read Report",
-      buttonIcon: <Shield className="h-5 w-5" />,
-      popular: false,
       color: "cyan"
     },
     {
-      title: "Stay Updated",
-      description: "Get notified about our progress and launches",
+      title: "Live Demo",
+      description: "See our AI agents in action right now",
       price: "Free",
-      priceNote: "Updates",
+      priceNote: "Interactive",
       features: [
-        "Development progress updates", 
-        "Safety milestone reports", 
-        "Community announcements", 
-        "Expert insights", 
-        "Launch notifications",
-        "Beta testing opportunities",
-        "Feedback sessions",
-        "Priority support"
+        "Live AI agent demonstrations", 
+        "Real-time capabilities", 
+        "Interactive examples", 
+        "Feature walkthrough", 
+        "Q&A sessions",
+        "Technical deep-dives",
+        "Use case scenarios",
+        "Performance benchmarks"
       ],
-      buttonText: "Subscribe",
-      buttonIcon: <MessageCircle className="h-5 w-5" />,
+      buttonText: "Watch Demo",
+      buttonIcon: <Zap className="h-5 w-5" />,
+      popular: false,
+      color: "yellow"
+    },
+    {
+      title: "Developer Hub",
+      description: "Join our growing community of AI developers",
+      price: "Free",
+      priceNote: "Open Access",
+      features: [
+        "Technical documentation", 
+        "API references", 
+        "Code examples", 
+        "Best practices", 
+        "Community forums",
+        "Expert mentorship",
+        "Hackathons & events",
+        "Job opportunities"
+      ],
+      buttonText: "Join Community",
+      buttonIcon: <Users className="h-5 w-5" />,
       popular: false,
       color: "cyan"
     }
@@ -147,14 +147,14 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
             GET STARTED TODAY
           </Badge>
           
-          <h2 className="text-5xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent">
-            Responsible AI Development
+                    <h2 className="text-5xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent">
+            Join the Beta
           </h2>
           
           <p className="text-2xl lg:text-3xl text-gray-300 max-w-4xl mx-auto">
-            We discovered our OS could pose risks to humanity. 
-            <span className="text-yellow-400 font-semibold"> Join our waitlist</span> for 
-            safe AI agents coming Q2 2025.
+            Get early access to DeusVaultOS with 15 AI development agents. 
+            <span className="text-cyan-400 font-semibold"> Limited beta spots</span> for 
+            our Q4 2025 launch.
           </p>
 
           {/* Trust Indicators */}
@@ -183,20 +183,20 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button 
               onClick={() => onNavigateToSubpage?.('download')}
-              className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-bold px-12 py-6 text-xl transform hover:scale-105 shadow-2xl shadow-yellow-500/25"
+              className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-12 py-6 text-xl transform hover:scale-105 shadow-2xl shadow-cyan-500/25"
             >
               <Download className="mr-3 h-6 w-6" />
-              Join Waitlist
+              Get Beta Access
               <ArrowRight className="ml-3 h-6 w-6" />
             </Button>
             
             <Button 
-              onClick={() => onNavigateToSubpage?.('documentation')}
+              onClick={() => onNavigateToSubpage?.('demo')}
               variant="outline" 
               className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-12 py-6 text-xl"
             >
-              <Shield className="mr-3 h-6 w-6" />
-              Safety Report
+              <Crown className="mr-3 h-6 w-6" />
+              View Demo
             </Button>
           </div>
         </motion.div>
@@ -210,9 +210,9 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
           className="space-y-12"
         >
           <div className="text-center space-y-4">
-            <h3 className="text-4xl font-bold text-white">Upcoming Safe AI Agents</h3>
+            <h3 className="text-4xl font-bold text-white">Choose Your Access Level</h3>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              We're developing responsible AI agents that prioritize human safety. Join our waitlist for early access.
+              Get access to DeusVaultOS beta program and join our developer community.
             </p>
           </div>
 
@@ -269,12 +269,12 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
                     {/* CTA Button */}
                     <Button 
                       onClick={() => {
-                        if (option.buttonText === "Download Free") {
+                        if (option.title === "Beta Access") {
                           onNavigateToSubpage?.('download');
-                        } else if (option.buttonText === "Contact Sales") {
-                          onNavigateToSubpage?.('enterprise');
-                        } else if (option.buttonText === "Start Free Trial") {
-                          onNavigateToSubpage?.('download');
+                        } else if (option.title === "Live Demo") {
+                          onNavigateToSubpage?.('demo');
+                        } else if (option.title === "Developer Hub") {
+                          window.open('https://github.com/deusvault', '_blank');
                         }
                       }}
                       className={`w-full ${option.popular 
@@ -302,9 +302,9 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
           className="space-y-12"
         >
           <div className="text-center space-y-4">
-            <h3 className="text-4xl font-bold text-white">Join the Community</h3>
+            <h3 className="text-4xl font-bold text-white">Developer Community</h3>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Connect with thousands of developers building the future of professional software
+              Connect with developers using DeusVaultOS and contribute to the platform
             </p>
           </div>
 
@@ -355,12 +355,11 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
             <Globe className="h-16 w-16 text-cyan-400 mx-auto mb-6" />
             
             <h3 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-              Ready to Build the Future?
+              Ready to Get Started?
             </h3>
             
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Download DeusVaultOS now and join the revolution in professional development. 
-              Zero configuration, infinite possibilities.
+              Download DeusVaultOS and experience AI-powered development with 15 specialized agents.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -369,7 +368,7 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
                 className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-12 py-4 text-lg transform hover:scale-105"
               >
                 <Download className="mr-3 h-5 w-5" />
-                Download Now - Free
+                Get Beta Access
               </Button>
               <Button 
                 variant="outline" 
@@ -382,7 +381,7 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
             </div>
 
             <div className="mt-8 text-sm text-gray-400">
-              Free forever • No credit card required • Open source
+              Beta access • Q4 2025 launch • Open source platform
             </div>
           </div>
         </motion.div>
