@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useHapticFeedback } from '../utils/hapticFeedback';
 import {
     ArrowRight,
     CheckCircle,
@@ -9,16 +8,16 @@ import {
     Github,
     Globe,
     MessageCircle,
-    Shield,
     Star,
     Twitter,
     Users,
     Zap
 } from "lucide-react";
+import { useHapticFeedback } from '../utils/hapticFeedback';
+import { openSecureLink } from '../utils/safeExternalLink';
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { openSecureLink } from '../utils/safeExternalLink';
 
 export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (subpage: string) => void }) {
   const { click, success } = useHapticFeedback();

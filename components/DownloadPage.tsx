@@ -13,10 +13,10 @@ import {
     Terminal,
     Zap
 } from 'lucide-react';
+import { openSecureLink } from '../utils/safeExternalLink';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { openSecureLink } from '../utils/safeExternalLink';
 
 interface DownloadPageProps {
   onBack: () => void;

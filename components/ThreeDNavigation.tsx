@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Home, 
-  Users, 
-  Zap, 
-  ShoppingCart, 
-  BarChart3, 
-  Mail,
-  Menu,
-  X,
-  RotateCcw,
-  MousePointer,
-  Scroll,
-  Hexagon
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+    BarChart3,
+    Hexagon,
+    Home,
+    Mail,
+    Menu,
+    MousePointer,
+    Scroll,
+    ShoppingCart,
+    Users,
+    X,
+    Zap
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useHapticFeedback } from '../utils/hapticFeedback';
 
 interface ThreeDNavigationProps {

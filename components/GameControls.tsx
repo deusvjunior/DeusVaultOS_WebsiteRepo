@@ -1,20 +1,17 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useHapticFeedback } from '../utils/hapticFeedback';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Space, 
-  RotateCcw, 
-  Zap,
-  Navigation,
-  Gamepad2,
-  Volume2,
-  VolumeX,
-  Maximize,
-  Minimize,
-  Settings
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+    ChevronLeft,
+    Gamepad2,
+    Maximize,
+    Minimize,
+    Navigation,
+    RotateCcw,
+    Space,
+    Volume2,
+    VolumeX
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useHapticFeedback } from '../utils/hapticFeedback';
 
 interface GameControlsProps {
   currentSection: number;

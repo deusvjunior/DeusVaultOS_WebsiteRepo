@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useCallback } from 'react';
+import React, { createContext, useCallback, useContext, useReducer } from 'react';
 
 interface GameState {
   level: number;

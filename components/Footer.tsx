@@ -5,15 +5,14 @@ import {
     Download,
     ExternalLink,
     Github,
-    Globe,
     Mail,
     MessageCircle,
     Shield,
     Twitter,
     Zap
 } from "lucide-react";
-import { Badge } from "./ui/badge";
 import { openSecureLink } from '../utils/safeExternalLink';
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 

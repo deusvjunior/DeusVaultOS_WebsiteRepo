@@ -6,6 +6,7 @@
 
 1. **Push this backend folder to a separate GitHub repository**
 2. **Connect to Render:**
+
    - Go to [Render](https://render.com)
    - Create new Web Service
    - Connect your GitHub repo
@@ -49,6 +50,7 @@ npm run dev
 ## Features
 
 ✅ **Production Ready**
+
 - Rate limiting (5 submissions per 15 minutes)
 - Input validation and sanitization
 - Security headers (Helmet)
@@ -57,12 +59,14 @@ npm run dev
 - Error handling
 
 ✅ **Email System**
+
 - Automatic confirmation emails
 - Professional email templates
 - Multiple SMTP provider support
 - Development mode with test emails
 
 ✅ **Zero Configuration**
+
 - Works out of the box on Render
 - Auto-detects environment
 - Graceful fallbacks
@@ -70,11 +74,13 @@ npm run dev
 ## Email Setup Options
 
 ### Gmail (Free)
+
 1. Enable 2FA on your Gmail account
 2. Generate App Password
 3. Use App Password in SMTP_PASS
 
 ### SendGrid (Recommended for Production)
+
 1. Sign up for SendGrid
 2. Get API key
 3. Use `SMTP_USER=apikey` and your API key as password
@@ -85,10 +91,10 @@ Your contact form will automatically work once you update the API endpoint:
 
 ```javascript
 // In your ContactPage.tsx
-const response = await fetch('https://your-backend.onrender.com/api/contact', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(formData)
+const response = await fetch("https://your-backend.onrender.com/api/contact", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(formData),
 });
 ```
 

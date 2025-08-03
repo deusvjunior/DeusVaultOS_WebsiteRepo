@@ -3,7 +3,6 @@ import {
     ArrowLeft,
     ArrowRight,
     Code,
-    Cpu,
     Eye,
     Lightbulb,
     Play,

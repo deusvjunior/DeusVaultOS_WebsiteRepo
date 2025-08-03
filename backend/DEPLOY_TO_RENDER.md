@@ -51,6 +51,7 @@ TO_EMAIL=hello@deusvault.com
 ```
 
 ### Gmail Setup (Quick Option):
+
 1. Enable 2FA on Gmail
 2. Go to Account Settings → Security → App Passwords
 3. Generate app password for "Mail"
@@ -61,9 +62,10 @@ TO_EMAIL=hello@deusvault.com
 In your `ContactPage.tsx`, update the API URL:
 
 ```javascript
-const API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-app-name.onrender.com'  // Replace with your Render URL
-  : 'http://localhost:3001';
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://your-app-name.onrender.com" // Replace with your Render URL
+    : "http://localhost:3001";
 ```
 
 ## Step 5: Test Your Deployment
@@ -76,11 +78,12 @@ After deployment completes (2-3 minutes):
 
 ---
 
-## 🎯 THAT'S IT! 
+## 🎯 THAT'S IT!
 
 **Your professional contact form backend is now live with:**
+
 - ✅ Professional email responses
-- ✅ Rate limiting to prevent spam  
+- ✅ Rate limiting to prevent spam
 - ✅ Input validation and security
 - ✅ CORS configured for your frontend
 - ✅ Beautiful confirmation emails
@@ -92,14 +95,16 @@ After deployment completes (2-3 minutes):
 ## Alternative Email Providers
 
 ### SendGrid (Recommended for High Volume)
+
 ```bash
 SMTP_HOST=smtp.sendgrid.net
-SMTP_PORT=587  
+SMTP_PORT=587
 SMTP_USER=apikey
 SMTP_PASS=your-sendgrid-api-key
 ```
 
 ### Mailgun
+
 ```bash
 SMTP_HOST=smtp.mailgun.org
 SMTP_PORT=587

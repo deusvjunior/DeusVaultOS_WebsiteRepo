@@ -3,7 +3,7 @@
  * Provides fallback handling for missing images with loading states
  */
 
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 
 interface SafeImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;

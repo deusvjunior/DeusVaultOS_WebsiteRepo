@@ -10,10 +10,10 @@ import {
     Users
 } from 'lucide-react';
 import { useState } from 'react';
+import { openSecureLink } from '../utils/safeExternalLink';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { openSecureLink } from '../utils/safeExternalLink';
 
 interface ContactPageProps {
   onBack: () => void;
