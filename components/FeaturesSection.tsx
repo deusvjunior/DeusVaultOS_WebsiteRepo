@@ -18,6 +18,7 @@ import { UserContext } from './AdaptiveEngine';
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
+import { openSecureLink } from '../utils/safeExternalLink';
 
 interface FeaturesSectionProps {
   onNavigateToSubpage?: (subpage: string) => void;
@@ -117,7 +118,7 @@ export function FeaturesSection({ onNavigateToSubpage, userContext, onBack }: Fe
   ];
 
   const handleFeatureCTA = (feature: string) => {
-    window.open(`https://deusvault.com/features/${feature.toLowerCase().replace(/\s+/g, '-')}`, '_blank');
+    openSecureLink(`https://deusvault.com/features/${feature.toLowerCase().replace(/\s+/g, '-')}`);
   };
 
   return (

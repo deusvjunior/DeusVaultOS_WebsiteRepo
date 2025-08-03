@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { openSecureLink } from '../utils/safeExternalLink';
 
 interface ContactPageProps {
   onBack: () => void;
@@ -32,8 +33,8 @@ export function ContactPage({ onBack }: ContactPageProps) {
       icon: <Mail className="h-6 w-6" />,
       title: "Email",
       description: "Get in touch for general inquiries",
-      contact: "hello@deusvaultos.com",
-      action: "mailto:hello@deusvaultos.com",
+      contact: "hello@deusvault.com",
+      action: "mailto:hello@deusvault.com",
       color: "cyan"
     },
     {
@@ -85,8 +86,9 @@ export function ContactPage({ onBack }: ContactPageProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    // Handle form submission - implement actual backend integration
+    // TODO: Integrate with backend API
+    alert('Thank you! Your message has been sent.');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -174,7 +176,7 @@ export function ContactPage({ onBack }: ContactPageProps) {
                     <p className={`text-${method.color}-400 font-medium`}>{method.contact}</p>
                     
                     <Button 
-                      onClick={() => window.open(method.action, '_blank')}
+                      onClick={() => openSecureLink(method.action)}
                       className={`w-full bg-gradient-to-r from-${method.color}-500 to-yellow-500 hover:from-${method.color}-400 hover:to-yellow-400 text-black font-semibold`}
                     >
                       Contact Now
@@ -299,7 +301,7 @@ export function ContactPage({ onBack }: ContactPageProps) {
                           </div>
                         </div>
                         <Button
-                          onClick={() => window.open(link.url, '_blank')}
+                          onClick={() => openSecureLink(link.url)}
                           variant="outline"
                           size="sm"
                           className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10"

@@ -13,6 +13,7 @@ import {
     Zap
 } from 'lucide-react';
 import { UserContext } from './AdaptiveEngine';
+import { SafeImage } from './ui/SafeImage';
 
 interface HeroSectionProps {
   onNavigateToSubpage?: (subpage: string) => void;
@@ -71,14 +72,11 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
             className="relative flex justify-center lg:justify-start mb-8"
           >
             <div className="relative">
-              <img 
+                              <SafeImage
                 src="/DVLogo.png" 
-                alt="DeusVaultOS" 
-                className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 lg:h-32 lg:w-32 drop-shadow-2xl mx-auto lg:mx-0"
-                style={{
-                  filter: 'drop-shadow(0 0 30px rgba(0, 255, 255, 0.7)) drop-shadow(0 0 60px rgba(0, 255, 255, 0.3))'
-                }}
-              />
+                alt="DeusVault OS Logo" 
+                className="w-12 h-12 drop-shadow-2xl"
+                />
               {/* Glow effect */}
               <div className="absolute inset-0 bg-cyan-400/10 rounded-full blur-xl"></div>
             </div>

@@ -13,6 +13,7 @@ import {
     Zap
 } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { openSecureLink } from '../utils/safeExternalLink';
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
@@ -23,9 +24,11 @@ interface FooterProps {
 export function Footer({ onNavigateToSubpage }: FooterProps) {
   const quickLinks = [
     { name: "Download", icon: <Download className="h-4 w-4" />, action: () => onNavigateToSubpage?.('download') },
-    { name: "Documentation", icon: <Globe className="h-4 w-4" />, action: () => onNavigateToSubpage?.('documentation') },
-    { name: "Community", icon: <MessageCircle className="h-4 w-4" />, action: () => window.open('https://discord.gg/deusvault', '_blank') },
-    { name: "Support", icon: <Mail className="h-4 w-4" />, action: () => onNavigateToSubpage?.('contact') }
+    { name: "Documentation", icon: <ExternalLink className="h-4 w-4" />, action: () => openSecureLink('https://docs.deusvault.com') },
+    { name: "GitHub", icon: <Github className="h-4 w-4" />, action: () => openSecureLink('https://github.com/deusvault/deusvault-os') },
+    { name: "Community", icon: <MessageCircle className="h-4 w-4" />, action: () => openSecureLink('https://discord.gg/deusvault') },
+    { name: "Support", icon: <Mail className="h-4 w-4" />, action: () => onNavigateToSubpage?.('contact') },
+    { name: "Enterprise", icon: <Crown className="h-4 w-4" />, action: () => onNavigateToSubpage?.('enterprise') }
   ];
 
   const coreFeatures = [
@@ -44,12 +47,12 @@ export function Footer({ onNavigateToSubpage }: FooterProps) {
     { icon: <Mail className="h-5 w-5" />, platform: "Email", href: "#" }
   ];
 
-  const companyLinks = [
-    { name: "About", href: "#" },
-    { name: "Careers", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Privacy", href: "#" },
-    { name: "Terms", href: "#" }
+    const companyLinks = [
+    { name: "About", action: () => onNavigateToSubpage?.('about') },
+    { name: "Careers", action: () => openSecureLink('https://deusvault.com/careers') },
+    { name: "Press", action: () => openSecureLink('https://deusvault.com/press') },
+    { name: "Privacy", action: () => openSecureLink('https://deusvault.com/privacy') },
+    { name: "Terms", action: () => openSecureLink('https://deusvault.com/terms') }
   ];
 
   return (
@@ -95,7 +98,7 @@ export function Footer({ onNavigateToSubpage }: FooterProps) {
                 </Button>
                 
                 <Button 
-                  onClick={() => window.open('https://github.com/deusvault/deusvault-os', '_blank')}
+                  onClick={() => openSecureLink('https://github.com/deusvault/deusvault-os')}
                   variant="outline" 
                   size="default" 
                   className="glass-morphism refined-border text-brand-neutral-200 hover:bg-brand-primary/10 px-6 py-3 font-medium interactive-element focus-ring"
@@ -143,7 +146,7 @@ export function Footer({ onNavigateToSubpage }: FooterProps) {
                       {link.icon}
                     </div>
                     <span className="font-medium">{link.name}</span>
-                  </a>
+                  </button>
                 ))}
               </div>
             </motion.div>
@@ -192,13 +195,13 @@ export function Footer({ onNavigateToSubpage }: FooterProps) {
             
             <div className="flex items-center gap-6">
               {companyLinks.map((link, index) => (
-                <a 
+                <button 
                   key={index}
-                  href={link.href}
+                  onClick={link.action}
                   className="text-brand-neutral-400 hover:text-brand-primary text-sm font-medium transition-colors focus-ring rounded px-2 py-1 -m-1"
                 >
                   {link.name}
-                </a>
+                </button>
               ))}
             </div>
           </div>

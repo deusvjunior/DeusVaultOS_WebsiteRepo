@@ -76,13 +76,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     const prevLevel = gameState.level;
     dispatch({ type: 'GAIN_XP', payload: amount });
     
-    // Simple console log instead of toast for now
+    // Level up logic without console logs for production
     const newLevel = Math.min(Math.floor((gameState.xp + amount) / 100) + 1, 10);
     
     if (newLevel > prevLevel && newLevel <= 10) {
-      console.log(`🎉 Level Up! You've reached Level ${newLevel}!`);
-    } else {
-      console.log(`⚡ +${amount} XP - ${reason || 'Great interaction!'}`);
+      // Level up occurred - could trigger UI notification here
     }
   }, [gameState.level, gameState.xp]);
 
@@ -96,7 +94,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const unlockAchievement = useCallback((achievement: string) => {
     if (!gameState.achievements.includes(achievement)) {
       dispatch({ type: 'UNLOCK_ACHIEVEMENT', payload: achievement });
-      console.log(`🏆 Achievement Unlocked! ${achievement}`);
+      // Achievement unlocked - could trigger UI notification here
       gainXP(50, 'Achievement unlocked');
     }
   }, [gameState.achievements, gainXP]);

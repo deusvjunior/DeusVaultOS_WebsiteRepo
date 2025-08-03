@@ -16,6 +16,7 @@ import {
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { openSecureLink } from '../utils/safeExternalLink';
 
 interface LearnMorePageProps {
   onBack: () => void;
@@ -360,7 +361,7 @@ export function LearnMorePage({ onBack }: LearnMorePageProps) {
                 <Button 
                   variant="outline" 
                   className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 px-8 py-3"
-                  onClick={() => window.open('https://github.com/deusvault', '_blank')}
+                  onClick={() => openSecureLink('https://github.com/deusvault')}
                 >
                   <Github className="mr-2 h-5 w-5" />
                   View on GitHub

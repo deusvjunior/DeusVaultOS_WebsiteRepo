@@ -17,6 +17,7 @@ import {
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
+import { openSecureLink } from '../utils/safeExternalLink';
 
 export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (subpage: string) => void }) {
   const trustIndicators = [
@@ -274,7 +275,7 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
                         } else if (option.title === "Live Demo") {
                           onNavigateToSubpage?.('demo');
                         } else if (option.title === "Developer Hub") {
-                          window.open('https://github.com/deusvault', '_blank');
+                          openSecureLink('https://github.com/deusvault');
                         }
                       }}
                       className={`w-full ${option.popular 
@@ -317,7 +318,7 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 className="glass-refined rounded-lg p-6 border border-cyan-400/30 hover:border-cyan-400/50 transition-all group cursor-pointer"
-                onClick={() => window.open(link.url, '_blank')}
+                onClick={() => openSecureLink(link.url)}
               >
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-10 h-10 bg-cyan-400/20 rounded-lg flex items-center justify-center group-hover:bg-cyan-400/30 transition-colors">
@@ -373,7 +374,7 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
               <Button 
                 variant="outline" 
                 className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-12 py-4 text-lg"
-                onClick={() => window.open('https://github.com/DeusVault', '_blank')}
+                onClick={() => openSecureLink('https://github.com/deusvault/deusvault-os')}
               >
                 <Github className="mr-3 h-5 w-5" />
                 View on GitHub

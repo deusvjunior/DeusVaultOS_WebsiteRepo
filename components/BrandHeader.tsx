@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
+import { SafeImage } from './ui/SafeImage';
 
 interface BrandHeaderProps {
   onReturnHome: () => void;
@@ -24,16 +25,16 @@ export function BrandHeader({ onReturnHome, currentSection, isSubpage }: BrandHe
       >
         {/* THERION & DeusVault Logos */}
         <div className="flex items-center gap-2">
-          <motion.img 
+                      <SafeImage
             src="/Therion.png" 
-            alt="THERION" 
-            className="h-6 w-6 group-hover:scale-110 transition-transform" 
-          />
-          <motion.img 
+            alt="Therion AI Engine"
+            className="h-6 w-6 mr-2"
+            />
+            <SafeImage
             src="/DVLogo.png" 
-            alt="DeusVault" 
-            className="h-6 w-6 group-hover:scale-110 transition-transform" 
-          />
+            alt="DeusVault OS"
+            className="h-8 w-8 mr-3"
+            />
         </div>
         
         {/* Brand Text */}
