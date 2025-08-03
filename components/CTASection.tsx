@@ -20,67 +20,67 @@ import { Card, CardContent } from "./ui/card";
 
 export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (subpage: string) => void }) {
   const trustIndicators = [
-    { icon: <Users className="h-5 w-5" />, text: "50k+ Developers", highlight: "Growing Community", stat: "50,000+" },
-    { icon: <Star className="h-5 w-5" />, text: "4.9/5 Rating", highlight: "Highly Rated", stat: "4.9★" },
-    { icon: <Code className="h-5 w-5" />, text: "Open Source", highlight: "No Lock-in", stat: "100%" },
-    { icon: <Shield className="h-5 w-5" />, text: "Enterprise Ready", highlight: "Production Grade", stat: "24/7" }
+    { icon: <Shield className="h-5 w-5" />, text: "Safety First", highlight: "Ethical AI", stat: "100%" },
+    { icon: <Users className="h-5 w-5" />, text: "Transparency", highlight: "Open Process", stat: "Q2" },
+    { icon: <Star className="h-5 w-5" />, text: "Responsible", highlight: "Human-Centered", stat: "2025" },
+    { icon: <Code className="h-5 w-5" />, text: "Innovation", highlight: "Safe Agents", stat: "Soon" }
   ];
 
   const downloadOptions = [
     {
-      title: "Individual Developer",
-      description: "Perfect for solo developers and small teams",
+      title: "Early Access",
+      description: "Be among the first to try our safe AI agents",
       price: "Free",
-      priceNote: "Forever",
+      priceNote: "Beta Access",
       features: [
-        "Core development environment", 
-        "THERION AI assistant", 
-        "Community support", 
-        "5GB cloud storage",
-        "Unlimited environments",
-        "Basic deployment tools"
+        "First access to safe AI agents", 
+        "Safety-focused AI assistant", 
+        "Ethical AI guidelines", 
+        "Community safety discussions",
+        "Transparent development updates",
+        "Feedback and input opportunities"
       ],
-      buttonText: "Download Free",
+      buttonText: "Join Waitlist",
       buttonIcon: <Download className="h-5 w-5" />,
-      popular: false,
-      color: "cyan"
-    },
-    {
-      title: "Professional Team",
-      description: "Advanced features for professional development teams",
-      price: "$29",
-      priceNote: "per month",
-      features: [
-        "Everything in Individual", 
-        "Team collaboration tools", 
-        "Priority support", 
-        "50GB cloud storage", 
-        "Advanced AI features",
-        "Performance analytics",
-        "Custom integrations",
-        "Version control integration"
-      ],
-      buttonText: "Start Free Trial",
-      buttonIcon: <Zap className="h-5 w-5" />,
       popular: true,
       color: "yellow"
     },
     {
-      title: "Enterprise",
-      description: "Custom solutions for large organizations",
-      price: "Custom",
-      priceNote: "pricing",
+      title: "Safety Report",
+      description: "Understand why we paused the OS release",
+      price: "Free",
+      priceNote: "Full Report",
       features: [
-        "Everything in Professional", 
-        "Custom integrations", 
-        "Dedicated support", 
-        "Unlimited storage", 
-        "On-premise deployment",
-        "Advanced security",
-        "SLA guarantees",
-        "Training & consulting"
+        "Detailed safety analysis", 
+        "AI risk assessment", 
+        "Ethical considerations", 
+        "Future roadmap", 
+        "Transparency commitment",
+        "Research methodology",
+        "Expert consultations",
+        "Community feedback"
       ],
-      buttonText: "Contact Sales",
+      buttonText: "Read Report",
+      buttonIcon: <Shield className="h-5 w-5" />,
+      popular: false,
+      color: "cyan"
+    },
+    {
+      title: "Stay Updated",
+      description: "Get notified about our progress and launches",
+      price: "Free",
+      priceNote: "Updates",
+      features: [
+        "Development progress updates", 
+        "Safety milestone reports", 
+        "Community announcements", 
+        "Expert insights", 
+        "Launch notifications",
+        "Beta testing opportunities",
+        "Feedback sessions",
+        "Priority support"
+      ],
+      buttonText: "Subscribe",
       buttonIcon: <MessageCircle className="h-5 w-5" />,
       popular: false,
       color: "cyan"
@@ -148,13 +148,13 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
           </Badge>
           
           <h2 className="text-5xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent">
-            Transform Your Development
+            Responsible AI Development
           </h2>
           
           <p className="text-2xl lg:text-3xl text-gray-300 max-w-4xl mx-auto">
-            Join the revolution in professional development. 
-            <span className="text-cyan-400 font-semibold"> Download DeusVaultOS</span> and 
-            experience the future today.
+            We discovered our OS could pose risks to humanity. 
+            <span className="text-yellow-400 font-semibold"> Join our waitlist</span> for 
+            safe AI agents coming Q2 2025.
           </p>
 
           {/* Trust Indicators */}
@@ -183,20 +183,20 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button 
               onClick={() => onNavigateToSubpage?.('download')}
-              className="bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold px-12 py-6 text-xl transform hover:scale-105 shadow-2xl shadow-cyan-500/25"
+              className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-bold px-12 py-6 text-xl transform hover:scale-105 shadow-2xl shadow-yellow-500/25"
             >
               <Download className="mr-3 h-6 w-6" />
-              Download Free
+              Join Waitlist
               <ArrowRight className="ml-3 h-6 w-6" />
             </Button>
             
             <Button 
-              onClick={() => onNavigateToSubpage?.('enterprise')}
+              onClick={() => onNavigateToSubpage?.('documentation')}
               variant="outline" 
               className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-12 py-6 text-xl"
             >
-              <Crown className="mr-3 h-6 w-6" />
-              Enterprise
+              <Shield className="mr-3 h-6 w-6" />
+              Safety Report
             </Button>
           </div>
         </motion.div>
@@ -210,9 +210,9 @@ export function CTASection({ onNavigateToSubpage }: { onNavigateToSubpage?: (sub
           className="space-y-12"
         >
           <div className="text-center space-y-4">
-            <h3 className="text-4xl font-bold text-white">Choose Your Plan</h3>
+            <h3 className="text-4xl font-bold text-white">Upcoming Safe AI Agents</h3>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Start free and scale as you grow. Professional features for every team size.
+              We're developing responsible AI agents that prioritize human safety. Join our waitlist for early access.
             </p>
           </div>
 

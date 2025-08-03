@@ -112,14 +112,14 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
             </h1>
             
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-semibold text-gray-300 leading-relaxed">
-              {adaptedContent?.heroMessage || 'Create AI that actually helps you'}
+              {adaptedContent?.heroMessage || 'Safe AI Agents Coming Soon'}
               <br />
-              <span className="text-cyan-400 font-bold">No coding required. Ready in minutes.</span>
+              <span className="text-yellow-400 font-bold">Revolutionary AI that protects humanity.</span>
             </h2>
             
             <p className="text-base sm:text-lg md:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              The accessible AI platform that bridges the gap to tomorrow's technology. 
-              Build AI assistants, automate your work, and join 50,000+ creators who are shaping the future.
+              Our AI development platform revealed safety concerns too critical to ignore. 
+              Instead of releasing the OS, we're developing safe, ethical AI agents that prioritize human wellbeing.
             </p>
           </motion.div>
 
@@ -131,16 +131,16 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
             className="grid grid-cols-3 gap-4 sm:gap-6 max-w-sm sm:max-w-md mx-auto lg:mx-0"
           >
             <div className="text-center lg:text-left">
-              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">50k+</div>
-              <div className="text-xs sm:text-sm text-gray-400 font-medium">Creators</div>
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">Safe</div>
+              <div className="text-xs sm:text-sm text-gray-400 font-medium">AI First</div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">3 min</div>
-              <div className="text-xs sm:text-sm text-gray-400 font-medium">Setup Time</div>
+              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">Q2</div>
+              <div className="text-xs sm:text-sm text-gray-400 font-medium">2025 Launch</div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-2xl sm:text-3xl font-bold text-cyan-400">Free</div>
-              <div className="text-xs sm:text-sm text-gray-400 font-medium">To Start</div>
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">Ethical</div>
+              <div className="text-xs sm:text-sm text-gray-400 font-medium">By Design</div>
             </div>
           </motion.div>
 
@@ -153,10 +153,10 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
           >
             <button 
               onClick={() => onNavigateToSubpage?.('download')}
-              className="flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-cyan-500 to-yellow-500 text-black font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-lg hover:from-cyan-400 hover:to-yellow-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25"
+              className="flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-lg hover:from-yellow-400 hover:to-orange-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-yellow-500/25"
             >
               <Download className="h-4 w-4 sm:h-5 sm:w-5" />
-              {adaptedContent?.primaryCTA || 'Download Free'}
+              {adaptedContent?.primaryCTA || 'Join Waitlist'}
               <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
             
@@ -165,7 +165,7 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
               className="flex items-center justify-center gap-2 sm:gap-3 glass-refined border border-cyan-400/50 text-cyan-400 font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all"
             >
               <Github className="h-4 w-4 sm:h-5 sm:w-5" />
-              Documentation
+              Safety Report
             </button>
           </motion.div>
 
@@ -223,8 +223,8 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
               <div className="w-12 h-12 bg-cyan-400/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-cyan-400/30 transition-colors">
                 <Code className="h-6 w-6 text-cyan-400" />
               </div>
-              <h3 className="font-semibold text-white mb-1">AI Assistant</h3>
-              <p className="text-sm text-gray-400">AI that understands what you need</p>
+              <h3 className="font-semibold text-white mb-1">Safe AI</h3>
+              <p className="text-sm text-gray-400">Ethical AI agents prioritizing humanity</p>
             </motion.div>
 
             <motion.div
@@ -236,8 +236,8 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
               <div className="w-12 h-12 bg-yellow-400/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-yellow-400/30 transition-colors">
                 <Zap className="h-6 w-6 text-yellow-400" />
               </div>
-              <h3 className="font-semibold text-white mb-1">Easy Setup</h3>
-              <p className="text-sm text-gray-400">Working in 3 minutes or less</p>
+              <h3 className="font-semibold text-white mb-1">Coming Soon</h3>
+              <p className="text-sm text-gray-400">Q2 2025 launch timeline</p>
             </motion.div>
 
             <motion.div
@@ -249,8 +249,8 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
               <div className="w-12 h-12 bg-cyan-400/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-cyan-400/30 transition-colors">
                 <Shield className="h-6 w-6 text-cyan-400" />
               </div>
-              <h3 className="font-semibold text-white mb-1">Community</h3>
-              <p className="text-sm text-gray-400">Learn together with 50k+ creators</p>
+              <h3 className="font-semibold text-white mb-1">Transparency</h3>
+              <p className="text-sm text-gray-400">Open about our safety concerns</p>
             </motion.div>
 
             <motion.div
@@ -262,8 +262,8 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
               <div className="w-12 h-12 bg-yellow-400/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-yellow-400/30 transition-colors">
                 <Sparkles className="h-6 w-6 text-yellow-400" />
               </div>
-              <h3 className="font-semibold text-white mb-1">No Config</h3>
-              <p className="text-sm text-gray-400">Works out of the box</p>
+              <h3 className="font-semibold text-white mb-1">Responsible</h3>
+              <p className="text-sm text-gray-400">Putting humanity before profit</p>
             </motion.div>
           </div>
         </motion.div>

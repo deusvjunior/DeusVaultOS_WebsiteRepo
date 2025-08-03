@@ -1,16 +1,16 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Home, Map, Target, Users, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { BrandHeader } from './components/BrandHeader';
-import { Footer } from './components/Footer';
-import { SEOOptimizer, seoConfigs } from './components/SEOOptimizer';
 import ThreeJSScene from './components/ThreeJSScene';
 
 // Import sections
+import { BrandHeader } from './components/BrandHeader';
 import { CTASection } from './components/CTASection';
 import { FeaturesSection } from './components/FeaturesSection';
+import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
 import { MarketplaceSection } from './components/MarketplaceSection';
+import { SEOOptimizer, seoConfigs } from './components/SEOOptimizer';
 import { TherionSection } from './components/TherionSection_New';
 
 export default function App() {
@@ -21,31 +21,31 @@ export default function App() {
   const sections = [
     {
       id: 'hero',
-      title: 'Autonomous Agent Platform',
+      title: 'DeusVaultOS',
       icon: <Home className="h-4 w-4" />,
       component: <HeroSection />
     },
     {
       id: 'features',
-      title: 'Agent Capabilities',
+      title: 'Features',
       icon: <Zap className="h-4 w-4" />,
       component: <FeaturesSection />
     },
     {
       id: 'marketplace',
-      title: 'Agent Templates',
+      title: 'Marketplace',
       icon: <Map className="h-4 w-4" />,
       component: <MarketplaceSection />
     },
     {
       id: 'therion',
-      title: 'DeusVault AGI',
+      title: 'THERION AI',
       icon: <Target className="h-4 w-4" />,
       component: <TherionSection />
     },
     {
-      id: 'pricing',
-      title: 'Deploy Now',
+      id: 'cta',
+      title: 'Get Started',
       icon: <Users className="h-4 w-4" />,
       component: <CTASection />
     }
@@ -62,6 +62,11 @@ export default function App() {
   const prevSection = () => {
     setCurrentSection((prev) => (prev - 1 + sections.length) % sections.length);
   };
+
+  useEffect(() => {
+    // Auto-scroll to top on section change
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentSection]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -101,46 +106,70 @@ export default function App() {
     };
 
     const handleScroll = (e: WheelEvent) => {
-      e.preventDefault();
-      const delta = e.deltaY;
-      const threshold = 50;
+      // Allow normal scrolling within sections - only change sections at scroll boundaries
+      const target = e.target as Element;
+      const isAtTop = window.scrollY === 0;
+      const isAtBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10;
       
-      if (Math.abs(delta) > threshold) {
-        if (delta > 0 && currentSection < sections.length - 1) {
-          nextSection();
-        } else if (delta < 0 && currentSection > 0) {
-          prevSection();
+      // Only prevent default and change sections if we're at scroll boundaries
+      if ((e.deltaY > 0 && isAtBottom && currentSection < sections.length - 1) ||
+          (e.deltaY < 0 && isAtTop && currentSection > 0)) {
+        e.preventDefault();
+        const threshold = 50;
+        
+        if (Math.abs(e.deltaY) > threshold) {
+          if (e.deltaY > 0 && currentSection < sections.length - 1) {
+            nextSection();
+          } else if (e.deltaY < 0 && currentSection > 0) {
+            prevSection();
+          }
         }
       }
     };
 
-    // Mobile touch handling
+    // Mobile touch handling - improved for better UX
     let touchStartY: number | null = null;
+    let touchStartTime: number | null = null;
     
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
+      touchStartTime = Date.now();
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (!touchStartY) return;
+      if (!touchStartY || !touchStartTime) return;
       
       const touchEndY = e.changedTouches[0].clientY;
+      const touchEndTime = Date.now();
       const deltaY = touchStartY - touchEndY;
-      const threshold = 50;
+      const deltaTime = touchEndTime - touchStartTime;
+      const threshold = 80; // Increased threshold for less sensitivity
+      const maxTime = 800; // Maximum time for gesture recognition
       
-      if (deltaY > threshold && currentSection < sections.length - 1) {
-        nextSection();
-      } else if (deltaY < -threshold && currentSection > 0) {
-        prevSection();
+      // Only trigger if gesture is fast enough and within time limit
+      if (deltaTime < maxTime && Math.abs(deltaY) > threshold) {
+        const isAtTop = window.scrollY === 0;
+        const isAtBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10;
+        
+        // Only change sections at scroll boundaries
+        if ((deltaY > 0 && isAtBottom && currentSection < sections.length - 1) ||
+            (deltaY < 0 && isAtTop && currentSection > 0)) {
+          if (deltaY > 0) {
+            nextSection();
+          } else {
+            prevSection();
+          }
+        }
       }
       
       touchStartY = null;
+      touchStartTime = null;
     };
 
     // Loading timer
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 1000);
 
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('wheel', handleScroll, { passive: false });
@@ -161,9 +190,9 @@ export default function App() {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <h2 className="text-2xl font-bold text-cyan-400 mb-2">DeusVaultOS</h2>
-          <p className="text-gray-400">Initializing Autonomous Agent Platform...</p>
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <h2 className="text-2xl font-bold text-yellow-400 mb-2">DeusVaultOS</h2>
+          <p className="text-gray-400">Safe AI Agents Coming Soon...</p>
         </div>
       </div>
     );
@@ -175,7 +204,7 @@ export default function App() {
       {/* SEO Optimization */}
       <SEOOptimizer {...seoConfigs.home} />
       
-      {/* 3D Background Scene - Enhanced visibility */}
+      {/* 3D Background Scene */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <ThreeJSScene
           currentSection={currentSection}
@@ -183,43 +212,43 @@ export default function App() {
         />
       </div>
 
-      {/* **BRAND HEADER WITH HOMEPAGE NAVIGATION** */}
+      {/* Brand Header */}
       <BrandHeader 
         currentSection={currentSection}
         isSubpage={false}
         onReturnHome={() => setCurrentSection(0)}
       />
 
-      {/* Immersive Navigation - Floating Island Design */}
+      {/* Main Navigation - Improved Mobile Responsiveness */}
       <motion.div
-        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30"
+        className="fixed bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-30 w-full max-w-sm sm:max-w-none px-4 sm:px-0"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1 }}
       >
-        <div className="bg-black/40 backdrop-blur-xl rounded-full border border-cyan-400/30 shadow-2xl shadow-cyan-500/20">
-          <div className="flex items-center gap-1 py-3 px-6">
+        <div className="bg-black/40 backdrop-blur-xl rounded-full border border-cyan-400/30 shadow-2xl shadow-cyan-500/20 mx-auto w-fit">
+          <div className="flex items-center gap-1 sm:gap-1 py-2 sm:py-3 px-4 sm:px-6">
             
             {/* Previous */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={prevSection}
-              className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
+              className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
               title="Previous Section (A/←)"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
             </motion.button>
 
             {/* Section dots */}
-            <div className="flex items-center gap-2 px-3">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3">
               {sections.map((section, index) => (
                 <motion.button
                   key={index}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}
                   onClick={() => navigateToSection(index)}
-                  className={`relative w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  className={`relative w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 ${
                     index === currentSection
                       ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
                       : 'bg-white/30 hover:bg-white/50'
@@ -244,17 +273,17 @@ export default function App() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={nextSection}
-              className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
+              className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-cyan-400 hover:text-white transition-all duration-300 border border-white/10 hover:border-cyan-400/50"
               title="Next Section (D/→)"
             >
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </motion.button>
 
           </div>
         </div>
       </motion.div>
 
-      {/* Content Area - Proper Layout with Margins */}
+      {/* Content Area */}
       <div className="relative z-20">
         <AnimatePresence mode="wait">
           <motion.div
@@ -270,7 +299,7 @@ export default function App() {
         </AnimatePresence>
       </div>
 
-      {/* Side Navigation Indicator - Hidden on Mobile/Tablet */}
+      {/* Side Navigation Indicator */}
       <div className="hidden lg:block fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
         <div className="flex flex-col gap-3">
           {sections.map((section, index) => (
@@ -298,4 +327,3 @@ export default function App() {
     </div>
   );
 }
-
