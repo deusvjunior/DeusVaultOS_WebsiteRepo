@@ -28,6 +28,10 @@ export function ContactPage({ onBack }: ContactPageProps) {
     type: 'general'
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const contactMethods = [
     {
       icon: <Mail className="h-6 w-6" />,
@@ -84,11 +88,46 @@ export function ContactPage({ onBack }: ContactPageProps) {
     }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission - implement actual backend integration
-    // TODO: Integrate with backend API
-    alert('Thank you! Your message has been sent.');
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      // API endpoint - update this URL to your deployed backend
+      const API_URL = process.env.NODE_ENV === 'production' 
+        ? 'https://your-backend.onrender.com'  // Replace with your actual Render URL
+        : 'http://localhost:3001';
+
+      const response = await fetch(`${API_URL}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setIsSubmitted(true);
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          message: '',
+          type: 'general'
+        });
+      } else {
+        setSubmitError(result.error || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitError('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -265,11 +304,28 @@ export function ContactPage({ onBack }: ContactPageProps) {
                       />
                     </div>
                     
+                    {/* Error Message */}
+                    {submitError && (
+                      <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+                        <p className="text-red-400 text-sm">{submitError}</p>
+                      </div>
+                    )}
+
+                    {/* Success Message */}
+                    {isSubmitted && (
+                      <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
+                        <p className="text-green-400 text-sm">
+                          ✅ Message sent successfully! We'll get back to you within 24 hours.
+                        </p>
+                      </div>
+                    )}
+                    
                     <Button 
                       type="submit"
-                      className="w-full bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold py-3"
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-cyan-500 to-yellow-500 hover:from-cyan-400 hover:to-yellow-400 text-black font-bold py-3 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Send Message
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                     </Button>
                   </form>
                 </CardContent>
