@@ -59,8 +59,12 @@ export function AdaptiveMobileNav({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={menuStyle === 'minimal-motion' ? { duration: 0.1 } : { duration: 0.3 }}
+            onClick={() => setIsOpen(false)}
           >
-            <div className="flex flex-col items-center justify-center h-full space-y-6 p-6">
+            <div 
+              className="flex flex-col items-center justify-center h-full space-y-6 p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
               
               {/* User Context Info */}
               {userContext.userType !== 'unknown' && (

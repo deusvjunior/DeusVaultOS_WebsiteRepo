@@ -28,10 +28,11 @@ import { DocumentationPage } from "./components/DocumentationPage";
 import { DownloadPage } from "./components/DownloadPage";
 import { EnterprisePage } from "./components/EnterprisePage";
 
-// Import adaptive engine
+// Import adaptive engine and components
 import { useAdaptiveEngine } from "./components/AdaptiveEngine";
 import AdaptiveMobileNav from "./components/AdaptiveMobileNav";
 import PersonalizationBanner from "./components/PersonalizationBanner";
+import { BrandHeader } from "./components/BrandHeader";
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -107,13 +108,114 @@ export default function App() {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setReducedMotion(mediaQuery.matches);
     
-    const handleChange = (event: MediaQueryListEvent) => {
-      setReducedMotion(event.matches);
+    const handleChange = (e: MediaQueryListEvent) => {
+      setReducedMotion(e.matches);
     };
     
     mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+    
+    // Enhanced keyboard navigation
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (currentSubpage) return; // Don't interfere with subpage navigation
+      
+      switch (e.key) {
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+          prevSection();
+          break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+          nextSection();
+          break;
+        case 'Home':
+          navigateToSection(0);
+          break;
+        case 'End':
+          navigateToSection(sections.length - 1);
+          break;
+        case 'Escape':
+          if (currentSubpage) handleBackToMainSections();
+          break;
+      }
+    };
+
+    // Enhanced mobile touch gesture handling
+    let touchStartY: number | null = null;
+    let touchStartX: number | null = null;
+    
+    const handleTouchStart = (e: TouchEvent) => {
+      if (currentSubpage) return; // Don't interfere with subpage touch
+      
+      const touch = e.touches[0];
+      touchStartY = touch.clientY;
+      touchStartX = touch.clientX;
+    };
+    
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (currentSubpage || !touchStartY || !touchStartX) return;
+      
+      const touch = e.changedTouches[0];
+      const deltaY = touch.clientY - touchStartY;
+      const deltaX = touch.clientX - touchStartX;
+      
+      const threshold = 50;
+      const isVerticalSwipe = Math.abs(deltaY) > Math.abs(deltaX);
+      
+      if (isVerticalSwipe) {
+        if (deltaY > threshold && currentSection > 0) {
+          prevSection();
+        } else if (deltaY < -threshold && currentSection < sections.length - 1) {
+          nextSection();
+        }
+      } else {
+        if (deltaX > threshold && currentSection > 0) {
+          prevSection();
+        } else if (deltaX < -threshold && currentSection < sections.length - 1) {
+          nextSection();
+        }
+      }
+      
+      touchStartY = null;
+      touchStartX = null;
+    };
+
+    // Enhanced scroll handling with mobile optimization
+    const handleScroll = (e: WheelEvent) => {
+      if (currentSubpage) return; // Don't interfere with subpage scrolling
+      
+      e.preventDefault();
+      
+      const threshold = 50;
+      
+      if (e.deltaY > threshold && currentSection < sections.length - 1) {
+        nextSection();
+      } else if (e.deltaY < -threshold && currentSection > 0) {
+        prevSection();
+      }
+    };
+
+    // Loading timer
+    const loadingTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
+    // Event listeners
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('wheel', handleScroll, { passive: false });
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('wheel', handleScroll);
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchend', handleTouchEnd);
+      clearTimeout(loadingTimer);
+    };
+  }, [currentSection, sections.length, currentSubpage]);
 
   // Auto-scroll to top when section changes
   useEffect(() => {
@@ -223,46 +325,15 @@ export default function App() {
         />
       </div>
 
-      {/* **PROFESSIONAL HEADER** */}
-      <>
-        <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/10">
-            <div className="container mx-auto px-6 py-3">
-              <div className="flex items-center justify-between">
-                
-                {/* **ENHANCED LOGO & BRAND** */}
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <img 
-                      src="/DVLogo.png" 
-                      alt="DeusVaultOS Logo" 
-                      className="w-full h-full object-contain drop-shadow-lg"
-                      style={{
-                        filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.4))'
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent">
-                      DeusVaultOS
-                    </h1>
-                    <p className="text-xs text-cyan-400/80 font-medium tracking-wide">
-                      Revolutionary Development Environment
-                    </p>
-                  </div>
-                </div>
-
-                {/* Section Info */}
-                <div className="hidden md:flex items-center gap-3">
-                  <div className="text-cyan-400">
-                    {sections[currentSection].icon}
-                  </div>
-                  <span className="text-white font-medium" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
-                    {sections[currentSection].title}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* **BRAND HEADER WITH HOMEPAGE NAVIGATION** */}
+      <BrandHeader 
+        currentSection={currentSection}
+        isSubpage={currentSubpage !== null}
+        onReturnHome={() => {
+          setCurrentSubpage(null);
+          setCurrentSection(0);
+        }}
+      />
 
           {/* Navigation - Floating Island Design */}
           <motion.div
@@ -357,8 +428,8 @@ export default function App() {
             </AnimatePresence>
           </div>
 
-          {/* Side Navigation Indicator */}
-          <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
+          {/* Side Navigation Indicator - Hidden on Mobile/Tablet */}
+          <div className="hidden lg:block fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
             <div className="flex flex-col gap-3">
               {sections.map((section, index) => (
                 <motion.button
@@ -371,6 +442,7 @@ export default function App() {
                       : 'bg-white/20 hover:bg-white/40'
                   }`}
                   title={section.title}
+                  aria-label={`Navigate to ${section.title}`}
                 />
               ))}
             </div>
@@ -380,7 +452,8 @@ export default function App() {
           <div className="relative z-20">
             <Footer />
           </div>
-        </>
+        </div>
+      </div>
 
       {/* 3D Scene Background */}
       <ThreeJSScene currentSection={currentSection} reducedMotion={reducedMotion} />
