@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Home, Zap, Users, Target, Map } from 'lucide-react';
-import ThreeJSScene from './components/ThreeJSScene';
-import { HexagonNavigation } from './components/HexagonNavigation';
-import { SEOOptimizer, seoConfigs } from './components/SEOOptimizer';
+import { ArrowLeft, ArrowRight, Home, Map, Target, Users, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { BrandHeader } from './components/BrandHeader';
 import { Footer } from './components/Footer';
+import { SEOOptimizer, seoConfigs } from './components/SEOOptimizer';
+import ThreeJSScene from './components/ThreeJSScene';
 
 // Import sections
-import { HeroSection } from './components/HeroSection';
+import { CTASection } from './components/CTASection';
 import { FeaturesSection } from './components/FeaturesSection';
+import { HeroSection } from './components/HeroSection';
 import { MarketplaceSection } from './components/MarketplaceSection';
 import { TherionSection } from './components/TherionSection_New';
-import { CTASection } from './components/CTASection';
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState(0);
