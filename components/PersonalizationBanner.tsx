@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { X, User, Calendar, MapPin, Smartphone, Monitor, Tablet } from 'lucide-react';
+import { Calendar, Monitor, Smartphone, Tablet, User, X } from 'lucide-react';
 import { useState } from 'react';
 import { UserContext } from './AdaptiveEngine';
 

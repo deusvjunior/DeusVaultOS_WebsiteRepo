@@ -117,13 +117,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
         'Setting up Growth Analytics...',
         'Ready to Scale Your Business...',
       ];
-      return [
-        'Initializing Learning Environment...',
-        'Loading Educational Resources...',
-        'Preparing Project Templates...',
-        'Setting up Career Tools...',
-        'Optimizing for Learning...',
-      ];
     }
 
     return baseMessages;

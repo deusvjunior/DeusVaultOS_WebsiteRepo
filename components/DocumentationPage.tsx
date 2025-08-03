@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  Book, 
-  Code, 
-  ExternalLink, 
-  FileText, 
-  GitBranch, 
-  PlayCircle, 
-  Search, 
-  Terminal, 
-  Zap 
+import {
+    ArrowLeft,
+    Book,
+    Code,
+    ExternalLink,
+    FileText,
+    GitBranch,
+    PlayCircle,
+    Search,
+    Terminal,
+    Zap
 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';

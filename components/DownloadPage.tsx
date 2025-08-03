@@ -1,17 +1,17 @@
 import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  CheckCircle, 
-  Download, 
-  HardDrive, 
-  Monitor, 
-  Smartphone, 
-  Star, 
-  Shield, 
-  Zap,
-  Clock,
-  Users,
-  Globe
+import {
+    ArrowLeft,
+    CheckCircle,
+    Clock,
+    Download,
+    Globe,
+    HardDrive,
+    Monitor,
+    Shield,
+    Smartphone,
+    Star,
+    Users,
+    Zap
 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';

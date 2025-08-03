@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Home, Zap, Users, Target, Map, MessageCircle } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { UserContext } from './AdaptiveEngine';
 

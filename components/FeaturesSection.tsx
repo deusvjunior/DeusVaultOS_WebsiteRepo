@@ -14,10 +14,10 @@ import {
     Shield,
     Sparkles
 } from "lucide-react";
+import { UserContext } from './AdaptiveEngine';
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { UserContext } from './AdaptiveEngine';
 
 interface FeaturesSectionProps {
   onNavigateToSubpage?: (subpage: string) => void;

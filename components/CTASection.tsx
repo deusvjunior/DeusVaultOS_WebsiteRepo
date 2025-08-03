@@ -8,7 +8,6 @@ import {
     Github,
     Globe,
     MessageCircle,
-    Play,
     Shield,
     Star,
     Twitter,

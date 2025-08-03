@@ -1,13 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-    ArrowLeft,
-    ArrowRight,
-    Home,
-    Map,
-    MessageCircle,
-    Target,
-    Users,
-    Zap
+  ArrowLeft,
+  ArrowRight,
+  Map,
+  MessageCircle,
+  Target,
+  Users,
+  Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
@@ -31,8 +30,8 @@ import { EnterprisePage } from "./components/EnterprisePage";
 // Import adaptive engine and components
 import { useAdaptiveEngine } from "./components/AdaptiveEngine";
 import AdaptiveMobileNav from "./components/AdaptiveMobileNav";
-import PersonalizationBanner from "./components/PersonalizationBanner";
 import { BrandHeader } from "./components/BrandHeader";
+import PersonalizationBanner from "./components/PersonalizationBanner";
 
 export default function App() {
   // Loading and navigation state

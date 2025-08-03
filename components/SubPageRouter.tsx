@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // Main sections
-import { HeroSection } from './HeroSection';
-import { FeaturesSection } from './FeaturesSection';
-import { UserSegments } from './UserSegments';
-import { TherionSection } from './TherionSection_New';
-import { MarketplaceSection } from './MarketplaceSection';
 import { CTASection } from './CTASection';
+import { FeaturesSection } from './FeaturesSection';
+import { HeroSection } from './HeroSection';
+import { MarketplaceSection } from './MarketplaceSection';
+import { TherionSection } from './TherionSection_New';
+import { UserSegments } from './UserSegments';
 
 // Subpages
 import { DocumentationPage } from './DocumentationPage';

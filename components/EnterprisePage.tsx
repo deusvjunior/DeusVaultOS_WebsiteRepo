@@ -1,18 +1,16 @@
 import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  Building, 
-  CheckCircle, 
-  Crown, 
-  DollarSign, 
-  Globe, 
-  Lock, 
-  Phone, 
-  Shield, 
-  Star, 
-  TrendingUp, 
-  Users, 
-  Zap 
+import {
+    ArrowLeft,
+    Building,
+    CheckCircle,
+    Crown,
+    DollarSign,
+    Lock,
+    Phone,
+    Shield,
+    Star,
+    TrendingUp,
+    Users
 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
