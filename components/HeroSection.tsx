@@ -156,16 +156,16 @@ export function HeroSection({ onNavigateToSubpage, adaptedContent, userContext }
               className="flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-cyan-500 to-yellow-500 text-black font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-lg hover:from-cyan-400 hover:to-yellow-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25"
             >
               <Download className="h-4 w-4 sm:h-5 sm:w-5" />
-              {adaptedContent?.primaryCTA || 'Get Updates'}
+              Get Beta Access
               <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
             
             <button 
-              onClick={() => onNavigateToSubpage?.('demo')}
+              onClick={() => onNavigateToSubpage?.('learn-more')}
               className="flex items-center justify-center gap-2 sm:gap-3 glass-refined border border-cyan-400/50 text-cyan-400 font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all"
             >
               <Github className="h-4 w-4 sm:h-5 sm:w-5" />
-              See Demo
+              Learn More
             </button>
           </motion.div>
 

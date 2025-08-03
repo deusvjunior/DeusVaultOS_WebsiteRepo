@@ -14,10 +14,10 @@ import {
 } from 'lucide-react';
 
 interface DemoPageProps {
-  onReturnHome: () => void;
+  onBack: () => void;
 }
 
-export function DemoPage({ onReturnHome }: DemoPageProps) {
+export function DemoPage({ onBack }: DemoPageProps) {
   const demoScenarios = [
     {
       title: "Intelligent Code Assistant",
@@ -76,7 +76,7 @@ export function DemoPage({ onReturnHome }: DemoPageProps) {
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <button
-            onClick={onReturnHome}
+            onClick={onBack}
             className="flex items-center gap-2 text-cyan-400 hover:text-white transition-colors group"
           >
             <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
@@ -256,7 +256,7 @@ export function DemoPage({ onReturnHome }: DemoPageProps) {
             </button>
             
             <button 
-              onClick={onReturnHome}
+              onClick={onBack}
               className="glass-refined border border-cyan-400/50 text-cyan-400 font-semibold px-8 py-4 rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all"
             >
               Explore More Features

@@ -5,12 +5,16 @@ import ThreeJSScene from './components/ThreeJSScene';
 
 // Import sections
 import { BrandHeader } from './components/BrandHeader';
+import { ContactPage } from './components/ContactPage';
 import { CTASection } from './components/CTASection';
 import { DemoPage } from './components/DemoPage';
+import { DocumentationPage } from './components/DocumentationPage';
 import { DownloadPage } from './components/DownloadPage';
+import { EnterprisePage } from './components/EnterprisePage';
 import { FeaturesSection } from './components/FeaturesSection';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
+import { LearnMorePage } from './components/LearnMorePage';
 import { MarketplaceSection } from './components/MarketplaceSection';
 import { SEOOptimizer, seoConfigs } from './components/SEOOptimizer';
 import { TherionSection } from './components/TherionSection_New';
@@ -213,11 +217,11 @@ export default function App() {
   if (currentSubpage) {
     switch (currentSubpage) {
       case 'demo':
-        return <DemoPage onReturnHome={handleReturnHome} />;
+        return <DemoPage onBack={handleReturnHome} />;
       case 'download':
         return <DownloadPage onBack={handleReturnHome} />;
       default:
-        return <DemoPage onReturnHome={handleReturnHome} />;
+        return <DemoPage onBack={handleReturnHome} />;
     }
   }
 
@@ -309,43 +313,64 @@ export default function App() {
       {/* Content Area */}
       <div className="relative z-20">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSection}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            className="page-section"
-          >
-            {sections[currentSection].component}
-          </motion.div>
+          {currentSubpage ? (
+            <motion.div
+              key={currentSubpage}
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -300 }}
+              transition={{ duration: 0.5 }}
+            >
+              {currentSubpage === 'demo' && <DemoPage onBack={handleReturnHome} />}
+              {currentSubpage === 'download' && <DownloadPage onBack={handleReturnHome} />}
+              {currentSubpage === 'documentation' && <DocumentationPage onBack={handleReturnHome} />}
+              {currentSubpage === 'enterprise' && <EnterprisePage onBack={handleReturnHome} />}
+              {currentSubpage === 'contact' && <ContactPage onBack={handleReturnHome} />}
+              {currentSubpage === 'learn-more' && <LearnMorePage onBack={handleReturnHome} />}
+            </motion.div>
+          ) : (
+            <motion.div
+              key={currentSection}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="page-section"
+            >
+              {sections[currentSection].component}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
-      {/* Side Navigation Indicator */}
-      <div className="hidden lg:block fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
-        <div className="flex flex-col gap-3">
-          {sections.map((section, index) => (
-            <motion.button
-              key={index}
-              whileHover={{ scale: 1.2 }}
-              onClick={() => navigateToSection(index)}
-              className={`w-3 h-8 rounded-full transition-all duration-300 ${
-                index === currentSection
-                  ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                  : 'bg-white/20 hover:bg-white/40'
-              }`}
-              title={section.title}
-              aria-label={`Navigate to ${section.title}`}
-            />
-          ))}
+      {/* Side Navigation Indicator - Only show on main sections */}
+      {!currentSubpage && (
+        <div className="hidden lg:block fixed right-6 top-1/2 transform -translate-y-1/2 z-30">
+          <div className="flex flex-col gap-3">
+            {sections.map((section, index) => (
+              <motion.button
+                key={index}
+                whileHover={{ scale: 1.2 }}
+                onClick={() => navigateToSection(index)}
+                className={`w-3 h-8 rounded-full transition-all duration-300 ${
+                  index === currentSection
+                    ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
+                    : 'bg-white/20 hover:bg-white/40'
+                }`}
+                title={section.title}
+                aria-label={`Navigate to ${section.title}`}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Footer */}
-      <div className="relative z-20">
-        <Footer />
-      </div>
+      {/* Footer - Only show on main sections */}
+      {!currentSubpage && (
+        <div className="relative z-20">
+          <Footer onNavigateToSubpage={handleNavigateToSubpage} />
+        </div>
+      )}
 
     </div>
   );

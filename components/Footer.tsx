@@ -16,12 +16,16 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
-export function Footer() {
+interface FooterProps {
+  onNavigateToSubpage?: (page: string) => void;
+}
+
+export function Footer({ onNavigateToSubpage }: FooterProps) {
   const quickLinks = [
-    { name: "Download", icon: <Download className="h-4 w-4" />, href: "#" },
-    { name: "Documentation", icon: <Globe className="h-4 w-4" />, href: "#" },
-    { name: "Community", icon: <MessageCircle className="h-4 w-4" />, href: "#" },
-    { name: "Support", icon: <Mail className="h-4 w-4" />, href: "#" }
+    { name: "Download", icon: <Download className="h-4 w-4" />, action: () => onNavigateToSubpage?.('download') },
+    { name: "Documentation", icon: <Globe className="h-4 w-4" />, action: () => onNavigateToSubpage?.('documentation') },
+    { name: "Community", icon: <MessageCircle className="h-4 w-4" />, action: () => window.open('https://discord.gg/deusvault', '_blank') },
+    { name: "Support", icon: <Mail className="h-4 w-4" />, action: () => onNavigateToSubpage?.('contact') }
   ];
 
   const coreFeatures = [
@@ -82,6 +86,7 @@ export function Footer() {
               
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
+                  onClick={() => onNavigateToSubpage?.('download')}
                   size="default" 
                   className="brand-gradient text-white border-0 px-6 py-3 font-medium interactive-element focus-ring"
                 >
@@ -90,6 +95,7 @@ export function Footer() {
                 </Button>
                 
                 <Button 
+                  onClick={() => window.open('https://github.com/deusvault/deusvault-os', '_blank')}
                   variant="outline" 
                   size="default" 
                   className="glass-morphism refined-border text-brand-neutral-200 hover:bg-brand-primary/10 px-6 py-3 font-medium interactive-element focus-ring"
@@ -128,10 +134,10 @@ export function Footer() {
               <h4 className="text-lg font-semibold text-white mb-6">Quick Links</h4>
               <div className="space-y-4">
                 {quickLinks.map((link, index) => (
-                  <a 
+                  <button 
                     key={index}
-                    href={link.href}
-                    className="flex items-center gap-3 text-brand-neutral-300 hover:text-brand-primary transition-colors group focus-ring rounded-lg p-2 -m-2"
+                    onClick={link.action}
+                    className="flex items-center gap-3 text-brand-neutral-300 hover:text-brand-primary transition-colors group focus-ring rounded-lg p-2 -m-2 w-full text-left"
                   >
                     <div className="text-brand-neutral-500 group-hover:text-brand-primary transition-colors">
                       {link.icon}

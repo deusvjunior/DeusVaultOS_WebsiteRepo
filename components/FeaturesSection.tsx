@@ -294,11 +294,11 @@ export function FeaturesSection({ onNavigateToSubpage, userContext, onBack }: Fe
             Download Free
           </Button>
           <Button 
-            onClick={() => onNavigateToSubpage?.('documentation')}
+            onClick={() => onNavigateToSubpage?.('learn-more')}
             variant="outline" 
             className="border-cyan-400/50 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-400/10 px-8 py-3"
           >
-            View Documentation
+            Learn More
           </Button>
         </div>
       </motion.div>
